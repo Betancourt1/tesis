@@ -1,0 +1,11 @@
+stop_times.csv is a CSV file that contains information about the stop times for various trips in a transit system. The file has seven columns:
+
+1. trip_id: A unique identifier for each trip, which corresponds to a specific route or journey.
+2. stop_id: A unique identifier for each stop along the trip.
+3. stop_sequence: An integer indicating the order of the stops along the trip, starting from 0.
+4. stop_headsign: The direction or destination displayed on the vehicle for the stop.
+5. arrival_time: The scheduled arrival time at the stop.
+6. departure_time: The scheduled departure time from the stop.
+7. timepoint: A binary indicator (0 or 1) that specifies whether the arrival and departure times are strictly adhered to (1) or if they are approximate (0).
+
+Each row represents a single stop within a specific trip, detailing its sequence, arrival and departure times, and other related information.

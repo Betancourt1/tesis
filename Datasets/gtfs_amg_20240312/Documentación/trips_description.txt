@@ -1,0 +1,10 @@
+trips.csv is a CSV file that contains information about trips within a transit system. The file has six columns:
+
+1. trip_id: A unique identifier for each trip.
+2. route_id: The identifier for the route that the trip is a part of.
+3. service_id: The identifier for the type of service associated with the trip, such as weekday, weekend, or holiday service.
+4. trip_headsign: The text that appears on the vehicle to indicate its destination or direction.
+5. direction_id: A binary indicator (0 or 1) used to distinguish between different directions of travel on the same route.
+6. shape_id: The identifier for the shape associated with the trip, representing the path that the vehicle follows.
+
+Each row represents a single trip, detailing its route, service type, destination, direction, and path.

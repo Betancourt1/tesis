@@ -1,0 +1,8 @@
+shapes.csv is a CSV file that contains information about various shapes, specifically geographical points along a path. The file has four columns:
+
+1. shape_id: A unique identifier for each shape, which appears to correspond to a specific route or path.
+2. shape_pt_lat: The latitude of a specific point along the shape's path.
+3. shape_pt_lon: The longitude of a specific point along the shape's path.
+4. shape_pt_sequence: An integer that indicates the order of the points along the shape's path, starting from 0.
+
+Each row represents a single point in the geographical shape, with its associated latitude and longitude coordinates, and its sequence in the path.

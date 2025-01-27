@@ -1,0 +1,10 @@
+agency.csv is a CSV file that contains information about the agencies operating the transit system. The file has six columns:
+
+1. agency_id: A unique identifier for each agency.
+2. agency_name: The name of the agency responsible for operating the transit services.
+3. agency_url: The URL for the agency's website, where more information about the agency and its services can be found.
+4. agency_timezone: The timezone in which the agency operates.
+5. agency_lang: The primary language used by the agency.
+6. agency_phone: The contact phone number for the agency.
+
+Each row represents a single agency, providing details about its name, website, timezone, language, and contact information.

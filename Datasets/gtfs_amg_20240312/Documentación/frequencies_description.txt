@@ -1,0 +1,9 @@
+frequencies.csv is a CSV file that contains information about the frequency of trips in a transit system. The file has five columns:
+
+1. trip_id: A unique identifier for each trip, which corresponds to a specific route or journey.
+2. start_time: The start time of the frequency interval during which the trips run.
+3. end_time: The end time of the frequency interval during which the trips run.
+4. headway_secs: The time, in seconds, between consecutive trips during the specified time interval.
+5. exact_times: A binary indicator (0 or 1) that specifies whether the trips adhere strictly to the scheduled headway (1) or if they are approximate (0).
+
+Each row represents a specific time interval during which trips operate at a certain frequency, providing details on the timing and exactness of the trips.

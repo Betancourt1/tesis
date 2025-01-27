@@ -1,0 +1,12 @@
+routes.csv is a CSV file that contains information about the routes in a transit system. The file has eight columns:
+
+1. route_id: A unique identifier for each route.
+2. agency_id: The identifier for the agency that operates the route.
+3. route_short_name: A short name or number for the route, often used in public-facing applications.
+4. route_long_name: A more descriptive name for the route, often including major destinations or the general direction of travel.
+5. route_type: A numerical value indicating the type of transportation used on the route (e.g., bus, tram, subway).
+6. route_url: A URL that provides additional information about the route, if available.
+7. route_color: The color assigned to the route, typically used in maps or timetables.
+8. route_text_color: The color of the text that is displayed on top of the route color, ensuring readability.
+
+Each row represents a single route, detailing its identifier, name, type, and visual characteristics.

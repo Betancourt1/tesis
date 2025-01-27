@@ -1,0 +1,7 @@
+calendar_dates.csv is a CSV file that contains information about exceptions to the regular service schedules in a transit system. The file has three columns:
+
+1. service_id: A unique identifier for each service schedule.
+2. exception_type: An integer indicating the type of exception, where 1 typically means that service is added on the specified date, and 2 typically means that service is removed on the specified date.
+3. date: The date of the exception in the format YYYYMMDD.
+
+Each row represents a specific exception to the regular service schedule, detailing the service affected, the type of exception, and the date of the exception.

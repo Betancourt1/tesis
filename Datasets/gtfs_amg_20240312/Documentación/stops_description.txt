@@ -1,0 +1,8 @@
+stops.csv is a CSV file that contains information about the stops in a transit system. The file has four columns:
+
+1. stop_id: A unique identifier for each stop.
+2. stop_name: The name of the stop, typically referring to a nearby landmark or street.
+3. stop_lat: The latitude coordinate of the stop's location.
+4. stop_lon: The longitude coordinate of the stop's location.
+
+Each row represents a single stop within the transit system, providing its identifier, name, and geographical coordinates.

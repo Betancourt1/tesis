@@ -1,0 +1,10 @@
+fare_attributes.csv is a CSV file that contains information about the fare structures in a transit system. The file has six columns:
+
+1. fare_id: A unique identifier for each fare class.
+2. price: The cost of the fare, typically in the local currency.
+3. currency_type: The currency in which the fare is priced (e.g., MXN for Mexican Pesos).
+4. payment_method: An indicator of when the payment is made, where 0 typically means payment is made on board, and 1 typically means payment is made before boarding.
+5. transfers: The number of transfers allowed with this fare.
+6. agency_id: The identifier for the agency associated with this fare.
+
+Each row represents a specific fare class, detailing its cost, payment method, transfer allowances, and associated agency.

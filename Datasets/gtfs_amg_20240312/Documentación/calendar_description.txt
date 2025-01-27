@@ -1,0 +1,14 @@
+calendar.csv is a CSV file that contains information about the service schedules in a transit system. The file has ten columns:
+
+1. service_id: A unique identifier for each service schedule.
+2. monday: A binary indicator (0 or 1) specifying whether the service operates on Mondays.
+3. tuesday: A binary indicator (0 or 1) specifying whether the service operates on Tuesdays.
+4. wednesday: A binary indicator (0 or 1) specifying whether the service operates on Wednesdays.
+5. thursday: A binary indicator (0 or 1) specifying whether the service operates on Thursdays.
+6. friday: A binary indicator (0 or 1) specifying whether the service operates on Fridays.
+7. saturday: A binary indicator (0 or 1) specifying whether the service operates on Saturdays.
+8. sunday: A binary indicator (0 or 1) specifying whether the service operates on Sundays.
+9. start_date: The start date for the service schedule in the format YYYYMMDD.
+10. end_date: The end date for the service schedule in the format YYYYMMDD.
+
+Each row represents a specific service schedule, detailing the days of the week it operates and the period during which it is active.
