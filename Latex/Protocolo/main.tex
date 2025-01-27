@@ -1,0 +1,163 @@
+\documentclass[12pt,oneside]{article}
+\usepackage[letterpaper,margin=2cm]{geometry} % Tamaño carta con márgenes estándar
+\setlength{\columnsep}{1cm}
+\setlength{\parskip}{1.5ex plus 0.5ex} % Interlineado de 1.5
+
+\usepackage{latexsym,url,colortbl,amsmath,amssymb,amsfonts,amsthm,mdframed,fancyhdr,lastpage}
+\usepackage{paralist,etoolbox,enumerate,mathrsfs}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{booktabs}
+\usepackage{adjustbox}
+\usepackage{array, multirow, multicol}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkblue,
+    filecolor=magenta,      
+    urlcolor=blue,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+}
+
+\spanishdecimal{.}
+\pretolerance=2000
+\tolerance=3000
+
+%\setlength{\parindent}{0pt} % Opcional, para controlar sangría
+\linespread{1.3} % Interlineado 1.5
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+
+\counterwithin*{equation}{section}
+\counterwithin*{equation}{subsection}
+\renewcommand\theequation{\ifnumgreater{\value{subsection}}{0}{\thesubsection.}{\thesection.}\arabic{equation}}
+
+\graphicspath{{Imagenes/}}
+
+\definecolor{humo blanco}{rgb}{0.99, 0.99, 0.99}
+
+\begin{document}
+
+\begin{titlepage}
+    \begin{center}
+        \vspace{.4cm}
+        {\Huge UNIVERSIDAD DE GUADALAJARA}\\[0.4cm]
+        {\huge Centro Universitario de Ciencias Exactas\\e Ingenierías}\\[0.4cm]
+        {\LARGE Licenciatura en Matemáticas}\\[0.4cm]
+        \includegraphics[scale=0.1]{escudo.png}\\[0.4cm]
+        {\LARGE Protocolo de Tesis}\\[0.4cm]
+        {\LARGE El transporte urbano de la Zona Metropolitana de Guadalajara desde la perspectiva de la teoría de grafos}\\
+        \vspace{0.8cm} 
+        {\large Autor:\\Fernando Betancourt Moreno}\\[0.5cm]
+        {\large Director:\\
+        \normalsize{Dr. Abel Palafox González}} 
+    \end{center}
+    \vfill
+    \hfill{Guadalajara, Jal., Octubre 2024}
+\end{titlepage}
+
+\newpage
+\begin{center}
+    \Large{Protocolo de Tesis}\\
+\end{center}
+
+\section{Introducción}
+
+La movilidad urbana representa uno de los principales retos que enfrentan las grandes ciudades alrededor del mundo. Entre los problemas más comunes se encuentran la congestión vehicular, la falta de infraestructura adecuada, la limitada accesibilidad al transporte público y la alta dependencia del automóvil particular. En la Zona Metropolitana de Guadalajara (ZMG), con una población creciente que recurre cada vez más al uso del transporte público, incrementando la cantidad de kilómetros recorridos en un $4.4\%$ durante 2024 con respecto al año anterior (INEGI, 2024), la eficiencia y conectividad del sistema de transporte urbano son fundamentales para mejorar la calidad de vida de sus habitantes.
+
+El transporte urbano puede representarse matemáticamente mediante la teoría de grafos, una disciplina que modela sistemas a través de nodos (que en este caso representan estaciones o intersecciones) y aristas (que corresponden a las conexiones entre ellas). Este enfoque permite simplificar y analizar la complejidad de las redes de transporte, enfocándose en propiedades como la conectividad, la centralidad de ciertos puntos clave, los caminos más cortos y la eficiencia general de las rutas. Desde una perspectiva matemática, las propiedades de las aristas y los nodos en el grafo pueden emplearse para calcular métricas como la centralidad de intermediación, que identifica los nodos con mayor tránsito relativo, o el coeficiente de agrupamiento, útil para detectar áreas con una mayor densidad de conexiones. Estas herramientas hacen que la teoría de grafos sea valiosa para identificar puntos críticos, evaluar la vulnerabilidad de la red y diseñar estrategias para mejorar tanto su resiliencia como su eficiencia.
+
+Para analizar la red de transporte urbano de la ZMG, es necesario comprender tanto la estructura estática del sistema como sus dinámicas fundamentales. El modelo basado en grafos puede describir los procesos principales de la red de transporte, como la forma en la que los usuarios se desplazan a través de rutas predefinidas, las conexiones disponibles entre diferentes nodos (como estaciones o paradas) y los patrones de transferencia entre distintos medios de transporte. Los sistemas involucrados incluyen tanto rutas de autobuses como estaciones de transferencia y paradas menores, todas las cuales se modelan como nodos, mientras que las conexiones entre ellas se representan mediante aristas. Las dinámicas relevantes incluyen el flujo de pasajeros, los cuellos de botella en la red y la conectividad general, factores que afectan directamente la eficiencia del sistema.
+
+Diversos estudios han aplicado la teoría de grafos para analizar y optimizar redes de transporte urbano. Zhao et al. (2024) utilizaron un grafo multimodal ponderado para estimar matrices origen-destino en Sídney, demostrando su utilidad para analizar la eficiencia del sistema. Fielbaum et al. (2016) analizaron la disposición óptima de líneas de transporte en ciudades con diferentes configuraciones urbanas —monocéntricas, policéntricas y dispersas—, subrayando la importancia de la estructura urbana en la planificación de redes de transporte. Cervantes-Sanmiguel et al. (2023) propusieron un enfoque de optimización bi-objetivo para equilibrar los tiempos de viaje y los costos monetarios, mejorando la accesibilidad y eficiencia del sistema. Estos antecedentes destacan el potencial de la teoría de grafos para abordar problemas complejos en el transporte urbano y guiar decisiones de planificación.
+
+En el contexto de la ZMG, Barraza y Estrada (2021) aplicaron herramientas de teoría de redes para analizar el sistema de transporte, revelando que las áreas centrales presentan mejor accesibilidad, mientras que la red muestra una alta vulnerabilidad debido a la dependencia de nodos clave. Esto sugiere la necesidad de investigaciones más profundas que permitan analizar cuáles son esos nodos y cómo se puede aumentar la resiliencia del sistema en su conjunto.
+
+El presente trabajo tiene como objetivo analizar la red de transporte urbano de la ZMG utilizando la teoría de grafos para identificar las áreas con baja conectividad y proponer mejoras específicas en su estructura. Se adoptará un enfoque similar al de Barraza y Estrada (2021)  para modelar la red. La investigación se centrará en identificar nodos críticos y analizar la dependencia de hubs, buscando aumentar la eficiencia y resiliencia del sistema que sirve a millones de usuarios diariamente.
+
+La pregunta central de esta investigación es: ¿Cómo se puede modelar y analizar la red de transporte urbano de la ZMG para identificar las áreas con baja conectividad y proponer mejoras específicas en su estructura utilizando teoría de grafos? Este problema es relevante porque un sistema de transporte eficiente impacta directamente en la productividad de la ciudad, la equidad en el acceso a servicios y la calidad del medio ambiente al promover el uso del transporte público.
+
+El estudio se limitará al análisis estructural del sistema de transporte utilizando datos públicos disponibles, y no considerará aspectos operativos como la calidad del servicio o el comportamiento de los usuarios. Aunque se propondrán mejoras potenciales, su implementación práctica queda fuera del alcance de este trabajo. En lugar de ello, el objetivo es proporcionar herramientas analíticas basadas en la teoría de grafos que permitan a los planificadores urbanos analizar y mejorar la infraestructura de transporte de manera más informada.
+
+Con este estudio, se espera contribuir al desarrollo de modelos de optimización de rutas y simuladores de flujo de tráfico que permitan a las autoridades mejorar la infraestructura de transporte. Específicamente, se buscarán estrategias para la redistribución de rutas, optimización de paradas y priorización de áreas con baja conectividad, con el objetivo de que la ZMG cuente con un sistema de transporte más accesible, eficiente y equitativo para todos sus habitantes.
+
+\section{Objetivos}
+
+\subsection{Objetivo General}
+
+Modelar y analizar la red de transporte urbano de la Zona Metropolitana de Guadalajara mediante la teoría de grafos para analizar su conectividad y eficiencia, e identificar oportunidades de optimización en la infraestructura de transporte.
+
+\subsection{Objetivos Específicos}
+
+\begin{itemize}
+\item Describir la estructura del sistema de transporte urbano de la Zona Metropolitana de Guadalajara utilizando datos públicos.
+
+\item Modelar el sistema de transporte urbano como un grafo y aplicar métricas de la teoría de grafos para analizar su conectividad y centralidad.
+
+\item Analizar los resultados obtenidos del grafo para identificar áreas de baja conectividad y sugerir mejoras en la red de transporte.
+\end{itemize}
+
+\section{Metodología}
+
+\begin{enumerate}
+\item \textbf{Recopilación y limpieza de datos:} Se obtendrán los datos del sistema de transporte de la ZMG a partir de fuentes públicas, los cuales serán procesados y limpiados para su correcta utilización. Se utilizarán herramientas como Python para este proceso.
+
+\item \textbf{Modelación de la red como grafo:} El grafo utilizado será dirigido y ponderado, con aristas cuyo peso representará las distancias de viaje entre las paradas. Esto permitirá un análisis de la conectividad y eficiencia del sistema. El sistema de transporte se modelará como un grafo donde los nodos representarán las paradas o estaciones, y las aristas indicarán las rutas entre ellas, ponderadas por distancias o tiempos de viaje. Para este paso, se emplearán Python y Gephi.
+
+\item \textbf{Aplicación de métricas de grafos:} Aplicar métricas fundamentales para analizar diferentes aspectos de la red, tales como la centralidad de grado (importancia relativa de cada nodo), la centralidad de cercanía (facilidad de acceso entre diferentes partes de la red), la centralidad de intermediación (influencia de ciertos nodos en la comunicación dentro de la red) y la conectividad global (robustez general de la red). Estas métricas permitirán identificar áreas críticas que requieren mejoras y optimizar el funcionamiento del sistema de transporte. Utilizar Gephi para visualizar dichas métricas.
+
+\item \textbf{Análisis de los resultados:} Los resultados obtenidos de las métricas se analizarán para identificar patrones y características clave del sistema de transporte, como áreas con baja conectividad o alta intermediación. Se podría emplear GIS para un análisis geoespacial más detallado.
+
+\item \textbf{Propuesta de mejoras:} Con base en el análisis, se propondrán recomendaciones para mejorar la conectividad y eficiencia del sistema de transporte. Por ejemplo, se podrían sugerir la creación de nuevas rutas en áreas con baja cobertura, la optimización de frecuencias de paso en rutas congestionadas, o la implementación de conexiones directas entre zonas clave para reducir tiempos de viaje.
+\end{enumerate}
+
+\section{Cronograma}
+
+\small{
+\begin{adjustbox}{center} % Alinear tabla al centro y ajustar su tamaño automáticamente
+\begin{tabular}{|c||*{12}{c|}}
+    \hline
+    \multicolumn{13}{|c|}{Cronograma} \\
+    \hline
+    Actividad & Ene & Feb & Mar & Abr & May & Jun & Jul & Ago & Sep & Oct & Nov & Dic \\
+    \hline
+    Recopilación y limpieza de datos & \cellcolor[gray]{.8} & \cellcolor[gray]{.8} &  &  &  &  &  &  &  &  &  & \\
+    \hline
+    Modelación de la red como grafo &  &  & \cellcolor[gray]{.8} & \cellcolor[gray]{.8} & \cellcolor[gray]{.8} &  &  &  &  &  &  & \\
+    \hline
+    Aplicación de métricas de grafos &  &  &  &  &  & \cellcolor[gray]{.8} & \cellcolor[gray]{.8} &  &  &  &  & \\
+    \hline
+    Análisis de resultados &  &  &  &  &  &  &  & \cellcolor[gray]{.8} & \cellcolor[gray]{.8} &  &  & \\
+    \hline
+    Propuesta de mejoras &  &  &  &  &  &  &  &  &  &  \cellcolor[gray]{.8} & \cellcolor[gray]{.8} & \cellcolor[gray]{.8} \\
+    \hline
+\end{tabular}
+\end{adjustbox}
+}
+
+
+\renewcommand{\refname}{Bibliografía}
+\begin{thebibliography}{99}
+\bibitem{barraza2021} Barraza, O., Estrada, M. (2021). Structural Analysis in Transit System Using Network Theory: Case of Guadalajara, Mexico. \textit{Urban Sci}, 5, 87. https://doi.org/10.3390/urbansci5040087
+\bibitem{zhao2024} Zhao, D., Mihăiţă, A.-S., Ou, Y., Grzybowska, H., Li, M. (2024). Origin–destination matrix estimation for public transport: A multi-modal weighted graph approach. \textit{Transportation Research Part C}, 140, 104694. https://doi.org/10.1016/j.trc.2024.104694
+\bibitem{fielbaum2016} Andrés Fielbaum, Sergio Jara-Diaz, Antonio Gschwender (2016). Optimal public transport networks for a general urban structure. \textit{Transportation Research Part B}, 94, 298. 
+https://doi.org/10.1016/j.trb.2016.10.003
+\bibitem{ki2023} K.I. Cervantes-Sanmiguel, M.V. Chavez-Hernandez, O.J. Ibarra-Rojas. Analyzing the trade-off between minimizing travel times and
+reducing monetary costs for users in the transit network design. \textit{Transportation Research Part B}, 173, 142.
+https://doi.org/10.1016/j.trb.2023.04.009
+\bibitem{diestel2017} Diestel, R. (2017). \textit{Graph Theory}. Springer.
+\bibitem{balle1998} Bellá Bollobás (1998). \textit{Modern Graph Theory}. Springer.
+\bibitem{gobjalisco2024} Secretaría de Transporte del estado de Jalisco. \textit{Actualización de Rutas de Transporte Público Colectivo y Masivo en la Zona Metropolitana de Guadalajara}. Recuperado el 19 de septiembre del 2024 de \url{https://datos.jalisco.gob.mx/dataset/actualizacion-de-rutas-de-transporte-publico-colectivo-y-masivo-en-la-zona-metropolitana-de}.
+\bibitem{inegi2024} Instituto Nacional de Estadística y Geografía (INEGI).  \textit{Estadística de transporte urbano de pasajeros, enero de 2024: Indicadores económicos de coyuntura}. Recuperado el 1 de noviembre del 2024 de \url{https://inegi.org.mx/contenidos/programas/transporteurbano/doc/ETUP2024_03.pdf}.
+\bibitem{iieg2024} Instituto de Información Estadística y Geográfica de Jalisco. \textit{Usuarios en el Sistema de Transporte Urbano de Pasajeros de Guadalajara}. Recuperado el 2 de noviembre del 2024 de \url{https://iieg.gob.mx/ns/?page_id=25290}.
+
+\end{thebibliography}
+
+\end{document}
