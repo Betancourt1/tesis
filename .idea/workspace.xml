@@ -1,43 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d6aaaa1a-8e03-451a-9d5f-5ad83c1f4606" name="Changes" comment="" />
+    <list default="true" id="d6aaaa1a-8e03-451a-9d5f-5ad83c1f4606" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Código/Notebooks/Preprocesamiento.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latex/Tesis/main.log" beforeDir="false" afterPath="$PROJECT_DIR$/Latex/Tesis/main.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latex/Tesis/main.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Latex/Tesis/main.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latex/Tesis/main.synctex.gz" beforeDir="false" afterPath="$PROJECT_DIR$/Latex/Tesis/main.synctex.gz" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Jupyter Notebook" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "Betancourt1"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Betancourt1&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Betancourt1/tesis",
-    "accountId": "da53a840-eb93-4d00-976c-912820dde239"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Betancourt1/tesis&quot;,
+    &quot;accountId&quot;: &quot;da53a840-eb93-4d00-976c-912820dde239&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 1
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2sBrsUAVMGCXytpOcDEqpeCE2BA" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

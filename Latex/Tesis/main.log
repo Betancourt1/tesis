@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2025.1.26)  26 JAN 2025 19:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2025.1.26)  28 JAN 2025 22:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -352,7 +352,7 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 <escudo.png, id=1, 1513.655pt x 2055.68pt>
 File: escudo.png Graphic file (type png)
 <use escudo.png>
-Package pdftex.def Info: escudo.png  used on input line 34.
+Package pdftex.def Info: escudo.png  used on input line 32.
 (pdftex.def)             Requested size: 121.09486pt x 164.45776pt.
 
 
@@ -360,7 +360,85 @@ Package pdftex.def Info: escudo.png  used on input line 34.
 
 
 {C:/Users/fbetancourt/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map} <./escu
-do.png>] (main.aux
+do.png>] (main.toc
+LaTeX Info: Redefining \. on input line 1.
+LaTeX Info: Redefining \% on input line 1.
+
+
+[2
+
+])
+\tf@toc=\write3
+\openout3 = `main.toc'.
+
+
+
+LaTeX Info: Redefining \. on input line 49.
+LaTeX Info: Redefining \% on input line 49.
+[3]
+Cap\'{\i }tulo 1.
+! Undefined control sequence.
+l.58 	\alert
+            {Hola}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+
+[4
+
+]
+Cap\'{\i }tulo 2.
+
+
+[5
+
+]
+Cap\'{\i }tulo 3.
+
+
+[6
+
+]
+Cap\'{\i }tulo 4.
+
+
+[7
+
+]
+Cap\'{\i }tulo 5.
+
+
+[8
+
+]
+Cap\'{\i }tulo 6.
+
+
+[9
+
+]
+Cap\'{\i }tulo 7.
+
+
+[10
+
+]
+Cap\'{\i }tulo 8.
+
+
+[11
+
+]
+Cap\'{\i }tulo 9.
+
+
+[12
+
+] (main.aux
 LaTeX Info: Redefining \. on input line 8.
 LaTeX Info: Redefining \% on input line 8.
 )
@@ -370,22 +448,29 @@ L3 programming layer <2024-12-25>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 4735 strings out of 473536
- 75998 string characters out of 5712052
- 480283 words of memory out of 5000000
- 27920 multiletter control sequences out of 15000+600000
- 562672 words of font info for 41 fonts, out of 8000000 for 9000
+ 4762 strings out of 473536
+ 76423 string characters out of 5712052
+ 495285 words of memory out of 5000000
+ 27936 multiletter control sequences out of 15000+600000
+ 568596 words of font info for 50 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,5n,65p,236b,365s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,5n,65p,236b,455s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\fbetancourt\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi60
-0\ecrm1000.pk> <C:\Users\fbetancourt\AppData\Local\MiKTeX\fonts/pk/ljfour/jknap
-pen/ec/dpi600\ecrm1200.pk> <C:\Users\fbetancourt\AppData\Local\MiKTeX\fonts/pk/
-ljfour/jknappen/ec/dpi600\ecrm1440.pk> <C:\Users\fbetancourt\AppData\Local\MiKT
-eX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1728.pk> <C:\Users\fbetancourt\AppDat
-a\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm2488.pk>
-Output written on main.pdf (1 page, 299988 bytes).
+0\ecbx1200.pk> <C:\Users\fbetancourt\AppData\Local\MiKTeX\fonts/pk/ljfour/jknap
+pen/ec/dpi600\ecbx1440.pk> <C:\Users\fbetancourt\AppData\Local\MiKTeX\fonts/pk/
+ljfour/jknappen/ec/dpi600\ecbx2074.pk> <C:\Users\fbetancourt\AppData\Local\MiKT
+eX\fonts/pk/ljfour/jknappen/ec/dpi600\ecsl1000.pk> <C:\Users\fbetancourt\AppDat
+a\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1000.pk> <C:\Users\fbetan
+court\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx2488.pk> <C:\
+Users\fbetancourt\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1
+000.pk> <C:\Users\fbetancourt\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/
+dpi600\ecrm1200.pk> <C:\Users\fbetancourt\AppData\Local\MiKTeX\fonts/pk/ljfour/
+jknappen/ec/dpi600\ecrm1440.pk> <C:\Users\fbetancourt\AppData\Local\MiKTeX\font
+s/pk/ljfour/jknappen/ec/dpi600\ecrm1728.pk> <C:\Users\fbetancourt\AppData\Local
+\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm2488.pk>
+Output written on main.pdf (12 pages, 410087 bytes).
 PDF statistics:
- 133 PDF objects out of 1000 (max. 8388607)
+ 454 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
