@@ -111,14 +111,18 @@
 					\end{center}
 				\item \textbf{Grafo ponderado}: Un grafo es ponderado si a cada arista $(u, v) \in E$ se le asigna un peso $w(u, v) \in \mathbb{R}$ que representa costos, distancias, o cualquier otra métrica relevante.
 				    \begin{center}
-					\begin{tikzpicture}[scale=1, every node/.style={draw, circle, minimum size=1cm}]
-						\node (A) at (0,0) {A};
-						\node (B) at (2,0) {B};
-						\node (C) at (1,1.5) {C};
+					\begin{tikzpicture}[scale=1, 
+						vertex/.style={draw, circle, minimum size=1cm}]} % Estilo de las flechas
+						]
+						% Definición de vértices
+						\node[vertex] (A) at (0,0) {A};
+						\node[vertex] (B) at (2,0) {B};
+						\node[vertex] (C) at (1,1.5) {C};
 						
-						\draw[->, thick] (A) -- node[above] {2} (B);
-						\draw[->, thick] (B) -- node[above right] {3} (C);
-						\draw[->, thick] (C) -- node[above left] {1} (A);
+						% Aristas con etiquetas; se anula el estilo global para estos nodos
+						\draw[->, thick] (A) -- node[above, draw=none, fill=none] {2} (B);
+						\draw[->, thick] (B) -- node[above right, draw=none, fill=none] {3} (C);
+						\draw[->, thick] (C) -- node[above left, draw=none, fill=none] {1} (A);
 					\end{tikzpicture}
 				\end{center}
 
