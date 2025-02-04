@@ -160,10 +160,6 @@
 			
 			Los ciclos en redes de transporte ayudan a identificar redundancias estructurales y evaluar posibles congestiones en ciertas áreas de la red.
 			
-			\subsubsection{Ejemplos Ilustrados}
-			
-			A continuación, se presentan ejemplos gráficos de un subgrafo, un camino y un ciclo.
-			
 			\begin{figure}[ht]
 				\centering
 				\begin{subfigure}{0.3\textwidth}
@@ -173,7 +169,7 @@
 						\node (b) at (1,1) {B};
 						\node (c) at (2,0) {C};
 						\node (d) at (1,-1) {D};
-						\draw (a) -- (b) -- (c) -- (d) -- (a);
+						\draw (a) --> (b) --> (c) --> (d) --> (a);
 					\end{tikzpicture}
 					\caption{Subgrafo}
 				\end{subfigure}
@@ -183,7 +179,7 @@
 						\node (a) at (0,0) {A};
 						\node (b) at (1,1) {B};
 						\node (c) at (2,0) {C};
-						\draw (a) -- (b) -- (c);
+						\draw (a) --> (b) --> (c);
 					\end{tikzpicture}
 					\caption{Camino}
 				\end{subfigure}
@@ -193,7 +189,7 @@
 						\node (a) at (0,0) {A};
 						\node (b) at (1,1) {B};
 						\node (c) at (2,0) {C};
-						\draw (a) -- (b) -- (c) -- (a);
+						\draw (a) --> (b) --> (c) --> (a);
 					\end{tikzpicture}
 					\caption{Ciclo}
 				\end{subfigure}
