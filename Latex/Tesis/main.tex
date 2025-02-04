@@ -182,7 +182,8 @@
 						\node (a) at (0,0) {A};
 						\node (b) at (1,1) {B};
 						\node (c) at (2,0) {C};
-						\draw[->, thick] (a) -> (b) -> (c);
+						\draw[->, thick] (a) -> (b);
+						\draw[->, thick] (b) -> (c);
 					\end{tikzpicture}
 					\caption{Camino}
 				\end{subfigure}
@@ -192,7 +193,9 @@
 						\node (a) at (0,0) {A};
 						\node (b) at (1,1) {B};
 						\node (c) at (2,0) {C};
-						\draw[->, thick] (a) -> (b) -> (c) -> (a);
+						\draw[->, thick] (a) -> (b);
+						\draw[->, thick] (b) -> (c);
+						\draw[->, thick] (c) -> (a);
 					\end{tikzpicture}
 					\caption{Ciclo}
 				\end{subfigure}
