@@ -209,11 +209,7 @@
 			Las métricas en teoría de grafos permiten cuantificar diversas propiedades estructurales de un grafo y son esenciales para evaluar redes de transporte urbano. A continuación, se presentan algunas de las métricas más relevantes.
 			
 			\subsubsection{Grado de un Nodo}
-			El grado de un nodo $v$, denotado como $deg(v)$, es el número de aristas incidentes a $v$. Para un grafo no dirigido, se define como:
-			\begin{equation}
-				deg(v) = |\{ u \in V : \{u,v\} \in E \}|.
-			\end{equation}
-			En un grafo dirigido, se distinguen el grado de entrada $deg^-(v)$ y el grado de salida $deg^+(v)$:
+			El grado de un nodo $v$, denotado como $deg(v)$, es el número de aristas incidentes a $v$. En un grafo dirigido, se distinguen el grado de entrada $deg^-(v)$ y el grado de salida $deg^+(v)$:
 			\begin{align}
 				deg^-(v) &= |\{ u \in V : (u,v) \in E \}|, \\
 				deg^+(v) &= |\{ u \in V : (v,u) \in E \}|.
