@@ -134,41 +134,70 @@
 		\subsection{Propiedades fundamentales de los grafos}
 			Los grafos poseen diversas propiedades matemáticas que permiten su análisis estructural. Algunas que son especialmente valiosas para el presente estudio son conceptos como la \textit{conectividad}, que nos permite mesurar la importancia que tiene un nodo con respecto a los demás; así también los \textit{caminos}, que nos permiten representar trayectorias; entre otros conceptos.
 			
-			\subsubsection{Conectividad y Componentes Conexas}
+			\subsubsection{Subgrafos}
 			
-			Sea $G = (V, E)$ un grafo con conjunto de vértices $V$ y conjunto de aristas $E$. La conectividad de $G$ es una medida de cuán interconectados están sus nodos. Un grafo $G$ es conexo si existe un camino entre cualquier par de vértices $u, v \in V$. En caso contrario, se dice que $G$ es disconexo y se puede descomponer en componentes conexas, que son subgrafos máximos en los cuales existe un camino entre cualquier par de nodos.
+			Un subgrafo $H = (V_H, E_H)$ de un grafo $G = (V, E)$ es un grafo tal que $V_H \subseteq V$ y $E_H \subseteq E$. Es decir, un subgrafo es una parte de un grafo que mantiene la estructura de nodos y aristas del grafo original.
 			
-			La conectividad se puede analizar mediante la matriz de adyacencia $A$ de $G$, donde $A_{ij} = 1$ si existe una arista entre los nodos $i$ y $j$, y $0$ en caso contrario. La existencia de caminos entre nodos puede determinarse elevando $A$ a diferentes potencias:
+			Muchos conceptos en la teoría de grafos pueden describirse en términos de subgrafos. Por ejemplo, un camino es un tipo de subgrafo en el que los vértices están conectados en una secuencia sin repetir aristas. Un ciclo es un caso especial de camino en el que el primer y último nodo coinciden.
+			
+			\subsubsection{Caminos}
+			
+			Un \textbf{camino} en un grafo $G$ es un subgrafo en el que los vértices están conectados por una secuencia de aristas sin repeticiones:
 			\begin{equation}
-				(A^k)_{ij} > 0 \Rightarrow \text{Existe un camino de longitud } k \text{ entre } i \text{ y } j.
+				P_k = (v_1, v_2, \dots, v_k) \quad \text{donde } \{v_i, v_{i+1}\} \in E, \forall i \in \{1, \dots, k-1\}.
 			\end{equation}
 			
-			\subsubsection{Caminos y Ciclos}
+			Los caminos son fundamentales en redes de transporte, pues permiten analizar rutas eficientes y la conectividad entre distintos puntos de la red.
 			
-			Un camino en un grafo $G$ es una secuencia de vértices $(v_1, v_2, \dots, v_k)$ tal que $\{v_i, v_{i+1}\} \in E$ para toda $i \in \{1, \dots, k-1\}$. Si $v_1 = v_k$, el camino se denomina ciclo.
+			\subsubsection{Ciclos}
 			
-			Un ciclo simple es un ciclo en el que no se repiten vértices excepto el inicial y el final. La existencia de ciclos en un grafo es fundamental en el análisis de redes de transporte, pues permite identificar rutas redundantes y evaluar la robustez del sistema.
-			
-			\subsubsection{Distancia y Diámetro de un Grafo}
-			
-			La distancia $d(u, v)$ entre dos nodos $u, v \in V$ es la longitud del camino más corto que los conecta. Esta distancia se puede calcular mediante el algoritmo de Dijkstra en grafos ponderados o con la búsqueda en amplitud (BFS) en grafos no ponderados.
-			
-			El diámetro de un grafo $G$ es la mayor distancia entre dos nodos en el grafo:
+			Un \textbf{ciclo} es un camino en el que el primer y el último vértice son el mismo:
 			\begin{equation}
-				D(G) = \max_{u,v \in V} d(u, v).
+				C_k = (v_1, v_2, \dots, v_k, v_1) \quad \text{donde } \{v_k, v_1\} \in E.
 			\end{equation}
 			
-			Este valor representa la mayor cantidad de pasos necesarios para viajar entre dos nodos cualesquiera en la red y es una métrica relevante en la evaluación de sistemas de transporte.
+			Los ciclos en redes de transporte ayudan a identificar redundancias estructurales y evaluar posibles congestiones en ciertas áreas de la red.
 			
-			\subsubsection{Coeficiente de Agrupamiento}
+			\subsubsection{Ejemplos Ilustrados}
 			
-			El coeficiente de agrupamiento mide la tendencia de los nodos a formar cliques o grupos altamente interconectados. Se define para un nodo $v$ como:
-			\begin{equation}
-				C_v = \frac{2T_v}{k_v (k_v - 1)},
-			\end{equation}
-			donde $T_v$ es el número de triángulos que contienen a $v$, y $k_v$ es su grado. 
+			A continuación, se presentan ejemplos gráficos de un subgrafo, un camino y un ciclo.
 			
-			El coeficiente de agrupamiento global de un grafo es el promedio de $C_v$ para todos los nodos. En redes de transporte, esta métrica ayuda a identificar regiones donde las conexiones son más densas, lo que puede indicar zonas con mayor accesibilidad.
+			\begin{figure}[h]
+				\centering
+				\begin{subfigure}{0.3\textwidth}
+					\centering
+					\begin{tikzpicture}[scale=1, every node/.style={circle, draw, fill=white, inner sep=2pt}]
+						\node (a) at (0,0) {A};
+						\node (b) at (1,1) {B};
+						\node (c) at (2,0) {C};
+						\node (d) at (1,-1) {D};
+						\draw (a) -- (b) -- (c) -- (d) -- (a);
+					\end{tikzpicture}
+					\caption{Subgrafo}
+				\end{subfigure}
+				\begin{subfigure}{0.3\textwidth}
+					\centering
+					\begin{tikzpicture}[scale=1, every node/.style={circle, draw, fill=white, inner sep=2pt}]
+						\node (a) at (0,0) {A};
+						\node (b) at (1,1) {B};
+						\node (c) at (2,0) {C};
+						\draw (a) -- (b) -- (c);
+					\end{tikzpicture}
+					\caption{Camino}
+				\end{subfigure}
+				\begin{subfigure}{0.3\textwidth}
+					\centering
+					\begin{tikzpicture}[scale=1, every node/.style={circle, draw, fill=white, inner sep=2pt}]
+						\node (a) at (0,0) {A};
+						\node (b) at (1,1) {B};
+						\node (c) at (2,0) {C};
+						\draw (a) -- (b) -- (c) -- (a);
+					\end{tikzpicture}
+					\caption{Ciclo}
+				\end{subfigure}
+				\caption{Ejemplos de subgrafo, camino y ciclo en un grafo.}
+			\end{figure}
+
 		
 		
 		\subsection{Métricas clave en teoría de grafos}
