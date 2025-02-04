@@ -208,7 +208,7 @@
 		
 			Las métricas en teoría de grafos permiten cuantificar diversas propiedades estructurales de un grafo y son esenciales para evaluar redes de transporte urbano. A continuación, se presentan algunas de las métricas más relevantes.
 			
-			\subsection{Grado de un Nodo}
+			\subsubsection{Grado de un Nodo}
 			El grado de un nodo $v$, denotado como $deg(v)$, es el número de aristas incidentes a $v$. Para un grafo no dirigido, se define como:
 			\begin{equation}
 				deg(v) = |\{ u \in V : \{u,v\} \in E \}|.
@@ -219,7 +219,7 @@
 				deg^+(v) &= |\{ u \in V : (v,u) \in E \}|.
 			\end{align}
 			
-			\subsection{Centralidad}
+			\subsubsection{Centralidad}
 			La centralidad mide la importancia relativa de un nodo en un grafo. Existen diversas formas de centralidad:
 			\begin{itemize}
 				\item \textbf{Centralidad de grado}: Se define por el grado de un nodo, reflejando su conectividad local.
@@ -234,13 +234,13 @@
 				donde $\sigma_{st}$ es el número de caminos más cortos entre $s$ y $t$, y $\sigma_{st}(v)$ es el número de esos caminos que pasan por $v$.
 			\end{itemize}
 			
-			\subsection{Densidad del Grafo}
+			\subsubsection{Densidad del Grafo}
 			La densidad de un grafo mide qué tan conectado está en comparación con el máximo posible:
 			\begin{equation}
 				D = \frac{|E|}{|V|(|V|-1)}.
 			\end{equation}
 			
-			\subsection{Transitividad y Coeficiente de Agrupamiento}
+			\subsubsection{Transitividad y Coeficiente de Agrupamiento}
 			La transitividad evalúa la presencia de triángulos en un grafo, definida como:
 			\begin{equation}
 				T = \frac{3 \times \text{número de triángulos}}{\text{número de tríadas abiertas}}.
