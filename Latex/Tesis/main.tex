@@ -110,17 +110,18 @@
 						\end{tikzpicture}
 					\end{center}
 				\item \textbf{Grafo ponderado}: Un grafo es ponderado si a cada arista $(u, v) \in E$ se le asigna un peso $w(u, v) \in \mathbb{R}$ que representa costos, distancias, o cualquier otra métrica relevante.
-					\begin{center}
-						\begin{tikzpicture}[scale=1, every node/.style={draw, circle, minimum size=1cm}]
-							\node (A) at (0,0) {A};
-							\node (B) at (2,0) {B};
-							\node (C) at (1,1.5) {C};
-							
-							\draw[->] (A) -- node[above] {2} (B);
-							\draw[->] (B) -- node[above right] {3} (C);
-							\draw[->] (C) -- node[above left] {1} (A);
-						\end{tikzpicture}
-					\end{center}
+				    \begin{center}
+					\begin{tikzpicture}[scale=1, every node/.style={draw, circle, minimum size=1cm}, >={Stealth[round]}]
+						\node (A) at (0,0) {A};
+						\node (B) at (2,0) {B};
+						\node (C) at (1,1.5) {C};
+						
+						\draw[->, thick] (A) -- node[above] {2} (B);
+						\draw[->, thick] (B) -- node[above right] {3} (C);
+						\draw[->, thick] (C) -- node[above left] {1} (A);
+					\end{tikzpicture}
+				\end{center}
+
 			\end{itemize}
 						
 			En este contexto, la elección de la representación adecuada es crucial para la implementación de algoritmos eficientes en el análisis de redes de transporte urbano.
