@@ -132,10 +132,44 @@
 
 		
 		\subsection{Propiedades fundamentales de los grafos}
-		- Conectividad y componentes conexas
-		- Caminos y ciclos
-		- Distancia y diámetro de un grafo
-		- Conglomerados y coeficiente de agrupamiento
+			Los grafos poseen diversas propiedades matemáticas que permiten su análisis estructural. En esta sección se presentan algunas de las más relevantes en el estudio de redes de transporte urbano.
+			
+			\subsubsection{Conectividad y Componentes Conexas}
+			
+			Sea $G = (V, E)$ un grafo con conjunto de vértices $V$ y conjunto de aristas $E$. La conectividad de $G$ es una medida de cuán interconectados están sus nodos. Un grafo $G$ es conexo si existe un camino entre cualquier par de vértices $u, v \in V$. En caso contrario, se dice que $G$ es disconexo y se puede descomponer en componentes conexas, que son subgrafos máximos en los cuales existe un camino entre cualquier par de nodos.
+			
+			La conectividad se puede analizar mediante la matriz de adyacencia $A$ de $G$, donde $A_{ij} = 1$ si existe una arista entre los nodos $i$ y $j$, y $0$ en caso contrario. La existencia de caminos entre nodos puede determinarse elevando $A$ a diferentes potencias:
+			\begin{equation}
+				(A^k)_{ij} > 0 \Rightarrow \text{Existe un camino de longitud } k \text{ entre } i \text{ y } j.
+			\end{equation}
+			
+			\subsubsection{Caminos y Ciclos}
+			
+			Un camino en un grafo $G$ es una secuencia de vértices $(v_1, v_2, \dots, v_k)$ tal que $\{v_i, v_{i+1}\} \in E$ para toda $i \in \{1, \dots, k-1\}$. Si $v_1 = v_k$, el camino se denomina ciclo.
+			
+			Un ciclo simple es un ciclo en el que no se repiten vértices excepto el inicial y el final. La existencia de ciclos en un grafo es fundamental en el análisis de redes de transporte, pues permite identificar rutas redundantes y evaluar la robustez del sistema.
+			
+			\subsubsection{Distancia y Diámetro de un Grafo}
+			
+			La distancia $d(u, v)$ entre dos nodos $u, v \in V$ es la longitud del camino más corto que los conecta. Esta distancia se puede calcular mediante el algoritmo de Dijkstra en grafos ponderados o con la búsqueda en amplitud (BFS) en grafos no ponderados.
+			
+			El diámetro de un grafo $G$ es la mayor distancia entre dos nodos en el grafo:
+			\begin{equation}
+				D(G) = \max_{u,v \in V} d(u, v).
+			\end{equation}
+			
+			Este valor representa la mayor cantidad de pasos necesarios para viajar entre dos nodos cualesquiera en la red y es una métrica relevante en la evaluación de sistemas de transporte.
+			
+			\subsubsection{Coeficiente de Agrupamiento}
+			
+			El coeficiente de agrupamiento mide la tendencia de los nodos a formar cliques o grupos altamente interconectados. Se define para un nodo $v$ como:
+			\begin{equation}
+				C_v = \frac{2T_v}{k_v (k_v - 1)},
+			\end{equation}
+			donde $T_v$ es el número de triángulos que contienen a $v$, y $k_v$ es su grado. 
+			
+			El coeficiente de agrupamiento global de un grafo es el promedio de $C_v$ para todos los nodos. En redes de transporte, esta métrica ayuda a identificar regiones donde las conexiones son más densas, lo que puede indicar zonas con mayor accesibilidad.
+		
 		
 		\subsection{Métricas clave en teoría de grafos}
 		- Grado de un nodo
