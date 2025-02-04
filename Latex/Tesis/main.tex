@@ -215,6 +215,13 @@
 				deg^+(v) &= |\{ u \in V : (v,u) \in E \}|.
 			\end{align}
 			
+			\subsubsection{Distancia entre Nodos}
+			La distancia entre dos nodos $u$ y $v$, denotada como $d(u,v)$, es la longitud del camino más corto entre ellos, es decir, el número mínimo de aristas que deben recorrerse para ir de $u$ a $v$.
+			\begin{equation}
+				d(u,v) = \min \{ k \mid \exists (u = v_0, v_1, \dots, v_k = v) \text{ tal que } (v_i, v_{i+1}) \in E, \forall i \}.
+			\end{equation}
+			Si no existe un camino entre $u$ y $v$, se define $d(u,v) = \infty$.
+			
 			\subsubsection{Centralidad}
 			La centralidad mide la importancia relativa de un nodo en un grafo. Existen diversas formas de centralidad:
 			\begin{itemize}
