@@ -60,9 +60,76 @@
 	\section{Fundamentos de la teoría de grafos}
 	
 		\subsection{Definición y conceptos básicos}
-		- Definición de un grafo
-		- Tipos de grafos: dirigidos, ponderados, bipartitos, etc.
-		- Representación de grafos: listas y matrices de adyacencia
+			
+			Un \textbf{grafo} $G$ es una estructura matemática definida como un par ordenado:
+			\begin{equation}
+				G = (V, E)
+			\end{equation}
+			donde:
+			\begin{itemize}
+				\item $V$ es un conjunto finito y no vacío de elementos llamados \textbf{vértices} o \textbf{nodos}.
+				\item $E$ es un subconjunto de $V \times V$, cuyos elementos se denominan \textbf{aristas} o \textbf{edges}, y representan conexiones entre los vértices.
+			\end{itemize}
+			
+			\subsection{Ejemplo de un grafo no dirigido}
+			
+			\begin{center}
+				\begin{tikzpicture}[scale=1, every node/.style={draw, circle, minimum size=1cm}]
+					\node (A) at (0,0) {A};
+					\node (B) at (2,0) {B};
+					\node (C) at (1,1.5) {C};
+					\node (D) at (3,1.5) {D};
+					\node (E) at (4,0) {E};
+					
+					\draw (A) -- (B);
+					\draw (A) -- (C);
+					\draw (B) -- (C);
+					\draw (B) -- (D);
+					\draw (B) -- (E);
+					\draw (D) -- (E);
+				\end{tikzpicture}
+			\end{center}
+			
+			\subsection{Tipos de grafos}
+			
+			Dependiendo de las propiedades de $E$, los grafos pueden clasificarse en diversas categorías:
+			
+			\begin{itemize}
+				\item \textbf{Grafo no dirigido}: Un grafo es no dirigido si las aristas no tienen una orientación específica, es decir, $(u, v) \in E$ implica que $(v, u) \in E$.
+				\item \textbf{Grafo dirigido (dígrafo)}: En un grafo dirigido, cada arista tiene una dirección, por lo que $(u, v) \in E$ no implica necesariamente que $(v, u) \in E$.
+				\item \textbf{Grafo ponderado}: Un grafo es ponderado si a cada arista $(u, v) \in E$ se le asigna un peso $w(u, v) \in \mathbb{R}^+$ que representa costos, distancias, o cualquier otra métrica relevante.
+			\end{itemize}
+			
+			\subsection{Ejemplo de un grafo dirigido}
+			
+			\begin{center}
+				\begin{tikzpicture}[scale=1, every node/.style={draw, circle, minimum size=1cm}]
+					\node (A) at (0,0) {A};
+					\node (B) at (2,0) {B};
+					\node (C) at (1,1.5) {C};
+					
+					\draw[->] (A) -- (B);
+					\draw[->] (B) -- (C);
+					\draw[->] (C) -- (A);
+				\end{tikzpicture}
+			\end{center}
+			
+			\subsection{Ejemplo de un grafo ponderado}
+			
+			\begin{center}
+				\begin{tikzpicture}[scale=1, every node/.style={draw, circle, minimum size=1cm}]
+					\node (A) at (0,0) {A};
+					\node (B) at (2,0) {B};
+					\node (C) at (1,1.5) {C};
+					
+					\draw[->] (A) -- node[above] {2} (B);
+					\draw[->] (B) -- node[right] {3} (C);
+					\draw[->] (C) -- node[left] {1} (A);
+				\end{tikzpicture}
+			\end{center}
+			
+			En este contexto, la elección de la representación adecuada es crucial para la implementación de algoritmos eficientes en el análisis de redes de transporte urbano.
+
 		
 		\subsection{Propiedades fundamentales de los grafos}
 		- Conectividad y componentes conexas
