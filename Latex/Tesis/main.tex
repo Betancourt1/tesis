@@ -205,10 +205,52 @@
 		
 		
 		\subsection{Métricas clave en teoría de grafos}
-		- Grado de un nodo
-		- Centralidad: grado, cercanía, intermediación y eigenvector
-		- Densidad de un grafo
-		- Transitividad
+		
+			Las métricas en teoría de grafos permiten cuantificar diversas propiedades estructurales de un grafo y son esenciales para evaluar redes de transporte urbano. A continuación, se presentan algunas de las métricas más relevantes.
+			
+			\subsection{Grado de un Nodo}
+			El grado de un nodo $v$, denotado como $deg(v)$, es el número de aristas incidentes a $v$. Para un grafo no dirigido, se define como:
+			\begin{equation}
+				deg(v) = |\{ u \in V : \{u,v\} \in E \}|.
+			\end{equation}
+			En un grafo dirigido, se distinguen el grado de entrada $deg^-(v)$ y el grado de salida $deg^+(v)$:
+			\begin{align}
+				deg^-(v) &= |\{ u \in V : (u,v) \in E \}|, \\
+				deg^+(v) &= |\{ u \in V : (v,u) \in E \}|.
+			\end{align}
+			
+			\subsection{Centralidad}
+			La centralidad mide la importancia relativa de un nodo en un grafo. Existen diversas formas de centralidad:
+			\begin{itemize}
+				\item \textbf{Centralidad de grado}: Se define por el grado de un nodo, reflejando su conectividad local.
+				\item \textbf{Centralidad de cercanía}: Se basa en la inversa de la suma de las distancias a todos los demás nodos:
+				\begin{equation}
+					C_c(v) = \frac{1}{\sum_{u \in V} d(v,u)}.
+				\end{equation}
+				\item \textbf{Centralidad de intermediación}: Representa cuántos caminos más cortos pasan por un nodo:
+				\begin{equation}
+					C_b(v) = \sum_{s \neq v \neq t} \frac{\sigma_{st}(v)}{\sigma_{st}},
+				\end{equation}
+				donde $\sigma_{st}$ es el número de caminos más cortos entre $s$ y $t$, y $\sigma_{st}(v)$ es el número de esos caminos que pasan por $v$.
+			\end{itemize}
+			
+			\subsection{Densidad del Grafo}
+			La densidad de un grafo mide qué tan conectado está en comparación con el máximo posible:
+			\begin{equation}
+				D = \frac{|E|}{|V|(|V|-1)}.
+			\end{equation}
+			
+			\subsection{Transitividad y Coeficiente de Agrupamiento}
+			La transitividad evalúa la presencia de triángulos en un grafo, definida como:
+			\begin{equation}
+				T = \frac{3 \times \text{número de triángulos}}{\text{número de tríadas abiertas}}.
+			\end{equation}
+			El coeficiente de agrupamiento de un nodo $v$ mide cuán conectados están sus vecinos:
+			\begin{equation}
+				C_v = \frac{2T_v}{deg(v)(deg(v)-1)},
+			\end{equation}
+			siendo $T_v$ el número de triángulos en los que participa $v$.
+
 		
 		\subsection{Algoritmos fundamentales en teoría de grafos}
 		- Búsqueda en profundidad (DFS) y búsqueda en amplitud (BFS)
