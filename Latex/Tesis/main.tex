@@ -123,12 +123,12 @@
 					\node (B) at (2,0) {B};
 					\node (C) at (1,1.5) {C};
 					
-					\draw[->, thick] (A) -- {2} (B);
-					\draw[->, thick] (B) -- {3} (C);
-					\draw[->, thick] (C) -- {1} (A);
+					\draw[->] (A) -- node[above] {2} (B);
+					\draw[->] (B) -- node[above right] {3} (C);
+					\draw[->] (C) -- node[above left] {1} (A);
 				\end{tikzpicture}
 			\end{center}
-			
+						
 			En este contexto, la elección de la representación adecuada es crucial para la implementación de algoritmos eficientes en el análisis de redes de transporte urbano.
 
 		
