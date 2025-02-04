@@ -98,7 +98,7 @@
 							\end{tikzpicture}
 						\end{center}
 					
-					\item \textbf{Grafo dirigido (dígrafo)}: En un grafo dirigido, cada arista tiene una dirección, por lo que $(u, v) \in E$ no implica necesariamente que $(v, u) \in E$.
+					\item \textbf{Grafo dirigido (dígrafo)}: En un grafo dirigido, cada arista tiene una dirección, por lo que $(u, v) \in E$ no implica necesariamente que $(v, u) \in E$ pero tampoco lo prohíbe. Dado este escenario, diremos que \textbf{$u$ se dirige a $v$}.
 					
 						\begin{center}
 							\begin{tikzpicture}[scale=1, every node/.style={draw, circle, minimum size=1cm}, >=stealth]
@@ -109,6 +109,7 @@
 								\draw[->, thick] (A) -- (B);
 								\draw[->, thick] (B) -- (C);
 								\draw[->, thick] (C) -- (A);
+								\draw[->, thick] (A) -- (C);
 							\end{tikzpicture}
 						\end{center}
 					\item \textbf{Grafo ponderado}: Un grafo es ponderado si a cada arista $(u, v) \in E$ se le asigna un peso $w(u, v) \in \mathbb{R}$ que representa costos, distancias, o cualquier otra métrica relevante. Un grafo puede ser ponderado a la vez que dirigido o no dirigido.
@@ -122,15 +123,15 @@
 							\node[vertex] (C) at (1,1.5) {C};
 							
 							% Aristas con etiquetas; se anula el estilo global para estos nodos
-							\draw[->, thick] (A) -- node[above, draw=none, fill=none] {2} (B);
-							\draw[->, thick] (B) -- node[above right, draw=none, fill=none] {3} (C);
-							\draw[->, thick] (C) -- node[above left, draw=none, fill=none] {1} (A);
+							\draw[->, thick] (A) -- node[above, draw=none, fill=none] {69} (B);
+							\draw[->, thick] (B) -- node[above right, draw=none, fill=none] {420} (C);
+							\draw[->, thick] (C) -- node[above left, draw=none, fill=none] {11} (A);
 						\end{tikzpicture}
 					\end{center}
 	
 				\end{itemize}
 							
-			En delante nos ocuparemos únicamente de los grafos dirigidos ponderados.
+			En delante nos ocuparemos únicamente de los grafos dirigidos sean ponderados o no y, por simplicidad, asumiremos que no existen vértices que se dirijan a sí mismos. Es decir, $(v, v) \notin E$ para ningún $v \in V$.
 
 		
 		\subsection{Propiedades fundamentales de los grafos}
@@ -303,12 +304,6 @@
 					\end{itemize}
 				\end{enumerate}
 			\end{enumerate}
-		
-		\subsection{Aplicaciones de la teoría de grafos en redes de transporte}
-		- Modelado de rutas y paradas
-		- Optimización de frecuencias y tiempos de viaje
-		- Identificación de cuellos de botella en la red
-		- Evaluación de resiliencia y vulnerabilidad en el sistema de transporte
 	
 	\section{Redes de transporte urbano: conceptos y ejemplos}
 	\section{Métricas de grafos aplicadas al transporte}
