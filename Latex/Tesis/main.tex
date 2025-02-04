@@ -72,63 +72,63 @@
 				\item $E$ es un subconjunto de $V \times V$, cuyos elementos se denominan \textbf{aristas} o \textbf{edges}, y representan conexiones entre los vértices.
 			\end{itemize}
 			
-			\subsection{Tipos de grafos}
-			
-			Dependiendo de las propiedades de $E$, los grafos pueden clasificarse en diversas categorías:
-			
-			\begin{itemize}
-				\item \textbf{Grafo no dirigido}: Un grafo es no dirigido si las aristas no tienen una orientación específica, es decir, $(u, v) \in E$ implica que $(v, u) \in E$.
+				\subsubsection{Tipos de grafos}
 				
-					\begin{center}
-						\begin{tikzpicture}[scale=1, every node/.style={draw, circle, minimum size=1cm}]
-							\node (A) at (0,0) {A};
-							\node (B) at (2,0) {B};
-							\node (C) at (1,1.5) {C};
-							\node (D) at (3,1.5) {D};
-							\node (E) at (4,0) {E};
+				Dependiendo de las propiedades de $E$, los grafos pueden clasificarse en diversas categorías:
+				
+				\begin{itemize}
+					\item \textbf{Grafo no dirigido}: Un grafo es no dirigido si las aristas no tienen una orientación específica, es decir, $(u, v) \in E$ implica que $(v, u) \in E$.
+					
+						\begin{center}
+							\begin{tikzpicture}[scale=1, every node/.style={draw, circle, minimum size=1cm}]
+								\node (A) at (0,0) {A};
+								\node (B) at (2,0) {B};
+								\node (C) at (1,1.5) {C};
+								\node (D) at (3,1.5) {D};
+								\node (E) at (4,0) {E};
+								
+								\draw (A) -- (B);
+								\draw (A) -- (C);
+								\draw (B) -- (C);
+								\draw (B) -- (D);
+								\draw (B) -- (E);
+								\draw (D) -- (E);
+							\end{tikzpicture}
+						\end{center}
+					
+					\item \textbf{Grafo dirigido (dígrafo)}: En un grafo dirigido, cada arista tiene una dirección, por lo que $(u, v) \in E$ no implica necesariamente que $(v, u) \in E$.
+					
+						\begin{center}
+							\begin{tikzpicture}[scale=1, every node/.style={draw, circle, minimum size=1cm}, >=stealth]
+								\node (A) at (0,0) {A};
+								\node (B) at (2,0) {B};
+								\node (C) at (1,1.5) {C};
+								
+								\draw[->, thick] (A) -- (B);
+								\draw[->, thick] (B) -- (C);
+								\draw[->, thick] (C) -- (A);
+							\end{tikzpicture}
+						\end{center}
+					\item \textbf{Grafo ponderado}: Un grafo es ponderado si a cada arista $(u, v) \in E$ se le asigna un peso $w(u, v) \in \mathbb{R}$ que representa costos, distancias, o cualquier otra métrica relevante.
+					    \begin{center}
+						\begin{tikzpicture}[scale=1, 
+							vertex/.style={draw, circle, minimum size=1cm}
+							]
+							% Definición de vértices
+							\node[vertex] (A) at (0,0) {A};
+							\node[vertex] (B) at (2,0) {B};
+							\node[vertex] (C) at (1,1.5) {C};
 							
-							\draw (A) -- (B);
-							\draw (A) -- (C);
-							\draw (B) -- (C);
-							\draw (B) -- (D);
-							\draw (B) -- (E);
-							\draw (D) -- (E);
+							% Aristas con etiquetas; se anula el estilo global para estos nodos
+							\draw[->, thick] (A) -- node[above, draw=none, fill=none] {2} (B);
+							\draw[->, thick] (B) -- node[above right, draw=none, fill=none] {3} (C);
+							\draw[->, thick] (C) -- node[above left, draw=none, fill=none] {1} (A);
 						\end{tikzpicture}
 					\end{center}
-				
-				\item \textbf{Grafo dirigido (dígrafo)}: En un grafo dirigido, cada arista tiene una dirección, por lo que $(u, v) \in E$ no implica necesariamente que $(v, u) \in E$.
-				
-					\begin{center}
-						\begin{tikzpicture}[scale=1, every node/.style={draw, circle, minimum size=1cm}, >=stealth]
-							\node (A) at (0,0) {A};
-							\node (B) at (2,0) {B};
-							\node (C) at (1,1.5) {C};
+	
+				\end{itemize}
 							
-							\draw[->, thick] (A) -- (B);
-							\draw[->, thick] (B) -- (C);
-							\draw[->, thick] (C) -- (A);
-						\end{tikzpicture}
-					\end{center}
-				\item \textbf{Grafo ponderado}: Un grafo es ponderado si a cada arista $(u, v) \in E$ se le asigna un peso $w(u, v) \in \mathbb{R}$ que representa costos, distancias, o cualquier otra métrica relevante.
-				    \begin{center}
-					\begin{tikzpicture}[scale=1, 
-						vertex/.style={draw, circle, minimum size=1cm}
-						]
-						% Definición de vértices
-						\node[vertex] (A) at (0,0) {A};
-						\node[vertex] (B) at (2,0) {B};
-						\node[vertex] (C) at (1,1.5) {C};
-						
-						% Aristas con etiquetas; se anula el estilo global para estos nodos
-						\draw[->, thick] (A) -- node[above, draw=none, fill=none] {2} (B);
-						\draw[->, thick] (B) -- node[above right, draw=none, fill=none] {3} (C);
-						\draw[->, thick] (C) -- node[above left, draw=none, fill=none] {1} (A);
-					\end{tikzpicture}
-				\end{center}
-
-			\end{itemize}
-						
-			En este contexto, la elección de la representación adecuada es crucial para la implementación de algoritmos eficientes en el análisis de redes de transporte urbano.
+				En este contexto, la elección de la representación adecuada es crucial para la implementación de algoritmos eficientes en el análisis de redes de transporte urbano.
 
 		
 		\subsection{Propiedades fundamentales de los grafos}
