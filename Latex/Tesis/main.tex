@@ -245,10 +245,64 @@
 
 		
 		\subsection{Algoritmos fundamentales en teoría de grafos}
-		- Búsqueda en profundidad (DFS) y búsqueda en amplitud (BFS)
-		- Algoritmo de Dijkstra para caminos más cortos
-		- Algoritmo de Floyd-Warshall para caminos más cortos en todos los pares
-		- Algoritmo de Prim y Kruskal para árboles de expansión mínima
+			Los algoritmos en teoría de grafos permiten resolver problemas fundamentales como la determinación de caminos más cortos entre nodos. En esta sección, se presentan dos algoritmos esenciales para este propósito: Dijkstra y Floyd-Warshall.
+			
+			\subsubsection{Algoritmo de Dijkstra}
+			
+			El algoritmo de Dijkstra encuentra el camino más corto desde un nodo fuente $s$ hacia todos los demás nodos en un grafo ponderado con pesos no negativos. Se basa en una estrategia voraz que mantiene un conjunto de nodos visitados y actualiza iterativamente las distancias más cortas conocidas.
+			
+			\textbf{Entrada:}
+			\begin{itemize}
+				\item Un grafo dirigido o no dirigido $G = (V, E)$ con pesos no negativos $w: E \to \mathbb{R}^+$.
+				\item Un nodo fuente $s \in V$.
+			\end{itemize}
+			
+			\textbf{Salida:}
+			\begin{itemize}
+				\item Distancias mínimas $d(v)$ desde $s$ hacia cada nodo $v \in V$.
+				\item Árbol de caminos más cortos.
+			\end{itemize}
+			
+			\textbf{Procedimiento:}
+			\begin{enumerate}
+				\item Inicializar $d(s) = 0$ y $d(v) = \infty$ para todos los $v \neq s$.
+				\item Crear un conjunto de nodos visitados $S = \emptyset$.
+				\item Mientras $S \neq V$:
+				\begin{enumerate}
+					\item Seleccionar el nodo $u \notin S$ con la menor distancia $d(u)$.
+					\item Agregar $u$ a $S$.
+					\item Para cada vecino $v$ de $u$ tal que $(u,v) \in E$:
+					\begin{itemize}
+						\item Si $d(u) + w(u,v) < d(v)$, actualizar $d(v) = d(u) + w(u,v)$.
+					\end{itemize}
+				\end{enumerate}
+			\end{enumerate}
+			
+			\subsection{Algoritmo de Floyd-Warshall}
+			
+			El algoritmo de Floyd-Warshall encuentra el camino más corto entre todos los pares de nodos en un grafo ponderado con pesos arbitrarios (incluyendo negativos, pero sin ciclos negativos). Se basa en la programación dinámica y mejora iterativamente una matriz de distancias.
+			
+			\textbf{Entrada:}
+			\begin{itemize}
+				\item Un grafo dirigido $G = (V, E)$ con una matriz de pesos $W$.
+			\end{itemize}
+			
+			\textbf{Salida:}
+			\begin{itemize}
+				\item Una matriz $D$ donde $D[i][j]$ representa la distancia más corta entre los nodos $i$ y $j$.
+			\end{itemize}
+			
+			\textbf{Procedimiento:}
+			\begin{enumerate}
+				\item Inicializar $D$ como la matriz de adyacencia $W$, donde $D[i][j] = w(i,j)$ si existe una arista $(i,j)$, y $\infty$ en caso contrario.
+				\item Para cada nodo intermedio $k \in V$:
+				\begin{enumerate}
+					\item Para cada par de nodos $i, j \in V$:
+					\begin{itemize}
+						\item Si $D[i][k] + D[k][j] < D[i][j]$, actualizar $D[i][j] = D[i][k] + D[k][j]$.
+					\end{itemize}
+				\end{enumerate}
+			\end{enumerate}
 		
 		\subsection{Aplicaciones de la teoría de grafos en redes de transporte}
 		- Modelado de rutas y paradas
