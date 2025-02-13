@@ -1,6 +1,8 @@
 \documentclass[openany]{book}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{makecell}
+\usepackage{float}
 \usepackage[document]{ragged2e}
 %para editar el tamaño de los margenes
 \usepackage[a4paper,top=2.54cm,bottom=2.54cm,left=2.54cm,right=2.54cm,marginparwidth=1.75cm]{geometry}
@@ -11,6 +13,7 @@
 \usepackage{colortbl} 
 \usepackage{tikz}
 \usepackage{subcaption}
+\usepackage{amsfonts}
 
 
 
@@ -46,24 +49,30 @@
 
 \tableofcontents
 
-% TODO 
 \chapter{Introducción}
 	\section{Contexto y relevancia del problema}
+
+    \section{Antecedentes}
 	
 	\section{Justificación del estudio}
-	\section{Hipótesis}
+
+	\section{Problema}
+
+    \section{Metodología}
+
 	\section{Objetivos de la investigación}
 		\subsection{Objetivo general}
 		\subsection{Objetivos específicos}
-	\section{Métodos y Materiales}
-	\section{Alcances y limitaciones del estudio}
+
+    \section{Tesis}
+
 	\section{Estructura del documento} 
 
 \chapter{Marco Teórico}
 	\section{Fundamentos de la teoría de grafos}
 	
 		\subsection{Definición y conceptos básicos}
-			
+
 			Un \textbf{grafo} $G$ es una estructura matemática definida como un par ordenado:
 			\begin{equation}
 				G = (V, E)
@@ -135,11 +144,13 @@
 
 		
 		\subsection{Propiedades fundamentales de los grafos}
-			Los grafos poseen diversas propiedades matemáticas que permiten su análisis estructural. Algunas que son especialmente valiosas para el presente estudio son conceptos como la \textit{conectividad}, que nos permite mesurar la importancia que tiene un nodo con respecto a los demás; así también los \textit{caminos}, que nos permiten representar trayectorias; entre otros conceptos.
+			Los grafos poseen diversas propiedades matemáticas que permiten su análisis estructural.
+			Algunas que son especialmente valiosas para el presente estudio son conceptos como la \textit{conectividad}, que nos permite mesurar la importancia que tiene un nodo con respecto a los demás; así también los \textit{caminos}, que nos permiten representar trayectorias; entre otros conceptos.
 			
 			\subsubsection{Subgrafos}
 			
-			Un subgrafo $H = (V_H, E_H)$ de un grafo $G = (V, E)$ es un grafo tal que $V_H \subseteq V$ y $E_H \subseteq E$. Es decir, un subgrafo es una parte de un grafo que mantiene la estructura de nodos y aristas del grafo original.
+			Un subgrafo $H = (V_H, E_H)$ de un grafo $G = (V, E)$ es un grafo tal que $V_H \subseteq V$ y $E_H \subseteq E$.
+			Es decir, un subgrafo es una parte de un grafo que mantiene la estructura de nodos y aristas del grafo original.
 			
 			Muchos conceptos en la teoría de grafos pueden describirse en términos de subgrafos.
 			
@@ -203,7 +214,6 @@
 				\caption{Ejemplos de subgrafo, camino y ciclo en un grafo.}
 			\end{figure}
 
-		
 		
 		\subsection{Métricas clave en teoría de grafos}
 		
@@ -304,36 +314,226 @@
 					\end{itemize}
 				\end{enumerate}
 			\end{enumerate}
-	
-	\section{Redes de transporte urbano: conceptos y ejemplos}
-		\subsection{División territorial de la ZMG}
-		La ZMG se subdivide en distintas zonas de acuerdo con la documentación oficial del Gobierno de Jalisco. Estas divisiones permiten analizar la movilidad y planificar el transporte de manera eficiente. Se abordarán los siguientes aspectos:
-		\begin{itemize}
-			\item Definición y delimitación de la ZMG.
-			\item División por municipios y su relevancia en la movilidad.
-			\item Sectores y corredores de movilidad definidos por la planificación urbana.
-			\item Áreas de influencia del transporte público.
-		\end{itemize}
-		
-		\subsection{Introducción al General Transit Feed Specification (GTFS)}
-		El GTFS es un estándar para la publicación de datos de transporte público. En esta subsección se explicará:
-		\begin{itemize}
-			\item ¿Qué es el GTFS y por qué es relevante para el análisis del transporte?
-			\item Estructura de los archivos GTFS y descripción de sus principales componentes (agencia, rutas, viajes, horarios, paradas, etc.).
-			\item Cómo se utiliza GTFS en estudios de movilidad y planificación del transporte.
-			\item Ejemplos de implementación del GTFS en ciudades similares a la ZMG.
-		\end{itemize}
-		
-		\subsection{Infraestructura y modos de transporte en la ZMG}
-		Se describirán los distintos tipos de transporte disponibles en la ZMG y cómo se relacionan entre sí:
-		\begin{itemize}
-			\item Sistemas de transporte masivo (tren ligero, BRT, Macrobús).
-			\item Transporte convencional (rutas de autobuses urbanos y suburbanos).
-			\item Transporte no motorizado y su interacción con el sistema de transporte público.
-			\item Infraestructura vial y su impacto en la movilidad del transporte público.
-		\end{itemize}
-	
-	\section{Revisión de investigaciones previas}
+
+	\section{División territorial de la ZMG}
+		La ZMG cuenta con un organismo llamado \textit{imeplan}, dedicado a "diseñar, gestionar e impulsar herramientas para el crecimiento integral de la ciudad desde un enfoque sustentable y resiliente" (imeplan, 2023). Este organismo publicó en 2016 el documento \textit{POTmet: plan de ordenamiento territorial metropolitano del AMG} (POTmet, en delante). Dentro de dicho documento el imeplan propone una forma de segmentar a la ZMG basándose en un modelo policéntrico de ciudad que "busca a través de una identificación metódica de las centralidades, contribuir a un mejor equilibrio espacial en el territorio del AMG, mejorando la distribución de equipamiento, la repartición de la población, la administración de las zonas para crecimiento y en general, todo lo que contribuya a fortalecer un sistema de ciudades aún incipiente en el territorio metropolitano" (imeplan, 2016, p. 265). Dichas centralidades permiten una mejor planificación y análisis de la movilidad urbana, facilitando el diseño de estrategias de transporte más eficientes (imeplan, 2016).
+
+			\subsubsection{Definición y delimitación de la ZMG}
+				La ZMG está conformada por los municipios de Guadalajara, Zapopan, Tlaquepaque, Tonalá, El Salto, Ixtlahuacán de los Membrillos y Juanacatlán.
+				Su delimitación geográfica se encuentra establecida en el Plan de Ordenamiento Territorial Metropolitano (imeplan, 2016).
+
+			\subsubsection{Centralidades}
+				En el POTmet se define centralidad de la siguiente manera:
+				\begin{center}
+					Son unidades urbanas vinculadas por una estructura vial y que desempeñan una función esencial en la dinámica urbana del área metropolitana, definidas esencialmente por su concentración de empleo, población, transporte y prestación de servicios, además se caracterizan por un alto potencial de generación de identidad y arraigo entre sus habitantes.
+				\end{center}
+				Para delimitar estas centralidades se toman en cuenta aquellas concentraciones urbanas de entre 10,000 y 500,000 habitantes (imeplan, 2016), luego se estiman los siguientes métricos para cada una de ellas:
+
+				\begin{itemize}
+					\item \textbf{Productividad}
+					\begin{itemize}
+						\item Unidades económicas: cantidad de unidades económicas por centralidad.
+						\item Personal ocupado: personal ocupado generado por las unidades económicas.
+						\item Índice de demanda laboral (promedio): describe la relación entre población residente local y oferta laboral local.
+						\item Densidad de población residente: Capas de datos que contienen los valores de densidad de población (personas/ha) por manzanas de la ZMG.
+					\end{itemize}
+
+					\item \textbf{Infraestructura}
+					\begin{itemize}
+						\item Rutas de transporte público: Cantidad de rutas que interceptan con la centralidad.
+						\item Capacidad de carga de transporte público: Definida a través del cálculo de flota entre intervalo de las rutas de transporte público que interceptan con la centralidad.
+						\item Transporte público masivo: Cantidad de líneas de transporte público masivo que interceptan por centralidad.
+					\end{itemize}
+
+					\item \textbf{Calidad de vida}
+					\begin{itemize}
+						\item Índice de suficiencia de servicios (promedio).
+						\item Equipamientos distritales: Proporcionados por los municipios en sus PPDU y clasificados con base en el reglamento estatal de zonificación. Son polígonos de equipamiento de educación, cultura, salud, servicios institucionales y culto que sirven a amplios sectores de los centros de población.
+						\item Equipamientos centrales: Proporcionados por los municipios en sus PPDU y clasificados con base en el reglamento estatal de zonificación. Son polígonos de equipamiento que sirven a la totalidad del centro de población.
+						\item Equipamientos regionales: Proporcionados por los municipios en sus PPDU y clasificados con base en el reglamento estatal de zonificación. Son polígonos de equipamiento con cobertura de servicio que supera a la ciudad.
+					\end{itemize}
+
+					\item \textbf{Otros indicadores}
+					\begin{itemize}
+						\item Ponderación: Peso relativo de cada centralidad en la evaluación global.
+					\end{itemize}
+				\end{itemize}
+
+			Una vez se obtienen estas métricas, los datos se normalizan y se otorga un peso a cada centralidad tomando como referencia a la centralidad que mayor puntaje haya obtenido. De este proceso obtenemos la siguiente tabla:
+
+			\begin{table}[H]
+			\centering
+			\scriptsize
+			\setlength{\tabcolsep}{3pt}
+			\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|c|}
+			\hline
+			\textbf{CENTRALIDAD} &
+			\begin{tabular}[c]{@{}c@{}}Rutas\\transp.\\público\end{tabular} &
+			\begin{tabular}[c]{@{}c@{}}Cap.\\carga\\transp.\end{tabular} &
+			\begin{tabular}[c]{@{}c@{}}Dens.\\pobl.\end{tabular} &
+			\begin{tabular}[c]{@{}c@{}}Pers.\\ocup.\end{tabular} &
+			\begin{tabular}[c]{@{}c@{}}Equip.\end{tabular} &
+			\begin{tabular}[c]{@{}c@{}}Línea\\transp.\\masivo\end{tabular} &
+			\begin{tabular}[c]{@{}c@{}}Unid.\\econ.\end{tabular} &
+			\begin{tabular}[c]{@{}c@{}}Índice\\sufic.\\serv.\end{tabular} &
+			\begin{tabular}[c]{@{}c@{}}Índice\\dem.\\lab.\end{tabular} &
+			Pond. \\
+			\hline
+			Centro Guadalajara & 1,00 & 1,00 & 0,40 & 1,00 & 1,00 & 1,00 & 1,00 & 1,00 & 1,00 & 1,00 \\
+			Centro Zapopan & 0,52 & 0,20 & 1,00 & 0,52 & 0,76 & 0,50 & 0,42 & 1,00 & 0,38 & 0,82 \\
+			Centro Tlaquepaque & 0,69 & 0,32 & 1,00 & 0,48 & 0,94 & 0,50 & 0,58 & 1,00 & 0,21 & 0,82 \\
+			Tonalá Centro & 0,37 & 0,21 & 1,00 & 0,52 & 0,13 & 0,00 & 0,66 & 1,00 & 0,27 & 0,74 \\
+			Expo-Chapalita & 0,54 & 0,29 & 0,45 & 0,66 & 0,58 & 0,00 & 0,28 & 0,83 & 0,57 & 0,63 \\
+			Las Águilas & 0,46 & 0,21 & 1,00 & 0,34 & 0,36 & 0,00 & 0,30 & 1,00 & 0,02 & 0,59 \\
+			Oblatos & 0,48 & 0,27 & 1,00 & 0,34 & 0,13 & 0,00 & 0,46 & 1,00 & -0,25 & 0,58 \\
+			Miravalle & 0,35 & 0,17 & 1,00 & 0,23 & 0,27 & 0,50 & 0,30 & 1,00 & -0,27 & 0,58 \\
+			Parque Solidaridad-Tetlán & 0,31 & 0,20 & 1,00 & 0,21 & 0,00 & 0,50 & 0,34 & 1,00 & -0,36 & 0,52 \\
+			Providencia & 0,30 & 0,21 & 0,40 & 0,48 & 0,85 & 0,00 & 0,33 & 0,80 & 0,51 & 0,49 \\
+			Centro Sur & 0,28 & 0,15 & 1,00 & 0,25 & 0,31 & 0,50 & 0,12 & 0,58 & 0,13 & 0,49 \\
+			Santa Anita & 0,14 & 0,05 & 1,00 & 0,12 & 0,22 & 0,00 & 0,16 & 0,45 & -0,05 & 0,46 \\
+			Huentitán & 0,37 & 0,20 & 1,00 & 0,14 & 0,04 & 0,00 & 0,16 & 0,80 & -0,13 & 0,46 \\
+			Las Pintitas & 0,37 & 0,04 & 0,52 & 0,25 & 0,40 & 0,00 & 0,33 & 0,41 & -0,09 & 0,43 \\
+			Santa Fe & 0,26 & 0,16 & 1,00 & 0,12 & 0,00 & 0,00 & 0,12 & 0,60 & -0,18 & 0,43 \\
+			Tlajomulco de Zúñiga & 0,15 & 0,07 & 0,72 & 0,24 & 0,18 & 0,00 & 0,23 & 0,50 & 0,09 & 0,37 \\
+			El Salto & 0,06 & 0,02 & 0,75 & 0,12 & 0,58 & 0,00 & 0,17 & 0,60 & -0,01 & 0,37 \\
+			San Martín de las Flores & 0,09 & 0,02 & 1,00 & 0,09 & 0,18 & 0,00 & 0,14 & 0,43 & -0,16 & 0,31 \\
+			Tesistán & 0,09 & 0,07 & 0,76 & 0,12 & 0,22 & 0,00 & 0,16 & 0,40 & -0,08 & 0,29 \\
+			Zapotlanejo & 0,00 & 0,00 & 0,32 & 0,25 & 0,00 & 0,00 & 0,44 & 0,50 & 0,00 & 0,29 \\
+			Base Aérea & 0,07 & 0,04 & 0,73 & 0,23 & 0,13 & 0,00 & 0,13 & 0,28 & -0,02 & 0,28 \\
+			Toluquilla & 0,26 & 0,16 & 0,47 & 0,18 & 0,18 & 0,00 & 0,06 & 0,28 & 0,04 & 0,28 \\
+			San José del Castillo & 0,06 & 0,02 & 0,74 & 0,13 & 0,00 & 0,00 & 0,10 & 0,36 & -0,04 & 0,27 \\
+			Coyula & 0,17 & 0,09 & 0,40 & 0,07 & 0,18 & 0,00 & 0,09 & 0,43 & -0,02 & 0,24 \\
+			Santa Cruz del Valle & 0,06 & 0,01 & 0,54 & 0,05 & 0,00 & 0,00 & 0,08 & 0,28 & -0,12 & 0,19 \\
+			Santa Cruz de las Flores & 0,02 & 0,00 & 0,53 & 0,06 & 0,04 & 0,00 & 0,05 & 0,10 & -0,04 & 0,16 \\
+			Ixtlahuacán & 0,00 & 0,00 & 0,38 & 0,04 & 0,00 & 0,00 & 0,07 & 0,20 & -0,03 & 0,15 \\
+			\hline
+			\end{tabular}
+			\caption{Centralidades y sus indicadores}
+			\label{tab:centralidades}
+			\end{table}
+
+            Para poder analizar la estructura de la red de transporte público, cada una de las centralidades más extensas se dividen en dos, mientras que aquellas centralidades de menos extensión se combinan en una sola (imeplan, 2023). Una vez realizado este procedimiento, nos queamos con las siguientes zonas por cada municipio:
+
+            \begin{table}[H]
+            \centering
+            \small
+            %\rowcolors{1}{white}
+            \begin{tabular}{|c|l|l|}
+            \hline
+            \textbf{Código} & \textbf{Ubicación} & \textbf{Municipio} \\
+            \hline
+            24A & Bugambilias - Palomar & Tlajomulco de Zúñiga \\
+            24B & Las Águilas - Miramar & Zapopan \\
+            25 & Santa Ana - El Briseño & Zapopan \\
+            26 & La Cantera & Zapopan \\
+            29F & La Alcantarilla & El Salto \\
+            30 & Santa Anita & Tlajomulco de Zúñiga \\
+            30F & Bosques de Santa Anita & Tlajomulco de Zúñiga \\
+            32 & Las Liebres & San Pedro Tlaquepaque \\
+            34 & Toluquilla & San Pedro Tlaquepaque \\
+            35 & Las Pintitas & El Salto \\
+            37F & Santa Cruz del Valle & Tlajomulco de Zúñiga \\
+            38 & Santa Fe - Chulavista & Tlajomulco de Zúñiga \\
+            39F & Lomas del Sur - Hacienda Los Fresnos II & Tlajomulco de Zúñiga \\
+            40 & Lázaro Cárdenas del Río & Tonalá \\
+            41 & Coyula & Tonalá \\
+            42 & Centro Tonalá & Tonalá \\
+            43 & Centro Sur - Balcones de Santa María & San Pedro Tlaquepaque \\
+            44 & Valdepeñas - Centinela & Zapopan \\
+            45 & Tololotlán & Tonalá \\
+            46F & Valle de los Molinos - Copalita & Zapopan \\
+            48F & Matatlán - La Purísima & Zapotlanejo \\
+            49F & La Laja & Zapotlanejo \\
+            50 & Santa Fe Zapotlanejo & Zapotlanejo \\
+            \hline
+            \end{tabular}
+            \end{table}
+
+            \begin{table}[H]
+            \centering
+            \small
+            %\rowcolors{1}{white}
+            \begin{tabular}{|c|l|l|}
+            \hline
+            \textbf{Código} & \textbf{Ubicación} & \textbf{Municipio} \\
+            \hline
+            51F & San Miguel Cuyutlán - San Lucas Evangelista & Tlajomulco de Zúñiga \\
+            52 & San José del Castillo & El Salto \\
+            53 & Atequiza & Ixtlahuacán de los Membrillos \\
+            54 & La Capilla & Ixtlahuacán de los Membrillos \\
+            57 & La Gigantera & San Pedro Tlaquepaque \\
+            59 & Cajititlán & Tlajomulco de Zúñiga \\
+            60 & El Salto & El Salto \\
+            61 & Tesistán & Zapopan \\
+            63F & La Azucena & Zapopan \\
+            65A & El Bajío & Zapopan \\
+            65B & Base Aérea & Zapopan \\
+            68A & Constitución - Auditorio & Zapopan \\
+            68B & Centro Zapopan & Zapopan \\
+            69A & Providencia - Minerva & Guadalajara \\
+            69B & Puerta de Hierro - Autónoma & Zapopan \\
+            70A & San Juan de Dios & Guadalajara \\
+            70B & Centro Guadalajara & Guadalajara \\
+            Acceso Carretera Vallarta & Acceso Carretera Vallarta & Zapopan \\
+            Acceso Carretera Colotlán & Acceso Carretera Colotlán & Zapopan \\
+            Acceso Carretera Saltillo & Acceso Carretera Saltillo & Zapopan \\
+            Acceso Carretera Zapotlanejo & Acceso Carretera Zapotlanejo & Zapotlanejo \\
+            Acceso Carretera Chapala & Acceso Carretera Chapala & Ixtlahuacán de los Membrillos \\
+            Acceso Av. López Mateos & Acceso Av. López Mateos & Tlajomulco de Zúñiga \\
+            Aeropuerto & Aeropuerto & Tlajomulco de Zúñiga \\
+            \hline
+            \end{tabular}
+            \caption{Puntos de acceso}
+            \label{tab:accesos}
+            \end{table}
+
+    % TODO: Insertar un mapita aquí todo coqueto siono
+
+    \section{Introducción al General Transit Feed Specification (GTFS)}
+
+    El General Transit Feed Specification (GTFS) es un estándar utilizado a nivel internacional para la publicación y análisis de datos sobre el transporte público (GTFS, 2025). Su importancia radica en la posibilidad de modelar la red de transporte mediante datos estructurados que incluyen información sobre agencias, rutas, viajes, horarios, paradas y frecuencias.
+
+    El GTFS permite estructurar información clave sobre el transporte público, facilitando el análisis y la planificación urbana. Sus principales componentes incluyen archivos como \texttt{agency.txt}, \texttt{stops.txt}, \texttt{routes.txt}, \texttt{trips.txt}, \texttt{stop\_times.txt}, \texttt{calendar.txt}, \texttt{frequencies.txt}, \texttt{shapes.txt}, \texttt{fare\_attributes.txt}, \texttt{fare\_rules.txt}, \texttt{transfers.txt} y \texttt{feed\_info.txt}. Estos archivos contienen información sobre operadores de transporte, ubicaciones de paradas, rutas, horarios programados, tarifas y reglas de transbordo. Gracias a su estructura, el GTFS permite integrar sistemas de pago, optimizar la gestión de tarifas y mejorar la accesibilidad a la información de transporte.
+
+    \subsection{Archivos del GTFS}
+
+    A continuación, se presenta una tabla con los archivos incluidos en el GTFS y su descripción:
+
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{|l|p{10cm}|}
+            \hline
+            \textbf{Archivo} & \textbf{Descripción} \\
+            \hline
+            agency.txt & Contiene información sobre las agencias de transporte público. \\
+            stops.txt & Define las ubicaciones de paradas y estaciones. \\
+            routes.txt & Describe las rutas del servicio de transporte. \\
+            trips.txt & Lista los viajes individuales para cada ruta. \\
+            stop\_times.txt & Indica los tiempos de llegada y salida en cada parada. \\
+            calendar.txt & Define los días de operación del servicio de transporte. \\
+            calendar\_dates.txt & Permite definir excepciones a los horarios del calendario. \\
+            fare\_attributes.txt & Contiene información sobre tarifas de viaje. \\
+            fare\_rules.txt & Especifica reglas sobre la aplicación de tarifas. \\
+            shapes.txt & Describe las formas geométricas de las rutas. \\
+            frequencies.txt & Define los intervalos entre viajes en rutas con horarios de frecuencia fija. \\
+            transfers.txt & Especifica las reglas de transferencia entre rutas. \\
+            feed\_info.txt & Contiene metadatos sobre el conjunto de datos del GTFS. \\
+            pathways.txt & Define conexiones peatonales dentro de estaciones. \\
+            levels.txt & Especifica los diferentes niveles dentro de estaciones. \\
+            location\_groups.txt & Agrupa varias ubicaciones relacionadas en el sistema de transporte. \\
+            attributions.txt & Contiene información sobre atribuciones y derechos de los datos. \\
+            translations.txt & Define traducciones de los valores mostrados al usuario. \\
+
+            \hline
+        \end{tabular}
+        \caption{Archivos del GTFS y su descripción.}
+        \label{tab:gtfs_files}
+    \end{table}
+
+    La adopción del GTFS ha sido clave en diversas ciudades para mejorar la planificación y operación del transporte público. Además, en muchas otras ciudades, su implementación ha facilitado la integración de múltiples operadores en una única plataforma de información, permitiendo la interoperabilidad de diferentes servicios de transporte y promoviendo la movilidad sostenible.
+
+    \section{Aplicaciones de la teoría de grafos en el análisis de redes de tranporte público}
+
 
 \chapter{Metodología}
 	\section{Diseño de la investigación}
@@ -365,10 +565,9 @@
 	\section{Comparación con estudios similares}
 	\section{Implicaciones prácticas y teóricas}
 
-\chapter{Conclusiones y Recomendaciones}
+\chapter{Conclusiones}
 	\section{Resumen de hallazgos principales}
 	\section{Respuesta a la pregunta de investigación}
-	\section{Recomendaciones para mejorar el transporte en la ZMG}
 	\section{Propuestas para investigaciones futuras}
 
 \chapter{Bibliografía}
