@@ -4,18 +4,14 @@
 \usepackage{makecell}
 \usepackage{float}
 \usepackage[document]{ragged2e}
-%para editar el tamaño de los margenes
 \usepackage[a4paper,top=2.54cm,bottom=2.54cm,left=2.54cm,right=2.54cm,marginparwidth=1.75cm]{geometry}
-\setlength{\parindent}{.5 cm}   %Activar sangrias
-%librerias o paquetes
 \usepackage{amsmath, amssymb}
 \usepackage{graphicx}
 \usepackage{colortbl} 
 \usepackage{tikz}
 \usepackage{subcaption}
 \usepackage{amsfonts}
-
-
+\setlength{\parindent}{.5 cm}   %Activar sangrias
 
 \begin{document}
 
@@ -49,24 +45,58 @@
 
 \tableofcontents
 
+
 \chapter{Introducción}
-	\section{Contexto y relevancia del problema}
 
-    \section{Antecedentes}
-	
-	\section{Justificación del estudio}
+El transporte urbano en la Zona Metropolitana de Guadalajara (ZMG) es un componente fundamental para la movilidad de la población y el desarrollo económico de la región. A lo largo de las últimas décadas, la expansión de la mancha urbana ha avanzado de manera acelerada, promoviendo un crecimiento desordenado y fragmentado del territorio, lo que ha generado diversos retos en términos de movilidad e infraestructura (IMEPLAN, 2024). Este fenómeno ha resultado en una red de transporte público que enfrenta múltiples deficiencias, tales como la saturación en horas pico, tiempos de espera prolongados, falta de cobertura en zonas periféricas y una conectividad limitada entre distintos sistemas de transporte (IMEPLAN, 2024). Estas problemáticas afectan la calidad de vida de los habitantes y reducen la eficiencia de los desplazamientos dentro del área metropolitana.
 
-	\section{Problema}
+El \textit{Plan de Ordenamiento Territorial Metropolitano del AMG (POTmet)} destaca la necesidad de implementar estrategias integrales que favorezcan la movilidad sustentable y permitan una mejor articulación del sistema de transporte público con el desarrollo urbano de la región (IMEPLAN, 2024). En este contexto, es esencial realizar estudios que permitan analizar la estructura actual de la red de transporte público con el objetivo de identificar áreas de mejora y proponer soluciones que optimicen su funcionamiento. La aplicación de herramientas analíticas basadas en modelos matemáticos puede contribuir significativamente a la toma de decisiones en materia de movilidad, proporcionando información cuantificable sobre la eficiencia de la red y sus niveles de accesibilidad.
 
-    \section{Metodología}
+Diversos estudios han abordado la movilidad en la ZMG desde distintas perspectivas, incluyendo encuestas de satisfacción de los usuarios, diagnósticos sobre cobertura y accesibilidad, así como planes de reestructuración de rutas. La \textit{Encuesta de Satisfacción a Usuarios del Transporte Público (2024)} señala que la percepción general del servicio es baja, con quejas recurrentes sobre la insuficiencia de rutas, la falta de puntualidad y la inseguridad en los trayectos (Polymetrix Consulting, 2024). Estos hallazgos reflejan la necesidad de analizar con mayor profundidad la estructura de la red y evaluar de manera objetiva su desempeño.
 
-	\section{Objetivos de la investigación}
-		\subsection{Objetivo general}
-		\subsection{Objetivos específicos}
+Dentro del \textit{POTmet}, se destaca la urgencia de fomentar un modelo de movilidad que promueva la intermodalidad, es decir, la combinación eficiente de distintos medios de transporte en un mismo desplazamiento, lo que permitiría reducir tiempos de viaje y mejorar la conectividad entre zonas clave de la metrópoli (IMEPLAN, 2024). Sin embargo, hasta el momento, los estudios sobre movilidad han privilegiado enfoques cualitativos o descriptivos, sin una aplicación sistemática de herramientas cuantitativas que permitan evaluar con precisión la conectividad de la red de transporte público.
 
-    \section{Tesis}
+Dado que el transporte público desempeña un papel clave en la movilidad urbana, resulta fundamental adoptar metodologías de análisis que permitan optimizar su funcionamiento. En este sentido, la teoría de grafos se presenta como una herramienta idónea para evaluar la eficiencia de la red de transporte mediante métricas que permiten identificar cuellos de botella, rutas críticas y oportunidades de mejora. Estudios recientes han demostrado la utilidad de la teoría de grafos para modelar matrices de origen-destino y evaluar la accesibilidad en redes multimodales, proporcionando una base cuantitativa para mejorar la planificación del transporte (Zhao et al., 2024; Barraza y Estrada, 2021).
 
-	\section{Estructura del documento} 
+Este estudio propone una nueva metodología basada en la teoría de grafos para analizar y optimizar la infraestructura del transporte público en la ZMG, promoviendo un esquema de movilidad más eficiente, accesible y equitativo. A través del uso de modelos matemáticos, se pretende analizar la estructura de la red de transporte y proponer intervenciones basadas en evidencia empírica que faciliten su modernización y mejora continua.
+
+La pregunta de investigación que guía este trabajo es: \textit{¿Cómo puede la teoría de grafos proporcionar un enfoque metodológico para analizar la conectividad del sistema de transporte público en la ZMG?} A partir de esta interrogante, se pretende evaluar la conectividad del sistema de transporte, detectar posibles deficiencias estructurales y sugerir estrategias para optimizar su desempeño.
+
+Para responder esta pregunta, se aplicará la teoría de grafos para modelar y analizar la red de transporte público en la ZMG. Se recopilarán datos sobre rutas, frecuencias y tiempos de traslado, representándolos en un \textit{grafo dirigido}. A partir de este modelo, se emplearán diversas métricas de análisis, tales como:
+
+\begin{itemize}
+	\item \textbf{Centralidad}: Para identificar las rutas y nodos más relevantes dentro de la red y evaluar su impacto en la conectividad global del sistema.
+	\item \textbf{Conectividad}: Para analizar la accesibilidad de distintos puntos de la ciudad y medir la eficiencia de las conexiones entre diferentes rutas y modos de transporte.
+	\item \textbf{Eficiencia}: Para examinar la relación entre tiempos de traslado, distancias recorridas y la optimización de la cobertura de la red.
+	\item \textbf{Vulnerabilidad}: Para evaluar la resiliencia de la red ante la eliminación de nodos estratégicos y su impacto en la accesibilidad general (Barraza y Estrada, 2021).
+\end{itemize}
+
+Adicionalmente, se compararán estos resultados con modelos de planificación de transporte exitosos en otras ciudades, con el propósito de identificar buenas prácticas y adaptar soluciones que sean viables dentro del contexto de la ZMG.
+
+Los objetivos de este estudio son los siguientes:
+
+\textbf{Objetivo general:}
+\begin{itemize}
+	\item Evaluar la conectividad, accesibilidad y vulnerabilidad de la red de transporte público en la ZMG utilizando herramientas de teoría de grafos.
+\end{itemize}
+
+\textbf{Objetivos específicos:}
+\begin{itemize}
+	\item Identificar los nodos y rutas con mayor centralidad dentro de la red de transporte público.
+	\item Analizar la eficiencia y accesibilidad del sistema en términos de tiempos de traslado y cobertura.
+	\item Evaluar la vulnerabilidad del sistema ante la eliminación de nodos críticos y su impacto en la conectividad.
+	\item Comparar los resultados con modelos de planificación en otras ciudades y proponer mejoras para la ZMG.
+\end{itemize}
+
+\textbf{Hipótesis:}
+\begin{itemize}
+	\item La aplicación de la teoría de grafos permitirá desarrollar y validar un enfoque metodológico cuantitativo para analizar la conectividad de la red de transporte público de la ZMG, proporcionando un marco analítico para futuras estrategias de optimización del sistema.
+\end{itemize}
+
+\textbf{Limitaciones:} Si bien el presente estudio aporta un marco metodológico innovador basado en la teoría de grafos para analizar la conectividad del sistema de transporte público en la ZMG, es importante reconocer algunas limitaciones inherentes. En primer lugar, la falta de datos de alta calidad sobre los orígenes y destinos limita la precisión en la estimación de los flujos de pasajeros. Además, el modelo no discrimina entre los diferentes tipos de transporte ni considera las variaciones en el aforo que cada uno soporta, asumiendo una homogeneidad que simplifica la realidad operativa. Finalmente, se ha supuesto que los horarios se cumplen a la perfección, sin contemplar la posibilidad de retrasos u otras variabilidades operativas. Estas limitaciones abren la puerta a futuras investigaciones que integren fuentes de datos complementarias y aborden la heterogeneidad y la incertidumbre en la operación del sistema.
+
+\textbf{Estructura del documento:}
+El documento está organizado en cinco capítulos. En el Capítulo 2 se presenta el marco teórico, abordando estudios previos y fundamentos de la teoría de grafos en el análisis de transporte. El Capítulo 3 describe la metodología empleada, detallando la recolección y procesamiento de datos. En el Capítulo 4 se presentan los resultados del análisis y su discusión. Finalmente, en el Capítulo 5 se exponen las conclusiones y recomendaciones para futuras investigaciones.
 
 \chapter{Marco Teórico}
 	\section{Fundamentos de la teoría de grafos}
@@ -214,6 +244,18 @@
 				\caption{Ejemplos de subgrafo, camino y ciclo en un grafo.}
 			\end{figure}
 
+			\subsubsection{Matriz de Adyacencia}
+				La matriz de adyacencia es una representación matricial que codifica la estructura de un grafo. Dado un grafo $G=(V,E)$ con $N$ nodos, se define una matriz $A \in \mathbb{R}^{N \times N}$, donde cada elemento $a_{ij}$ indica si existe una conexión directa entre el nodo $i$ y el nodo $j$. En un grafo no ponderado, se establece que:
+				\begin{equation}
+					a_{ij} =
+					\begin{cases}
+						1, & \text{si existe una arista entre } i \text{ y } j,\\
+						0, & \text{en caso contrario.}
+					\end{cases}
+				\end{equation}
+				En grafos ponderados, cada $a_{ij}$ toma el valor del peso asignado a la conexión, lo que permite cuantificar la intensidad o costo de dicha relación.
+
+
 		
 		\subsection{Métricas clave en teoría de grafos}
 		
@@ -254,7 +296,33 @@
 				D = \frac{|E|}{|V|(|V|-1)}.
 			\end{equation}
 
-		
+			\subsubsection{Vulnerabilidad}
+			La \emph{vulnerabilidad} de un grafo se refiere a la sensibilidad de su estructura ante la eliminación de ciertos nodos.
+			Sea $G$ un grafo de $N$ nodos y sea $E(G)$ la eficiencia global del grafo, definida como
+			\begin{equation}
+				E(G) = \frac{1}{N(N-1)} \sum_{\substack{i,j \\ i \neq j}} \frac{1}{d_{ij}},
+			\end{equation}
+			donde $d_{ij}$ representa la longitud de la trayectoria más corta entre los nodos $i$ y $j$. Si se elimina un conjunto $H$ de nodos críticos, se obtiene el grafo $G \setminus H$ con eficiencia $E(G \setminus H)$.
+			La vulnerabilidad $V$ se expresa de la siguiente manera:
+			\begin{equation}
+			V = \frac{E(G) - E(G \setminus H)}{E(G)}.
+			\end{equation}
+			Un valor elevado de $V$ indica que la eliminación de los nodos críticos reduce significativamente la eficiencia global del grafo.
+
+			\subsubsection{Largo Promedio por Camino}
+			El \emph{largo promedio por camino} es una medida que cuantifica la distancia media entre todos los pares de nodos en un grafo. Se calcula mediante la siguiente expresión:
+			\begin{equation}
+				L = \frac{1}{N(N-1)} \sum_{\substack{i,j \\ i \neq j}} d_{ij},
+			\end{equation}
+			donde $N$ es el número total de nodos y $d_{ij}$ representa la longitud del camino más corto entre los nodos $i$ y $j$. Un valor menor de $L$ indica que, en promedio, los nodos están más próximos, lo cual se asocia con una mayor eficiencia en la conectividad del grafo.
+
+			\subsubsection{Brecha Espectral (Gap Espectral)}
+			La \emph{brecha espectral} es una medida derivada del espectro del grafo que refleja la diferencia entre los autovalores más importantes de un operador asociado al grafo, como la matriz de adyacencia. Si denotamos por $\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_N$ a los autovalores de la matriz de adyacencia, la brecha espectral se define como:
+			\begin{equation}
+				\Delta = \lambda_1 - \lambda_2.
+			\end{equation}
+			Un valor mayor de $\Delta$ sugiere que el grafo posee una estructura más cohesiva y es menos vulnerable a desconexiones, ya que una diferencia significativa entre el primer y el segundo autovalor indica una robusta conectividad estructural.
+
 		\subsection{Algoritmos fundamentales en teoría de grafos}
 			Los algoritmos en teoría de grafos permiten resolver problemas fundamentales como la determinación de caminos más cortos entre nodos. En esta sección, se presentan dos algoritmos esenciales para este propósito: Dijkstra y Floyd-Warshall.
 			
@@ -533,7 +601,6 @@
     La adopción del GTFS ha sido clave en diversas ciudades para mejorar la planificación y operación del transporte público. Además, en muchas otras ciudades, su implementación ha facilitado la integración de múltiples operadores en una única plataforma de información, permitiendo la interoperabilidad de diferentes servicios de transporte y promoviendo la movilidad sostenible.
 
     \section{Aplicaciones de la teoría de grafos en el análisis de redes de tranporte público}
-
 
 \chapter{Metodología}
 	\section{Diseño de la investigación}
