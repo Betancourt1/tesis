@@ -325,23 +325,23 @@ El documento está organizado en cinco capítulos. En el Capítulo 2 se presenta
 
 		\subsection{Algoritmos fundamentales en teoría de grafos}
 			Los algoritmos en teoría de grafos permiten resolver problemas fundamentales como la determinación de caminos más cortos entre nodos. En esta sección, se presentan dos algoritmos esenciales para este propósito: Dijkstra y Floyd-Warshall.
-			
+
 			\subsubsection{Algoritmo de Dijkstra}
-			
+
 			El algoritmo de Dijkstra encuentra el camino más corto desde un nodo fuente $s$ hacia todos los demás nodos en un grafo ponderado con pesos no negativos. Se basa en una estrategia voraz que mantiene un conjunto de nodos visitados y actualiza iterativamente las distancias más cortas conocidas.
-			
+
 			\textbf{Entrada:}
 			\begin{itemize}
 				\item Un grafo dirigido o no dirigido $G = (V, E)$ con pesos no negativos $w: E \to \mathbb{R}^+$.
 				\item Un nodo fuente $s \in V$.
 			\end{itemize}
-			
+
 			\textbf{Salida:}
 			\begin{itemize}
 				\item Distancias mínimas $d(v)$ desde $s$ hacia cada nodo $v \in V$.
 				\item Árbol de caminos más cortos.
 			\end{itemize}
-			
+
 			\textbf{Procedimiento:}
 			\begin{enumerate}
 				\item Inicializar $d(s) = 0$ y $d(v) = \infty$ para todos los $v \neq s$.
@@ -356,21 +356,21 @@ El documento está organizado en cinco capítulos. En el Capítulo 2 se presenta
 					\end{itemize}
 				\end{enumerate}
 			\end{enumerate}
-			
+
 			\subsubsection{Algoritmo de Floyd-Warshall}
-			
+
 			El algoritmo de Floyd-Warshall encuentra el camino más corto entre todos los pares de nodos en un grafo ponderado con pesos arbitrarios (incluyendo negativoss). Se basa en la programación dinámica y mejora iterativamente una matriz de distancias.
-			
+
 			\textbf{Entrada:}
 			\begin{itemize}
 				\item Un grafo dirigido $G = (V, E)$ con una matriz de pesos $W$.
 			\end{itemize}
-			
+
 			\textbf{Salida:}
 			\begin{itemize}
 				\item Una matriz $D$ donde $D[i][j]$ representa la distancia más corta entre los nodos $i$ y $j$.
 			\end{itemize}
-			
+
 			\textbf{Procedimiento:}
 			\begin{enumerate}
 				\item Inicializar $D$ como la matriz de adyacencia $W$, donde $D[i][j] = w(i,j)$ si existe una arista $(i,j)$, y $\infty$ en caso contrario.
@@ -557,7 +557,7 @@ El documento está organizado en cinco capítulos. En el Capítulo 2 se presenta
 
     % TODO: Insertar un mapita aquí todo coqueto siono
 
-    \section{Introducción al General Transit Feed Specification (GTFS)}
+    \section{General Transit Feed Specification (GTFS)}
 
     El General Transit Feed Specification (GTFS) es un estándar utilizado a nivel internacional para la publicación y análisis de datos sobre el transporte público (GTFS, 2025). Su importancia radica en la posibilidad de modelar la red de transporte mediante datos estructurados que incluyen información sobre agencias, rutas, viajes, horarios, paradas y frecuencias.
 
