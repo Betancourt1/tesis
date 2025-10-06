@@ -1,0 +1,187 @@
+\documentclass[openany]{book}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{makecell}
+\usepackage{float}
+\usepackage[document]{ragged2e}
+\usepackage[a4paper,top=2.54cm,bottom=2.54cm,left=2.54cm,right=2.54cm,marginparwidth=1.75cm]{geometry}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{colortbl} 
+\usepackage{tikz}
+\usepackage{subcaption}
+\usepackage{amsfonts}
+\setlength{\parindent}{.5 cm}   %Activar sangrias
+
+\begin{document}
+
+\begin{titlepage}
+	\begin{center}
+	\Huge{ UNIVERSIDAD DE GUADALAJARA\\}
+	\vspace{.4 cm}
+	\Huge{Centro Universitario de Ciencias Exactas\\
+	e Ingenierías \\}
+	\vspace{.4 cm}
+	\LARGE{División de Ciencias Básicas\\}
+	\LARGE{Licenciatura en Matemáticas\\}
+	\vspace{1 cm}
+	\includegraphics[scale = .08]{Images/escudo}\\
+	\vspace{1 cm}
+	\Large{Proyecto Integrador de Modelación Matemática\\}
+	\vspace{1 cm}
+	\LARGE{El transporte urbano de la Zona Metropolitana de Guadalajara desde la perspectiva de la teoría de grafos}\\
+	\vspace{1 cm}
+	{
+	 	\large Fernando Betancourt Moreno\\
+	}
+	\vspace{1 cm}
+	{
+		\large Dr. Abel Palafox Gonzálex\\}   
+		\end{center}
+		\vspace{3.5 cm}
+		\hfill{Guadalajara, Jal., Febrero 2025\\
+	}
+\end{titlepage}
+
+\tableofcontents
+
+\chapter{Introducción}
+
+    El transporte urbano en la Zona Metropolitana de Guadalajara (ZMG) es una pieza central de la vida cotidiana y del desempeño económico regional. La expansión acelerada de la mancha urbana y la dispersión del uso de suelo han tensionado la movilidad metropolitana, generando problemas recurrentes: saturación en horas pico, tiempos de espera elevados, discontinuidades de cobertura y conectividad limitada entre zonas periféricas y ejes troncales. Estas condiciones deterioran la calidad de vida de la población y reducen la eficiencia de los desplazamientos.
+
+    En este contexto, resulta necesario contar con evaluaciones cuantitativas y reproducibles de la red de transporte público que integren estructura y operación tal como se ofrece al usuario. Un antecedente inmediato de este trabajo es el estudio de Barraza y Estrada (2021), quienes modelan la red como un grafo y emplean métricas de teoría de grafos para identificar cuellos de botella, desigualdades de accesibilidad y nodos estratégicos. Retomando y extendiendo ese enfoque, este trabajo construye un modelo de grafo dirigido y ponderado por tiempo a partir de especificaciones operativas en formato \textit{GTFS}, con el objetivo de medir conectividad, accesibilidad y robustez de la red de transporte público de la ZMG.
+
+    \textbf{Antecedente y aportación}. Siguiendo la línea de Barraza–Estrada, se representa la red mediante nodos (paradas consolidadas) y aristas (conexiones temporales derivadas de viajes y trasbordos). Sobre este grafo se calculan centralidades (grado, intermediación, cercanía), índices de conectividad global y medidas de accesibilidad basadas en tiempos mínimos de viaje. Como aportes, se:
+    (i) actualizan y formalizan los procedimientos de construcción del grafo desde GTFS con supuestos explícitos de consolidación de paradas y ventanas de trasbordo;
+    (ii) incorporan mapas de isócronas y distribución espacial de accesibilidad usando una malla de unidades espaciales homogéneas;
+    (iii) evalúa la \emph{robustez} ante fallas mediante remoción aleatoria y dirigida de nodos/enlaces, cuantificando sus efectos en conectividad y tiempos de viaje; y
+    (iv) se documenta el pipeline para asegurar reproducibilidad y comparabilidad temporal.
+
+    \textbf{Pregunta de investigación}. ¿Cómo puede la teoría de grafos, aplicada a datos operativos del sistema (GTFS), proporcionar un marco metodológico para analizar la conectividad, la accesibilidad y la vulnerabilidad del transporte público en la ZMG, siguiendo y extendiendo el enfoque de Barraza–Estrada?
+
+    Para responder esta pregunta, se implementa un procedimiento que: (i) construye el grafo dirigido y ponderado por tiempo a partir de GTFS; (ii) estima distancias temporales y recuentos de trasbordos entre múltiples puntos de la ciudad; (iii) calcula métricas de centralidad (grado, intermediación, cercanía), conectividad global y eficiencia; y (iv) evalúa la vulnerabilidad de la red mediante escenarios de remoción aleatoria y dirigida de nodos y enlaces.
+
+    Las métricas empleadas incluyen:
+    \begin{itemize}
+      \item \textbf{Centralidad}: identificación de nodos y enlaces con papel desproporcionado en la conectividad global, útiles para priorizar intervenciones.
+      \item \textbf{Conectividad}: índices globales y locales que describen estructura topológica y longitud media de caminos en términos de tiempo.
+      \item \textbf{Accesibilidad}: tiempos mínimos y acumulados de viaje entre zonas, isócronas y distribución espacial de oportunidades alcanzables.
+      \item \textbf{Vulnerabilidad/robustez}: sensibilidad de conectividad y tiempos de viaje ante eliminación de nodos críticos (fallas aleatorias y ataques dirigidos).
+    \end{itemize}
+
+    \textbf{Objetivo general}
+    \begin{itemize}
+      \item Evaluar la conectividad, accesibilidad y vulnerabilidad de la red de transporte público de la ZMG mediante un modelo de grafo construido a partir de GTFS, retomando y extendiendo la metodología de Barraza–Estrada (2021).
+    \end{itemize}
+
+    \textbf{Objetivos específicos}
+    \begin{itemize}
+      \item Identificar nodos y corredores con mayor centralidad e intermediación.
+      \item Medir la accesibilidad temporal entre distintas zonas y su distribución espacial.
+      \item Estimar la vulnerabilidad de la red ante fallas dirigidas y aleatorias, y su impacto en conectividad y tiempos de viaje.
+      \item Proponer lineamientos de mejora priorizada a partir de los hallazgos estructurales.
+    \end{itemize}
+
+    \textbf{Hipótesis}
+    \begin{itemize}
+      \item Un modelo de grafo dirigido y ponderado por tiempo, derivado de GTFS y alineado con el enfoque de Barraza–Estrada, revela patrones de conectividad, desigualdades de accesibilidad y nodos críticos que no son evidentes en diagnósticos descriptivos, ofreciendo un marco cuantitativo útil para priorizar intervenciones.
+    \end{itemize}
+
+    \textbf{Alcance y limitaciones}. El análisis se centra en la oferta de transporte público tal como queda representada en GTFS y en su estructura de conectividad temporal. No se estiman flujos de demanda ni ocupación vehicular. Se asume el cumplimiento de horarios y frecuencias reportadas y se emplean supuestos estándar de caminata y transferencia. La calidad de los resultados depende de la consistencia del GTFS y de las convenciones adoptadas para consolidar paradas y tiempos de transferencia. Estas decisiones se documentan para asegurar reproducibilidad.
+
+    \textbf{Estructura del documento}. El Capítulo 2 presenta el marco teórico y la literatura sobre análisis de redes de transporte con teoría de grafos (con énfasis en Barraza–Estrada). El Capítulo 3 detalla los datos, el procedimiento de construcción del grafo y las métricas aplicadas. El Capítulo 4 expone los resultados y su discusión, con énfasis en accesibilidad, cuellos de botella y robustez. El Capítulo 5 ofrece conclusiones y líneas de trabajo futuro.
+
+\chapter{Análisis del transporte público}
+    \section{Modelos matemáticos para el análisis del transporte público}
+    \section{Teoría de grafos aplicada}
+        \subsection{Definiciones básicas y tipos de grafos}
+        \subsection{Propiedades estructurales relevantes}
+        \subsection{Métricas empleadas}
+            \subsubsection{Accesibilidad (índice de Shimbel / ATT)}
+            \subsubsection{Conectividad e indicadores globales}
+            \subsubsection{Centralidades (grado, intermediación, cercanía)}
+            \subsubsection{Robustez (resiliencia estructural)}
+            \subsubsection{Fricción espacial (índice de rodeo, \textit{Detour Index})}
+    \section{Antecedentes}
+        \subsection{Síntesis del enfoque de Barraza--Estrada}
+        \subsection{Estado del arte en redes urbanas}
+
+\chapter{Datos y construcción de la red}
+    \section{General Transit Feed Specification (GTFS)}
+        \subsection{Archivos y campos utilizados}
+    \section{Preprocesamiento y validación}
+        \subsection{Limpieza, consistencia y calendarios}
+        \subsection{Consolidación de paradas y ventanas de transferencia}
+    \section{Definición del grafo dirigido y ponderado por tiempo}
+        \subsection{Arcos de servicio}
+        \subsection{Arcos de transferencia (caminata)}
+    \section{Escalas temporales de análisis}
+    \section{Supuestos y limitaciones de los datos}
+
+\chapter{Metodología}
+    \section{Pipeline de modelación}
+    \section{Cálculo de matrices de menor tiempo}
+    \section{Cálculo de métricas}
+        \subsection{Accesibilidad}
+        \subsection{Conectividad}
+        \subsection{Centralidad}
+        \subsection{Robustez (fallas aleatorias y dirigidas)}
+        \subsection{Fricción espacial (índice de rodeo)}
+    \section{Visualización y análisis espacial}
+    \section{Reproducibilidad}
+
+\chapter{Casos de aplicación}
+    \section{Sydney}
+        \subsection{Red de autobuses}
+        \subsection{Red ferroviaria y de metro}
+        \subsection{Resultados y conclusiones}
+    \section{Resistencia (AR)} % Lugar, no métrica
+        \subsection{Conectividad}
+        \subsection{Centralidad}
+        \subsection{Accesibilidad}
+        \subsection{Distribución espacial}
+        \subsection{Resultados y conclusiones}
+    \section{Guadalajara}
+        \subsection{Fuente y alcance del estudio}
+        \subsection{Preparación de datos}
+        \subsection{Paso 1: Accesibilidad (índice de Shimbel)}
+            \subsubsection{Definición}
+            \subsubsection{Resultados}
+            \subsubsection{Interpretación}
+        \subsection{Paso 2: Fricción espacial (índice de rodeo, \textit{Detour Index})}
+            \subsubsection{Definición}
+            \subsubsection{Resultados}
+            \subsubsection{Interpretación}
+        \subsection{Paso 3: Robustez y vulnerabilidad (dependencia de hubs)}
+            \subsubsection{Resultados}
+            \subsubsection{Interpretación}
+        \subsection{Conclusiones para Guadalajara}
+
+\chapter{Discusión}
+    \section{Implicaciones operativas y de planeación}
+    \section{Continuidad y contraste con Barraza--Estrada}
+    \section{Trade-offs: accesibilidad, transferencias y cobertura}
+    \section{Limitaciones del estudio}
+    \section{Agenda futura}
+
+\chapter{Conclusions and Recommendations} % o "Conclusiones y recomendaciones" si todo es en español
+    \section{Síntesis de hallazgos}
+    \section{Respuestas a las preguntas de investigación}
+    \section{Recomendaciones}
+
+\chapter*{Referencias}
+    \addcontentsline{toc}{chapter}{Referencias}
+
+\appendix
+    \chapter{Detalles algorítmicos (Dijkstra, Floyd--Warshall)}
+    \chapter{Formulación matemática y notación}
+    \chapter{Tablas completas de resultados}
+    \chapter{Parámetros GTFS y reglas de consolidación}
+    \chapter{Guía de replicación y scripts}
+
+\chapter*{Anexos}
+    \addcontentsline{toc}{chapter}{Anexos}
+    \section{Cartografía y figuras en alta resolución}
+    \section{Listados de rutas y paradas (complementario)}
+
+\end{document}
