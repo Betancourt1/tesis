@@ -1,6 +1,49 @@
 \chapter{Datos y construcción de la red}
+
+
     \section{General Transit Feed Specification (GTFS)}
-        \subsection{Archivos y campos utilizados}
+
+		El General Transit Feed Specification (GTFS) es un estándar utilizado a nivel internacional para la publicación y análisis de datos sobre el transporte público (GTFS, 2025). Su importancia radica en la posibilidad de modelar la red de transporte mediante datos estructurados que incluyen información sobre agencias, rutas, viajes, horarios, paradas y frecuencias.
+
+		El GTFS permite estructurar información clave sobre el transporte público, facilitando el análisis y la planificación urbana. Sus principales componentes incluyen archivos como \texttt{agency.txt}, \texttt{stops.txt}, \texttt{routes.txt}, \texttt{trips.txt}, \texttt{stop\_times.txt}, \texttt{calendar.txt}, \texttt{frequencies.txt}, \texttt{shapes.txt}, \texttt{fare\_attributes.txt}, \texttt{fare\_rules.txt}, \texttt{transfers.txt} y \texttt{feed\_info.txt}. Estos archivos contienen información sobre operadores de transporte, ubicaciones de paradas, rutas, horarios programados, tarifas y reglas de transbordo. Gracias a su estructura, el GTFS permite integrar sistemas de pago, optimizar la gestión de tarifas y mejorar la accesibilidad a la información de transporte.
+
+		\subsection{Archivos del GTFS}
+
+		A continuación, se presenta una tabla con los archivos incluidos en el GTFS y su descripción:
+
+		\begin{table}[h]
+			\centering
+			\begin{tabular}{|l|p{10cm}|}
+				\hline
+				\textbf{Archivo} & \textbf{Descripción} \\
+				\hline
+				agency.txt & Contiene información sobre las agencias de transporte público. \\
+				stops.txt & Define las ubicaciones de paradas y estaciones. \\
+				routes.txt & Describe las rutas del servicio de transporte. \\
+				trips.txt & Lista los viajes individuales para cada ruta. \\
+				stop\_times.txt & Indica los tiempos de llegada y salida en cada parada. \\
+				calendar.txt & Define los días de operación del servicio de transporte. \\
+				calendar\_dates.txt & Permite definir excepciones a los horarios del calendario. \\
+				fare\_attributes.txt & Contiene información sobre tarifas de viaje. \\
+				fare\_rules.txt & Especifica reglas sobre la aplicación de tarifas. \\
+				shapes.txt & Describe las formas geométricas de las rutas. \\
+				frequencies.txt & Define los intervalos entre viajes en rutas con horarios de frecuencia fija. \\
+				transfers.txt & Especifica las reglas de transferencia entre rutas. \\
+				feed\_info.txt & Contiene metadatos sobre el conjunto de datos del GTFS. \\
+				pathways.txt & Define conexiones peatonales dentro de estaciones. \\
+				levels.txt & Especifica los diferentes niveles dentro de estaciones. \\
+				location\_groups.txt & Agrupa varias ubicaciones relacionadas en el sistema de transporte. \\
+				attributions.txt & Contiene información sobre atribuciones y derechos de los datos. \\
+				translations.txt & Define traducciones de los valores mostrados al usuario. \\
+
+				\hline
+			\end{tabular}
+			\caption{Archivos del GTFS y su descripción.}
+			\label{tab:gtfs_files}
+		\end{table}
+
+		La adopción del GTFS ha sido clave en diversas ciudades para mejorar la planificación y operación del transporte público. Además, en muchas otras ciudades, su implementación ha facilitado la integración de múltiples operadores en una única plataforma de información, permitiendo la interoperabilidad de diferentes servicios de transporte y promoviendo la movilidad sostenible.
+
     \section{Preprocesamiento y validación}
         \subsection{Limpieza, consistencia y calendarios}
         \subsection{Consolidación de paradas y ventanas de transferencia}
