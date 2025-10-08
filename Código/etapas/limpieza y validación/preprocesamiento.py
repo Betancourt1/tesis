@@ -257,6 +257,9 @@ class GTFSValidator:
         self.print_test("Claves primarias unicas",
                        len(pk_issues) == 0,
                        "Sin duplicados" if len(pk_issues) == 0 else f"{len(pk_issues)} problemas")
+        if pk_issues:
+            for issue in pk_issues:
+                print(f"         - {issue}")
 
         # Test 4: Claves foraneas
         fk_issues = []
@@ -293,6 +296,9 @@ class GTFSValidator:
         self.print_test("Referencias entre tablas válidas",
                        len(fk_issues) == 0,
                        "Sin huérfanos" if len(fk_issues) == 0 else f"{len(fk_issues)} problemas")
+        if fk_issues:
+            for issue in fk_issues:
+                print(f"         - {issue}")
 
         # Estadisticas
         self.stats['total_records'] = sum(len(df) for df in self.data.values())
