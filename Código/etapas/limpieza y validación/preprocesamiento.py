@@ -518,11 +518,11 @@ class GTFSValidator:
                               invalid_types.sum() == 0,
                               f"{invalid_types.sum()} rutas con route_type invalido ({invalid_pct:.1f}%)",
                               'warning')
-                self.print_test("route_type v�lido (GTFS spec)",
+                self.print_test("route_type válido (GTFS spec)",
                                invalid_types.sum() == 0,
                                f"{len(routes) - invalid_types.sum()}/{len(routes)} rutas")
 
-        # Test 2: Viajes hu�rfanos
+        # Test 2: Viajes huérfanos
         if 'trips' in self.data and 'stop_times' in self.data:
             trips_with_stops = set(self.data['stop_times']['trip_id'].unique())
             all_trips = set(self.data['trips']['trip_id'].unique())
@@ -537,7 +537,7 @@ class GTFSValidator:
                            orphan_pct < 1,
                            f"{len(trips_with_stops)}/{len(all_trips)} trips usados")
 
-        # Test 3: Stops hu�rfanos
+        # Test 3: Stops huérfanos
         if 'stops' in self.data and 'stop_times' in self.data:
             used_stops = set(self.data['stop_times']['stop_id'].unique())
             all_stops = set(self.data['stops']['stop_id'].unique())
@@ -558,7 +558,7 @@ class GTFSValidator:
 
     def print_summary(self):
         """Imprimir resumen final"""
-        self.print_section("RESUMEN DE VALIDACI�N")
+        self.print_section("RESUMEN DE VALIDACIóN")
 
         # Contar tests
         total_tests = 0
@@ -578,26 +578,26 @@ class GTFSValidator:
                         warnings += 1
 
         print(f"\n  Tests ejecutados: {total_tests}")
-        print(f"   Aprobados: {passed_tests}")
-        print(f"   Fallidos: {failed_tests}")
-        print(f"  � Advertencias: {warnings}")
+        print(f"   Aprobados: {passed_tests}")
+        print(f"  Fallidos: {failed_tests}")
+        print(f"  Advertencias: {warnings}")
 
-        # Criterios de aceptaci�n
-        self.print_section("CRITERIOS DE ACEPTACI�N")
+        # Criterios de aceptación
+        self.print_section("CRITERIOS DE ACEPTACIóN")
 
         # Criterio 1: 0% claves rotas
         broken_keys = sum(
             1 for test in self.results['structure']['tests']
             if not test['passed'] and test['severity'] == 'error' and
             ('clave' in test['message'].lower() or 'duplicado' in test['message'].lower() or
-             'hu�rfano' in test['message'].lower())
+             'huérfano' in test['message'].lower())
         )
 
         criterion_1 = broken_keys == 0
         self.print_test(
             "Criterio 1: 0% claves rotas",
             criterion_1,
-            f"{broken_keys} problemas de claves" if not criterion_1 else "Todas las claves v�lidas"
+            f"{broken_keys} problemas de claves" if not criterion_1 else "Todas las claves válidas"
         )
 
         # Criterio 2: <1% tramos sospechosos
@@ -611,7 +611,7 @@ class GTFSValidator:
         )
 
         # Criterio 3: Todo documentado
-        criterion_3 = True  # Siempre se genera documentaci�n
+        criterion_3 = True  # Siempre se genera documentación
         self.print_test(
             "Criterio 3: Todo documentado",
             criterion_3,
@@ -624,22 +624,22 @@ class GTFSValidator:
         self.print_section("RESULTADO FINAL")
 
         if all_criteria:
-            print("\n   FEED APROBADO")
-            print("     El feed cumple con todos los criterios de aceptaci�n.")
-            print("      Listo para an�lisis de m�tricas\n")
+            print("\n   FEED APROBADO")
+            print("     El feed cumple con todos los criterios de aceptación.")
+            print("      Listo para análisis de métricas\n")
         else:
             print("\n  L FEED RECHAZADO")
-            print("     El feed NO cumple con los criterios de aceptaci�n.")
-            print("      Correcciones requeridas antes de continuar\n")
+            print("     El feed NO cumple con los criterios de aceptación.")
+            print("     Correcciones requeridas antes de continuar\n")
 
         return all_criteria
 
     # ========================================================================
-    # EJECUTAR VALIDACI�N
+    # EJECUTAR VALIDACIóN
     # ========================================================================
 
     def run(self):
-        """Ejecutar validaci�n completa"""
+        """Ejecutar validación completa"""
         print("\n" + "="*70)
         print("  VALIDADOR GTFS - ZONA METROPOLITANA DE GUADALAJARA")
         print("="*70)
@@ -652,7 +652,7 @@ class GTFSValidator:
             self.check_temporal()
             self.check_consistency()
         else:
-            print("\n�  Validaci�n detenida: fallos cr�ticos en estructura")
+            print("\n Validación detenida: fallos críticos en estructura")
 
         passed = self.print_summary()
 
