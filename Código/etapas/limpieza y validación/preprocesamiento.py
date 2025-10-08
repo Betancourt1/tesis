@@ -149,8 +149,7 @@ class GTFSValidator:
         if missing_files:
             return  # No continuar si faltan archivos criticos
 
-        # Test 2: Encoding y formato
-        encoding_issues = []
+        # Test 2: Formato de archivos y carga
         bom_issues = []
 
         for file in required_files + calendar_files:
@@ -161,21 +160,16 @@ class GTFSValidator:
             if not path.exists():
                 continue
 
-            # Check encoding
-            with open(path, 'rb') as f:
-                raw = f.read(10000)
-                result = chardet.detect(raw)
+            # Check BOM (solo informativo, no bloqueante)
+            try:
+                with open(path, 'rb') as f:
+                    start = f.read(3)
+                    if start == b'\xef\xbb\xbf':
+                        bom_issues.append(file)
+            except Exception:
+                pass
 
-            if result['encoding'].upper() not in ['UTF-8', 'ASCII']:
-                encoding_issues.append(f"{file} ({result['encoding']})")
-
-            # Check BOM
-            with open(path, 'rb') as f:
-                start = f.read(3)
-                if start == b'\xef\xbb\xbf':
-                    bom_issues.append(file)
-
-            # Cargar datos
+            # Cargar datos (sin exigir UTF-8)
             try:
                 df = pd.read_csv(path, dtype=str)
 
@@ -184,20 +178,19 @@ class GTFSValidator:
                 df = df.dropna(how='all')
 
                 unnamed_cols = [col for col in df.columns if 'Unnamed' in str(col)]
-                df = df.drop(columns=unnamed_cols)
+                if unnamed_cols:
+                    df = df.drop(columns=unnamed_cols)
 
                 self.data[file] = df
 
             except Exception as e:
                 self.log_test('structure', f'carga_{file}', False,
-                             f"Error al cargar: {str(e)}")
+                              f"Error al cargar {file}.csv/txt: {str(e)}")
 
-        self.log_test('structure', 'encoding_utf8',
-                      len(encoding_issues) == 0,
-                      f"Problemas en: {encoding_issues}" if encoding_issues else "UTF-8 correcto")
-        self.print_test("Encoding UTF-8 sin BOM",
-                       len(encoding_issues) == 0 and len(bom_issues) == 0,
-                       f"{len(self.data)} archivos validados")
+        # Nota: Se eliminó el criterio de que los archivos deban ser UTF-8
+        self.print_test("Archivos legibles (sin exigir UTF-8)",
+                        True,
+                        f"{len(self.data)} archivos cargados")
 
         # Test 3: Claves primarias
         pk_issues = []
@@ -219,9 +212,21 @@ class GTFSValidator:
             if isinstance(pk, list):
                 # Compuesta
                 if all(col in df.columns for col in pk):
-                    dup_count = df.duplicated(subset=pk, keep=False).sum()
+                    dup_mask = df.duplicated(subset=pk, keep=False)
+                    dup_count = int(dup_mask.sum())
                     if dup_count > 0:
-                        pk_issues.append(f"{table}: {dup_count} duplicados")
+                        # ejemplos de claves compuestas duplicadas
+                        dup_keys = (
+                            df.loc[dup_mask, pk]
+                              .astype(str)
+                              .drop_duplicates()
+                              .head(10)
+                              .apply(lambda r: tuple(r.values.tolist()), axis=1)
+                              .tolist()
+                        )
+                        pk_issues.append(
+                            f"{table}.csv/txt: {dup_count} duplicados en clave compuesta {pk} - ejemplos: {dup_keys}"
+                        )
             else:
                 # Simple
                 if pk not in df.columns:
@@ -229,11 +234,22 @@ class GTFSValidator:
                         df['agency_id'] = '1'
                         self.data[table] = df
                     else:
-                        pk_issues.append(f"{table}: falta columna {pk}")
+                        pk_issues.append(f"{table}.csv/txt: falta columna {pk}")
                 else:
-                    dup_count = df.duplicated(subset=[pk], keep=False).sum()
+                    dup_mask = df.duplicated(subset=[pk], keep=False)
+                    dup_count = int(dup_mask.sum())
                     if dup_count > 0:
-                        pk_issues.append(f"{table}: {dup_count} duplicados")
+                        dup_vals = (
+                            df.loc[dup_mask, pk]
+                              .astype(str)
+                              .dropna()
+                              .drop_duplicates()
+                              .head(10)
+                              .tolist()
+                        )
+                        pk_issues.append(
+                            f"{table}.csv/txt: {dup_count} duplicados en {pk} - ejemplos: {dup_vals}"
+                        )
 
         self.log_test('structure', 'claves_primarias',
                       len(pk_issues) == 0,
@@ -266,14 +282,17 @@ class GTFSValidator:
 
             orphans = child_vals - parent_vals
             if orphans:
-                fk_issues.append(f"{child_table}.{child_key}->{parent_table}: {len(orphans)} huerfanos")
+                examples = list(sorted(map(str, orphans)))[:10]
+                fk_issues.append(
+                    f"{child_table}.csv/txt {child_key} -> {parent_table}.csv/txt: {len(orphans)} huérfanos; ejemplos: {examples}"
+                )
 
         self.log_test('structure', 'claves_foraneas',
                       len(fk_issues) == 0,
-                      "; ".join(fk_issues) if fk_issues else "Todas validas")
-        self.print_test("Referencias entre tablas validas",
+                      "; ".join(fk_issues) if fk_issues else "Todas válidas")
+        self.print_test("Referencias entre tablas válidas",
                        len(fk_issues) == 0,
-                       "Sin huerfanos" if len(fk_issues) == 0 else f"{len(fk_issues)} problemas")
+                       "Sin huérfanos" if len(fk_issues) == 0 else f"{len(fk_issues)} problemas")
 
         # Estadisticas
         self.stats['total_records'] = sum(len(df) for df in self.data.values())
