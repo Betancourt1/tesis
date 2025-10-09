@@ -68,7 +68,10 @@ Este capítulo presenta las fuentes de datos y los procedimientos metodológicos
 
     \subsection{Consolidación de paradas y ventanas de transferencia}
 
+    % TODO: Quitar esas menciones idiotas a parent_station
+
     Con base en los resultados de validación, la consolidación de paradas parte del atributo \texttt{parent\_station} cuando está disponible, lo que permite agrupar andenes y accesos pertenecientes a una misma instalación física. Esta agrupación es relevante para la definición de nodos del grafo y para la modelación de transbordos. Las ventanas de transferencia temporal entre servicios se parametrizan a partir de los tiempos de llegada y salida en \texttt{stop\_times}, consistentes con los rangos temporales verificados en la etapa anterior; los detalles operativos de dichas ventanas y de los arcos de caminata se desarrollan en la siguiente sección al definir el grafo dirigido ponderado por tiempo.
+
     \section{Definición del grafo dirigido y ponderado por tiempo}
         \subsection{Arcos de servicio}
         \subsection{Arcos de transferencia (caminata)}
