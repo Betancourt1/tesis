@@ -47,7 +47,8 @@ Este capítulo presenta las fuentes de datos y los procedimientos metodológicos
 
 		La adopción del GTFS ha sido clave en diversas ciudades para mejorar la planificación y operación del transporte público. Además, en muchas otras ciudades, su implementación ha facilitado la integración de múltiples operadores en una única plataforma de información, permitiendo la interoperabilidad de diferentes servicios de transporte y promoviendo la movilidad sostenible.
 
-\newpage
+    \newpage
+
     \section{Preprocesamiento y validación}
 
     Esta sección documenta el flujo de preprocesamiento y validación aplicado al conjunto GTFS con el fin de garantizar la coherencia estructural, espacial y temporal de los datos empleados en la construcción del grafo de transporte. El proceso se encuentra automatizado en un validador programático que registra los resultados de cada prueba (PASS/FAIL), así como metadatos de ejecución, y se complementa con rutinas ad hoc para casos específicos (por ejemplo, duplicados en secuencias de paradas). A continuación se sintetizan los criterios principales, referenciando las funciones implementadas en el código.
@@ -75,5 +76,7 @@ Este capítulo presenta las fuentes de datos y los procedimientos metodológicos
     \section{Definición del grafo dirigido y ponderado por tiempo}
         \subsection{Arcos de servicio}
         \subsection{Arcos de transferencia (caminata)}
+
     \section{Escalas temporales de análisis}
+
     \section{Supuestos y limitaciones de los datos}
