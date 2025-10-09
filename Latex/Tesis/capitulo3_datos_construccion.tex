@@ -1,40 +1,43 @@
 \chapter{Datos y construcción de la red}
 
+Hemos visto que la teoría de grafos puede ser exitosamente aplicada al modelado y análisis de las redes de transporte público, dejándonos ver aspectos interesantes de su estructura, robustez y eficiencia. Si tuviéramos que hacer estos análisis a partir de datos no estructurados, o si tuviéramos que recabar manualmente la información a partir de observaciones, el trabajo necesario para analizar estas redes sería poco abarcable para una sola persona. Por esto es que se ha desarrollado el \textit{General Transit Feed Specification} (en delante \textit{GTFS}), un estándar de archivos estructurados para describir redes de transporte urbano de manera formal.
+
+Este capítulo presenta las fuentes de datos y los procedimientos metodológicos empleados para construir la red de transporte público utilizada en los análisis subsecuentes. En particular, se describe el estándar GTFS adoptado como insumo principal, el proceso de preprocesamiento y validación diseñado para garantizar la integridad espacial y temporal de los registros, y los criterios con los que se derivan los elementos del grafo (nodos, arcos de servicio y de transferencia) y sus ponderaciones temporales. El objetivo es asegurar que la red resultante sea consistente, reproducible y fiel a la operación observada, sentando una base sólida para los ejercicios analíticos y de modelación presentados en los capítulos siguientes.
 
     \section{General Transit Feed Specification (GTFS)}
 
 		El General Transit Feed Specification (GTFS) es un estándar utilizado a nivel internacional para la publicación y análisis de datos sobre el transporte público (GTFS, 2025). Su importancia radica en la posibilidad de modelar la red de transporte mediante datos estructurados que incluyen información sobre agencias, rutas, viajes, horarios, paradas y frecuencias.
 
-		El GTFS permite estructurar información clave sobre el transporte público, facilitando el análisis y la planificación urbana. Sus principales componentes incluyen archivos como \texttt{agency.txt}, \texttt{stops.txt}, \texttt{routes.txt}, \texttt{trips.txt}, \texttt{stop\_times.txt}, \texttt{calendar.txt}, \texttt{frequencies.txt}, \texttt{shapes.txt}, \texttt{fare\_attributes.txt}, \texttt{fare\_rules.txt}, \texttt{transfers.txt} y \texttt{feed\_info.txt}. Estos archivos contienen información sobre operadores de transporte, ubicaciones de paradas, rutas, horarios programados, tarifas y reglas de transbordo. Gracias a su estructura, el GTFS permite integrar sistemas de pago, optimizar la gestión de tarifas y mejorar la accesibilidad a la información de transporte.
+		El GTFS permite estructurar información clave sobre el transporte público, facilitando el análisis y la planificación urbana. Sus principales componentes incluyen archivos como \texttt{agency.csv}, \texttt{stops.csv}, \texttt{routes.csv}, \texttt{trips.csv}, \texttt{stop\_times.csv}, \texttt{calendar.csv}, \texttt{frequencies.csv}, \texttt{shapes.csv}, \texttt{fare\_attributes.csv}, \texttt{fare\_rules.csv}, \texttt{transfers.csv} y \texttt{feed\_info.csv}. Estos archivos contienen información sobre operadores de transporte, ubicaciones de paradas, rutas, horarios programados, tarifas y reglas de transbordo. Gracias a su estructura, el GTFS permite integrar sistemas de pago, optimizar la gestión de tarifas y mejorar la accesibilidad a la información de transporte.
 
 		\subsection{Archivos del GTFS}
 
 		A continuación, se presenta una tabla con los archivos incluidos en el GTFS y su descripción:
 
-		\begin{table}[h]
+		\begin{table}[h!]
 			\centering
 			\begin{tabular}{|l|p{10cm}|}
 				\hline
 				\textbf{Archivo} & \textbf{Descripción} \\
 				\hline
-				agency.txt & Contiene información sobre las agencias de transporte público. \\
-				stops.txt & Define las ubicaciones de paradas y estaciones. \\
-				routes.txt & Describe las rutas del servicio de transporte. \\
-				trips.txt & Lista los viajes individuales para cada ruta. \\
-				stop\_times.txt & Indica los tiempos de llegada y salida en cada parada. \\
-				calendar.txt & Define los días de operación del servicio de transporte. \\
-				calendar\_dates.txt & Permite definir excepciones a los horarios del calendario. \\
-				fare\_attributes.txt & Contiene información sobre tarifas de viaje. \\
-				fare\_rules.txt & Especifica reglas sobre la aplicación de tarifas. \\
-				shapes.txt & Describe las formas geométricas de las rutas. \\
-				frequencies.txt & Define los intervalos entre viajes en rutas con horarios de frecuencia fija. \\
-				transfers.txt & Especifica las reglas de transferencia entre rutas. \\
-				feed\_info.txt & Contiene metadatos sobre el conjunto de datos del GTFS. \\
-				pathways.txt & Define conexiones peatonales dentro de estaciones. \\
-				levels.txt & Especifica los diferentes niveles dentro de estaciones. \\
-				location\_groups.txt & Agrupa varias ubicaciones relacionadas en el sistema de transporte. \\
-				attributions.txt & Contiene información sobre atribuciones y derechos de los datos. \\
-				translations.txt & Define traducciones de los valores mostrados al usuario. \\
+				agency.csv & Contiene información sobre las agencias de transporte público. \\
+				stops.csv & Define las ubicaciones de paradas y estaciones. \\
+				routes.csv & Describe las rutas del servicio de transporte. \\
+				trips.csv & Lista los viajes individuales para cada ruta. \\
+				stop\_times.csv & Indica los tiempos de llegada y salida en cada parada. \\
+				calendar.csv & Define los días de operación del servicio de transporte. \\
+				calendar\_dates.csv & Permite definir excepciones a los horarios del calendario. \\
+				fare\_attributes.csv & Contiene información sobre tarifas de viaje. \\
+				fare\_rules.csv & Especifica reglas sobre la aplicación de tarifas. \\
+				shapes.csv & Describe las formas geométricas de las rutas. \\
+				frequencies.csv & Define los intervalos entre viajes en rutas con horarios de frecuencia fija. \\
+				transfers.csv & Especifica las reglas de transferencia entre rutas. \\
+				feed\_info.csv & Contiene metadatos sobre el conjunto de datos del GTFS. \\
+				pathways.csv & Define conexiones peatonales dentro de estaciones. \\
+				levels.csv & Especifica los diferentes niveles dentro de estaciones. \\
+				location\_groups.csv & Agrupa varias ubicaciones relacionadas en el sistema de transporte. \\
+				attributions.csv & Contiene información sobre atribuciones y derechos de los datos. \\
+				translations.csv & Define traducciones de los valores mostrados al usuario. \\
 
 				\hline
 			\end{tabular}
@@ -44,9 +47,28 @@
 
 		La adopción del GTFS ha sido clave en diversas ciudades para mejorar la planificación y operación del transporte público. Además, en muchas otras ciudades, su implementación ha facilitado la integración de múltiples operadores en una única plataforma de información, permitiendo la interoperabilidad de diferentes servicios de transporte y promoviendo la movilidad sostenible.
 
+\newpage
     \section{Preprocesamiento y validación}
-        \subsection{Limpieza, consistencia y calendarios}
-        \subsection{Consolidación de paradas y ventanas de transferencia}
+
+    Esta sección documenta el flujo de preprocesamiento y validación aplicado al conjunto GTFS con el fin de garantizar la coherencia estructural, espacial y temporal de los datos empleados en la construcción del grafo de transporte. El proceso se encuentra automatizado en un validador programático que registra los resultados de cada prueba (PASS/FAIL), así como metadatos de ejecución, y se complementa con rutinas ad hoc para casos específicos (por ejemplo, duplicados en secuencias de paradas). A continuación se sintetizan los criterios principales, referenciando las funciones implementadas en el código.
+
+    \subsection{Limpieza, consistencia y calendarios}
+
+    \paragraph{Estructura mínima y carga robusta.} Como primer paso, se verifica la presencia de archivos obligatorios: \texttt{agency}, \texttt{stops}, \texttt{routes}, \texttt{trips} y \texttt{stop\_times}, además de al menos uno entre \texttt{calendar} o \texttt{calendar\_dates}. La carga se realiza de manera tolerante tanto para archivos \texttt{.csv} como \texttt{.txt}, sin imponer codificación UTF-8 y con limpieza automática de filas completamente vacías y columnas espurias (por ejemplo, columnas \texttt{Unnamed}).
+
+    \paragraph{Identificadores y claves.} Se aplican controles de unicidad sobre claves primarias: \texttt{agency\_id}, \texttt{stop\_id}, \texttt{route\_id}, \texttt{trip\_id} y la clave compuesta \texttt{(trip\_id, stop\_sequence)} en \texttt{stop\_times}. En caso de ausencia de \texttt{agency\_id}, se asigna un valor por defecto para mantener la integridad. Asimismo, se evalúan claves foráneas críticas: \texttt{routes.agency\_id} \(\rightarrow\) \texttt{agency.agency\_id}, \texttt{trips.route\_id} \(\rightarrow\) \texttt{routes.route\_id}, \texttt{stop\_times.trip\_id} \(\rightarrow\) \texttt{trips.trip\_id} y \texttt{stop\_times.stop\_id} \(\rightarrow\) \texttt{stops.stop\_id}. La presencia de valores huérfanos se reporta con ejemplos y afecta el estatus de la validación estructural.
+
+    \paragraph{Validación espacial.} Se tipifican numéricamente las coordenadas de \texttt{stops} y se verifican: (i) existencia de \texttt{stop\_lat} y \texttt{stop\_lon} válidas; (ii) localización dentro de un rectángulo envolvente de referencia para la ZMG; (iii) cobertura del atributo \texttt{parent\_station} (si existe). Adicionalmente, se calculan distancias geodésicas entre paradas consecutivas dentro de un mismo \texttt{trip} mediante la fórmula de Haversine, marcando como sospechosos los tramos con longitudes fuera del intervalo [10 m, 2000 m]. Se reporta el porcentaje de segmentos sospechosos respecto del total, con un umbral de aceptación inferior al 1\%.
+
+    \paragraph{Validación temporal.} Se estandarizan los campos \texttt{arrival\_time} y \texttt{departure\_time} a segundos desde las 00:00, se verifica que \texttt{arrival\_time} \(\leq\) \texttt{departure\_time} y que \texttt{stop\_sequence} sea estrictamente creciente por \texttt{trip}. Se evalúan duraciones de tramo (diferencias sucesivas de \texttt{arrival\_time}) y se consideran atípicas las que se encuentran fuera del rango [10 s, 3600 s]. Asimismo, se inspeccionan brechas temporales máximas entre eventos consecutivos (hasta 7200 s) y se documentan incidencias por porcentaje de registros afectados.
+
+    \paragraph{Consistencia transversal.} Se realizan comprobaciones adicionales: tipos de ruta válidos conforme a la especificación GTFS; \texttt{trips} huérfanos (sin registros en \texttt{stop\_times}) y \texttt{stops} huérfanos (no referenciados por \texttt{stop\_times}). Estas métricas sirven para dimensionar el uso efectivo del \emph{feed} y orientar acciones de depuración.
+
+    \paragraph{Tratamientos específicos de duplicados.} Complementariamente, se dispone de una rutina de diagnóstico y corrección dirigida a duplicados en la clave compuesta \texttt{(trip\_id, stop\_sequence)} de \texttt{stop\_times}. En particular, para registros del Tren Ligero (\texttt{stop\_id} con prefijo \texttt{MT-}), se identifican y eliminan duplicados exactos, generando un archivo \texttt{stop\_times\_cleaned.csv} que preserva el resto de los registros intactos. Esta intervención acotada se justifica por su impacto en la consistencia secuencial y temporal de los viajes y por su trazabilidad mediante un reporte de duplicados exportado.
+
+    \subsection{Consolidación de paradas y ventanas de transferencia}
+
+    Con base en los resultados de validación, la consolidación de paradas parte del atributo \texttt{parent\_station} cuando está disponible, lo que permite agrupar andenes y accesos pertenecientes a una misma instalación física. Esta agrupación es relevante para la definición de nodos del grafo y para la modelación de transbordos. Las ventanas de transferencia temporal entre servicios se parametrizan a partir de los tiempos de llegada y salida en \texttt{stop\_times}, consistentes con los rangos temporales verificados en la etapa anterior; los detalles operativos de dichas ventanas y de los arcos de caminata se desarrollan en la siguiente sección al definir el grafo dirigido ponderado por tiempo.
     \section{Definición del grafo dirigido y ponderado por tiempo}
         \subsection{Arcos de servicio}
         \subsection{Arcos de transferencia (caminata)}
