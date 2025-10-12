@@ -65,10 +65,28 @@ Este capítulo presenta las fuentes de datos y los procedimientos metodológicos
 
 	\paragraph{Eliminación de nodos aislados.} El primer paso consiste en una limpieza estructural. Se identifican y eliminan todos los nodos con grado cero, es decir, aquellas paradas que no tienen ninguna arista de entrada o salida. Estos nodos, conocidos como aislados, no forman parte de ninguna ruta activa en el conjunto de datos y, por lo tanto, no aportan información sobre la conectividad de la red. Su eliminación reduce el ruido y enfoca el análisis en la porción funcional del sistema de transporte.
 
+\begin{table}[h!]
+\centering
+\caption{Resultados del Proceso de Construcción y Limpieza del Grafo.}
+\label{tab:construccion_grafo}
+\begin{tabular}{lr}
+\hline
+\textbf{Métrica} & \textbf{Valor} \\
+\hline
+Nodos iniciales (total de paradas) & 12,231 \\
+Arcos iniciales (segmentos de viaje) & 12,714 \\
+Nodos aislados eliminados & 1,609 \\
+\hline
+\textbf{Nodos finales en grafo} & \textbf{10,622} \\
+\textbf{Arcos finales en grafo} & \textbf{12,714} \\
+\hline
+\end{tabular}
+\end{table}
+
 	\paragraph{Eliminación de viajes duplicados}. Como medida correctiva específica, se implementó una rutina para gestionar registros duplicados en la secuencia de paradas del Tren Ligero (identificados por el prefijo \texttt{MT-}), generando una versión depurada del archivo \texttt{stop\_times} que resuelve inconsistencias secuenciales sin alterar el resto de los datos.
 
 
-	\subsection{Refinamiento y consolidación del grafo}
+	\subsection{Validación: $|V|$, $|E|$, componentes, chequeos}
 
 	Una vez construido el grafo inicial donde cada parada es un nodo y cada segmento de viaje una arista, se aplican dos procesos de refinamiento para optimizar la estructura de la red para el análisis.
 
@@ -84,6 +102,19 @@ Este capítulo presenta las fuentes de datos y los procedimientos metodológicos
 
 	Este procedimiento resulta en un grafo más abstracto y computacionalmente manejable, idóneo para análisis de centralidad y accesibilidad a nivel de zonas, sin sacrificar la capacidad de rastrear las rutas y viajes originales.
 
+\begin{table}[h!]
+\centering
+\caption{Resultados del Proceso de Consolidación del Grafo.}
+\label{tab:consolidacion_grafo}
+\begin{tabular}{lrr}
+\hline
+\textbf{Métrica} & \textbf{Grafo Original} & \textbf{Grafo Consolidado} \\
+\hline
+Número de Nodos & 10,622 & 4,203 \\
+Número de Aristas & 12,714 & 8,591 \\
+\hline
+\end{tabular}
+\end{table}
+
     \section{Definición del grafo: nodos, aristas, direccionalidad, pesos}
-    \section{Validación: $|V|$, $|E|$, componentes, chequeos}
     \section{Limitaciones de los datos}
