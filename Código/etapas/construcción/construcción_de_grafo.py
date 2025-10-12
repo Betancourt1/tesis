@@ -83,8 +83,16 @@ for trip_id, trip_data in grouped_trips:
 
 # Imprimir el número de nodos y aristas en el grafo G
 print(f"\nGrafo construido.")
-print(f"Número de nodos (paradas): {G.number_of_nodes()}")
+print(f"Número de nodos (paradas) antes de la limpieza: {G.number_of_nodes()}")
 print(f"Número de aristas (segmentos de viaje): {G.number_of_edges()}")
+
+# 3. Eliminación de nodos aislados
+# Un nodo aislado es aquel que no tiene aristas de entrada ni de salida (grado total cero).
+# Estos nodos no aportan información sobre las conexiones en la red.
+isolated_nodes = [node for node, degree in G.degree() if degree == 0]
+G.remove_nodes_from(isolated_nodes)
+print(f"Se eliminaron {len(isolated_nodes)} nodos aislados (grado cero).")
+print(f"Número de nodos (paradas) final: {G.number_of_nodes()}")
 
 # Ejemplo de cómo acceder a los datos de un nodo
 if G.number_of_nodes() > 0:

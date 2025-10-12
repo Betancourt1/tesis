@@ -123,7 +123,4 @@ def consolidar_grafo():
     print(f"Aristas en grafo consolidado: {G_consolidado.number_of_edges()}")
 
 if __name__ == '__main__':
-    # Para ejecutar este script, asegúrate de tener las bibliotecas necesarias instaladas:
-    # pip install pandas networkx numpy scikit-learn
-    # consolidar_grafo()
-    print("Este script no se ejecuta directamente. Importa y usa la función 'consolidar_grafo' o descomenta la llamada.")
+    consolidar_grafo()
