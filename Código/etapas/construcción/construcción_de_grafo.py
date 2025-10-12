@@ -97,7 +97,7 @@ if G.number_of_edges() > 0:
     print(f"\nDatos de la arista de ejemplo: De '{sample_edge[0]}' a '{sample_edge[1]}' -> {sample_edge[2]}")
 
 # Nombre del archivo de salida
-OUTPUT_DIR = r"C:\Users\fbetancourt\Documents\GitHub\Tesis\QGIS"
+OUTPUT_DIR = r"C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\QGIS"
 os.makedirs(OUTPUT_DIR, exist_ok=True)  # Asegura que el directorio de salida exista
 output_filename = os.path.join(OUTPUT_DIR, "transporte_publico_grafo.gexf")
 
