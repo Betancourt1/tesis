@@ -53,7 +53,9 @@
 
     Una vez entendido en qué consiste el \textit{GTFS}, podemos responder en detalle a la cuestión de cómo usarlo para construir un grafo que sirva a nuestros propósitos. Un buen primer paso es validar que los archivos que estamos usando cumplan con ciertos criterios de calidad. Una vez comprobado eso, podemos proceder con la construcción de un grafo usanda la información que contienen.
 
-    Esta sección documenta el flujo de preprocesamiento y validación aplicado al conjunto GTFS con el fin de garantizar la coherencia estructural, espacial y temporal de los datos empleados en la construcción del grafo de transporte. A continuación se sintetizan los criterios principales, referenciando las funciones implementadas.
+    Esta sección documenta el flujo de preprocesamiento y validación aplicado al conjunto GTFS con el fin de garantizar la coherencia estructural, espacial y temporal de los datos empleados en la construcción del grafo de transporte. A continuación se sintetizarán los criterios principales, referenciando las funciones implementadas.
+
+    Una vez hayamos implementado las medidas necesarias para garantizar la calidad del dataset, procederemos a crear el grafo que servirá de modelo a la red de transporte público. Primero crearemos un nodo por cada entrada en el fichero \texttt{stops.csv}, luego crearemos una arista por cada entrada en el fichero \texttt{trips.csv}. Al resultado de este proceso le aplicaremos un algoritmo de clustering para consolidar paradas muy cercanas y eliminaremos nodos huérfanos. Una vez terminado este proceso, tendremos como resultado una propuesta de grafo que luego podremos analizar.
 
 	\subsection{Limpieza y consistencia de datos}
 
