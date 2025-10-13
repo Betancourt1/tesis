@@ -1,14 +1,14 @@
 \chapter{Datos y construcción de la red}
 
-Hemos visto que la teoría de grafos puede ser exitosamente aplicada al modelado y análisis de las redes de transporte público, dejándonos ver aspectos interesantes de su estructura, robustez y eficiencia. Si tuviéramos que hacer estos análisis a partir de datos no estructurados, o si tuviéramos que recabar manualmente la información a partir de observaciones, el trabajo necesario para analizar estas redes sería poco abarcable para una sola persona. Por esto es que se ha desarrollado el \textit{General Transit Feed Specification} (en delante \textit{GTFS}), un estándar de archivos estructurados para describir redes de transporte urbano de manera formal.
+    Hemos visto que la teoría de grafos puede ser exitosamente aplicada al modelado y análisis de las redes de transporte público, dejándonos ver aspectos interesantes de su estructura, robustez y eficiencia. Si tuviéramos que hacer estos análisis a partir de datos no estructurados, o si tuviéramos que recabar manualmente la información a partir de observaciones, el trabajo necesario para analizar estas redes sería poco abarcable para una sola persona. Por esto es que se ha desarrollado el \textit{General Transit Feed Specification} (en delante \textit{GTFS}), un estándar de archivos estructurados para describir redes de transporte urbano de manera formal.
 
-Este capítulo presenta las fuentes de datos y los procedimientos metodológicos empleados para construir la red de transporte público utilizada en los análisis subsecuentes. En particular, se describe el estándar GTFS adoptado como insumo principal, el proceso de preprocesamiento y validación diseñado para garantizar la integridad espacial y temporal de los registros, y los criterios con los que se derivan los elementos del grafo (nodos, arcos de servicio y de transferencia) y sus ponderaciones temporales. El objetivo es asegurar que la red resultante sea consistente, reproducible y fiel a la operación observada, sentando una base sólida para los ejercicios analíticos y de modelación presentados en los capítulos siguientes.
+    Este capítulo presenta las fuentes de datos y los procedimientos metodológicos empleados para construir la red de transporte público utilizada en los análisis subsecuentes. En particular, se describe el estándar GTFS adoptado como insumo principal, el proceso de preprocesamiento y validación diseñado para garantizar la integridad espacial y temporal de los registros, y los criterios con los que se derivan los elementos del grafo y sus ponderaciones temporales. El objetivo es asegurar que la red resultante sea consistente, reproducible y fiel a la operación observada, sentando una base sólida para los ejercicios analíticos y de modelación presentados en los capítulos siguientes.
 
     \section{General Transit Feed Specification (GTFS)}
 
 		El General Transit Feed Specification (GTFS) es un estándar utilizado a nivel internacional para la publicación y análisis de datos sobre el transporte público (GTFS, 2025). Su importancia radica en la posibilidad de modelar la red de transporte mediante datos estructurados que incluyen información sobre agencias, rutas, viajes, horarios, paradas y frecuencias.
 
-		El GTFS permite estructurar información clave sobre el transporte público, facilitando el análisis y la planificación urbana. Sus principales componentes incluyen archivos como \texttt{agency.csv}, \texttt{stops.csv}, \texttt{routes.csv}, \texttt{trips.csv}, \texttt{stop\_times.csv}, \texttt{calendar.csv}, \texttt{frequencies.csv}, \texttt{shapes.csv}, \texttt{fare\_attributes.csv}, \texttt{fare\_rules.csv}, \texttt{transfers.csv} y \texttt{feed\_info.csv}. Estos archivos contienen información sobre operadores de transporte, ubicaciones de paradas, rutas, horarios programados, tarifas y reglas de transbordo. Gracias a su estructura, el GTFS permite integrar sistemas de pago, optimizar la gestión de tarifas y mejorar la accesibilidad a la información de transporte.
+		Este estándar permite estructurar información clave sobre el transporte público, facilitando el análisis y la planificación urbana. Sus principales componentes incluyen archivos como \texttt{agency.csv}, \texttt{stops.csv}, \texttt{routes.csv}, \texttt{trips.csv}, \texttt{stop\_times.csv}, \texttt{calendar.csv}, \texttt{frequencies.csv}, \texttt{shapes.csv}, \texttt{fare\_attributes.csv}, \texttt{fare\_rules.csv}, \texttt{transfers.csv} y \texttt{feed\_info.csv}. Estos archivos contienen información sobre operadores de transporte, ubicaciones de paradas, rutas, horarios programados, tarifas y reglas de transbordo. Gracias a su estructura, el GTFS permite integrar sistemas de pago, optimizar la gestión de tarifas y mejorar la accesibilidad a la información de transporte.
 
 		\subsection{Archivos del GTFS}
 
@@ -45,13 +45,15 @@ Este capítulo presenta las fuentes de datos y los procedimientos metodológicos
 			\label{tab:gtfs_files}
 		\end{table}
 
-		La adopción del GTFS ha sido clave en diversas ciudades para mejorar la planificación y operación del transporte público. Además, en muchas otras ciudades, su implementación ha facilitado la integración de múltiples operadores en una única plataforma de información, permitiendo la interoperabilidad de diferentes servicios de transporte y promoviendo la movilidad sostenible.
-
     \newpage
+        % TODO: citar fuente de esta afirmación de abajo
+		La adopción del GTFS ha sido clave en diversas ciudades para mejorar la planificación y operación del transporte público. Además, en muchas otras ciudades, su implementación ha facilitado la integración de múltiples operadores en una única plataforma de información, permitiendo la interoperabilidad de diferentes servicios de transporte y promoviendo la movilidad sostenible.
 
     \section{Preprocesamiento y validación}
 
-    Esta sección documenta el flujo de preprocesamiento y validación aplicado al conjunto GTFS con el fin de garantizar la coherencia estructural, espacial y temporal de los datos empleados en la construcción del grafo de transporte. El proceso se encuentra automatizado en un validador programático que registra los resultados de cada prueba (PASS/FAIL), así como metadatos de ejecución, y se complementa con rutinas ad hoc para casos específicos (por ejemplo, duplicados en secuencias de paradas). A continuación se sintetizan los criterios principales, referenciando las funciones implementadas en el código.
+    Una vez entendido en qué consiste el \textit{GTFS}, podemos responder en detalle a la cuestión de cómo usarlo para construir un grafo que sirva a nuestros propósitos. Un buen primer paso es validar que los archivos que estamos usando cumplan con ciertos criterios de calidad. Una vez comprobado eso, podemos proceder con la construcción de un grafo usanda la información que contienen.
+
+    Esta sección documenta el flujo de preprocesamiento y validación aplicado al conjunto GTFS con el fin de garantizar la coherencia estructural, espacial y temporal de los datos empleados en la construcción del grafo de transporte. A continuación se sintetizan los criterios principales, referenciando las funciones implementadas.
 
 	\subsection{Limpieza y consistencia de datos}
 
@@ -65,23 +67,23 @@ Este capítulo presenta las fuentes de datos y los procedimientos metodológicos
 
 	\paragraph{Eliminación de nodos aislados.} El primer paso consiste en una limpieza estructural. Se identifican y eliminan todos los nodos con grado cero, es decir, aquellas paradas que no tienen ninguna arista de entrada o salida. Estos nodos, conocidos como aislados, no forman parte de ninguna ruta activa en el conjunto de datos y, por lo tanto, no aportan información sobre la conectividad de la red. Su eliminación reduce el ruido y enfoca el análisis en la porción funcional del sistema de transporte.
 
-\begin{table}[h!]
-\centering
-\caption{Resultados del Proceso de Construcción y Limpieza del Grafo.}
-\label{tab:construccion_grafo}
-\begin{tabular}{lr}
-\hline
-\textbf{Métrica} & \textbf{Valor} \\
-\hline
-Nodos iniciales (total de paradas) & 12,231 \\
-Arcos iniciales (segmentos de viaje) & 12,714 \\
-Nodos aislados eliminados & 1,609 \\
-\hline
-\textbf{Nodos finales en grafo} & \textbf{10,622} \\
-\textbf{Arcos finales en grafo} & \textbf{12,714} \\
-\hline
-\end{tabular}
-\end{table}
+    \begin{table}[h!]
+    \centering
+    \caption{Resultados del Proceso de Construcción y Limpieza del Grafo.}
+    \label{tab:construccion_grafo}
+    \begin{tabular}{lr}
+    \hline
+    \textbf{Métrica} & \textbf{Valor} \\
+    \hline
+    Nodos iniciales (total de paradas) & 12,231 \\
+    Arcos iniciales (segmentos de viaje) & 12,714 \\
+    Nodos aislados eliminados & 1,609 \\
+    \hline
+    \textbf{Nodos finales en grafo} & \textbf{10,622} \\
+    \textbf{Arcos finales en grafo} & \textbf{12,714} \\
+    \hline
+    \end{tabular}
+    \end{table}
 
 	\paragraph{Eliminación de viajes duplicados}. Como medida correctiva específica, se implementó una rutina para gestionar registros duplicados en la secuencia de paradas del Tren Ligero (identificados por el prefijo \texttt{MT-}), generando una versión depurada del archivo \texttt{stop\_times} que resuelve inconsistencias secuenciales sin alterar el resto de los datos.
 
@@ -102,19 +104,19 @@ Nodos aislados eliminados & 1,609 \\
 
 	Este procedimiento resulta en un grafo más abstracto y computacionalmente manejable, idóneo para análisis de centralidad y accesibilidad a nivel de zonas, sin sacrificar la capacidad de rastrear las rutas y viajes originales.
 
-\begin{table}[h!]
-\centering
-\caption{Resultados del Proceso de Consolidación del Grafo.}
-\label{tab:consolidacion_grafo}
-\begin{tabular}{lrr}
-\hline
-\textbf{Métrica} & \textbf{Grafo Original} & \textbf{Grafo Consolidado} \\
-\hline
-Número de Nodos & 10,622 & 4,203 \\
-Número de Aristas & 12,714 & 8,591 \\
-\hline
-\end{tabular}
-\end{table}
+    \begin{table}[h!]
+    \centering
+    \caption{Resultados del Proceso de Consolidación del Grafo.}
+    \label{tab:consolidacion_grafo}
+    \begin{tabular}{lrr}
+    \hline
+    \textbf{Métrica} & \textbf{Grafo Original} & \textbf{Grafo Consolidado} \\
+    \hline
+    Número de Nodos & 10,622 & 4,203 \\
+    Número de Aristas & 12,714 & 8,591 \\
+    \hline
+    \end{tabular}
+    \end{table}
 
     \section{Definición del grafo: nodos, aristas, direccionalidad, pesos}
     \section{Limitaciones de los datos}
