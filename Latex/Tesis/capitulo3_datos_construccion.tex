@@ -134,3 +134,16 @@
 
 
     \section{Limitaciones de los datos}
+
+        Es fundamental reconocer que el modelo de red construido, a pesar de su robustez estructural, se basa en una serie de supuestos y abstracciones que introducen limitaciones inherentes. La interpretación de los resultados de cualquier análisis basado en este grafo debe realizarse teniendo en cuenta las siguientes consideraciones:
+
+        \paragraph{Naturaleza estática de los datos.} El modelo se construye a partir de una instantánea de los datos GTFS correspondiente a marzo de 2024. Por lo tanto, no captura la dinámica operativa de la red, como variaciones estacionales, modificaciones de rutas posteriores a esa fecha, o disrupciones del servicio en tiempo real. El grafo representa la red tal como fue programada en ese momento específico.
+
+        \paragraph{Abstracción de la operación y la demanda.} El modelo se enfoca en la topología y el servicio programado, pero abstrae aspectos cruciales de la operación física. No se considera la \textbf{capacidad} de los vehículos ni el \textbf{tipo} de unidad asignada a cada viaje. De igual manera, el grafo no contiene información sobre la \textbf{demanda real} de pasajeros; una arista indica que un servicio existe, pero no cuántas personas lo utilizan. Esto limita la posibilidad de realizar análisis de congestión o de carga de pasajeros.
+
+        \paragraph{Simplificación de horarios.} El modelo se basa en los horarios y frecuencias programadas en el GTFS. No se toman en cuenta las desviaciones operativas del día a día, como los retrasos debidos al tráfico, ni los horarios especiales que pueden aplicar en \textbf{días festivos} o fines de semana, a menos que estén explícitamente detallados en los archivos `calendar.csv` y `calendar_dates.csv`.
+
+        \paragraph{Modelado de transbordos.} El proceso de consolidación de nodos agrupa paradas en un radio de 100 metros, modelando implícitamente los transbordos peatonales de corta distancia. Sin embargo, el modelo \textbf{no contempla explícitamente las caminatas de mayor distancia} que un usuario podría realizar para conectar dos rutas. Por ejemplo, un pasajero podría estar dispuesto a caminar 300 metros entre dos paradas que no pertenecen al mismo nodo consolidado, pero esta conexión peatonal no existe como una arista en el grafo.
+
+        A pesar de estas limitaciones, el grafo resultante es una representación fiel y detallada de la estructura topológica y el nivel de servicio programado de la red de transporte público. Es una herramienta poderosa para el análisis de la conectividad, la centralidad y la accesibilidad estructural, que son los objetivos centrales de esta investigación.
+
