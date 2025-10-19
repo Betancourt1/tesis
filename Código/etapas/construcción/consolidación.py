@@ -98,7 +98,7 @@ def consolidar_grafo():
     print("Agregando atributos y creando nuevas aristas...")
     for (u, v), original_edges_data in new_edges_aggregation.items():
         valid_times = [d.get('travel_time_minutes', 0.0) for d in original_edges_data if d.get('travel_time_minutes', -1.0) >= 0]
-        avg_travel_time = sum(valid_times) / len(valid_times) if valid_times else 0.0
+        min_time_travel = min(valid_times) if valid_times else 0.0
 
         # Serializar los datos de las aristas originales a un string JSON
         # Esto asegura que todos los datos complejos se guarden en un solo atributo
@@ -106,7 +106,7 @@ def consolidar_grafo():
 
         G_consolidado.add_edge(
             u, v,
-            travel_time_minutes=avg_travel_time,
+            travel_time_minutes=min_time_travel,
             original_edge_count=len(original_edges_data),
             original_edges_properties=original_edges_json_str
         )
