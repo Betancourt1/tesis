@@ -1,19 +1,16 @@
-
 import networkx as nx
 import os
 import pandas as pd
 
-def calcular_centralidades():
+def calcular_centralidades_y_enriquecer():
     """
-    Carga el grafo consolidado y calcula varias métricas de centralidad,
-    considerando las ponderaciones de las aristas donde sea apropiado.
-    Guarda los resultados en un archivo CSV.
+    Carga el grafo consolidado, calcula varias métricas de centralidad y
+    las añade directamente como atributos a los nodos del grafo.
+    El grafo modificado se guarda sobrescribiendo el archivo original.
     """
     # --- 1. CONFIGURACIÓN Y CARGA DE DATOS ---
     BASE_DIR = r"C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis"
     GRAPH_PATH = os.path.join(BASE_DIR, "QGIS", "transporte_publico_grafo_consolidado.gexf")
-    OUTPUT_DIR = os.path.join(BASE_DIR, "Código", "etapas", "análisis", "centralidades")
-    OUTPUT_FILE = os.path.join(OUTPUT_DIR, "centralidades.csv")
 
     print(f"Cargando grafo desde {GRAPH_PATH}...")
     G = nx.read_gexf(GRAPH_PATH)
@@ -23,64 +20,59 @@ def calcular_centralidades():
     print("Calculando centralidades... (esto puede tardar)")
 
     # a) Centralidad de Grado (Ponderada por número de rutas originales)
-    # Usamos el atributo 'original_edge_count' que definimos en la consolidación.
     degree_in = dict(G.in_degree(weight='original_edge_count'))
     degree_out = dict(G.out_degree(weight='original_edge_count'))
 
     # b) Centralidad de Intermediación (Ponderada por tiempo de viaje)
-    # Mide puentes en los caminos MÁS RÁPIDOS.
     betweenness = nx.betweenness_centrality(G, weight='travel_time_minutes', normalized=True)
 
     # c) Centralidad de Cercanía (usa el tiempo de viaje como 'distancia')
     closeness = nx.closeness_centrality(G, distance='travel_time_minutes')
 
     # d) Centralidad de Eigenvector (Ponderada por número de rutas originales)
-    # Mide la influencia en corredores importantes. Puede fallar en grafos no fuertemente conectados.
     try:
         eigenvector = nx.eigenvector_centrality(G, weight='original_edge_count', max_iter=1000)
     except nx.PowerIterationFailedConvergence:
-        print("La centralidad de Eigenvector no convergió. Se omitirá.")
+        print("La centralidad de Eigenvector no convergió. Se omitirá y asignará 0.")
         eigenvector = {node: 0.0 for node in G.nodes()}
 
     print("Cálculos completados.")
 
-    # --- 3. CONSOLIDACIÓN Y GUARDADO DE RESULTADOS ---
-    print("Consolidando resultados en un DataFrame...")
-    
-    # Extraer coordenadas y stop_count de los nodos
-    node_data = {
-        node: {
-            'lat': data.get('stop_lat', 0),
-            'lon': data.get('stop_lon', 0),
-            'stop_count': data.get('stop_count', 0)
-        } for node, data in G.nodes(data=True)
-    }
-    df_nodes = pd.DataFrame.from_dict(node_data, orient='index')
+    # --- 3. AÑADIR ATRIBUTOS AL GRAFO ---
+    print("Añadiendo atributos de centralidad a los nodos del grafo...")
+    nx.set_node_attributes(G, degree_in, name='in_degree_weighted')
+    nx.set_node_attributes(G, degree_out, name='out_degree_weighted')
+    nx.set_node_attributes(G, betweenness, name='betweenness')
+    nx.set_node_attributes(G, closeness, name='closeness')
+    nx.set_node_attributes(G, eigenvector, name='eigenvector')
+    print("Atributos añadidos correctamente.")
 
-    # Crear DataFrame para cada centralidad
-    df_degree_in = pd.DataFrame(degree_in.items(), columns=['node_id', 'in_degree_weighted'])
-    df_degree_out = pd.DataFrame(degree_out.items(), columns=['node_id', 'out_degree_weighted'])
-    df_betweenness = pd.DataFrame(betweenness.items(), columns=['node_id', 'betweenness'])
-    df_closeness = pd.DataFrame(closeness.items(), columns=['node_id', 'closeness'])
-    df_eigenvector = pd.DataFrame(eigenvector.items(), columns=['node_id', 'eigenvector'])
+    # --- 4. GUARDAR EL GRAFO ENRIQUECIDO ---
+    print(f"Guardando el grafo enriquecido en {GRAPH_PATH} (sobrescribiendo)...")
+    nx.write_gexf(G, GRAPH_PATH)
+    print("¡Proceso completado!")
 
-    # Unir todos los DataFrames
-    df = df_nodes.reset_index().rename(columns={'index': 'node_id'})
-    for df_centrality in [df_degree_in, df_degree_out, df_betweenness, df_closeness, df_eigenvector]:
-        df = pd.merge(df, df_centrality, on='node_id', how='left')
-
-    # Guardar en CSV
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-    df.to_csv(OUTPUT_FILE, index=False)
-    print(f"Resultados guardados exitosamente en {OUTPUT_FILE}")
-
-    # --- 4. MOSTRAR TOP 10 DE CADA MÉTRICA ---
+    # --- 5. MOSTRAR TOP 10 DE CADA MÉTRICA ---
     print("\n--- TOP 10 NODOS POR CENTRALIDAD ---")
+    # Crear un DataFrame para el análisis a partir de los atributos del grafo
+    node_data = {node: data for node, data in G.nodes(data=True)}
+    df = pd.DataFrame.from_dict(node_data, orient='index')
+    
     for metrica in ['in_degree_weighted', 'out_degree_weighted', 'betweenness', 'closeness', 'eigenvector']:
-        print(f"\n--- Top 10 por: {metrica} ---")
-        top_10 = df.nlargest(10, metrica)
-        for _, row in top_10.iterrows():
-            print(f"  - Nodo {row['node_id']} (Lat: {row['lat']:.4f}, Lon: {row['lon']:.4f}): {row[metrica]:.4f}")
+        if metrica in df.columns:
+            print(f"\n--- Top 10 por: {metrica} ---")
+            top_10 = df.nlargest(10, metrica)
+            for index, row in top_10.iterrows():
+                # Use .get() for lat/lon to avoid errors if they are missing
+                lat = row.get('stop_lat', 'N/A')
+                lon = row.get('stop_lon', 'N/A')
+                if isinstance(lat, str) or isinstance(lon, str):
+                    print(f"  - Nodo {index}: {row[metrica]:.4f}")
+                else:
+                    print(f"  - Nodo {index} (Lat: {lat:.4f}, Lon: {lon:.4f}): {row[metrica]:.4f}")
+        else:
+            print(f"\n--- Métrica '{metrica}' no encontrada en el grafo ---")
+
 
 if __name__ == '__main__':
-    calcular_centralidades()
+    calcular_centralidades_y_enriquecer()
