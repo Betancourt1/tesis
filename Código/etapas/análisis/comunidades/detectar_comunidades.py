@@ -17,7 +17,7 @@ def detectar_comunidades():
     
     # Ruta de salida
     OUTPUT_DIR = os.path.join(BASE_DIR, "QGIS")
-    OUTPUT_GRAPH_PATH = os.path.join(OUTPUT_DIR, "transporte_publico_grafo_comunidades.gexf")
+    OUTPUT_GRAPH_PATH = os.path.join(OUTPUT_DIR, "transporte_publico_grafo_consolidado.gexf")
 
     print(f"Cargando grafo desde {GRAPH_PATH}...")
     G = nx.read_gexf(GRAPH_PATH)

@@ -95,5 +95,60 @@
 
     En conclusión, la detección de comunidades revela la organización interna de la red de transporte. Muestra cómo el sistema se articula en subsistemas geográficos que corresponden en gran medida a la división municipal y a los grandes corredores viales del Área Metropolitana de Guadalajara. Esta granularidad es fundamental para entender los patrones de viaje a una escala intermedia, más allá del nivel de parada individual pero más específico que el de la red completa.
 
-    \section{Análisis de robustez: escenarios y procedimiento}
+    \section{Análisis de Robustez: Vulnerabilidad ante Fallas y Ataques}
+
+        Una vez caracterizada la estructura estática de la red, el siguiente paso es evaluar su resiliencia. Un sistema de transporte robusto es aquel que puede mantener su funcionalidad principal —conectar personas y lugares de manera eficiente— incluso cuando algunas de sus partes fallan. Para medir esta robustez, se realizaron simulaciones de eliminación de nodos bajo diferentes escenarios, evaluando el impacto en la conectividad y eficiencia de la red.
+
+        \subsection{Metodología de la Simulación}
+
+        Se simularon dos tipos principales de disrupciones, eliminando progresivamente hasta el 5% de los nodos de la red (210 nodos):
+
+        \begin{itemize}
+            \item \textbf{Fallas Aleatorias:} Se eliminaron nodos seleccionados al azar. Este escenario simula eventos no coordinados como averías, accidentes o cierres de paradas por mantenimiento.
+            \item \textbf{Ataques Dirigidos:} Se eliminaron nodos de forma deliberada, en orden descendente de importancia según tres métricas de centralidad:
+            \begin{itemize}
+                \item \textbf{Por Grado Ponderado:} Apuntando a los nodos con mayor volumen de rutas.
+                \item \textbf{Por Intermediación (Betweenness):} Apuntando a los puentes y puntos de transbordo más críticos.
+                \item \textbf{Por Cercanía (Closeness):} Apuntando a los nodos más accesibles o mejor ubicados en la red.
+            \end{itemize}
+        \end{itemize}
+
+        Para cada nodo eliminado, se midió la degradación de dos indicadores clave de rendimiento de la red: el tamaño del Componente Conectado Gigante (LCC) y la Eficiencia Global.
+
+        \subsection{Resultados del Análisis de Robustez}
+
+        Los resultados, visualizados en la Figura \ref{fig:robustez}, revelan una marcada diferencia entre la resistencia de la red a fallas aleatorias y su fragilidad ante ataques dirigidos.
+
+        \begin{figure}[h!]
+            \centering
+            \includegraphics[width=\textwidth]{Images/robustez_plot.png}
+            \caption{Comparativa del impacto en el LCC y la Eficiencia Global bajo diferentes escenarios de eliminación de nodos.}
+            \label{fig:robustez}
+        \end{figure}
+
+        \subsubsection{Impacto en la Conectividad (LCC)}
+
+        La gráfica superior de la Figura \ref{fig:robustez} muestra cómo se fragmenta la red.
+
+        \begin{itemize}
+            \item \textbf{Fallas Aleatorias:} La red demuestra ser muy resiliente. La curva de fallas aleatorias (línea punteada negra) desciende de manera suave y lenta, indicando que la eliminación de nodos al azar tiene un impacto mínimo en la conectividad general. Se necesitaría una disrupción masiva y no coordinada para fragmentar el sistema.
+            \item \textbf{Ataques Dirigidos:} La situación es radicalmente distinta ante ataques estratégicos. Los ataques basados en Grado e Intermediación (líneas azul y naranja) son extraordinariamente efectivos. La eliminación de apenas 50 nodos (un 1.2\% del total) provoca una caída en la conectividad de casi el 5\%, mientras que la eliminación de 210 nodos llega a desconectar a más del 12\% de la red. Esto demuestra que la integridad estructural del sistema depende de un número reducido de nodos-hub, cuya falla resulta en una rápida fragmentación de la red. El ataque por cercanía es, en comparación, mucho menos efectivo.
+        \end{itemize}
+
+        \subsubsection{Impacto en la Eficiencia Global}
+
+        La gráfica inferior de la Figura \ref{fig:robustez} muestra cómo se degradan los tiempos de viaje promedio en la red.
+
+        \begin{itemize}
+            \item \textbf{Fallas Aleatorias:} De nuevo, el impacto es moderado. La eficiencia disminuye de forma casi lineal, pero contenida. Los viajes se vuelven un poco más largos, pero el sistema en su conjunto no colapsa.
+            \item \textbf{Ataques Dirigidos:} Aquí se manifiesta la mayor vulnerabilidad de la red. Los ataques por Grado e Intermediación provocan un desplome de la eficiencia. Con solo 100 nodos eliminados, la eficiencia global se reduce en casi un 20\%, lo que implica un severo aumento en los tiempos de viaje para la mayoría de los usuarios. Al eliminar 210 nodos, la eficiencia cae hasta en un 50\% en el peor de los casos (ataque por grado). Esto significa que los nodos con muchas rutas y que actúan como puentes son absolutamente críticos para la operación eficiente del sistema.
+        \end{itemize}
+
+        \subsection{Conclusiones sobre la Robustez}
+
+        El análisis revela que la red de transporte público de Guadalajara presenta una \textbf{estructura de tipo "Aquiles"}: es robusta en general, pero posee un "talón de Aquiles" muy específico. Su vulnerabilidad no reside en fallos casuales, sino en la dependencia crítica de un núcleo de nodos de alta centralidad de grado e intermediación.
+
+        Estos nodos, que funcionan simultáneamente como los grandes distribuidores de flujo y los principales puentes de la red, son los puntos únicos de fallo del sistema. Su neutralización, ya sea por un evento coordinado o una falla masiva, tendría un impacto desproporcionado y catastrófico tanto en la capacidad de los usuarios para llegar a sus destinos como en la eficiencia general de los tiempos de viaje.
+
+
     \section{Parámetros, software y reproducibilidad}
