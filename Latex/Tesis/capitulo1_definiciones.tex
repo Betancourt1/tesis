@@ -11,6 +11,13 @@
             Un \textbf{grafo} $G$ es un par $(V,E)$ que consiste en un conjunto no vacío $V$ de \textbf{vértices} (o \textbf{nodos}) y un conjunto $E$ de subconjuntos de 2 elementos de $V$, denominados \textbf{aristas}.
         \end{definicion}
 
+    A un grafo $G$ con conjunto de aristas $V$ también lo podemos definir como un grafo \textit{en} $V$ o simplemente $G(V)$ \cite{diestel2017}.
+
+    \begin{definicion}
+        Llamamos \textit{orden} de un grafo G al número de vértices que contiene y lo representamos como $|G|$. A la cantidad de aristas de $G$ la escribiremos como $\parallel G \parallel$. Un grafo puede ser \textit{finito} o \textit{infinito}.
+    \end{definicion}
+
+    \begin{ejemplo}
         La forma habitual de representar un grafo es dibujando un punto por cada vértice y uniendo dichos puntos con una línea si el par correspondiente forma una arista. La disposición de los puntos y las líneas es irrelevante; lo único que importa es qué pares de vértices están conectados.
 
         \begin{figure}[ht]
@@ -35,7 +42,11 @@
             \label{fig:ejemplo-grafo}
         \end{figure}
 
-        En este capítulo trabajaremos principalmente con \emph{dígrafos} (grafos dirigidos) ponderados, salvo que se indique explícitamente lo contrario.
+
+        El grafo $G$ tiene el orden $|G|=7$ y el número de aristas $\parallel G \parallel = 5$.
+    \end{ejemplo}
+
+    En el resto de este trabajo asumiremos que todos los grafos son finitos.
 
     \subsubsection{Tipos de grafos}
         Dependiendo de las propiedades de $E$, los grafos pueden clasificarse en diversas categorías:
