@@ -1,23 +1,41 @@
 \chapter{Teoría de grafos}
     Antes de comenzar con el estudio de las redes de transporte público, y con el fin de partir desde bases bien fundamentadas, vamos a introducir una serie de definiciones en torno a la teoría de grafos. En este caso nos importa fundamentar adecuadamente qué es un \textit{camino} en el contexto de esta teoría, lo que nos ayudará a tener un formalismo de lo que es una ruta de transporte público. Asimismo, nos interesa explorar cómo la noción de camino nos ayuda a entender la estructura de una red. Para esto también estudiaremos el concepto de \textit{centralidad}, que nos ayudará a evaluar la importancia que tiene un determinado nodo en el contexto del resto del grafo. Finalmente, gracias a lo anterior, estudiaremos distintos algoritmos para lograr encontrar caminos óptimos entre cualesquiera dos nodos.
 
+    Los problemas de movilidad urbana requieren modelos que abstraigan la complejidad de la ciudad sin perder los elementos esenciales de conectividad. La \emph{teoría de grafos} provee justamente ese andamiaje formal: reduce las interacciones físicas a vértices y aristas y, a partir de ahí, permite cuantificar eficiencia, robustez y vulnerabilidad de toda la red (Rodrigues, 2013).
+
     Este capítulo se basa en \cite{diestel2017} y \cite{bangjensen2007}.
 
-    \subsection{Fundamentos de la teoría de grafos}
-
-    Los problemas de movilidad urbana requieren modelos que abstraigan la complejidad de la ciudad sin perder los elementos esenciales de conectividad. La \emph{teoría de grafos} provee justamente ese andamiaje formal: reduce las interacciones físicas a vértices y aristas y, a partir de ahí, permite
-    cuantificar eficiencia, robustez y vulnerabilidad de toda la red (Rodrigues, 2013).
-
     \subsection{Definición y conceptos básicos}
-    \begin{definition}
-    Un \textbf{grafo} $G$ es un par ordenado
-    \begin{equation}
-        G = (V,E),
-    \end{equation}
-    donde $V$ es el conjunto no vacío de \emph{vértices} (o \emph{nodos}) y $E \subseteq V\times V$ es el conjunto de \emph{aristas}. (Rodrigues, 2013).
-    \end{definition}
 
-    En esta tesis trabajaremos principalmente con \emph{dígrafos} (grafos dirigidos) ponderados, salvo que se indique explícitamente lo contrario, y supondremos que no existen bucles: $(v,v) \notin E$.
+        \begin{definicion}
+            Un \textbf{grafo} $G$ es un par $(V,E)$ que consiste en un conjunto no vacío $V$ de \textbf{vértices} (o \textbf{nodos}) y un conjunto $E$ de subconjuntos de 2 elementos de $V$, denominados \textbf{aristas}.
+        \end{definicion}
+
+        La forma habitual de representar un grafo es dibujando un punto por cada vértice y uniendo dichos puntos con una línea si el par correspondiente forma una arista. La disposición de los puntos y las líneas es irrelevante; lo único que importa es qué pares de vértices están conectados.
+
+        \begin{figure}[ht]
+            \centering
+            \begin{tikzpicture}
+                % nodes
+                \node[draw, circle, inner sep=1pt] (1) at (0,1) {1};
+                \node[draw, circle, inner sep=1pt] (2) at (0.5,0) {2};
+                \node[draw, circle, inner sep=1pt] (3) at (1.5,2) {3};
+                \node[draw, circle, inner sep=1pt] (4) at (2.5,0) {4};
+                \node[draw, circle, inner sep=1pt] (5) at (2,1.5) {5};
+                \node[draw, circle, inner sep=1pt] (6) at (3.5,1) {6};
+                \node[draw, circle, inner sep=1pt] (7) at (4,1.8) {7};
+                % edges
+                \draw (1) -- (2);
+                \draw (1) -- (5);
+                \draw (2) -- (5);
+                \draw (3) -- (4);
+                \draw (5) to[bend left=20] (7);
+            \end{tikzpicture}
+            \caption{Ejemplo de un grafo con $V=\{1, ..., 7\}$ y $E=\{\{1,2\}, \{1,5\}, \{2,5\}, \{3,4\}, \{5,7\}\}$.}
+            \label{fig:ejemplo-grafo}
+        \end{figure}
+
+        En este capítulo trabajaremos principalmente con \emph{dígrafos} (grafos dirigidos) ponderados, salvo que se indique explícitamente lo contrario.
 
     \subsubsection{Tipos de grafos}
         Dependiendo de las propiedades de $E$, los grafos pueden clasificarse en diversas categorías:
