@@ -13,6 +13,28 @@
 \usepackage{amsfonts}
 \setlength{\parindent}{.5 cm}   %Activar sangrias
 
+% --- Contador base: se reinicia por sección ---
+\newtheorem{teo}{Teorema}[section]
+% Formato de número: Capítulo.Sección.Consecutivo
+\renewcommand{\theteo}{\thechapter.\thesection.\arabic{teo}}
+
+% --- Entornos que COMPARTEN el contador de 'teo' ---
+\newtheorem{proposicion}[teo]{Proposición}
+\newtheorem{lema}[teo]{Lema}
+
+% Estilo "definición": roman en vez de itálicas
+\theoremstyle{definition}
+\newtheorem{definicion}[teo]{Definición}
+\newtheorem{ejemplo}[teo]{Ejemplo}
+
+% Estilo "remark": para notas/observaciones
+\theoremstyle{remark}
+\newtheorem{observacion}[teo]{Observación}
+
+% Cambiar el título del entorno de demostración
+\renewcommand{\proofname}{Demostración}
+
+
 \begin{document}
 
 \begin{titlepage}
@@ -46,6 +68,7 @@
 \tableofcontents
 
 \input{capitulo1_introduccion}
+\input{capitulo1_definiciones}
 \input{capitulo2_analisis_transporte}
 \input{capitulo3_datos_construccion}
 \input{capitulo4_transporte_público_y_grafos}
