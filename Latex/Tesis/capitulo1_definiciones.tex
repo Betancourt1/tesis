@@ -214,125 +214,353 @@
             Obsérvese que $H$ se obtiene de $G$ al eliminar el nodo $D$ y las aristas asociadas a $D$.
         \end{ejemplo}
 
+        La noción de subgrafo es importante en aquellos escenarios en los que no nos interesa, o no nos es posible, estudiar un grafo completo. Es claro que un subgrafo tiene todas las propiedades y tiene todas las propiedades que enunciamos antes para cualquier grafo. Asimismo, hay algunos subgrafos que nos pueden llegar a interesar especialmente por su naturaleza estructural con respecto al resto del grafo al que pertenecen, tal es el caso de los \textit{caminos}, \textit{ciclos} y \textit{árboles}, los cuales definimos a continuación.
+
         \begin{definicion}[Camino]
-            Un \textbf{camino} en un grafo $G$ es una sucesión de vértices $P_k = (v_1, v_2, \dots, v_k)$ tal que $\{v_i, v_{i+1}\} \in E$ para todo $i \in \{1, \dots, k-1\}$ y ningún vértice se repite.
+            Sea $G = (V, E)$ un grafo.
+            Un \textbf{camino de longitud $k$} es un subgrafo $P = (V_P, E_P)$ de $G$ tal que existen vértices distintos $v_1, v_2, \dots, v_{k+1} \in V$ para los cuales:
+            \begin{align*}
+                V_P &= \{v_1, v_2, \dots, v_{k+1}\}, \\
+                E_P &= \left\{ (v_i, v_{i+1}) : i = 1, \dots, k \right\},
+            \end{align*}
+            y $v_i \neq v_j$ para todo $i \neq j$.
+            Decimos que $P$ es un camino de $v_1$ a $v_{k+1}$ en $G$.
         \end{definicion}
 
-        \begin{ejemplo}
-            Ejemplo de camino:
+        \begin{ejemplo}[Camino como subgrafo]
+            Sea $G$ el siguiente dígrafo (a la izquierda), y sea $P$ el subgrafo resaltado, que constituye un camino de longitud $5$ en $G$.
+            A la derecha, se muestra $P$ como subgrafo inducido por sus vértices.
 
             \begin{center}
-                \begin{tikzpicture}[scale=1, every node/.style={circle, draw, fill=white, inner sep=2pt}]
-                    \node (a) at (0,0) {A};
-                    \node (b) at (1,1) {B};
-                    \node (c) at (2,0) {C};
-                    \draw[->, thick] (a) -> (b);
-                    \draw[->, thick] (b) -> (c);
+                \begin{tikzpicture}[scale=1.2, every node/.style={fill=white, circle, draw, inner sep=2.5pt},
+                    edge/.style={thick, black!40, ->, >=stealth},
+                    highlight/.style={very thick, blue, ->, >=stealth}]
+                    % Grafo G
+                    \begin{scope}
+                        % Nodos
+                        \node (a) at (0,2) {};
+                        \node (b) at (1,2.7) {};
+                        \node (c) at (2,2) {};
+                        \node (d) at (0,1) {};
+                        \node (e) at (1,1.8) {};
+                        \node (f) at (2,1) {};
+                        \node (g) at (1,0.3) {};
+
+                        % Aristas grises (completas, incluye algunas que no forman parte del camino)
+                        \draw[edge] (a) -- (b);
+                        \draw[edge] (b) -- (c);
+                        \draw[edge] (a) -- (c);
+                        \draw[edge] (c) -- (e);
+                        \draw[edge] (e) -- (f);
+                        \draw[edge] (a) -- (d);
+                        \draw[edge] (d) -- (g);
+                        \draw[edge] (g) -- (f);
+
+                        % Camino dirigido resaltado (a -> e -> f -> g -> f -> c)
+                        \draw[highlight] (a) -- (e);
+                        \draw[highlight] (e) -- (f);
+                        \draw[highlight] (f) -- (g);
+                        \draw[highlight] (g) -- (f);
+                        \draw[highlight] (f) -- (c);
+
+                        % Nombres de los nodos
+                        \node[draw=none,fill=none, left] at (a) {$v_1$};
+                        \node[draw=none,fill=none, above] at (b) {$v_2$};
+                        \node[draw=none,fill=none, right] at (c) {$v_6$};
+                        \node[draw=none,fill=none, left] at (d) {$v_4$};
+                        \node[draw=none,fill=none, above right] at (e) {$v_3$};
+                        \node[draw=none,fill=none, right] at (f) {$v_5$};
+                        \node[draw=none,fill=none, below] at (g) {$v_7$};
+
+                        % G label
+                        \node[draw=none, fill=none] at (1,-0.3) {$G$};
+                    \end{scope}
+
+                    % Subgrafo (camino) a la derecha
+                    \begin{scope}[xshift=5cm]
+                        \node (a) at (0,2) {};
+                        \node (e) at (1,1.8) {};
+                        \node (f) at (2,1) {};
+                        \node (g) at (1,0.3) {};
+                        \node (c) at (2,2) {};
+
+                        \draw[highlight] (a) -- (e);
+                        \draw[highlight] (e) -- (f);
+                        \draw[highlight] (f) -- (g);
+                        \draw[highlight] (g) -- (f);
+                        \draw[highlight] (f) -- (c);
+
+                        % Nombres de los nodos
+                        \node[draw=none,fill=none, left] at (a) {$v_1$};
+                        \node[draw=none,fill=none, above right] at (e) {$v_3$};
+                        \node[draw=none,fill=none, right] at (f) {$v_5$};
+                        \node[draw=none,fill=none, below] at (g) {$v_7$};
+                        \node[draw=none,fill=none, right] at (c) {$v_6$};
+
+                        % P label
+                        \node[draw=none, fill=none] at (1,-0.3) {$P$};
+                    \end{scope}
                 \end{tikzpicture}
             \end{center}
+
+        \captionof{figure}{Un camino dirigido $P = (v_1, v_3, v_5, v_7, v_5, v_6)$ en el dígrafo $G$ y su representación como subgrafo.}
         \end{ejemplo}
 
         \begin{definicion}[Ciclo]
-            Un \textbf{ciclo} es un camino $C_k = (v_1, v_2, \dots, v_k, v_1)$ tal que el primer y el último vértice coinciden ($v_1 = v_{k+1}$) y las aristas cumplen $\{v_i, v_{i+1}\} \in E$ para $i = 1, \dots, k$.
+            Un \textbf{ciclo de longitud $k$} es un subgrafo $C = (V_C, E_C)$ tal que existen vértices distintos $v_1, v_2, \dots, v_k$ para los cuales:
+            \begin{align*}
+                V_C &= \{v_1, v_2, \dots, v_k\}, \\
+                E_C &= \{ (v_1, v_2),\ (v_2, v_3),\ \dots,\ (v_{k-1}, v_k),\ (v_k, v_1) \},
+            \end{align*}
+            y $v_i \neq v_j$ para $i \neq j$.
         \end{definicion}
 
-        \begin{ejemplo}
-            Ejemplo de ciclo:
+        \begin{ejemplo}[Ciclo como subgrafo]
+            Sea $G$ el siguiente grafo:
 
             \begin{center}
-                \begin{tikzpicture}[scale=1, every node/.style={circle, draw, fill=white, inner sep=2pt}]
-                    \node (a) at (0,0) {A};
-                    \node (b) at (1,1) {B};
-                    \node (c) at (2,0) {C};
-                    \draw[->, thick] (a) -> (b);
-                    \draw[->, thick] (b) -> (c);
-                    \draw[->, thick] (c) -> (a);
+                \begin{tikzpicture}[scale=1.2, every node/.style={circle, draw, fill=white, inner sep=2.5pt},
+                    edge/.style={thick, black!40, ->, >=stealth},
+                    highlight/.style={very thick, blue, ->, >=stealth}]
+                    % Grafo G (con otras conexiones grises)
+                    \node (a) at (0,2) {};
+                    \node (b) at (2,2) {};
+                    \node (c) at (2,0) {};
+                    \node (d) at (0,0) {};
+                    \node (e) at (1,1) {};
+                    \node (f) at (1,2.7) {};
+
+                    \draw[edge] (a) -- (b);
+                    \draw[edge] (b) -- (c);
+                    \draw[edge] (c) -- (d);
+                    \draw[edge] (d) -- (a);
+                    \draw[edge] (a) -- (e);
+                    \draw[edge] (e) -- (c);
+                    \draw[edge] (b) -- (f);
+                    \draw[edge] (f) -- (a);
+
+                    % Ciclo resaltado: a -> b -> c -> d -> a
+                    \draw[highlight] (a) -- (b);
+                    \draw[highlight] (b) -- (c);
+                    \draw[highlight] (c) -- (d);
+                    \draw[highlight] (d) -- (a);
+
+                    % Nombres de los nodos
+                    \node[draw=none,fill=none, left] at (a) {$v_1$};
+                    \node[draw=none,fill=none, above right] at (b) {$v_2$};
+                    \node[draw=none,fill=none, right] at (c) {$v_3$};
+                    \node[draw=none,fill=none, below left] at (d) {$v_4$};
+                    \node[draw=none,fill=none, right] at (e) {$v_5$};
+                    \node[draw=none,fill=none, above] at (f) {$v_6$};
+
+                    \node[draw=none, fill=none] at (1,-0.6) {$G$};
                 \end{tikzpicture}
             \end{center}
+
+            El subgrafo resaltado constituye un ciclo de longitud $4$, dado por la sucesión $v_1 \to v_2 \to v_3 \to v_4 \to v_1$.
         \end{ejemplo}
 
-    \subsection{Propiedades estructurales}
+        \begin{definicion}[Árbol]
+            Un \textbf{árbol} es un grafo conexo y acíclico en el que, fijado un vértice raíz $r$, existe exactamente un camino dirigido de $r$ a cualquier otro vértice del grafo.
+        \end{definicion}
 
-    Entre las propiedades clásicas que describen la forma en que los vértices se relacionan destacan:
-    \begin{itemize}
-        \item \textbf{Conectividad}: existe al menos un camino entre cada par de vértices; de lo contrario la red se fragmenta en componentes conexas.
-        \item \textbf{Árbol}: grafo conexo sin ciclos. Satisface $|E|=|V|-1$.
-        \item \textbf{Diámetro}: longitud del camino más largo entre los caminos más cortos de todos los pares $(u,v)$.
-        \item \textbf{Nodo articulación} e \textbf{istmo}: suprimirlos incrementa el número de componentes, evidencia fragilidad local. (Rodrigues, 2013).
-        \item \textbf{Número de ciclos independientes}: $\mu = |E|-|V|+p$, donde $p$ es el número de componentes.
-    \end{itemize}
+        \begin{ejemplo}[Árbol]
+            El siguiente grafo muestra un árbol con raíz en $v_1$:
 
-    \subsubsection*{Nivel de red}
+            \begin{center}
+            \begin{tikzpicture}[scale=1.3, every node/.style={circle, draw, fill=white, inner sep=2.5pt},
+                edge/.style={thick, ->, >=stealth},
+                level distance=1.1cm, sibling distance=1.5cm]
+                % Nodos
+                \node (v1) at (0,0) {$v_1$};
+                \node (v2) at (-1,-1) {$v_2$};
+                \node (v3) at (1,-1) {$v_3$};
+                \node (v4) at (-1.5,-2) {$v_4$};
+                \node (v5) at (-0.5,-2) {$v_5$};
+                \node (v6) at (1,-2) {$v_6$};
 
-    \begin{description}
+                % Aristas dirigidas
+                \draw[edge] (v1) -- (v2);
+                \draw[edge] (v1) -- (v3);
+                \draw[edge] (v2) -- (v4);
+                \draw[edge] (v2) -- (v5);
+                \draw[edge] (v3) -- (v6);
+            \end{tikzpicture}
+            \end{center}
 
-    \item[Índice $\beta$ (conectividad).]
-    Mide cuántas aristas existen respecto al número de nodos, es decir, cuántas conexiones “promedio” puede esperar cada vértice. Valores cercanos a $1$ indican una topología arborescente (pocas alternativas de ruta), mientras que valores crecientes reflejan una mayor interconexión y, por tanto, más opciones de recorrido.
-    \begin{center}
-    $\displaystyle \beta \;=\; \frac{|E|}{|V|}$
-    \end{center}
+            Desde la raíz $v_1$, existe exactamente un camino dirigido a cada vértice del árbol.
+        \end{ejemplo}
 
-    \item[Índice $\alpha$ (redundancia).]
-    Cuantifica la proporción de ciclos efectivamente presentes frente al máximo posible en un grafo planar. Sirve para valorar la resiliencia de la red: cuanto más alto, más caminos alternativos existen ante fallos o congestión. El parámetro $p$ indica el número de componentes conexas (en la práctica, $p=1$ si la red está totalmente conectada).
-    \begin{center}
-    $\displaystyle \alpha \;=\; \frac{|E| - |V| + p}{\,2|V| - 5\,}$
-    \end{center}
+        \subsection{Propiedades estructurales}
 
-    \item[Índice $\gamma$ (densidad planar).]
-    Expresa la fracción de aristas observadas con respecto al límite superior para un grafo planar simple ($3|V|-6$). Un $\gamma$ cercano a $1$ denota que la red se aproxima a la máxima densidad planar, mientras que valores bajos sugieren poca malla y mayor fragilidad estructural.
-    \begin{center}
-    $\displaystyle \gamma \;=\; \frac{|E|}{\,3|V| - 6\,}$
-    \end{center}
+            Entre las propiedades clásicas que describen la forma en que los vértices se relacionan destacan los siguientes conceptos fundamentales:
 
-    \item[Longitud total.]
-    Es la suma de las longitudes físicas de todas las aristas—por ejemplo, la distancia vial o la duración promedio del trayecto—y constituye un indicador agregado de la inversión material o de la “extensión” operativa de la red.
-    \begin{center}
-    $\displaystyle L(G) \;=\; \sum_{(i,j)\in E} \ell_{ij}$
-    \end{center}
+            \begin{definicion}[Conectividad]
+             Una red es \textbf{conexa} si existe al menos un camino dirigido entre cada par de vértices. En caso contrario, la red se fragmenta en varias componentes conexas.
+            \end{definicion}
 
-    \item[Índice de rodeo ($DI$).]
-    Compara la distancia efectiva que un viajero debe recorrer dentro de la red ($D_S$) con la distancia euclidiana ($D_T$) entre origen y destino. Valores mayores que $1$ revelan desvíos importantes (trayectorias poco rectas), mientras que valores cercanos a $1$ implican rutas casi directas.
-    \begin{center}
-    $\displaystyle DI \;=\; \frac{D_S}{D_T}$
-    \end{center}
+            \begin{definicion}[Diámetro]
+             El \textbf{diámetro} de un grafo es la longitud máxima de los caminos más cortos entre todos los pares de vértices $(u,v)$.
+            Formalmente: $\displaystyle \mathrm{diam}(G) = \max_{u,v \in V} d(u,v)$, donde $d(u,v)$ es la longitud del camino dirigido más corto de $u$ a $v$.
+            \end{definicion}
 
-    \item[Brecha espectral ($\Delta$).]
-    Se define como la diferencia entre el mayor y el segundo mayor autovalor del operador de transición (o del Laplaciano normalizado). Una brecha grande suele asociarse con redes más “cohesivas” y con tiempos de mezcla rápidos para procesos de difusión (p.\,ej.\,reparto de pasajeros).
-    \begin{center}
-    $\displaystyle \Delta \;=\; \lambda_{1} - \lambda_{2}$
-    \end{center}
+            \begin{definicion}[Nodo de articulación e istmo]
+              Un \textbf{nodo de articulación} es un vértice cuya supresión (junto con sus aristas incidentes) incrementa el número de componentes conexas de la red.
+            Un \textbf{istmo} (o arista de corte) es una arista cuya supresión incrementa el número de componentes conexas.
+            \end{definicion}
 
-    \end{description}
+            \begin{definicion}[Número de ciclos independientes]
+             El \textbf{número de ciclos independientes} de un grafo se define como $\mu = |E| - |V| + p$, donde $|E|$ es el número de aristas, $|V|$ es el número de vértices y $p$ el número de componentes conexas.
+            \end{definicion}
 
-    \subsubsection*{Nivel de nodo}
+            % ----------------------------------------------------------
+            \subsubsection*{Nivel de red}
 
-    \begin{description}
+            \begin{definicion}[Índice $\beta$ (conectividad)]
+                El \textbf{índice $\beta$} mide cuántas aristas existen respecto al número de nodos:
+                \[
+                \beta = \frac{|E|}{|V|}
+                \]
+                Valores cercanos a $1$ indican una topología arborescente (pocas alternativas de ruta), mientras que valores crecientes reflejan mayor interconexión y opciones de recorrido.
+            \end{definicion}
 
-    \item[Grado ($deg$).]
-    Cuenta el número de aristas incidentes en un vértice. En redes dirigidas se distingue entre grado de entrada ($deg^{-}$) y grado de salida ($deg^{+}$); su suma refleja la importancia local del nodo como punto de transferencia.
-    \begin{center}
-    $\displaystyle deg(v) \;=\; deg^{-}(v) + deg^{+}(v)$
-    \end{center}
+            \begin{ejemplo}
+                Para una red con $|V| = 10$ y $|E| = 12$, se tiene $\beta = 1.2$, lo que indica que cada nodo tiene en promedio más de una conexión.
+            \end{ejemplo}
 
-    \item[Centralidad de cercanía ($C_c$).]
-    Evalúa qué tan “cerca” se encuentra un nodo de todos los demás en términos de la distancia sobre la red. Un valor elevado (distancias promedio bajas) indica accesibilidad global, útil para ubicar terminales o centros de transbordo.
-    \begin{center}
-    $\displaystyle C_c(v) \;=\; \frac{1}{\sum_{u\in V} d(u,v)}$
-    \end{center}
+            \begin{definicion}[Índice $\alpha$ (redundancia)]
+                El \textbf{índice $\alpha$} cuantifica la proporción de ciclos presentes frente al máximo posible en un grafo planar:
+                \[
+                \alpha = \frac{|E| - |V| + p}{2|V| - 5}
+                \]
+                Valores altos sugieren mayor redundancia y resiliencia. El parámetro $p$ representa el número de componentes conexas (en redes totalmente conectadas, $p=1$).
+            \end{definicion}
 
-    \item[Centralidad de intermediación ($C_b$).]
-    Mide la proporción de rutas geodésicas (más cortas) entre pares de nodos que pasan por $v$. Detecta “puentes” críticos cuyo fallo incrementaría fuertemente la longitud de los recorridos o desconectaría sectores.
-    \begin{center}
-    $\displaystyle C_b(v) \;=\; \sum_{s\neq v\neq t}\frac{\sigma_{st}(v)}{\sigma_{st}}$
-    \end{center}
+            \begin{ejemplo}
+                Supón que $|V| = 12$, $|E| = 17$, y la red es conexa ($p = 1$). Entonces:
+                \[
+                \alpha = \frac{17 - 12 + 1}{2 \times 12 - 5} = \frac{6}{19} \approx 0.316
+                \]
+                Esto indica una baja redundancia estructural.
+            \end{ejemplo}
 
-    \item[Eccentricidad ($e$).]
-    Es la mayor distancia desde $v$ hacia cualquier otro nodo. Representa el “peor caso” de accesibilidad individual; nodos con baja eccentricidad pueden considerarse geográficamente estratégicos dentro de la red.
-    \begin{center}
-    $\displaystyle e(v) \;=\; \max_{u\in V} d(u,v)$
-    \end{center}
+            \begin{definicion}[Índice $\gamma$ (densidad planar)]
+                El \textbf{índice $\gamma$} expresa la fracción de aristas observadas respecto al máximo en un grafo planar simple:
+                \[
+                \gamma = \frac{|E|}{3|V| - 6}
+                \]
+                Un valor cercano a $1$ denota que la red se aproxima a la máxima densidad planar.
+            \end{definicion}
 
-    \end{description}
+            \begin{ejemplo}
+                Si $|V| = 8$, $|E| = 14$, entonces:
+                \[
+                \gamma = \frac{14}{3 \times 8 - 6} = \frac{14}{18} \approx 0.778
+                \]
+                Lo que sugiere alta densidad planar.
+            \end{ejemplo}
+
+            \begin{definicion}[Longitud total]
+                La \textbf{longitud total} de la red es la suma de las longitudes físicas de todas las aristas:
+                \[
+                L(G) = \sum_{(i,j) \in E} \ell_{ij}
+                \]
+                donde $\ell_{ij}$ es la longitud de la arista $(i,j)$.
+            \end{definicion}
+
+            \begin{ejemplo}
+              En una red con tres aristas de longitudes $5$, $7$ y $3$ unidades, $L(G) = 5 + 7 + 3 = 15$ unidades.
+            \end{ejemplo}
+
+            \begin{definicion}[Índice de rodeo ($DI$)]
+                El \textbf{índice de rodeo} compara la distancia efectiva recorrida ($D_S$) con la distancia euclidiana ($D_T$) entre dos nodos:
+                \[
+                DI = \frac{D_S}{D_T}
+                \]
+                Valores mayores que $1$ indican trayectorias poco directas; valores cercanos a $1$ implican rutas eficientes.
+            \end{definicion}
+
+            \begin{ejemplo}
+             Para un trayecto donde la distancia por red es $12$ km y la distancia en línea recta es $10$ km, $DI = 1.2$.
+            \end{ejemplo}
+
+            \begin{definicion}[Brecha espectral]
+                La \textbf{brecha espectral} $\Delta$ se define como la diferencia entre el mayor y el segundo mayor autovalor del operador de transición (o del Laplaciano normalizado) de la red:
+                \[
+                \Delta = \lambda_1 - \lambda_2
+                \]
+                Una brecha grande suele asociarse con redes más cohesivas y rápidos tiempos de mezcla para procesos de difusión.
+            \end{definicion}
+
+            \begin{ejemplo}
+                Supón que los dos mayores autovalores del operador de transición son $\lambda_1 = 1$ y $\lambda_2 = 0.8$; entonces $\Delta = 0.2$.
+            \end{ejemplo}
+
+
+        \subsubsection*{Nivel de nodo}
+
+            \begin{definicion}[Grado de un nodo]
+                El \textbf{grado} de un nodo $v$, denotado $deg(v)$, es la suma del número de aristas entrantes (\emph{grado de entrada}, $deg^{-}(v)$) y aristas salientes (\emph{grado de salida}, $deg^{+}(v)$):
+                \[
+                deg(v) = deg^{-}(v) + deg^{+}(v)
+                \]
+                Este valor refleja la importancia local del nodo como punto de transferencia.
+            \end{definicion}
+
+            \begin{ejemplo}
+                En el siguiente grafo, el nodo $A$ tiene dos aristas entrantes y una saliente, por lo que $deg^{-}(A) = 2$, $deg^{+}(A) = 1$ y $deg(A) = 3$.
+
+                \begin{center}
+                    \begin{tikzpicture}[scale=1.1, every node/.style={circle, draw, fill=white, inner sep=2.5pt}, >=stealth]
+                        \node (A) at (0,0) {A};
+                        \node (B) at (2,0) {B};
+                        \node (C) at (1,1.5) {C};
+
+                        \draw[->, thick] (B) -- (A);
+                        \draw[->, thick] (C) -- (A);
+                        \draw[->, thick] (A) -- (B);
+                    \end{tikzpicture}
+                \end{center}
+            \end{ejemplo}
+
+            \begin{definicion}[Centralidad de cercanía]
+                La \textbf{centralidad de cercanía} de un nodo $v$, denotada $C_c(v)$, mide la inversa de la suma de distancias mínimas desde todos los nodos hasta $v$:
+                \[
+                C_c(v) = \frac{1}{\sum_{u\in V} d(u, v)}
+                \]
+                Un valor elevado indica que $v$ es globalmente accesible dentro de la red.
+            \end{definicion}
+
+            \begin{ejemplo}
+                Supón que para el nodo $v$ se tiene $d(u_1,v) = 2$, $d(u_2,v) = 3$, $d(u_3,v) = 4$. Entonces,
+                \[
+                C_c(v) = \frac{1}{2+3+4} = \frac{1}{9} \approx 0.111
+                \]
+            \end{ejemplo}
+
+            \begin{definicion}[Centralidad de intermediación]
+                La \textbf{centralidad de intermediación} de un nodo $v$, denotada $C_b(v)$, es la suma, sobre todos los pares de nodos $(s, t)$ distintos de $v$, de la proporción de caminos más cortos entre $s$ y $t$ que pasan por $v$:
+                \[
+                C_b(v) = \sum_{s \neq v \neq t} \frac{\sigma_{st}(v)}{\sigma_{st}}
+                \]
+                donde $\sigma_{st}$ es el número de caminos geodésicos de $s$ a $t$, y $\sigma_{st}(v)$ aquellos que pasan por $v$.
+            \end{definicion}
+
+            \begin{ejemplo}
+                En una red donde hay 5 caminos más cortos entre $s$ y $t$, y 2 pasan por $v$, entonces la contribución de $v$ para ese par es $2/5$. Suma esto sobre todos los pares posibles para obtener $C_b(v)$.
+            \end{ejemplo}
+
+            \begin{definicion}[Eccentricidad]
+                La \textbf{eccentricidad} de un nodo $v$, denotada $e(v)$, es la mayor distancia desde $v$ hacia cualquier otro nodo de la red:
+                \[
+                e(v) = \max_{u \in V} d(u, v)
+                \]
+                Mide el “peor caso” de accesibilidad individual.
+            \end{definicion}
+
+            \begin{ejemplo}
+                Si desde el nodo $v$ la distancia máxima a cualquier otro nodo es $5$, entonces $e(v) = 5$.
+            \end{ejemplo}
 
     En conjunto, estos indicadores permiten diagnosticar fortalezas y debilidades tanto globales como locales, fundamentando decisiones sobre expansión, mantenimiento y robustecimiento de la infraestructura de transporte (Rodrigues, 2013).
 
