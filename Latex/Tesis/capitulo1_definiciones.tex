@@ -11,42 +11,58 @@
             Un \textbf{grafo} $G$ es un par $(V,E)$ que consiste en un conjunto no vacío $V$ de \textbf{vértices} (o \textbf{nodos}) y un conjunto $E$ de subconjuntos de 2 elementos de $V$, denominados \textbf{aristas}.
         \end{definicion}
 
-    A un grafo $G$ con conjunto de aristas $V$ también lo podemos definir como un grafo \textit{en} $V$ o simplemente $G(V)$ \cite{diestel2017}.
+    A un grafo $G$ con conjunto de aristas $V$ también lo podemos definir como un grafo \textit{en} $V$ o simplemente $G(V)$.
 
-    \begin{definicion}
-        Llamamos \textit{orden} de un grafo G al número de vértices que contiene y lo representamos como $|G|$. A la cantidad de aristas de $G$ la escribiremos como $\parallel G \parallel$. Un grafo puede ser \textit{finito} o \textit{infinito}.
-    \end{definicion}
+        \begin{definicion}[Grafo planar]
+            Un grafo es \textbf{planar} si admite una representación (llamada \emph{dibujo planar}) en el plano tal que ninguna de sus aristas se cruza con otra, salvo en los vértices que comparten.
+        \end{definicion}
 
-    \begin{ejemplo}
-        La forma habitual de representar un grafo es dibujando un punto por cada vértice y uniendo dichos puntos con una línea si el par correspondiente forma una arista. La disposición de los puntos y las líneas es irrelevante; lo único que importa es qué pares de vértices están conectados.
+        \begin{observacion}
+            La planitud de un grafo no depende de una representación particular, sino de la existencia de al menos un dibujo en el plano sin cruces de aristas.
+        \end{observacion}
 
-        \begin{figure}[ht]
-            \centering
-            \begin{tikzpicture}
-                % nodes
-                \node[draw, circle, inner sep=1pt] (1) at (0,1) {1};
-                \node[draw, circle, inner sep=1pt] (2) at (0.5,0) {2};
-                \node[draw, circle, inner sep=1pt] (3) at (1.5,2) {3};
-                \node[draw, circle, inner sep=1pt] (4) at (2.5,0) {4};
-                \node[draw, circle, inner sep=1pt] (5) at (2,1.5) {5};
-                \node[draw, circle, inner sep=1pt] (6) at (3.5,1) {6};
-                \node[draw, circle, inner sep=1pt] (7) at (4,1.8) {7};
-                % edges
-                \draw (1) -- (2);
-                \draw (1) -- (5);
-                \draw (2) -- (5);
-                \draw (3) -- (4);
-                \draw (5) to[bend left=20] (7);
-            \end{tikzpicture}
-            \caption{Ejemplo de un grafo con $V=\{1, ..., 7\}$ y $E=\{\{1,2\}, \{1,5\}, \{2,5\}, \{3,4\}, \{5,7\}\}$.}
-            \label{fig:ejemplo-grafo}
-        \end{figure}
+        \begin{definicion}[Cara de un grafo planar]
+            Sea $G$ un grafo planar, y considérese un dibujo de $G$ en el plano sin cruces de aristas.
+            Una \textbf{cara} es cada una de las regiones conexas en que el dibujo divide el plano, incluyendo la región exterior.
+            Formalmente, las caras son los componentes conexos del complemento del dibujo de $G$ en el plano.
+        \end{definicion}
+
+        Las definiciones de grafo planar y de cara de un grafo planar nos serán útiles cuando estudiemos propiedades globales de un grafo. Hasta entonces, asumiremos que todos los grafos son no planares.
+
+        \begin{definicion}
+            Llamamos \textit{orden} de un grafo G al número de vértices que contiene y lo representamos como $|G|$. A la cantidad de aristas de $G$ la escribiremos como $\parallel G \parallel$. Un grafo puede ser \textit{finito} o \textit{infinito}.
+        \end{definicion}
+
+        \begin{ejemplo}
+            La forma habitual de representar un grafo es dibujando un punto por cada vértice y uniendo dichos puntos con una línea si el par correspondiente forma una arista. La disposición de los puntos y las líneas es irrelevante; lo único que importa es qué pares de vértices están conectados.
+
+            \begin{figure}[ht]
+                \centering
+                \begin{tikzpicture}
+                    % nodes
+                    \node[draw, circle, inner sep=1pt] (1) at (0,1) {1};
+                    \node[draw, circle, inner sep=1pt] (2) at (0.5,0) {2};
+                    \node[draw, circle, inner sep=1pt] (3) at (1.5,2) {3};
+                    \node[draw, circle, inner sep=1pt] (4) at (2.5,0) {4};
+                    \node[draw, circle, inner sep=1pt] (5) at (2,1.5) {5};
+                    \node[draw, circle, inner sep=1pt] (6) at (3.5,1) {6};
+                    \node[draw, circle, inner sep=1pt] (7) at (4,1.8) {7};
+                    % edges
+                    \draw (1) -- (2);
+                    \draw (1) -- (5);
+                    \draw (2) -- (5);
+                    \draw (3) -- (4);
+                    \draw (5) to[bend left=20] (7);
+                \end{tikzpicture}
+                \caption{Ejemplo de un grafo con $V=\{1, ..., 7\}$ y $E=\{\{1,2\}, \{1,5\}, \{2,5\}, \{3,4\}, \{5,7\}\}$.}
+                \label{fig:ejemplo-grafo}
+            \end{figure}
 
 
-        El grafo $G$ tiene el orden $|G|=7$ y el número de aristas $\parallel G \parallel = 5$.
-    \end{ejemplo}
+            El grafo $G$ tiene el orden $|G|=7$ y el número de aristas $\parallel G \parallel = 5$.
+        \end{ejemplo}
 
-    En el resto de este trabajo asumiremos que todos los grafos son finitos.
+        En el resto de este trabajo asumiremos que todos los grafos son finitos.
 
     \section{Tipos de grafos}
 
@@ -475,9 +491,9 @@
             \end{definicion}
 
             % ----------------------------------------------------------
-            \subsection*{Propiedades a nivel de red}
+        \subsection*{Propiedades a nivel de grafo}
 
-            El análisis estructural de una red comienza por el estudio de propiedades globales, es decir, aquellas que describen la organización, la conectividad y la robustez del grafo en su conjunto. Estas métricas permiten evaluar la redundancia de rutas, la facilidad de desplazamiento a través de la red, el grado de fragmentación ante la eliminación de elementos y la capacidad de la red para mantener su funcionalidad bajo distintas condiciones. Al entender estas características globales, es posible comparar diferentes topologías, identificar vulnerabilidades sistémicas y fundamentar decisiones sobre el diseño o la mejora de sistemas complejos.
+            Cuando estudiamos un grafo, a menudo nos interesa ser capaces de describirlo de forma numérica para entender cómo se comporta globalmente. Basados en estas descripciones, podemos querer inferir propiedades más abstractas como la complejidad o la robustez. Esto también nos ayuda a diferenciar dos grafos y compararlos sin necesidad de analizarlos componente a componente, lo cual puede resultar imposible en la práctica. A continuación describiremos algunas de estas formas que tenemos de describir numéricamente un grafo.
 
             \begin{definicion}[Índice $\beta$ (conectividad)]
                 El \textbf{índice $\beta$} mide cuántas aristas existen respecto al número de nodos:
@@ -490,6 +506,79 @@
             \begin{ejemplo}
                 Para una red con $|V| = 10$ y $|E| = 12$, se tiene $\beta = 1.2$, lo que indica que cada nodo tiene en promedio más de una conexión.
             \end{ejemplo}
+
+            En algunos casos, cuando disponemos de un grafo planar, podemos saber cuál es el número máximo de ciclos que puede tener. Para poder llegar a esa definición, antes debemos establecer un par de resultados previos.
+
+            \begin{teorema}[Teorema de Euler]
+                Sea $G$ un grafo planar conexo con $|V|$ vértices, $|E|$ aristas y $f$ caras. Entonces:
+                \[
+                |V| - |E| + f = 2.
+                \]
+            \end{teorema}
+
+            \begin{proof}
+                La prueba se realiza por inducción sobre el número de aristas $|E|$.
+
+                \textbf{Caso base:}
+                Si $G$ es un árbol (grafo conexo sin ciclos), es planar y tiene $f=1$ (toda la región exterior), y se sabe que $|E| = |V| - 1$.
+                Por tanto:
+                \[
+                |V| - |E| + f = |V| - (|V|-1) + 1 = 1 + 1 = 2.
+                \]
+
+                \textbf{Paso inductivo:}
+                Supón que el teorema se cumple para todo grafo planar conexo con $k$ aristas.
+                Sea $G$ un grafo planar conexo con $k+1$ aristas.
+                Como $G$ es conexo y tiene más aristas que un árbol, debe contener al menos un ciclo.
+                Elimina una arista que pertenezca a algún ciclo; el grafo resultante $G'$ sigue siendo conexo y planar, tiene $k$ aristas y, al eliminar la arista del ciclo, se fusionan dos caras adyacentes, por lo que el número de caras disminuye en uno ($f' = f - 1$).
+                Por hipótesis inductiva:
+                \[
+                |V| - k + f' = 2.
+                \]
+                Sustituyendo $f = f'+1$ y $|E| = k+1$,
+                \[
+                |V| - (k+1) + (f'+1) = |V| - k - 1 + f' + 1 = |V| - k + f' = 2.
+                \]
+                Por lo tanto, la fórmula se mantiene para $G$.
+
+                Por inducción, la fórmula se cumple para todo grafo planar conexo.
+            \end{proof}
+
+            \begin{corolario}
+                Para todo grafo planar simple y conexo con $|V| \geq 3$ vértices, se cumple $|E| \leq 3|V| - 6$.
+            \end{corolario}
+
+            \begin{proof}
+                Por el teorema de Euler, $|V| - |E| + f = 2$.
+                En todo grafo planar simple, cada cara está limitada por al menos tres aristas, y cada arista delimita a lo sumo dos caras. Por tanto,
+                \[
+                3f \leq 2|E|.
+                \]
+                Despejando $f$ de la fórmula de Euler:
+                \[
+                f = 2 + |E| - |V|,
+                \]
+                y sustituyendo en la desigualdad:
+                \[
+                3(2 + |E| - |V|) \leq 2|E| \\
+                6 + 3|E| - 3|V| \leq 2|E| \\
+                6 + 3|E| - 3|V| - 2|E| \leq 0 \\
+                6 + |E| - 3|V| \leq 0 \\
+                |E| \leq 3|V| - 6.
+                \]
+            \end{proof}
+
+            \begin{corolario}
+                El número máximo de ciclos independientes en un grafo planar simple y conexo es $2|V| - 5$.
+            \end{corolario}
+
+            \begin{proof}
+                El número de ciclos independientes es $\mu = |E| - |V| + 1$ para $p=1$.
+                Al usar el máximo de aristas $|E| = 3|V|-6$,
+                \[
+                \mu_{\max} = (3|V|-6) - |V| + 1 = 2|V| - 5.
+                \]
+            \end{proof}
 
             \begin{definicion}[Índice $\alpha$ (redundancia)]
                 El \textbf{índice $\alpha$} cuantifica la proporción de ciclos presentes frente al máximo posible en un grafo planar:
@@ -562,7 +651,7 @@
 
         \subsection*{Propiedades a nivel de nodo}
 
-            No menos relevante es el estudio de las propiedades locales, aquellas asociadas a nodos individuales dentro de la red. Estas medidas permiten cuantificar el papel específico que juega cada vértice en la estructura general, ya sea como punto de transferencia, centro de distribución, intermediario crítico o extremo periférico. Analizar los atributos de los nodos proporciona una visión más granular del funcionamiento de la red, identificando elementos estratégicos cuya relevancia puede ser decisiva para la conectividad, el flujo de información o la resiliencia global del sistema.
+            El análisis de propiedades a nivel de nodo nos permite identificar y cuantificar el papel de cada vértice dentro de la estructura del grafo. Mediante medidas locales, podemos distinguir nodos con características particulares, comparar su relevancia relativa y obtener una visión más detallada de la organización interna del grafo, incluso cuando el estudio global resulta insuficiente para captar las diferencias individuales.
 
             \begin{definicion}[Grado de un nodo]
                 El \textbf{grado} de un nodo $v$, denotado $deg(v)$, es la suma del número de aristas entrantes (\emph{grado de entrada}, $deg^{-}(v)$) y aristas salientes (\emph{grado de salida}, $deg^{+}(v)$):
