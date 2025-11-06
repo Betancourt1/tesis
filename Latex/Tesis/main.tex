@@ -3,7 +3,14 @@
 \usepackage[T1]{fontenc}
 \usepackage{makecell}
 \usepackage{float}
-\usepackage{hyperref}
+\usepackage[
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    urlcolor=black,
+    filecolor=black,
+    linktoc=page  % Esto mantiene visibles las entradas del índice
+]{hyperref}
 \usepackage[document]{ragged2e}
 \usepackage[a4paper,top=2.54cm,bottom=2.54cm,left=2.54cm,right=2.54cm,marginparwidth=1.75cm]{geometry}
 \usepackage{amsmath, amssymb}
@@ -22,14 +29,13 @@
 % --- Entornos que COMPARTEN el contador de 'teo' ---
 \newtheorem{proposicion}[teo]{Proposición}
 \newtheorem{lema}[teo]{Lema}
+\newtheorem{corolario}[teo]{Corolario}
 
 % Estilo "definición": roman en vez de itálicas
-\theoremstyle{definition}
 \newtheorem{definicion}[teo]{Definición}
 \newtheorem{ejemplo}[teo]{Ejemplo}
 
 % Estilo "remark": para notas/observaciones
-\theoremstyle{remark}
 \newtheorem{observacion}[teo]{Observación}
 
 % Cambiar el título del entorno de demostración
