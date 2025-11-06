@@ -5,7 +5,7 @@
 
     Este capítulo se basa en \cite{diestel2017} y \cite{bangjensen2007}.
 
-    \subsection{Definición y conceptos básicos}
+    \section{Definición y conceptos básicos}
 
         \begin{definicion}
             Un \textbf{grafo} $G$ es un par $(V,E)$ que consiste en un conjunto no vacío $V$ de \textbf{vértices} (o \textbf{nodos}) y un conjunto $E$ de subconjuntos de 2 elementos de $V$, denominados \textbf{aristas}.
@@ -48,7 +48,7 @@
 
     En el resto de este trabajo asumiremos que todos los grafos son finitos.
 
-    \subsection{Tipos de grafos}
+    \section{Tipos de grafos}
 
         Ahora que sabemos lo que es un grafo, es pertinente preguntarnos si es posible clasificarlos. Aunque posible, la clasificación de los grafos es una tarea multifacética que puede atender a una diversidad de criterios. Es posible categorizarlos, por ejemplo, en función de su estructura general (como en el caso de los grafos planares, bipartitos o completos), de las propiedades de conectividad que exhiben, o incluso de la presencia de ciclos. No obstante, para los fines de esta introducción, nos centraremos en una de las distinciones más fundamentales, la cual emana directamente de las propiedades inherentes al conjunto de aristas $E$. Específicamente, exploraremos la clasificación de los grafos según si sus aristas poseen una dirección definida (grafos dirigidos y no dirigidos) y si se les atribuye un valor numérico (grafos ponderados).
 
@@ -124,7 +124,7 @@
             \end{center}
         \end{ejemplo}
 
-    \subsection{Propiedades fundamentales de los grafos}
+    \section{Propiedades fundamentales de los grafos}
 
         Hasta ahora hemos evaluado a los grafos como un todo, deteniéndonos apenas en sus componentes como una herramienta para definir propiedades globales, pero también es posible y recomendable establecer propiedades de sus componentes. Algunas que son especialmente valiosas para el presente estudio son la \textit{conectividad}, los \textit{caminos}, los \textit{ciclos}, y las representaciones matriciales como la matriz de adyacencia.
 
@@ -391,30 +391,93 @@
             Desde la raíz $v_1$, existe exactamente un camino dirigido a cada vértice del árbol.
         \end{ejemplo}
 
-        \subsection{Propiedades estructurales}
+        \section{Propiedades estructurales}
+
+            Ahora que disponemos no solo de la noción de grafo y sus elementos básicos, sino también de herramientas para particionarlos y analizarlos, podemos avanzar hacia la definición de métricas e indicadores que permitan caracterizar cuantitativamente su estructura y funcionamiento. Estas medidas nos ayudarán a identificar patrones, puntos críticos y niveles de eficiencia o resiliencia en la red, ofreciendo una base objetiva para comparar distintas topologías, fundamentar intervenciones y detectar limitaciones o vulnerabilidades que no serían evidentes a simple vista.
 
             Entre las propiedades clásicas que describen la forma en que los vértices se relacionan destacan los siguientes conceptos fundamentales:
 
             \begin{definicion}[Conectividad]
-             Una red es \textbf{conexa} si existe al menos un camino dirigido entre cada par de vértices. En caso contrario, la red se fragmenta en varias componentes conexas.
-            \end{definicion}
-
-            \begin{definicion}[Diámetro]
-             El \textbf{diámetro} de un grafo es la longitud máxima de los caminos más cortos entre todos los pares de vértices $(u,v)$.
-            Formalmente: $\displaystyle \mathrm{diam}(G) = \max_{u,v \in V} d(u,v)$, donde $d(u,v)$ es la longitud del camino dirigido más corto de $u$ a $v$.
+                Decimos que un grafo $G$ es \textbf{conexo} si existe al menos un camino entre cada par de vértices. En caso contrario, la red se fragmenta en varias componentes conexas. Al número de componentes conexas lo llamamos $p$.
             \end{definicion}
 
             \begin{definicion}[Nodo de articulación e istmo]
-              Un \textbf{nodo de articulación} es un vértice cuya supresión (junto con sus aristas incidentes) incrementa el número de componentes conexas de la red.
-            Un \textbf{istmo} (o arista de corte) es una arista cuya supresión incrementa el número de componentes conexas.
+                Un \textbf{nodo de articulación} es un vértice cuya supresión (junto con sus aristas incidentes) incrementa el número de componentes conexas de la red.
+                Un \textbf{istmo} (o arista de corte) es una arista cuya supresión incrementa el número de componentes conexas.
+            \end{definicion}
+
+            \begin{ejemplo}
+                Ilustración correcta de nodo de articulación y de istmo (arista de corte).
+                \begin{center}
+                    \begin{tabular}{cc}
+                    % Nodo de articulación
+                    \begin{tikzpicture}[scale=1.1, every node/.style={circle, draw, fill=white, inner sep=2pt}, articulation/.style={red,fill=red}, edge/.style={thick}]
+                        % Grafo tipo "Y" con nodo central crítico
+                        \node (A) at (0,1) {A};
+                        \node (B) at (2,1) {B};
+                        \node (C) at (1,0) {C};
+                        \node[articulation] (D) at (1,2) {D};
+                        \draw[edge] (A) -- (D);
+                        \draw[edge] (B) -- (D);
+                        \draw[edge] (C) -- (D);
+                    \end{tikzpicture}
+                    &
+                    % Istmo/arista de corte
+                    \begin{tikzpicture}[scale=1.1, every node/.style={circle, draw, fill=white, inner sep=2pt}, istmo/.style={blue,very thick}, edge/.style={thick}]
+                        % Grafo tipo "cadena" con arista central crítica
+                        \node (A) at (0,1) {A};
+                        \node (B) at (1,1) {B};
+                        \node (C) at (2,1) {C};
+                        \node (D) at (3,1) {D};
+                        \draw[edge] (A) -- (B);
+                        \draw[istmo] (B) -- (C);
+                        \draw[edge] (C) -- (D);
+                    \end{tikzpicture}
+                    \\
+                    \textit{Nodo de articulación (D)} &
+                    \textit{Istmo (arista $BC$)} \\
+                    % Red tras eliminar el nodo de articulación
+                    \begin{tikzpicture}[scale=1.1, every node/.style={circle, draw=gray!60, fill=gray!10, inner sep=2pt}, edge/.style={thick,gray!60}]
+                        \node (A) at (0,1) {A};
+                        \node (B) at (2,1) {B};
+                        \node (C) at (1,0) {C};
+                        % Nodo D eliminado
+                        % Componentes desconectadas
+                    \end{tikzpicture}
+                    &
+                    % Red tras eliminar el istmo
+                    \begin{tikzpicture}[scale=1.1, every node/.style={circle, draw=gray!60, fill=gray!10, inner sep=2pt}, edge/.style={thick,gray!60}]
+                        \node (A) at (0,1) {A};
+                        \node (B) at (1,1) {B};
+                        \node (C) at (2,1) {C};
+                        \node (D) at (3,1) {D};
+                        \draw[edge] (A) -- (B);
+                        % Istmo eliminado
+                        \draw[edge] (C) -- (D);
+                    \end{tikzpicture}
+                    \\
+                    \textit{Red tras eliminar el nodo de articulación} &
+                    \textit{Red tras eliminar el istmo} \\
+                    \end{tabular}
+                \end{center}
+
+                \captionof{figure}{Arriba: ejemplos correctos de nodo de articulación ($D$, en rojo) e istmo ($BC$, en azul).
+                Abajo: la red se fragmenta en componentes al eliminar el nodo o la arista crítica.}
+            \end{ejemplo}
+
+            \begin{definicion}[Diámetro]
+                El \textbf{diámetro} de un grafo es la longitud máxima de los caminos más cortos entre todos los pares de vértices $(u,v)$.
+                Formalmente: $\displaystyle \mathrm{diam}(G) = \max_{u,v \in V} d(u,v)$, donde $d(u,v)$ es la longitud del camino dirigido más corto de $u$ a $v$.
             \end{definicion}
 
             \begin{definicion}[Número de ciclos independientes]
-             El \textbf{número de ciclos independientes} de un grafo se define como $\mu = |E| - |V| + p$, donde $|E|$ es el número de aristas, $|V|$ es el número de vértices y $p$ el número de componentes conexas.
+                El \textbf{número de ciclos independientes} de un grafo se define como $\mu = |E| - |V| + p$, donde $|E|$ es el número de aristas, $|V|$ es el número de vértices y $p$ el número de componentes conexas.
             \end{definicion}
 
             % ----------------------------------------------------------
-            \subsubsection*{Nivel de red}
+            \subsection*{Propiedades a nivel de red}
+
+            El análisis estructural de una red comienza por el estudio de propiedades globales, es decir, aquellas que describen la organización, la conectividad y la robustez del grafo en su conjunto. Estas métricas permiten evaluar la redundancia de rutas, la facilidad de desplazamiento a través de la red, el grado de fragmentación ante la eliminación de elementos y la capacidad de la red para mantener su funcionalidad bajo distintas condiciones. Al entender estas características globales, es posible comparar diferentes topologías, identificar vulnerabilidades sistémicas y fundamentar decisiones sobre el diseño o la mejora de sistemas complejos.
 
             \begin{definicion}[Índice $\beta$ (conectividad)]
                 El \textbf{índice $\beta$} mide cuántas aristas existen respecto al número de nodos:
@@ -497,7 +560,9 @@
             \end{ejemplo}
 
 
-        \subsubsection*{Nivel de nodo}
+        \subsection*{Propiedades a nivel de nodo}
+
+            No menos relevante es el estudio de las propiedades locales, aquellas asociadas a nodos individuales dentro de la red. Estas medidas permiten cuantificar el papel específico que juega cada vértice en la estructura general, ya sea como punto de transferencia, centro de distribución, intermediario crítico o extremo periférico. Analizar los atributos de los nodos proporciona una visión más granular del funcionamiento de la red, identificando elementos estratégicos cuya relevancia puede ser decisiva para la conectividad, el flujo de información o la resiliencia global del sistema.
 
             \begin{definicion}[Grado de un nodo]
                 El \textbf{grado} de un nodo $v$, denotado $deg(v)$, es la suma del número de aristas entrantes (\emph{grado de entrada}, $deg^{-}(v)$) y aristas salientes (\emph{grado de salida}, $deg^{+}(v)$):
@@ -565,7 +630,7 @@
     En conjunto, estos indicadores permiten diagnosticar fortalezas y debilidades tanto globales como locales, fundamentando decisiones sobre expansión, mantenimiento y robustecimiento de la infraestructura de transporte (Rodrigues, 2013).
 
 
-    \subsection{Vulnerabilidad y resiliencia}
+    \section{Vulnerabilidad y resiliencia}
 
     Para cuantificar la sensibilidad de la red ante fallos se emplea la \emph{eficiencia global}
     \begin{equation}
@@ -577,10 +642,10 @@
     \end{equation}
     Valores altos de $V$ implican que pocos nodos o aristas concentran la mayor parte del flujo: la red es frágil (Rodrigues, 2013).
 
-    \subsection{Algoritmos fundamentales en teoría de grafos}
+    \section{Algoritmos fundamentales en teoría de grafos}
         Los algoritmos en teoría de grafos permiten resolver problemas fundamentales como la determinación de caminos más cortos entre nodos. En esta sección, se presentan dos algoritmos esenciales para este propósito: Dijkstra y Floyd-Warshall.
 
-        \subsubsection{Algoritmo de Dijkstra}
+        \subsection{Algoritmo de Dijkstra}
 
         El algoritmo de Dijkstra encuentra el camino más corto desde un nodo fuente $s$ hacia todos los demás nodos en un grafo ponderado con pesos no negativos. Se basa en una estrategia voraz que mantiene un conjunto de nodos visitados y actualiza iterativamente las distancias más cortas conocidas.
 
@@ -611,7 +676,7 @@
             \end{enumerate}
         \end{enumerate}
 
-        \subsubsection{Algoritmo de Floyd-Warshall}
+        \subsection{Algoritmo de Floyd-Warshall}
 
         El algoritmo de Floyd-Warshall encuentra el camino más corto entre todos los pares de nodos en un grafo ponderado con pesos arbitrarios (incluyendo negativoss). Se basa en la programación dinámica y mejora iterativamente una matriz de distancias.
 
