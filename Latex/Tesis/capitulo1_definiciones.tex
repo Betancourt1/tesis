@@ -100,8 +100,10 @@
             \end{center}
         \end{ejemplo}
 
+        En delante, asumiremos que todos los grafos son dirigidos.
+
         \begin{definicion}[Grafo ponderado]
-            Un grafo es \textbf{ponderado} si a cada arista $(u, v) \in E$ se le asigna un peso $w(u, v) \in \mathbb{R}$ que representa costos, distancias u otra métrica relevante. Un grafo puede ser ponderado además de dirigido o no dirigido.
+            Un grafo es \textbf{ponderado} si a cada arista $(u, v) \in E$ se le asigna un peso $w(u, v) \in \mathbb{R}$. Un grafo puede ser ponderado además de dirigido o no dirigido.
         \end{definicion}
 
         \begin{ejemplo}
@@ -124,7 +126,7 @@
 
     \subsection{Propiedades fundamentales de los grafos}
 
-        Los grafos poseen diversas propiedades matemáticas que permiten su análisis estructural. Algunas que son especialmente valiosas para el presente estudio son la \textit{conectividad}, los \textit{caminos}, los \textit{ciclos}, y las representaciones matriciales como la matriz de adyacencia.
+        Hasta ahora hemos evaluado a los grafos como un todo, deteniéndonos apenas en sus componentes como una herramienta para definir propiedades globales, pero también es posible y recomendable establecer propiedades de sus componentes. Algunas que son especialmente valiosas para el presente estudio son la \textit{conectividad}, los \textit{caminos}, los \textit{ciclos}, y las representaciones matriciales como la matriz de adyacencia.
 
         \begin{definicion}[Adyacencia de nodos]
             Sean $G = (V, E)$ un grafo y $u, v \in V$ dos nodos distintos.
@@ -133,28 +135,83 @@
                 \item En un grafo no dirigido, $u$ y $v$ son adyacentes si $(u, v) \in E$ (lo que implica también $(v, u) \in E$).
                 \item En un grafo dirigido, $u$ es adyacente a $v$ si $(u, v) \in E$ (pero no necesariamente $(v, u) \in E$).
             \end{itemize}
-            De forma equivalente, dos nodos son adyacentes si la entrada correspondiente en la matriz de adyacencia $A$ es distinta de cero, es decir, $a_{uv} \neq 0$.
         \end{definicion}
+
+        \begin{definicion}[Matriz de adyacencia]
+            Dado un grafo $G=(V,E)$ con $N$ nodos, la \textbf{matriz de adyacencia} es una matriz $A \in \mathbb{R}^{N \times N}$ donde cada elemento $a_{ij}$ indica si existe una conexión directa entre el nodo $i$ y el nodo $j$:
+            \[
+            a_{ij} =
+            \begin{cases}
+            1, & \text{si existe una arista entre } i \text{ y } j,\\
+            0, & \text{en caso contrario.}
+            \end{cases}
+            \]
+            En grafos ponderados, cada $a_{ij}$ toma el valor del peso asignado a la conexión. Además, dos nodos son adyacentes si la entrada correspondiente en la matriz de adyacencia $A$ es distinta de cero, es decir, $a_{uv} \neq 0$.
+
+        \end{definicion}
+
+        \begin{ejemplo}[Matriz de adyacencia]
+            Considera el siguiente grafo dirigido $G = (V, E)$ con $V = \{A, B, C\}$ y $E = \{(A,B), (B,C), (C,A)\}$:
+
+            \begin{center}
+                \begin{tikzpicture}[scale=1, every node/.style={circle, draw, fill=white, inner sep=2pt}, >=stealth]
+                    \node (A) at (0,0) {A};
+                    \node (B) at (2,0) {B};
+                    \node (C) at (1,1.5) {C};
+                    \draw[->, thick] (A) -- (B);
+                    \draw[->, thick] (B) -- (C);
+                    \draw[->, thick] (C) -- (A);
+                \end{tikzpicture}
+            \end{center}
+
+            La matriz de adyacencia $A$ correspondiente es:
+            \[
+            A =
+            \begin{pmatrix}
+            0 & 1 & 0 \\
+            0 & 0 & 1 \\
+            1 & 0 & 0 \\
+            \end{pmatrix}
+            \]
+            donde las filas y columnas corresponden al orden $A$, $B$, $C$.
+            Por ejemplo, $a_{12} = 1$ indica una arista dirigida de $A$ a $B$, y $a_{33} = 0$ indica que no hay un lazo en $C$.
+        \end{ejemplo}
 
         \begin{definicion}[Subgrafo]
             Un \textbf{subgrafo} $H = (V_H, E_H)$ de un grafo $G = (V, E)$ es un grafo tal que $V_H \subseteq V$ y $E_H \subseteq E$. Es decir, un subgrafo es una parte de un grafo que mantiene la estructura de nodos y aristas del grafo original.
         \end{definicion}
 
-        \begin{ejemplo}
-            Ejemplo de subgrafo:
+        \begin{ejemplo}[Subgrafo]
+            Sea $G$ el siguiente grafo dirigido:
 
             \begin{center}
-                \begin{tikzpicture}[scale=1, every node/.style={circle, draw, fill=white, inner sep=2pt}]
-                    \node (a) at (0,0) {A};
-                    \node (b) at (1,1) {B};
-                    \node (c) at (2,0) {C};
-                    \node (d) at (1,-1) {D};
-                    \draw[->, thick] (a) -> (b);
-                    \draw[->, thick] (b) -> (c);
-                    \draw[->, thick] (c) -> (d);
-                    \draw[->, thick] (d) -> (a);
+                \begin{tikzpicture}[scale=1, every node/.style={circle, draw, fill=white, inner sep=2pt}, >=stealth]
+                    \node (A) at (0,0) {A};
+                    \node (B) at (2,0) {B};
+                    \node (C) at (1,1.5) {C};
+                    \node (D) at (1,-1.5) {D};
+                    \draw[->, thick] (A) -- (B);
+                    \draw[->, thick] (B) -- (C);
+                    \draw[->, thick] (C) -- (A);
+                    \draw[->, thick] (A) -- (D);
+                    \draw[->, thick] (D) -- (B);
                 \end{tikzpicture}
             \end{center}
+
+            Considera el subgrafo $H$ formado por los nodos $A$, $B$ y $C$ y las aristas $(A,B)$, $(B,C)$ y $(C,A)$:
+
+            \begin{center}
+                \begin{tikzpicture}[scale=1, every node/.style={circle, draw=black, fill=white, inner sep=2pt}, >=stealth]
+                    \node (A) at (0,0) {A};
+                    \node (B) at (2,0) {B};
+                    \node (C) at (1,1.5) {C};
+                    \draw[->, very thick, blue] (A) -- (B);
+                    \draw[->, very thick, blue] (B) -- (C);
+                    \draw[->, very thick, blue] (C) -- (A);
+                \end{tikzpicture}
+            \end{center}
+
+            Obsérvese que $H$ se obtiene de $G$ al eliminar el nodo $D$ y las aristas asociadas a $D$.
         \end{ejemplo}
 
         \begin{definicion}[Camino]
@@ -193,18 +250,6 @@
                 \end{tikzpicture}
             \end{center}
         \end{ejemplo}
-
-        \begin{definicion}[Matriz de adyacencia]
-            Dado un grafo $G=(V,E)$ con $N$ nodos, la \textbf{matriz de adyacencia} es una matriz $A \in \mathbb{R}^{N \times N}$ donde cada elemento $a_{ij}$ indica si existe una conexión directa entre el nodo $i$ y el nodo $j$:
-            \[
-            a_{ij} =
-            \begin{cases}
-            1, & \text{si existe una arista entre } i \text{ y } j,\\
-            0, & \text{en caso contrario.}
-            \end{cases}
-            \]
-            En grafos ponderados, cada $a_{ij}$ toma el valor del peso asignado a la conexión.
-        \end{definicion}
 
     \subsection{Propiedades estructurales}
 
