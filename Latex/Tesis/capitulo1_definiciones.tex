@@ -48,95 +48,102 @@
 
     En el resto de este trabajo asumiremos que todos los grafos son finitos.
 
-    \subsubsection{Tipos de grafos}
-        Dependiendo de las propiedades de $E$, los grafos pueden clasificarse en diversas categorías:
+    \subsection{Tipos de grafos}
 
-        \begin{itemize}
-            \item \textbf{Grafo no dirigido}: Un grafo es no dirigido si las aristas no tienen una orientación específica, es decir, $(u, v) \in E$ implica que $(v, u) \in E$.
+        Ahora que sabemos lo que es un grafo, es pertinente preguntarnos si es posible clasificarlos. Aunque posible, la clasificación de los grafos es una tarea multifacética que puede atender a una diversidad de criterios. Es posible categorizarlos, por ejemplo, en función de su estructura general (como en el caso de los grafos planares, bipartitos o completos), de las propiedades de conectividad que exhiben, o incluso de la presencia de ciclos. No obstante, para los fines de esta introducción, nos centraremos en una de las distinciones más fundamentales, la cual emana directamente de las propiedades inherentes al conjunto de aristas $E$. Específicamente, exploraremos la clasificación de los grafos según si sus aristas poseen una dirección definida (grafos dirigidos y no dirigidos) y si se les atribuye un valor numérico (grafos ponderados).
 
-                \begin{center}
-                    \begin{tikzpicture}[scale=1, every node/.style={draw, circle, minimum size=1cm}]
-                        \node (A) at (0,0) {A};
-                        \node (B) at (2,0) {B};
-                        \node (C) at (1,1.5) {C};
-                        \node (D) at (3,1.5) {D};
-                        \node (E) at (4,0) {E};
+        Estas propiedades dan lugar a un espectro de categorías de grafos, cada una con implicaciones estructurales y algorítmicas particulares. Por consiguiente, a continuación se presentan las definiciones formales:
 
-                        \draw (A) -- (B);
-                        \draw (A) -- (C);
-                        \draw (B) -- (C);
-                        \draw (B) -- (D);
-                        \draw (B) -- (E);
-                        \draw (D) -- (E);
-                    \end{tikzpicture}
-                \end{center}
+        \begin{definicion}[Grafo no dirigido]
+            Un grafo es \textbf{no dirigido} si sus aristas no tienen una orientación específica; es decir, $(u, v) \in E$ implica que $(v, u) \in E$.
+        \end{definicion}
 
-            \item \textbf{Grafo dirigido (dígrafo)}: En un grafo dirigido, cada arista tiene una dirección, por lo que $(u, v) \in E$ no implica necesariamente que $(v, u) \in E$ pero tampoco lo prohíbe. Dado este escenario, diremos que \textbf{$u$ se dirige a $v$}.
+        \begin{ejemplo}
+            A continuación se muestra un ejemplo de grafo no dirigido:
 
-                \begin{center}
-                    \begin{tikzpicture}[scale=1, every node/.style={draw, circle, minimum size=1cm}, >=stealth]
-                        \node (A) at (0,0) {A};
-                        \node (B) at (2,0) {B};
-                        \node (C) at (1,1.5) {C};
+            \begin{center}
+                \begin{tikzpicture}[scale=1, every node/.style={draw, circle, minimum size=1cm}]
+                    \node (A) at (0,0) {A};
+                    \node (B) at (2,0) {B};
+                    \node (C) at (1,1.5) {C};
+                    \node (D) at (3,1.5) {D};
+                    \node (E) at (4,0) {E};
 
-                        \draw[->, thick] (A) -- (B);
-                        \draw[->, thick] (B) -- (C);
-                        \draw[->, thick] (C) -- (A);
-                        \draw[->, thick] (A) -- (C);
-                    \end{tikzpicture}
-                \end{center}
-            \item \textbf{Grafo ponderado}: Un grafo es ponderado si a cada arista $(u, v) \in E$ se le asigna un peso $w(u, v) \in \mathbb{R}$ que representa costos, distancias, o cualquier otra métrica relevante. Un grafo puede ser ponderado a la vez que dirigido o no dirigido.
-                \begin{center}
-                \begin{tikzpicture}[scale=1,
-                    vertex/.style={draw, circle, minimum size=1cm}
-                    ]
+                    \draw (A) -- (B);
+                    \draw (A) -- (C);
+                    \draw (B) -- (C);
+                    \draw (B) -- (D);
+                    \draw (B) -- (E);
+                    \draw (D) -- (E);
+                \end{tikzpicture}
+            \end{center}
+        \end{ejemplo}
+
+        \begin{definicion}[Grafo dirigido (dígrafo)]
+            Un grafo es \textbf{dirigido} (o \emph{dígrafo}) si cada arista tiene una dirección; es decir, $(u, v) \in E$ no implica que $(v, u) \in E$ (aunque puede ocurrir). En este caso, diremos que $u$ se dirige a $v$.
+        \end{definicion}
+
+        \begin{ejemplo}
+            Ejemplo de grafo dirigido:
+
+            \begin{center}
+                \begin{tikzpicture}[scale=1, every node/.style={draw, circle, minimum size=1cm}, >=stealth]
+                    \node (A) at (0,0) {A};
+                    \node (B) at (2,0) {B};
+                    \node (C) at (1,1.5) {C};
+
+                    \draw[->, thick] (A) -- (B);
+                    \draw[->, thick] (B) -- (C);
+                    \draw[->, thick] (C) -- (A);
+                    \draw[->, thick] (A) -- (C);
+                \end{tikzpicture}
+            \end{center}
+        \end{ejemplo}
+
+        \begin{definicion}[Grafo ponderado]
+            Un grafo es \textbf{ponderado} si a cada arista $(u, v) \in E$ se le asigna un peso $w(u, v) \in \mathbb{R}$ que representa costos, distancias u otra métrica relevante. Un grafo puede ser ponderado además de dirigido o no dirigido.
+        \end{definicion}
+
+        \begin{ejemplo}
+            Ejemplo de grafo ponderado:
+
+            \begin{center}
+                \begin{tikzpicture}[scale=1, vertex/.style={draw, circle, minimum size=1cm}, >=stealth]
                     % Definición de vértices
                     \node[vertex] (A) at (0,0) {A};
                     \node[vertex] (B) at (2,0) {B};
                     \node[vertex] (C) at (1,1.5) {C};
 
-                    % Aristas con etiquetas; se anula el estilo global para estos nodos
+                    % Aristas con etiquetas
                     \draw[->, thick] (A) -- node[above, draw=none, fill=none] {69} (B);
                     \draw[->, thick] (B) -- node[above right, draw=none, fill=none] {420} (C);
                     \draw[->, thick] (C) -- node[above left, draw=none, fill=none] {11} (A);
                 \end{tikzpicture}
             \end{center}
-
-        \end{itemize}
+        \end{ejemplo}
 
     \subsection{Propiedades fundamentales de los grafos}
-        Los grafos poseen diversas propiedades matemáticas que permiten su análisis estructural.
-        Algunas que son especialmente valiosas para el presente estudio son conceptos como la \textit{conectividad}, que nos permite mesurar la importancia que tiene un nodo con respecto a los demás; así también los \textit{caminos}, que nos permiten representar trayectorias; entre otros conceptos.
 
-        \subsubsection{Subgrafos}
+        Los grafos poseen diversas propiedades matemáticas que permiten su análisis estructural. Algunas que son especialmente valiosas para el presente estudio son la \textit{conectividad}, los \textit{caminos}, los \textit{ciclos}, y las representaciones matriciales como la matriz de adyacencia.
 
-        Un subgrafo $H = (V_H, E_H)$ de un grafo $G = (V, E)$ es un grafo tal que $V_H \subseteq V$ y $E_H \subseteq E$.
-        Es decir, un subgrafo es una parte de un grafo que mantiene la estructura de nodos y aristas del grafo original.
+        \begin{definicion}[Adyacencia de nodos]
+            Sean $G = (V, E)$ un grafo y $u, v \in V$ dos nodos distintos.
+            Se dice que $u$ y $v$ son \textbf{adyacentes} si existe una arista que los conecta directamente, es decir:
+            \begin{itemize}
+                \item En un grafo no dirigido, $u$ y $v$ son adyacentes si $(u, v) \in E$ (lo que implica también $(v, u) \in E$).
+                \item En un grafo dirigido, $u$ es adyacente a $v$ si $(u, v) \in E$ (pero no necesariamente $(v, u) \in E$).
+            \end{itemize}
+            De forma equivalente, dos nodos son adyacentes si la entrada correspondiente en la matriz de adyacencia $A$ es distinta de cero, es decir, $a_{uv} \neq 0$.
+        \end{definicion}
 
-        Muchos conceptos en la teoría de grafos pueden describirse en términos de subgrafos.
+        \begin{definicion}[Subgrafo]
+            Un \textbf{subgrafo} $H = (V_H, E_H)$ de un grafo $G = (V, E)$ es un grafo tal que $V_H \subseteq V$ y $E_H \subseteq E$. Es decir, un subgrafo es una parte de un grafo que mantiene la estructura de nodos y aristas del grafo original.
+        \end{definicion}
 
-        \subsubsection{Caminos}
+        \begin{ejemplo}
+            Ejemplo de subgrafo:
 
-        Un \textbf{camino} en un grafo $G$ es un subgrafo en el que los vértices están conectados por una secuencia de aristas sin repeticiones:
-        \begin{equation}
-            P_k = (v_1, v_2, \dots, v_k) \quad \text{donde } \{v_i, v_{i+1}\} \in E, \forall i \in \{1, \dots, k-1\}.
-        \end{equation}
-
-        Los caminos son fundamentales en redes, pues permiten analizar rutas eficientes y la conectividad entre distintos puntos.
-
-        \subsubsection{Ciclos}
-
-        Un \textbf{ciclo} es un camino en el que el primer y el último vértice son el mismo:
-        \begin{equation}
-            C_k = (v_1, v_2, \dots, v_k, v_1) \quad \text{donde } \{v_k, v_1\} \in E.
-        \end{equation}
-
-        Los ciclos en redes ayudan a identificar redundancias estructurales y evaluar posibles congestiones en ciertas áreas.
-
-        \begin{figure}[ht]
-            \centering
-            \begin{subfigure}{0.3\textwidth}
-                \centering
+            \begin{center}
                 \begin{tikzpicture}[scale=1, every node/.style={circle, draw, fill=white, inner sep=2pt}]
                     \node (a) at (0,0) {A};
                     \node (b) at (1,1) {B};
@@ -147,10 +154,17 @@
                     \draw[->, thick] (c) -> (d);
                     \draw[->, thick] (d) -> (a);
                 \end{tikzpicture}
-                \caption{Subgrafo}
-            \end{subfigure}
-            \begin{subfigure}{0.3\textwidth}
-                \centering
+            \end{center}
+        \end{ejemplo}
+
+        \begin{definicion}[Camino]
+            Un \textbf{camino} en un grafo $G$ es una sucesión de vértices $P_k = (v_1, v_2, \dots, v_k)$ tal que $\{v_i, v_{i+1}\} \in E$ para todo $i \in \{1, \dots, k-1\}$ y ningún vértice se repite.
+        \end{definicion}
+
+        \begin{ejemplo}
+            Ejemplo de camino:
+
+            \begin{center}
                 \begin{tikzpicture}[scale=1, every node/.style={circle, draw, fill=white, inner sep=2pt}]
                     \node (a) at (0,0) {A};
                     \node (b) at (1,1) {B};
@@ -158,10 +172,17 @@
                     \draw[->, thick] (a) -> (b);
                     \draw[->, thick] (b) -> (c);
                 \end{tikzpicture}
-                \caption{Camino}
-            \end{subfigure}
-            \begin{subfigure}{0.3\textwidth}
-                \centering
+            \end{center}
+        \end{ejemplo}
+
+        \begin{definicion}[Ciclo]
+            Un \textbf{ciclo} es un camino $C_k = (v_1, v_2, \dots, v_k, v_1)$ tal que el primer y el último vértice coinciden ($v_1 = v_{k+1}$) y las aristas cumplen $\{v_i, v_{i+1}\} \in E$ para $i = 1, \dots, k$.
+        \end{definicion}
+
+        \begin{ejemplo}
+            Ejemplo de ciclo:
+
+            \begin{center}
                 \begin{tikzpicture}[scale=1, every node/.style={circle, draw, fill=white, inner sep=2pt}]
                     \node (a) at (0,0) {A};
                     \node (b) at (1,1) {B};
@@ -170,21 +191,20 @@
                     \draw[->, thick] (b) -> (c);
                     \draw[->, thick] (c) -> (a);
                 \end{tikzpicture}
-                \caption{Ciclo}
-            \end{subfigure}
-            \caption{Ejemplos de subgrafo, camino y ciclo en un grafo.}
-        \end{figure}
+            \end{center}
+        \end{ejemplo}
 
-        \subsubsection{Matriz de Adyacencia}
-            La matriz de adyacencia es una representación matricial que codifica la estructura de un grafo. Dado un grafo $G=(V,E)$ con $N$ nodos, se define una matriz $A \in \mathbb{R}^{N \times N}$, donde cada elemento $a_{ij}$ indica si existe una conexión directa entre el nodo $i$ y el nodo $j$. En un grafo no ponderado, se establece que:
-            \begin{equation}
-                a_{ij} =
-                \begin{cases}
-                    1, & \text{si existe una arista entre } i \text{ y } j,\\
-                    0, & \text{en caso contrario.}
-                \end{cases}
-            \end{equation}
-            En grafos ponderados, cada $a_{ij}$ toma el valor del peso asignado a la conexión, lo que permite cuantificar la intensidad o costo de dicha relación.
+        \begin{definicion}[Matriz de adyacencia]
+            Dado un grafo $G=(V,E)$ con $N$ nodos, la \textbf{matriz de adyacencia} es una matriz $A \in \mathbb{R}^{N \times N}$ donde cada elemento $a_{ij}$ indica si existe una conexión directa entre el nodo $i$ y el nodo $j$:
+            \[
+            a_{ij} =
+            \begin{cases}
+            1, & \text{si existe una arista entre } i \text{ y } j,\\
+            0, & \text{en caso contrario.}
+            \end{cases}
+            \]
+            En grafos ponderados, cada $a_{ij}$ toma el valor del peso asignado a la conexión.
+        \end{definicion}
 
     \subsection{Propiedades estructurales}
 
