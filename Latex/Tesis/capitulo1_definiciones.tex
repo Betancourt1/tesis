@@ -7,27 +7,15 @@
 
     \section{Definición y conceptos básicos}
 
-        \begin{definicion}
-            Un \textbf{grafo} $G$ es un par $(V,E)$ que consiste en un conjunto no vacío $V$ de \textbf{vértices} (o \textbf{nodos}) y un conjunto $E$ de subconjuntos de 2 elementos de $V$, denominados \textbf{aristas}.
+        \begin{definicion}[Grafo]
+            Un \textbf{grafo} $G$ es un par $(V,E)$ que consiste en un conjunto no vacío $V$ de \textbf{vértices} (en delante \textbf{nodos}) y un conjunto $E$ de subconjuntos de 2 elementos de $V$, denominados \textbf{aristas}.
         \end{definicion}
 
-    A un grafo $G$ con conjunto de aristas $V$ también lo podemos definir como un grafo \textit{en} $V$ o simplemente $G(V)$.
+        A un grafo $G$ con conjunto de aristas $V$ también lo podemos definir como un grafo \textit{en} $V$ o simplemente $G(V)$.
 
-        \begin{definicion}[Grafo planar]
-            Un grafo es \textbf{planar} si admite una representación (llamada \emph{dibujo planar}) en el plano tal que ninguna de sus aristas se cruza con otra, salvo en los vértices que comparten.
+        \begin{definicion}[Lazo]
+            Un \textbf{lazo} es una arista/arco cuyos extremos coinciden: $\{v,v\}$ en el caso no dirigido, o $(v,v)$ en el caso dirigido.
         \end{definicion}
-
-        \begin{observacion}
-            La planitud de un grafo no depende de una representación particular, sino de la existencia de al menos un dibujo en el plano sin cruces de aristas.
-        \end{observacion}
-
-        \begin{definicion}[Cara de un grafo planar]
-            Sea $G$ un grafo planar, y considérese un dibujo de $G$ en el plano sin cruces de aristas.
-            Una \textbf{cara} es cada una de las regiones conexas en que el dibujo divide el plano, incluyendo la región exterior.
-            Formalmente, las caras son los componentes conexos del complemento del dibujo de $G$ en el plano.
-        \end{definicion}
-
-        Las definiciones de grafo planar y de cara de un grafo planar nos serán útiles cuando estudiemos propiedades globales de un grafo. Hasta entonces, asumiremos que todos los grafos son no planares.
 
         \begin{definicion}
             Llamamos \textit{orden} de un grafo G al número de vértices que contiene y lo representamos como $|G|$. A la cantidad de aristas de $G$ la escribiremos como $\parallel G \parallel$. Un grafo puede ser \textit{finito} o \textit{infinito}.
@@ -118,6 +106,31 @@
 
         En delante, asumiremos que todos los grafos son dirigidos.
 
+        \begin{definicion}[Grafo planar]
+            Un grafo es \textbf{planar} si admite una representación (llamada \emph{dibujo planar}) en el plano tal que ninguna de sus aristas se cruza con otra, salvo en los vértices que comparten.
+        \end{definicion}
+
+        \begin{observacion}
+            La planitud de un grafo no depende de una representación particular, sino de la existencia de al menos un dibujo en el plano sin cruces de aristas.
+        \end{observacion}
+
+        \begin{definicion}[Cara de un grafo planar]
+            Sea $G$ un grafo planar, y considérese un dibujo de $G$ en el plano sin cruces de aristas.
+            Una \textbf{cara} es cada una de las regiones conexas en que el dibujo divide el plano, incluyendo la región exterior.
+            Formalmente, las caras son los componentes conexos del complemento del dibujo de $G$ en el plano.
+        \end{definicion}
+
+        Las definiciones de grafo planar y de cara de un grafo planar nos serán útiles cuando estudiemos propiedades globales de un grafo. Hasta entonces, asumiremos que todos los grafos son no planares.
+
+        \begin{definicion}[Multígrafo]
+            Un \textbf{multígrafo} $G=(V,E)$ es un grafo finito en el que entre un par (ordenado o no ordenado) de vértices se permiten \emph{múltiples aristas} distintas (también llamadas \emph{aristas paralelas}).
+            Opcionalmente, puede permitirse la existencia de \emph{lazos} (aristas cuyos extremos coinciden en un mismo vértice); cuando se permiten lazos, a veces se habla de \emph{pseudografo}.
+        \end{definicion}
+
+        \begin{observacion}
+            En el contexto dirigido, un \emph{multígrafo dirigido} permite múltiples arcos $(u,v)$ con la misma orientación (y lazos $(v,v)$ si se autorizan). Salvo indicación en contrario, las definiciones de grado y matrices (incidencia/adyacencia) se adaptan contando cada arista paralela con su multiplicidad.
+        \end{observacion}
+
         \begin{definicion}[Grafo ponderado]
             Un grafo es \textbf{ponderado} si a cada arista $(u, v) \in E$ se le asigna un peso $w(u, v) \in \mathbb{R}$. Un grafo puede ser ponderado además de dirigido o no dirigido.
         \end{definicion}
@@ -139,6 +152,16 @@
                 \end{tikzpicture}
             \end{center}
         \end{ejemplo}
+
+        En la siguiente definición usamos el concepto de \textit{ciclo} que no hemos definido todavía. Aunque lo que es un ciclo será definido más adelante, para los propósitos del siguiente resultado, asumamos que un ciclo es una sucesión de $n$ nodos $\{v_{n}\}$ tales que $\(v_{i}, v_{i+1} \) \in E\(G\)$ y también $\(v_{1}, v_{v}\) \in E\(G\)$.
+
+        \begin{definicion}[Grafo simple]
+            Un \textbf{grafo simple} $G=(V,E)$ es un grafo no dirigido, finito y que no es multígrafo; esto es, $E\subseteq \{\{u,v\} : u,v\in V,\ u\neq v\}$ y entre dos vértices distintos hay a lo sumo una arista.
+        \end{definicion}
+
+        \begin{observacion}
+            Cuando el contexto es dirigido, se habla de \emph{dígrafo simple}: no se permiten lazos y, para cada par ordenado $(u,v)$ con $u\neq v$, hay a lo sumo un arco $(u,v)$.
+        \end{observacion}
 
     \section{Propiedades fundamentales de los grafos}
 
@@ -192,6 +215,35 @@
             donde las filas y columnas corresponden al orden $A$, $B$, $C$.
             Por ejemplo, $a_{12} = 1$ indica una arista dirigida de $A$ a $B$, y $a_{33} = 0$ indica que no hay un lazo en $C$.
         \end{ejemplo}
+
+        \begin{definicion}[Matriz de incidencia]
+            Sea $G=(V,E)$ un grafo simple con $n=|V|$ y $m=|E|$.
+            \begin{itemize}
+                \item \textbf{No dirigido (orientación arbitraria).} Se fija una orientación arbitraria de cada arista $e=\{u,v\}$ para obtener un par ordenado $(u,v)$. La \emph{matriz de incidencia} es $B\in\{-1,0,1\}^{n\times m}$ definida por
+                \[
+                B_{xe}=\begin{cases}
+                    -1, & \text{si } x=u \text{ (cola de $e$)},\\
+                    +1, & \text{si } x=v \text{ (cabeza de $e$)},\\
+                    0,  & \text{en otro caso.}
+                \end{cases}
+                \]
+                Con esta convención, $\operatorname{rank}(B)=n-p$ y $\dim\ker(B^\top)=m-n+p$.
+                \item \textbf{Dirigido.} Si $G$ ya es dirigido y $e=(u,v)$, se usa la misma convención natural:
+                \[
+                B_{xe}=\begin{cases}
+                    -1, & x=u,\\
+                    +1, & x=v,\\
+                    0,  & \text{en otro caso.}
+                \end{cases}
+                \]
+                Entonces $B^\top \mathbf{1}=0$, y sobre $\mathbb{F}_2$ la nulidad de $B^\top$ coincide con la dimensión del espacio de ciclos del subyacente no dirigido.
+            \end{itemize}
+            Salvo indicación contraria, se excluyen lazos y aristas múltiples (en multigrafos, cada arista da una columna; para lazos, la convención habitual asigna columna nula o un $2$ en la fila del vértice en la versión no dirigida).
+        \end{definicion}
+
+        \begin{observacion}[Relación con el espacio de ciclos]
+            Sobre $\mathbb{F}_2$, los vectores característicos de ciclos están en $\ker(B^\top)$ y, de hecho, $\dim \ker(B^\top)=m-n+p$; esta es la \emph{fórmula del número ciclomático}.
+        \end{observacion}
 
         \begin{definicion}[Subgrafo]
             Un \textbf{subgrafo} $H = (V_H, E_H)$ de un grafo $G = (V, E)$ es un grafo tal que $V_H \subseteq V$ y $E_H \subseteq E$. Es decir, un subgrafo es una parte de un grafo que mantiene la estructura de nodos y aristas del grafo original.
@@ -331,6 +383,10 @@
             y $v_i \neq v_j$ para $i \neq j$.
         \end{definicion}
 
+        \begin{definicion}
+            Decimos que un grafo $G$ es \textit{acíclico} si ninguno de sus subgrafos es un ciclo.
+        \end{observacion}
+
         \begin{ejemplo}[Ciclo como subgrafo]
             Sea $G$ el siguiente grafo:
 
@@ -376,6 +432,12 @@
             El subgrafo resaltado constituye un ciclo de longitud $4$, dado por la sucesión $v_1 \to v_2 \to v_3 \to v_4 \to v_1$.
         \end{ejemplo}
 
+        Aunque la teoría de espacios vectoriales se escapa de lo que abarca este trabajo, utilizaremos algunos conceptos de esta teoría para justificar algunos resultados importantes. Todos los resultados utilizados se justificarán en un apéndice al final del documento.
+
+        \begin{definicion}[Espacio de ciclos]
+            Sea $G=(V,E)$ un grafo finito (posiblemente con $p$ componentes). El \emph{espacio de ciclos} $\mathcal{C}(G)$ es el subespacio de $\mathbb{F}_2^{E}$ generado por los vectores característicos de todos los ciclos simples de $G$. La suma es módulo $2$.
+        \end{definicion}
+
         \begin{definicion}[Árbol]
             Un \textbf{árbol} es un grafo conexo y acíclico en el que, fijado un vértice raíz $r$, existe exactamente un camino dirigido de $r$ a cualquier otro vértice del grafo.
         \end{definicion}
@@ -406,6 +468,20 @@
 
             Desde la raíz $v_1$, existe exactamente un camino dirigido a cada vértice del árbol.
         \end{ejemplo}
+
+        \begin{definicion}[Bosque generador]
+            Sea $G=(V,E)$ un grafo (posiblemente con $p$ componentes). Un \textbf{bosque generador} de $G$ es un subgrafo $F=(V,E_F)$ tal que:
+            \begin{enumerate}
+                \item $E_F \subseteq E$ (mismas $V$, menos aristas),
+                \item $F$ es acíclico,
+                \item cada componente de $F$ es un árbol que contiene exactamente los vértices de la correspondiente componente de $G$.
+            \end{enumerate}
+            Equivalente y característico: $F$ es acíclico y maximal por inclusión, o bien $|E_F|=|V|-p$. Si $G$ es conexo ($p=1$), un bosque generador es un \emph{árbol generador}.
+        \end{definicion}
+
+        \begin{observacion}
+            Para dígrafos, el bosque/árbol generador se entiende sobre el \emph{grafo subyacente no dirigido} salvo que se especifique orientación (arborescencias). En el conteo ciclomático y en el espacio de ciclos se usa esta versión no dirigida.
+        \end{observacion}
 
         \section{Propiedades estructurales}
 
@@ -603,6 +679,45 @@
                 \]
                 Un valor cercano a $1$ denota que la red se aproxima a la máxima densidad planar.
             \end{definicion}
+
+            Como vimos, los resultados anteriores funcionan únicamente para grafos planares. Aunque esta clase de grafos es abundante y su estudio es muy útil, durante este trabajo nos interesaremos por grafos que no necesariamente son planares. Para estos casos usaremos los siguientes resultados.
+
+            \begin{definicion}[Espacio de ciclos]
+                Sea $G=(V,E)$ un grafo finito (posiblemente con $p$ componentes). El \emph{espacio de ciclos} $\mathcal{C}(G)$ es el subespacio de $\mathbb{F}_2^{E}$ generado por los vectores característicos de todos los ciclos simples de $G$. La suma es módulo $2$ (symmetric difference).
+            \end{definicion}
+
+            \begin{teorema}[Fórmula del número ciclomático]
+                Para todo grafo finito $G$ con $|V|=n$, $|E|=m$ y $p$ componentes conexas, se cumple
+                \[
+                \dim \mathcal{C}(G)\;=\;\mu(G)\;=\;m-n+p.
+                \]
+            \end{teorema}
+
+            \begin{proof}[Demostración (constructiva con bosque generador)]
+                Sea $F$ un \emph{bosque generador} de $G$, obtenido tomando un árbol generador en cada componente. Entonces $F$ tiene exactamente $n-p$ aristas.
+                Cada arista $e\in E\setminus E(F)$, al añadirse a $F$, crea un \emph{ciclo fundamental} $C_e$ único (porque en $F$ hay un único camino entre los extremos de $e$). El conjunto de estos ciclos fundamentales
+                \[
+                \mathcal{B}=\{C_e:\ e\in E\setminus E(F)\}
+                \]
+                tiene cardinalidad $m-(n-p)=m-n+p$.
+
+                Mostramos que $\mathcal{B}$ es una base de $\mathcal{C}(G)$ sobre $\mathbb{F}_2$:
+                \emph{(i) Independencia.} Si existiera una combinación lineal no trivial $\sum \lambda_e C_e=0$ (con $\lambda_e\in\{0,1\}$), eligiendo $e_0$ la arista de $E\setminus E(F)$ de \emph{mayor} nivel de inserción, se observa que $e_0$ aparece en $C_{e_0}$ pero no aparece en ningún otro $C_e$; por tanto, el coeficiente de $e_0$ en la suma no puede anularse, contradicción. \emph{(ii) Generación.} Todo ciclo $C$ de $G$ puede reducirse, por symmetric difference, restando sucesivamente ciclos fundamentales que contienen alguna arista de $E\setminus E(F)$ presente en $C$, hasta quedar (eventualmente) vacío. Luego todo ciclo pertenece al span de $\mathcal{B}$.
+
+                Así, $\mathcal{B}$ es una base y $\dim\mathcal{C}(G)=|\mathcal{B}|=m-n+p$.
+            \end{proof}
+
+            \begin{corolario}
+                Si $G$ es conexo ($p=1$), entonces $\mu(G)=m-n+1$ y, en particular, cualquier árbol tiene $\mu=0$.
+            \end{corolario}
+
+            \begin{observacion}[Versión lineal-algebraica]
+                Si $B$ es la matriz de incidencia de $G$ sobre $\mathbb{R}$ o $\mathbb{F}_2$, entonces $\operatorname{rank}(B)=n-p$ y
+                \[
+                \dim \ker(B^\top)=m-(n-p)=m-n+p,
+                \]
+                lo que coincide con la dimensión del espacio de ciclos.
+            \end{observacion}
 
             \begin{ejemplo}
                 Si $|V| = 8$, $|E| = 14$, entonces:
