@@ -17,6 +17,11 @@
             Un \textbf{lazo} es una arista/arco cuyos extremos coinciden: $\{v,v\}$ en el caso no dirigido, o $(v,v)$ en el caso dirigido.
         \end{definicion}
 
+        \begin{definicion}[Adyacencia de nodos]
+            Sean $G = (V, E)$ un grafo y $u, v \in V$ dos nodos distintos.
+            Se dice que $u$ y $v$ son \textbf{adyacentes} si existe una arista que los conecta directamente.
+        \end{definicion}
+
         \begin{definicion}
             Llamamos \textit{orden} de un grafo G al número de vértices que contiene y lo representamos como $|G|$. A la cantidad de aristas de $G$ la escribiremos como $\parallel G \parallel$. Un grafo puede ser \textit{finito} o \textit{infinito}.
         \end{definicion}
@@ -51,6 +56,32 @@
         \end{ejemplo}
 
         En el resto de este trabajo asumiremos que todos los grafos son finitos.
+
+        Más adelante veremos que es posible medir distintas propiedades de un grafo, ya sea en su totalidad o en cada una de sus partes, pero una primera noción en ese sentido es la de \textit{grado de un nodo} que además nos ayudará a demostrar varios resultados importantes más adelante.
+
+        \begin{definicion}[Grado de un nodo]
+            El \textbf{grado} de un nodo $v$, denotado $deg(v)$, es la suma del número de aristas entrantes (\emph{grado de entrada}, $deg^{-}(v)$) y aristas salientes (\emph{grado de salida}, $deg^{+}(v)$):
+            \[
+            deg(v) = deg^{-}(v) + deg^{+}(v)
+            \]
+            Este valor refleja la importancia local del nodo como punto de transferencia.
+        \end{definicion}
+
+        \begin{ejemplo}
+            En el siguiente grafo, el nodo $A$ tiene dos aristas entrantes y una saliente, por lo que $deg^{-}(A) = 2$, $deg^{+}(A) = 1$ y $deg(A) = 3$.
+
+            \begin{center}
+                \begin{tikzpicture}[scale=1.1, every node/.style={circle, draw, fill=white, inner sep=2.5pt}, >=stealth]
+                    \node (A) at (0,0) {A};
+                    \node (B) at (2,0) {B};
+                    \node (C) at (1,1.5) {C};
+
+                    \draw[->, thick] (B) -- (A);
+                    \draw[->, thick] (C) -- (A);
+                    \draw[->, thick] (A) -- (B);
+                \end{tikzpicture}
+            \end{center}
+        \end{ejemplo}
 
     \section{Tipos de grafos}
 
@@ -167,15 +198,6 @@
 
         Hasta ahora hemos evaluado a los grafos como un todo, deteniéndonos apenas en sus componentes como una herramienta para definir propiedades globales, pero también es posible y recomendable establecer propiedades de sus componentes. Algunas que son especialmente valiosas para el presente estudio son la \textit{conectividad}, los \textit{caminos}, los \textit{ciclos}, y las representaciones matriciales como la matriz de adyacencia.
 
-        \begin{definicion}[Adyacencia de nodos]
-            Sean $G = (V, E)$ un grafo y $u, v \in V$ dos nodos distintos.
-            Se dice que $u$ y $v$ son \textbf{adyacentes} si existe una arista que los conecta directamente, es decir:
-            \begin{itemize}
-                \item En un grafo no dirigido, $u$ y $v$ son adyacentes si $(u, v) \in E$ (lo que implica también $(v, u) \in E$).
-                \item En un grafo dirigido, $u$ es adyacente a $v$ si $(u, v) \in E$ (pero no necesariamente $(v, u) \in E$).
-            \end{itemize}
-        \end{definicion}
-
         \begin{definicion}[Matriz de adyacencia]
             Dado un grafo $G=(V,E)$ con $N$ nodos, la \textbf{matriz de adyacencia} es una matriz $A \in \mathbb{R}^{N \times N}$ donde cada elemento $a_{ij}$ indica si existe una conexión directa entre el nodo $i$ y el nodo $j$:
             \[
@@ -236,14 +258,9 @@
                     0,  & \text{en otro caso.}
                 \end{cases}
                 \]
-                Entonces $B^\top \mathbf{1}=0$, y sobre $\mathbb{F}_2$ la nulidad de $B^\top$ coincide con la dimensión del espacio de ciclos del subyacente no dirigido.
             \end{itemize}
             Salvo indicación contraria, se excluyen lazos y aristas múltiples (en multigrafos, cada arista da una columna; para lazos, la convención habitual asigna columna nula o un $2$ en la fila del vértice en la versión no dirigida).
         \end{definicion}
-
-        \begin{observacion}[Relación con el espacio de ciclos]
-            Sobre $\mathbb{F}_2$, los vectores característicos de ciclos están en $\ker(B^\top)$ y, de hecho, $\dim \ker(B^\top)=m-n+p$; esta es la \emph{fórmula del número ciclomático}.
-        \end{observacion}
 
         \begin{definicion}[Subgrafo]
             Un \textbf{subgrafo} $H = (V_H, E_H)$ de un grafo $G = (V, E)$ es un grafo tal que $V_H \subseteq V$ y $E_H \subseteq E$. Es decir, un subgrafo es una parte de un grafo que mantiene la estructura de nodos y aristas del grafo original.
@@ -284,204 +301,330 @@
 
         La noción de subgrafo es importante en aquellos escenarios en los que no nos interesa, o no nos es posible, estudiar un grafo completo. Es claro que un subgrafo tiene todas las propiedades y tiene todas las propiedades que enunciamos antes para cualquier grafo. Asimismo, hay algunos subgrafos que nos pueden llegar a interesar especialmente por su naturaleza estructural con respecto al resto del grafo al que pertenecen, tal es el caso de los \textit{caminos}, \textit{ciclos} y \textit{árboles}, los cuales definimos a continuación.
 
-        \begin{definicion}[Camino]
-            Sea $G = (V, E)$ un grafo.
-            Un \textbf{camino de longitud $k$} es un subgrafo $P = (V_P, E_P)$ de $G$ tal que existen vértices distintos $v_1, v_2, \dots, v_{k+1} \in V$ para los cuales:
-            \begin{align*}
-                V_P &= \{v_1, v_2, \dots, v_{k+1}\}, \\
-                E_P &= \left\{ (v_i, v_{i+1}) : i = 1, \dots, k \right\},
-            \end{align*}
-            y $v_i \neq v_j$ para todo $i \neq j$.
-            Decimos que $P$ es un camino de $v_1$ a $v_{k+1}$ en $G$.
-        \end{definicion}
+         \subsubsection{Caminos y ciclos}
+            \begin{definicion}[Camino]
+                Sea $G = (V, E)$ un grafo.
+                Un \textbf{camino de longitud $k$} es un subgrafo $P = (V_P, E_P)$ de $G$ tal que existen vértices distintos $v_1, v_2, \dots, v_{k+1} \in V$ para los cuales:
+                \begin{align*}
+                    V_P &= \{v_1, v_2, \dots, v_{k+1}\}, \\
+                    E_P &= \left\{ (v_i, v_{i+1}) : i = 1, \dots, k \right\},
+                \end{align*}
+                y $v_i \neq v_j$ para todo $i \neq j$.
+                Decimos que $P$ es un camino de $v_1$ a $v_{k+1}$ en $G$.
+            \end{definicion}
 
-        \begin{ejemplo}[Camino como subgrafo]
-            Sea $G$ el siguiente dígrafo (a la izquierda), y sea $P$ el subgrafo resaltado, que constituye un camino de longitud $5$ en $G$.
-            A la derecha, se muestra $P$ como subgrafo inducido por sus vértices.
+            \begin{ejemplo}[Camino como subgrafo]
+                Sea $G$ el siguiente dígrafo (a la izquierda), y sea $P$ el subgrafo resaltado, que constituye un camino de longitud $5$ en $G$.
+                A la derecha, se muestra $P$ como subgrafo inducido por sus vértices.
 
-            \begin{center}
-                \begin{tikzpicture}[scale=1.2, every node/.style={fill=white, circle, draw, inner sep=2.5pt},
-                    edge/.style={thick, black!40, ->, >=stealth},
-                    highlight/.style={very thick, blue, ->, >=stealth}]
-                    % Grafo G
-                    \begin{scope}
-                        % Nodos
+                \begin{center}
+                    \begin{tikzpicture}[scale=1.2, every node/.style={fill=white, circle, draw, inner sep=2.5pt},
+                        edge/.style={thick, black!40, ->, >=stealth},
+                        highlight/.style={very thick, blue, ->, >=stealth}]
+                        % Grafo G
+                        \begin{scope}
+                            % Nodos
+                            \node (a) at (0,2) {};
+                            \node (b) at (1,2.7) {};
+                            \node (c) at (2,2) {};
+                            \node (d) at (0,1) {};
+                            \node (e) at (1,1.8) {};
+                            \node (f) at (2,1) {};
+                            \node (g) at (1,0.3) {};
+
+                            % Aristas grises (completas, incluye algunas que no forman parte del camino)
+                            \draw[edge] (a) -- (b);
+                            \draw[edge] (b) -- (c);
+                            \draw[edge] (a) -- (c);
+                            \draw[edge] (c) -- (e);
+                            \draw[edge] (e) -- (f);
+                            \draw[edge] (a) -- (d);
+                            \draw[edge] (d) -- (g);
+                            \draw[edge] (g) -- (f);
+
+                            % Camino dirigido resaltado (a -> e -> f -> g -> f -> c)
+                            \draw[highlight] (a) -- (e);
+                            \draw[highlight] (e) -- (f);
+                            \draw[highlight] (f) -- (g);
+                            \draw[highlight] (g) -- (f);
+                            \draw[highlight] (f) -- (c);
+
+                            % Nombres de los nodos
+                            \node[draw=none,fill=none, left] at (a) {$v_1$};
+                            \node[draw=none,fill=none, above] at (b) {$v_2$};
+                            \node[draw=none,fill=none, right] at (c) {$v_6$};
+                            \node[draw=none,fill=none, left] at (d) {$v_4$};
+                            \node[draw=none,fill=none, above right] at (e) {$v_3$};
+                            \node[draw=none,fill=none, right] at (f) {$v_5$};
+                            \node[draw=none,fill=none, below] at (g) {$v_7$};
+
+                            % G label
+                            \node[draw=none, fill=none] at (1,-0.3) {$G$};
+                        \end{scope}
+
+                        % Subgrafo (camino) a la derecha
+                        \begin{scope}[xshift=5cm]
+                            \node (a) at (0,2) {};
+                            \node (e) at (1,1.8) {};
+                            \node (f) at (2,1) {};
+                            \node (g) at (1,0.3) {};
+                            \node (c) at (2,2) {};
+
+                            \draw[highlight] (a) -- (e);
+                            \draw[highlight] (e) -- (f);
+                            \draw[highlight] (f) -- (g);
+                            \draw[highlight] (g) -- (f);
+                            \draw[highlight] (f) -- (c);
+
+                            % Nombres de los nodos
+                            \node[draw=none,fill=none, left] at (a) {$v_1$};
+                            \node[draw=none,fill=none, above right] at (e) {$v_3$};
+                            \node[draw=none,fill=none, right] at (f) {$v_5$};
+                            \node[draw=none,fill=none, below] at (g) {$v_7$};
+                            \node[draw=none,fill=none, right] at (c) {$v_6$};
+
+                            % P label
+                            \node[draw=none, fill=none] at (1,-0.3) {$P$};
+                        \end{scope}
+                    \end{tikzpicture}
+                \end{center}
+
+            \captionof{figure}{Un camino dirigido $P = (v_1, v_3, v_5, v_7, v_5, v_6)$ en el dígrafo $G$ y su representación como subgrafo.}
+            \end{ejemplo}
+
+            \begin{definicion}[Ciclo]
+                Un \textbf{ciclo de longitud $k$} es un camino $C = (V_C, E_C)$ tal que existen vértices distintos $v_1, v_2, \dots, v_k$ para los cuales:
+                \begin{align*}
+                    V_C &= \{v_1, v_2, \dots, v_k\}, \\
+                    E_C &= \{ (v_1, v_2),\ (v_2, v_3),\ \dots,\ (v_{k-1}, v_k),\ (v_k, v_1) \},
+                \end{align*}
+                y $v_i \neq v_j$ para $i \neq j$.
+            \end{definicion}
+
+            \begin{definicion}
+                Decimos que un grafo $G$ es \textit{acíclico} si ninguno de sus subgrafos es un ciclo.
+            \end{observacion}
+
+            \begin{ejemplo}[Ciclo como subgrafo]
+                Sea $G$ el siguiente grafo:
+
+                \begin{center}
+                    \begin{tikzpicture}[scale=1.2, every node/.style={circle, draw, fill=white, inner sep=2.5pt},
+                        edge/.style={thick, black!40, ->, >=stealth},
+                        highlight/.style={very thick, blue, ->, >=stealth}]
+                        % Grafo G (con otras conexiones grises)
                         \node (a) at (0,2) {};
-                        \node (b) at (1,2.7) {};
-                        \node (c) at (2,2) {};
-                        \node (d) at (0,1) {};
-                        \node (e) at (1,1.8) {};
-                        \node (f) at (2,1) {};
-                        \node (g) at (1,0.3) {};
+                        \node (b) at (2,2) {};
+                        \node (c) at (2,0) {};
+                        \node (d) at (0,0) {};
+                        \node (e) at (1,1) {};
+                        \node (f) at (1,2.7) {};
 
-                        % Aristas grises (completas, incluye algunas que no forman parte del camino)
                         \draw[edge] (a) -- (b);
                         \draw[edge] (b) -- (c);
-                        \draw[edge] (a) -- (c);
-                        \draw[edge] (c) -- (e);
-                        \draw[edge] (e) -- (f);
-                        \draw[edge] (a) -- (d);
-                        \draw[edge] (d) -- (g);
-                        \draw[edge] (g) -- (f);
+                        \draw[edge] (c) -- (d);
+                        \draw[edge] (d) -- (a);
+                        \draw[edge] (a) -- (e);
+                        \draw[edge] (e) -- (c);
+                        \draw[edge] (b) -- (f);
+                        \draw[edge] (f) -- (a);
 
-                        % Camino dirigido resaltado (a -> e -> f -> g -> f -> c)
-                        \draw[highlight] (a) -- (e);
-                        \draw[highlight] (e) -- (f);
-                        \draw[highlight] (f) -- (g);
-                        \draw[highlight] (g) -- (f);
-                        \draw[highlight] (f) -- (c);
-
-                        % Nombres de los nodos
-                        \node[draw=none,fill=none, left] at (a) {$v_1$};
-                        \node[draw=none,fill=none, above] at (b) {$v_2$};
-                        \node[draw=none,fill=none, right] at (c) {$v_6$};
-                        \node[draw=none,fill=none, left] at (d) {$v_4$};
-                        \node[draw=none,fill=none, above right] at (e) {$v_3$};
-                        \node[draw=none,fill=none, right] at (f) {$v_5$};
-                        \node[draw=none,fill=none, below] at (g) {$v_7$};
-
-                        % G label
-                        \node[draw=none, fill=none] at (1,-0.3) {$G$};
-                    \end{scope}
-
-                    % Subgrafo (camino) a la derecha
-                    \begin{scope}[xshift=5cm]
-                        \node (a) at (0,2) {};
-                        \node (e) at (1,1.8) {};
-                        \node (f) at (2,1) {};
-                        \node (g) at (1,0.3) {};
-                        \node (c) at (2,2) {};
-
-                        \draw[highlight] (a) -- (e);
-                        \draw[highlight] (e) -- (f);
-                        \draw[highlight] (f) -- (g);
-                        \draw[highlight] (g) -- (f);
-                        \draw[highlight] (f) -- (c);
+                        % Ciclo resaltado: a -> b -> c -> d -> a
+                        \draw[highlight] (a) -- (b);
+                        \draw[highlight] (b) -- (c);
+                        \draw[highlight] (c) -- (d);
+                        \draw[highlight] (d) -- (a);
 
                         % Nombres de los nodos
                         \node[draw=none,fill=none, left] at (a) {$v_1$};
-                        \node[draw=none,fill=none, above right] at (e) {$v_3$};
-                        \node[draw=none,fill=none, right] at (f) {$v_5$};
-                        \node[draw=none,fill=none, below] at (g) {$v_7$};
-                        \node[draw=none,fill=none, right] at (c) {$v_6$};
+                        \node[draw=none,fill=none, above right] at (b) {$v_2$};
+                        \node[draw=none,fill=none, right] at (c) {$v_3$};
+                        \node[draw=none,fill=none, below left] at (d) {$v_4$};
+                        \node[draw=none,fill=none, right] at (e) {$v_5$};
+                        \node[draw=none,fill=none, above] at (f) {$v_6$};
 
-                        % P label
-                        \node[draw=none, fill=none] at (1,-0.3) {$P$};
-                    \end{scope}
+                        \node[draw=none, fill=none] at (1,-0.6) {$G$};
+                    \end{tikzpicture}
+                \end{center}
+
+                El subgrafo resaltado constituye un ciclo de longitud $4$, dado por la sucesión $v_1 \to v_2 \to v_3 \to v_4 \to v_1$.
+            \end{ejemplo}
+
+            Aunque la teoría de espacios vectoriales se escapa de lo que abarca este trabajo, utilizaremos algunos conceptos de esta teoría para justificar algunos resultados importantes. Todos los resultados utilizados se justificarán en un apéndice al final del documento.
+
+            \begin{definicion}[Espacio de ciclos]
+                Sea $G=(V,E)$ un grafo finito (posiblemente con $p$ componentes). El \emph{espacio de ciclos} $\mathcal{C}(G)$ es el subespacio de $\mathbb{F}_2^{E}$ generado por los vectores característicos de todos los ciclos simples de $G$. La suma es módulo $2$.
+            \end{definicion}
+
+            Ahora que sabemos lo que es un camino y un ciclo, disponemos de una herramienta para formalizar nuestra noción de movimiento dentro de un grafo. Algo que también nos gustaría formalizar es alguna noción de \textit{distancia} entre dos nodos cualesquiera. A continuación, veremos que una propuesta muy buena es pensar la distancia entre dos nodos como el largo del camino más corto que los une. Antes de llegar ahí, establezcamos un par de resultados útiles.
+
+            \begin{lema}[Extremos de un camino]
+                Sea $P$ un camino finito (subgrafo conexo y acíclico en el que todos los vértices tienen grado $\le 2$).
+                Entonces $P$ tiene exactamente dos vértices de grado $1$ (extremos) y todos los demás vértices, si los hay, tienen grado $2$.
+            \end{lema}
+
+            \begin{proof}
+                Si $|V(P)|=1$, el enunciado es vacuo. Para $|V(P)|\ge 2$, la aciclicidad implica que no puede haber todos los vértices de grado $2$; por el conteo de grados $\sum_{v}\deg(v)=2|E(P)|$ y porque un componente acíclico con $\deg\le 2$ no puede tener más de dos vértices de grado impar, se deduce que hay al menos dos vértices de grado $1$. Si hubiera tres o más de grado $1$, la suma de grados sería $<2|E(P)|$, contradicción.
+            \end{proof}
+
+            \begin{teorema}[Numeración lineal de los vértices de un camino]
+                Sea $P$ un camino finito no trivial. Entonces existe una biyección
+                \[
+                \phi:\{1,2,\dots,k\}\longrightarrow V(P)
+                \]
+                tal que las aristas de $P$ son exactamente $\{\phi(i),\phi(i+1)\}$ para $i=1,\dots,k-1$.
+                En particular, $P$ es isomorfo al camino estándar $P_k$ y la numeración es única salvo inversión (reversa).
+            \end{teorema}
+
+            \begin{proof}
+                Por el lema, $P$ tiene dos extremos. Fija uno de ellos y llámalo $\phi(1)$. Definimos inductivamente $\phi(i+1)$: dado $\phi(i)$, si $i=1$ tomamos como $\phi(2)$ el único vecino de $\phi(1)$; si $i\ge 2$, tomamos como $\phi(i+1)$ el único vecino de $\phi(i)$ distinto de $\phi(i-1)$.
+                La aciclicidad garantiza que este procedimiento nunca vuelve a un vértice ya visitado y, como $P$ es finito y conexo con grados $\le 2$, el proceso termina exactamente cuando alcanzamos el otro extremo. Así obtenemos un orden lineal $\phi(1),\dots,\phi(k)$ que recorre todos los vértices una única vez y en el que las únicas aristas son las consecutivas por construcción.
+                La unicidad salvo reversa es clara: cualquier ordenación válida debe empezar en un extremo y seguir el único vecino no visitado en cada paso.
+            \end{proof}
+
+            \begin{observacion}[Caso dirigido]
+                Si $P$ está orientado coherentemente (todas las aristas apuntan en el mismo sentido a lo largo del camino), la numeración puede escogerse de modo que $(\phi(i),\phi(i+1))$ sea el arco para todo $i$. En general, la numeración precedente se construye sobre el subyacente no dirigido.
+            \end{observacion}
+
+            \begin{definicion}[Distancia]
+                Sea $G=(V,E)$ un grafo finito. La \textbf{distancia} de $u$ a $v$, denotada $d(u,v)$, es
+                \[
+                d(u,v)\;=\;\min\{\,k\in\mathbb{N}_0:\ \text{existe un camino de longitud }k\text{ de }u\text{ a }v\,\},
+                \]
+                con la convención $d(u,u)=0$ (camino vacío) y $d(u,v)=+\infty$ si no existe tal camino. La longitud de un camino es el número de aristas que contiene.
+            \end{definicion}
+
+            \begin{definicion}[Distancia ponderada]
+                Si cada arista $e\in E$ tiene un peso no negativo $w(e)\in[0,\infty)$, la \textbf{distancia ponderada} es
+                \[
+                d_w(u,v)\;=\;\inf\Big\{\sum_{e\in P} w(e):\ P \text{ es un camino de }u\text{ a }v\Big\},
+                \]
+                con $d_w(u,u)=0$ y $d_w(u,v)=+\infty$ si no hay camino. Cuando los pesos son enteros positivos, el ínfimo es un mínimo.
+            \end{definicion}
+
+            \begin{definicion}[Geodésica]
+                Un camino $P$ de $u$ a $v$ es \textbf{geodésico} si su longitud (o su peso total, en el caso ponderado) es igual a $d(u,v)$.
+            \end{definicion}
+
+            \begin{observacion}[Propiedades básicas de la distancia]
+                \begin{itemize}
+                    \item $d(u,u)=0$.
+                    \item $d(u,v)\ge 0$; con aristas de longitud unitaria, $d(u,v)=0$ implica $u=v$.
+                    \item Desigualdad triangular: $d(u,v)\le d(u,x)+d(x,v)$ para todo $u,v,x\in V$.
+                    \item En grafos no dirigidos: $d(u,v)=d(v,u)$ cuando $u$ y $v$ pertenecen a la misma componente; si no, $d(u,v)=+\infty$.
+                    \item En grafos dirigidos: en general $d(u,v)\neq d(v,u)$; y $d(u,v)=+\infty$ si no existe camino de $u$ a $v$.
+                    \item En el caso ponderado con pesos no negativos: las propiedades anteriores se mantienen reemplazando “longitud” por “peso total”.
+                \end{itemize}
+            \end{observacion}
+
+        \subsubsection{Árboles}
+
+            \begin{definicion}[Árbol]
+                Un \textbf{árbol} es un grafo conexo y acíclico en el que, fijado un vértice raíz $r$, existe exactamente un camino dirigido de $r$ a cualquier otro vértice del grafo.
+            \end{definicion}
+
+            \begin{ejemplo}[Árbol]
+                El siguiente grafo muestra un árbol con raíz en $v_1$:
+
+                \begin{center}
+                \begin{tikzpicture}[scale=1.3, every node/.style={circle, draw, fill=white, inner sep=2.5pt},
+                    edge/.style={thick, ->, >=stealth},
+                    level distance=1.1cm, sibling distance=1.5cm]
+                    % Nodos
+                    \node (v1) at (0,0) {$v_1$};
+                    \node (v2) at (-1,-1) {$v_2$};
+                    \node (v3) at (1,-1) {$v_3$};
+                    \node (v4) at (-1.5,-2) {$v_4$};
+                    \node (v5) at (-0.5,-2) {$v_5$};
+                    \node (v6) at (1,-2) {$v_6$};
+
+                    % Aristas dirigidas
+                    \draw[edge] (v1) -- (v2);
+                    \draw[edge] (v1) -- (v3);
+                    \draw[edge] (v2) -- (v4);
+                    \draw[edge] (v2) -- (v5);
+                    \draw[edge] (v3) -- (v6);
                 \end{tikzpicture}
-            \end{center}
+                \end{center}
 
-        \captionof{figure}{Un camino dirigido $P = (v_1, v_3, v_5, v_7, v_5, v_6)$ en el dígrafo $G$ y su representación como subgrafo.}
-        \end{ejemplo}
+                Desde la raíz $v_1$, existe exactamente un camino dirigido a cada vértice del árbol.
+            \end{ejemplo}
 
-        \begin{definicion}[Ciclo]
-            Un \textbf{ciclo de longitud $k$} es un subgrafo $C = (V_C, E_C)$ tal que existen vértices distintos $v_1, v_2, \dots, v_k$ para los cuales:
-            \begin{align*}
-                V_C &= \{v_1, v_2, \dots, v_k\}, \\
-                E_C &= \{ (v_1, v_2),\ (v_2, v_3),\ \dots,\ (v_{k-1}, v_k),\ (v_k, v_1) \},
-            \end{align*}
-            y $v_i \neq v_j$ para $i \neq j$.
-        \end{definicion}
+            \begin{definicion}[Hoja]
+                Sea $G=(V,E)$ un grafo finito. Un vértice $v\in V$ es una \textbf{hoja} si tiene grado uno en el grafo subyacente no dirigido, es decir,
+                \[
+                \deg(v)=1.
+                \]
+                Equivalente: $v$ es incidente exactamente a una arista del grafo (contando multiplicidades si es multígrafo).
+            \end{definicion}
 
-        \begin{definicion}
-            Decimos que un grafo $G$ es \textit{acíclico} si ninguno de sus subgrafos es un ciclo.
-        \end{observacion}
+            \begin{observacion}[Caso dirigido y arborescencias]
+                En dígrafos se mantiene la definición anterior vía el subyacente no dirigido.
+                Cuando el dígrafo es un árbol enraizado (arborescencia):
+                \begin{itemize}
+                  \item en una arborescencia \emph{de salida} con raíz $r$, se llama hojas a los $v\neq r$ con $\deg^{+}(v)=0$;
+                  \item en una arborescencia \emph{de entrada} con raíz $r$, se llama hojas a los $v\neq r$ con $\deg^{-}(v)=0$.
+                \end{itemize}
+                Estas nociones coinciden con $\deg(v)=1$ en el subyacente no dirigido.
+            \end{observacion}
 
-        \begin{ejemplo}[Ciclo como subgrafo]
-            Sea $G$ el siguiente grafo:
+            \begin{lema}[Existencia de hoja]
+                Sea $T$ un árbol con $|V(T)|\ge 2$. Entonces $T$ tiene al menos una hoja (un vértice de grado $1$).
+            \end{lema}
 
-            \begin{center}
-                \begin{tikzpicture}[scale=1.2, every node/.style={circle, draw, fill=white, inner sep=2.5pt},
-                    edge/.style={thick, black!40, ->, >=stealth},
-                    highlight/.style={very thick, blue, ->, >=stealth}]
-                    % Grafo G (con otras conexiones grises)
-                    \node (a) at (0,2) {};
-                    \node (b) at (2,2) {};
-                    \node (c) at (2,0) {};
-                    \node (d) at (0,0) {};
-                    \node (e) at (1,1) {};
-                    \node (f) at (1,2.7) {};
+            \begin{proof}
+                Toma un camino $P$ de longitud máxima en $T$ (existe porque $T$ es finito). Si un extremo de $P$ tuviera grado $\ge 2$, habría una arista adicional que permite prolongar $P$, contradiciendo la maximalidad. Así, ambos extremos de $P$ tienen grado $1$.
+            \end{proof}
 
-                    \draw[edge] (a) -- (b);
-                    \draw[edge] (b) -- (c);
-                    \draw[edge] (c) -- (d);
-                    \draw[edge] (d) -- (a);
-                    \draw[edge] (a) -- (e);
-                    \draw[edge] (e) -- (c);
-                    \draw[edge] (b) -- (f);
-                    \draw[edge] (f) -- (a);
+            \begin{proposicion}[\,$|E|=|V|-1$ en árboles\,]
+                Si $T$ es un árbol finito, entonces $|E(T)|=|V(T)|-1$.
+            \end{proposicion}
 
-                    % Ciclo resaltado: a -> b -> c -> d -> a
-                    \draw[highlight] (a) -- (b);
-                    \draw[highlight] (b) -- (c);
-                    \draw[highlight] (c) -- (d);
-                    \draw[highlight] (d) -- (a);
+            \begin{proof}
+                Por inducción en $n=|V(T)|$.
+                Caso base $n=1$: $|E|=0=n-1$.
+                Paso inductivo: sea $n\ge 2$ y supón cierto para todo árbol con $<n$ vértices. Por el lema, $T$ tiene una hoja $x$ con vecino $y$. Considera $T'=T-\{x\}$: sigue siendo un árbol (conexo y acíclico) con $n-1$ vértices. Por hipótesis inductiva, $|E(T')|=(n-1)-1=n-2$. Como $E(T)=E(T')\cup\{xy\}$, se tiene $|E(T)|=(n-2)+1=n-1$.
+            \end{proof}
 
-                    % Nombres de los nodos
-                    \node[draw=none,fill=none, left] at (a) {$v_1$};
-                    \node[draw=none,fill=none, above right] at (b) {$v_2$};
-                    \node[draw=none,fill=none, right] at (c) {$v_3$};
-                    \node[draw=none,fill=none, below left] at (d) {$v_4$};
-                    \node[draw=none,fill=none, right] at (e) {$v_5$};
-                    \node[draw=none,fill=none, above] at (f) {$v_6$};
+            \begin{lema}[Frontera de cara acotada contiene un ciclo]
+                En cualquier dibujo planar de un grafo, la frontera de toda cara acotada contiene un ciclo.
+            \end{lema}
 
-                    \node[draw=none, fill=none] at (1,-0.6) {$G$};
-                \end{tikzpicture}
-            \end{center}
+            \begin{proof}
+                La frontera de una cara acotada es un camino cerrado $W$ que usa aristas del grafo.
+                Si $W$ no repite aristas ni vértices, entonces $W$ es un ciclo.
+                Si repite, al descomponer el camino cerrado estándar (eliminando subcaminos inversos por diferencia simétrica) se obtiene un ciclo no vacío contenido en la frontera.
+            \end{proof}
 
-            El subgrafo resaltado constituye un ciclo de longitud $4$, dado por la sucesión $v_1 \to v_2 \to v_3 \to v_4 \to v_1$.
-        \end{ejemplo}
+            \begin{proposicion}[Todo árbol es planar y tiene una sola cara]
+                Todo árbol finito $T$ admite un dibujo planar y, en cualquier dibujo planar conexo de $T$, el número de caras es $f=1$.
+            \end{proposicion}
 
-        Aunque la teoría de espacios vectoriales se escapa de lo que abarca este trabajo, utilizaremos algunos conceptos de esta teoría para justificar algunos resultados importantes. Todos los resultados utilizados se justificarán en un apéndice al final del documento.
+            \begin{proof}
+                \emph{Planaridad:} por inducción en $n=|V(T)|$.
+                Para $n=1$ es trivial.
+                Para $n\ge 2$, toma una hoja $x$ con vecino $y$ y considera $T'=T-\{x\}$. Por inducción, $T'$ tiene un dibujo sin cruces. Coloca $x$ en un pequeño vecindario libre alrededor de $y$ y dibuja el segmento $xy$; no introduce cruces. Así, $T$ es planar.
 
-        \begin{definicion}[Espacio de ciclos]
-            Sea $G=(V,E)$ un grafo finito (posiblemente con $p$ componentes). El \emph{espacio de ciclos} $\mathcal{C}(G)$ es el subespacio de $\mathbb{F}_2^{E}$ generado por los vectores característicos de todos los ciclos simples de $G$. La suma es módulo $2$.
-        \end{definicion}
+                \emph{Unicidad de la cara:} en cualquier dibujo planar de $T$, si hubiera una cara acotada, su frontera contendría un ciclo por el lema anterior, lo que contradice que $T$ sea acíclico. Por tanto no hay caras acotadas y solo existe la cara exterior, es decir, $f=1$.
+            \end{proof}
 
-        \begin{definicion}[Árbol]
-            Un \textbf{árbol} es un grafo conexo y acíclico en el que, fijado un vértice raíz $r$, existe exactamente un camino dirigido de $r$ a cualquier otro vértice del grafo.
-        \end{definicion}
+            \begin{corolario}
+                Si $T$ es un árbol finito y conexo, entonces $|E(T)|=|V(T)|-1$, $T$ es planar y en cualquier dibujo planar de $T$ se tiene $f=1$.
+            \end{corolario}
 
-        \begin{ejemplo}[Árbol]
-            El siguiente grafo muestra un árbol con raíz en $v_1$:
+            \begin{definicion}[Bosque generador]
+                Sea $G=(V,E)$ un grafo (posiblemente con $p$ componentes). Un \textbf{bosque generador} de $G$ es un subgrafo $F=(V,E_F)$ tal que:
+                \begin{enumerate}
+                    \item $E_F \subseteq E$ (mismas $V$, menos aristas),
+                    \item $F$ es acíclico,
+                    \item cada componente de $F$ es un árbol que contiene exactamente los vértices de la correspondiente componente de $G$.
+                \end{enumerate}
+                Equivalente y característico: $F$ es acíclico y maximal por inclusión, o bien $|E_F|=|V|-p$. Si $G$ es conexo ($p=1$), un bosque generador es un \emph{árbol generador}.
+            \end{definicion}
 
-            \begin{center}
-            \begin{tikzpicture}[scale=1.3, every node/.style={circle, draw, fill=white, inner sep=2.5pt},
-                edge/.style={thick, ->, >=stealth},
-                level distance=1.1cm, sibling distance=1.5cm]
-                % Nodos
-                \node (v1) at (0,0) {$v_1$};
-                \node (v2) at (-1,-1) {$v_2$};
-                \node (v3) at (1,-1) {$v_3$};
-                \node (v4) at (-1.5,-2) {$v_4$};
-                \node (v5) at (-0.5,-2) {$v_5$};
-                \node (v6) at (1,-2) {$v_6$};
-
-                % Aristas dirigidas
-                \draw[edge] (v1) -- (v2);
-                \draw[edge] (v1) -- (v3);
-                \draw[edge] (v2) -- (v4);
-                \draw[edge] (v2) -- (v5);
-                \draw[edge] (v3) -- (v6);
-            \end{tikzpicture}
-            \end{center}
-
-            Desde la raíz $v_1$, existe exactamente un camino dirigido a cada vértice del árbol.
-        \end{ejemplo}
-
-        \begin{definicion}[Bosque generador]
-            Sea $G=(V,E)$ un grafo (posiblemente con $p$ componentes). Un \textbf{bosque generador} de $G$ es un subgrafo $F=(V,E_F)$ tal que:
-            \begin{enumerate}
-                \item $E_F \subseteq E$ (mismas $V$, menos aristas),
-                \item $F$ es acíclico,
-                \item cada componente de $F$ es un árbol que contiene exactamente los vértices de la correspondiente componente de $G$.
-            \end{enumerate}
-            Equivalente y característico: $F$ es acíclico y maximal por inclusión, o bien $|E_F|=|V|-p$. Si $G$ es conexo ($p=1$), un bosque generador es un \emph{árbol generador}.
-        \end{definicion}
-
-        \begin{observacion}
-            Para dígrafos, el bosque/árbol generador se entiende sobre el \emph{grafo subyacente no dirigido} salvo que se especifique orientación (arborescencias). En el conteo ciclomático y en el espacio de ciclos se usa esta versión no dirigida.
-        \end{observacion}
+            \begin{observacion}
+                Para dígrafos, el bosque/árbol generador se entiende sobre el \emph{grafo subyacente no dirigido} salvo que se especifique orientación (arborescencias). En el conteo ciclomático y en el espacio de ciclos se usa esta versión no dirigida.
+            \end{observacion}
 
         \section{Propiedades estructurales}
 
@@ -499,7 +642,6 @@
             \end{definicion}
 
             \begin{ejemplo}
-                Ilustración correcta de nodo de articulación y de istmo (arista de corte).
                 \begin{center}
                     \begin{tabular}{cc}
                     % Nodo de articulación
@@ -553,7 +695,7 @@
                     \end{tabular}
                 \end{center}
 
-                \captionof{figure}{Arriba: ejemplos correctos de nodo de articulación ($D$, en rojo) e istmo ($BC$, en azul).
+                \captionof{figure}{Arriba: ejemplos de nodo de articulación ($D$, en rojo) e istmo ($BC$, en azul).
                 Abajo: la red se fragmenta en componentes al eliminar el nodo o la arista crítica.}
             \end{ejemplo}
 
@@ -567,7 +709,7 @@
             \end{definicion}
 
             % ----------------------------------------------------------
-        \subsection*{Propiedades a nivel de grafo}
+        \subsection{Propiedades a nivel de grafo}
 
             Cuando estudiamos un grafo, a menudo nos interesa ser capaces de describirlo de forma numérica para entender cómo se comporta globalmente. Basados en estas descripciones, podemos querer inferir propiedades más abstractas como la complejidad o la robustez. Esto también nos ayuda a diferenciar dos grafos y compararlos sin necesidad de analizarlos componente a componente, lo cual puede resultar imposible en la práctica. A continuación describiremos algunas de estas formas que tenemos de describir numéricamente un grafo.
 
@@ -583,7 +725,7 @@
                 Para una red con $|V| = 10$ y $|E| = 12$, se tiene $\beta = 1.2$, lo que indica que cada nodo tiene en promedio más de una conexión.
             \end{ejemplo}
 
-            En algunos casos, cuando disponemos de un grafo planar, podemos saber cuál es el número máximo de ciclos que puede tener. Para poder llegar a esa definición, antes debemos establecer un par de resultados previos.
+            En algunos casos, cuando disponemos de un grafo planar, somos capaces de saber cuál es el número máximo de ciclos que puede tener. Para poder llegar a esa definición, antes debemos establecer un par de resultados relevantes.
 
             \begin{teorema}[Teorema de Euler]
                 Sea $G$ un grafo planar conexo con $|V|$ vértices, $|E|$ aristas y $f$ caras. Entonces:
@@ -682,10 +824,6 @@
 
             Como vimos, los resultados anteriores funcionan únicamente para grafos planares. Aunque esta clase de grafos es abundante y su estudio es muy útil, durante este trabajo nos interesaremos por grafos que no necesariamente son planares. Para estos casos usaremos los siguientes resultados.
 
-            \begin{definicion}[Espacio de ciclos]
-                Sea $G=(V,E)$ un grafo finito (posiblemente con $p$ componentes). El \emph{espacio de ciclos} $\mathcal{C}(G)$ es el subespacio de $\mathbb{F}_2^{E}$ generado por los vectores característicos de todos los ciclos simples de $G$. La suma es módulo $2$ (symmetric difference).
-            \end{definicion}
-
             \begin{teorema}[Fórmula del número ciclomático]
                 Para todo grafo finito $G$ con $|V|=n$, $|E|=m$ y $p$ componentes conexas, se cumple
                 \[
@@ -764,33 +902,9 @@
             \end{ejemplo}
 
 
-        \subsection*{Propiedades a nivel de nodo}
+        \subsection{Propiedades a nivel de nodo}
 
             El análisis de propiedades a nivel de nodo nos permite identificar y cuantificar el papel de cada vértice dentro de la estructura del grafo. Mediante medidas locales, podemos distinguir nodos con características particulares, comparar su relevancia relativa y obtener una visión más detallada de la organización interna del grafo, incluso cuando el estudio global resulta insuficiente para captar las diferencias individuales.
-
-            \begin{definicion}[Grado de un nodo]
-                El \textbf{grado} de un nodo $v$, denotado $deg(v)$, es la suma del número de aristas entrantes (\emph{grado de entrada}, $deg^{-}(v)$) y aristas salientes (\emph{grado de salida}, $deg^{+}(v)$):
-                \[
-                deg(v) = deg^{-}(v) + deg^{+}(v)
-                \]
-                Este valor refleja la importancia local del nodo como punto de transferencia.
-            \end{definicion}
-
-            \begin{ejemplo}
-                En el siguiente grafo, el nodo $A$ tiene dos aristas entrantes y una saliente, por lo que $deg^{-}(A) = 2$, $deg^{+}(A) = 1$ y $deg(A) = 3$.
-
-                \begin{center}
-                    \begin{tikzpicture}[scale=1.1, every node/.style={circle, draw, fill=white, inner sep=2.5pt}, >=stealth]
-                        \node (A) at (0,0) {A};
-                        \node (B) at (2,0) {B};
-                        \node (C) at (1,1.5) {C};
-
-                        \draw[->, thick] (B) -- (A);
-                        \draw[->, thick] (C) -- (A);
-                        \draw[->, thick] (A) -- (B);
-                    \end{tikzpicture}
-                \end{center}
-            \end{ejemplo}
 
             \begin{definicion}[Centralidad de cercanía]
                 La \textbf{centralidad de cercanía} de un nodo $v$, denotada $C_c(v)$, mide la inversa de la suma de distancias mínimas desde todos los nodos hasta $v$:
