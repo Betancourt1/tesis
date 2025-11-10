@@ -1456,7 +1456,7 @@
                 sin entradas diagonales negativas, luego no hay ciclos de peso negativo. Por ejemplo, el camino mínimo $1\to 4$ es $1\to 2\to 3\to 4$ con costo $3+(-2)+1=2$.
             \end{ejemplo}
 
-        \subsection{DBSCAN: formalización y propiedades básicas}
+        \subsection{DBSCAN}
 
             \begin{definicion}[Espacio de trabajo]
                 Fijamos un conjunto finito de vértices $V$ y una función de distancia simétrica $d:V\times V\to[0,\infty)$ que satisface $d(u,u)=0$ y $d(u,v)=d(v,u)$; si $d$ no es métrica (p.\,ej.\ proviene de un dígrafo), trabajaremos con una simetrización $d^{\mathrm{sym}}(u,v):=\max\{d(u,v),d(v,u)\}$ o con la distancia sobre el subyacente no dirigido. Sea $N=|V|$.
@@ -1542,5 +1542,3 @@
                 \]
                 Tomamos $\varepsilon=1$ y $\text{minPts}=2$. Entonces $1,2,3$ forman un cluster (núcleos: $2$; bordes: $1$ y $3$) y $4,5$ forman otro (ambos núcleos). No hay ruido. Si elevamos $\text{minPts}$ a $3$, $\{1,2,3\}$ persiste (núcleo: $2$), pero $\{4,5\}$ pasa a ruido, ilustrando la monotonía en los parámetros.
             \end{ejemplo}
-
-
