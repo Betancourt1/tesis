@@ -7,8 +7,10 @@
 
     \section{Definición y conceptos básicos}
 
+        A lo largo de este capítulo, se asumirá que todos los grafos son \textbf{finitos}, a menos que se especifique lo contrario. Las definiciones se presentarán especificando si aplican a grafos \textbf{dirigidos}, \textbf{no dirigidos} o ambos, pues las propiedades y métricas pueden cambiar significativamente según el tipo de grafo.
+
         \begin{definicion}[Grafo]
-            Un \textbf{grafo} $G$ es un par $(V,E)$ que consiste en un conjunto no vacío $V$ de \textbf{vértices} (en delante \textbf{nodos}) y un conjunto $E$ de subconjuntos de 2 elementos de $V$, denominados \textbf{aristas}.
+            Un \textbf{grafo} $G$ es un par $(V,E)$ que consiste en un conjunto no vacío $V$ de \textbf{vértices} (en delante \textbf{nodos}) y una colección $E$ de \textbf{aristas}, donde cada arista conecta un par de vértices. La definición formal más restrictiva, la de un \textbf{grafo simple}, exige que las aristas conecten pares de vértices distintos y que no haya más de una arista entre el mismo par de vértices. A lo largo de este capítulo, se presentarán variantes como grafos dirigidos, multígrafos o grafos con lazos, que relajan estas condiciones.
         \end{definicion}
 
         A un grafo $G$ con conjunto de aristas $V$ también lo podemos definir como un grafo \textit{en} $V$ o simplemente $G(V)$.
@@ -23,7 +25,7 @@
         \end{definicion}
 
         \begin{definicion}
-            Llamamos \textit{orden} de un grafo G al número de vértices que contiene y lo representamos como $|G|$. A la cantidad de aristas de $G$ la escribiremos como $\parallel G \parallel$. Un grafo puede ser \textit{finito} o \textit{infinito}.
+            Llamamos \textit{orden} de un grafo G al número de vértices que contiene, representado como $|V|$, y \textit{tamaño} a la cantidad de aristas, representada como $|E|$. Un grafo puede ser \textit{finito} o \textit{infinito}.
         \end{definicion}
 
         \begin{ejemplo}
@@ -52,18 +54,11 @@
             \end{figure}
 
 
-            El grafo $G$ tiene el orden $|G|=7$ y el número de aristas $\parallel G \parallel = 5$.
+            El grafo $G$ tiene el orden $|G|=7$ y el número de aristas $|E| = 5$.
         \end{ejemplo}
-
-        En el resto de este trabajo asumiremos que todos los grafos son finitos.
-
         Más adelante veremos que es posible medir distintas propiedades de un grafo, ya sea en su totalidad o en cada una de sus partes, pero una primera noción en ese sentido es la de \textit{grado de un nodo} que además nos ayudará a demostrar varios resultados importantes más adelante.
-
         \begin{definicion}[Grado de un nodo]
-            El \textbf{grado} de un nodo $v$, denotado $deg(v)$, es la suma del número de aristas entrantes (\emph{grado de entrada}, $deg^{-}(v)$) y aristas salientes (\emph{grado de salida}, $deg^{+}(v)$):
-            \[
-            deg(v) = deg^{-}(v) + deg^{+}(v)
-            \]
+            El \textbf{grado} de un nodo $v$, denotado $deg(v)$, es el número de aristas que inciden en él (los lazos se cuentan dos veces). Para grafos dirigidos, el grado total se descompone en \textbf{grado de entrada} (\emph{indegree}, $deg^{-}(v)$), que es el número de aristas que terminan en $v$, y \textbf{grado de salida} (\emph{outdegree}, $deg^{+}(v)$), que es el número de aristas que comienzan en $v$. En este caso, el grado total es $deg(v) = deg^{-}(v) + deg^{+}(v)$.
             Este valor refleja la importancia local del nodo como punto de transferencia.
         \end{definicion}
 
@@ -135,8 +130,6 @@
             \end{center}
         \end{ejemplo}
 
-        En delante, asumiremos que todos los grafos son dirigidos.
-
         \begin{definicion}[Grafo planar]
             Un grafo es \textbf{planar} si admite una representación (llamada \emph{dibujo planar}) en el plano tal que ninguna de sus aristas se cruza con otra, salvo en los vértices que comparten.
         \end{definicion}
@@ -151,7 +144,7 @@
             Formalmente, las caras son los componentes conexos del complemento del dibujo de $G$ en el plano.
         \end{definicion}
 
-        Las definiciones de grafo planar y de cara de un grafo planar nos serán útiles cuando estudiemos propiedades globales de un grafo. Hasta entonces, asumiremos que todos los grafos son no planares.
+        Las definiciones de grafo planar y de cara de un grafo planar nos serán útiles cuando estudiemos propiedades globales de un grafo.
 
         \begin{definicion}[Multígrafo]
             Un \textbf{multígrafo} $G=(V,E)$ es un grafo finito en el que entre un par (ordenado o no ordenado) de vértices se permiten \emph{múltiples aristas} distintas (también llamadas \emph{aristas paralelas}).
@@ -183,8 +176,6 @@
                 \end{tikzpicture}
             \end{center}
         \end{ejemplo}
-
-        En la siguiente definición usamos el concepto de \textit{ciclo} que no hemos definido todavía. Aunque lo que es un ciclo será definido más adelante, para los propósitos del siguiente resultado, asumamos que un ciclo es una sucesión de $n$ nodos $\{v_{n}\}$ tales que $\(v_{i}, v_{i+1} \) \in E\(G\)$ y también $\(v_{1}, v_{v}\) \in E\(G\)$.
 
         \begin{definicion}[Grafo simple]
             Un \textbf{grafo simple} $G=(V,E)$ es un grafo no dirigido, finito y que no es multígrafo; esto es, $E\subseteq \{\{u,v\} : u,v\in V,\ u\neq v\}$ y entre dos vértices distintos hay a lo sumo una arista.
@@ -314,8 +305,8 @@
             \end{definicion}
 
             \begin{ejemplo}[Camino como subgrafo]
-                Sea $G$ el siguiente dígrafo (a la izquierda), y sea $P$ el subgrafo resaltado, que constituye un camino de longitud $5$ en $G$.
-                A la derecha, se muestra $P$ como subgrafo inducido por sus vértices.
+                Sea $G$ el siguiente dígrafo (a la izquierda), y sea $P$ el subgrafo resaltado, que constituye un camino de longitud $3$ en $G$.
+                A la derecha, se muestra $P$ como subgrafo.
 
                 \begin{center}
                     \begin{tikzpicture}[scale=1.2, every node/.style={fill=white, circle, draw, inner sep=2.5pt},
@@ -332,7 +323,7 @@
                             \node (f) at (2,1) {};
                             \node (g) at (1,0.3) {};
 
-                            % Aristas grises (completas, incluye algunas que no forman parte del camino)
+                            % Aristas grises
                             \draw[edge] (a) -- (b);
                             \draw[edge] (b) -- (c);
                             \draw[edge] (a) -- (c);
@@ -342,12 +333,10 @@
                             \draw[edge] (d) -- (g);
                             \draw[edge] (g) -- (f);
 
-                            % Camino dirigido resaltado (a -> e -> f -> g -> f -> c)
-                            \draw[highlight] (a) -- (e);
+                            % Camino dirigido resaltado (a -> c -> e -> f)
+                            \draw[highlight] (a) -- (c);
+                            \draw[highlight] (c) -- (e);
                             \draw[highlight] (e) -- (f);
-                            \draw[highlight] (f) -- (g);
-                            \draw[highlight] (g) -- (f);
-                            \draw[highlight] (f) -- (c);
 
                             % Nombres de los nodos
                             \node[draw=none,fill=none, left] at (a) {$v_1$};
@@ -365,23 +354,19 @@
                         % Subgrafo (camino) a la derecha
                         \begin{scope}[xshift=5cm]
                             \node (a) at (0,2) {};
+                            \node (c) at (2,2) {};
                             \node (e) at (1,1.8) {};
                             \node (f) at (2,1) {};
-                            \node (g) at (1,0.3) {};
-                            \node (c) at (2,2) {};
 
-                            \draw[highlight] (a) -- (e);
+                            \draw[highlight] (a) -- (c);
+                            \draw[highlight] (c) -- (e);
                             \draw[highlight] (e) -- (f);
-                            \draw[highlight] (f) -- (g);
-                            \draw[highlight] (g) -- (f);
-                            \draw[highlight] (f) -- (c);
 
                             % Nombres de los nodos
                             \node[draw=none,fill=none, left] at (a) {$v_1$};
+                            \node[draw=none,fill=none, right] at (c) {$v_6$};
                             \node[draw=none,fill=none, above right] at (e) {$v_3$};
                             \node[draw=none,fill=none, right] at (f) {$v_5$};
-                            \node[draw=none,fill=none, below] at (g) {$v_7$};
-                            \node[draw=none,fill=none, right] at (c) {$v_6$};
 
                             % P label
                             \node[draw=none, fill=none] at (1,-0.3) {$P$};
@@ -389,7 +374,7 @@
                     \end{tikzpicture}
                 \end{center}
 
-            \captionof{figure}{Un camino dirigido $P = (v_1, v_3, v_5, v_7, v_5, v_6)$ en el dígrafo $G$ y su representación como subgrafo.}
+            \captionof{figure}{Un camino dirigido $P = (v_1, v_6, v_3, v_5)$ en el dígrafo $G$ y su representación como subgrafo.}
             \end{ejemplo}
 
             \begin{definicion}[Ciclo]
@@ -576,9 +561,7 @@
                 Toma un camino $P$ de longitud máxima en $T$ (existe porque $T$ es finito). Si un extremo de $P$ tuviera grado $\ge 2$, habría una arista adicional que permite prolongar $P$, contradiciendo la maximalidad. Así, ambos extremos de $P$ tienen grado $1$.
             \end{proof}
 
-            \begin{proposicion}[\,$|E|=|V|-1$ en árboles\,]
-                Si $T$ es un árbol finito, entonces $|E(T)|=|V(T)|-1$.
-            \end{proposicion}
+            Intuitivamente, se puede construir cualquier árbol partiendo de un único nodo (donde $|E|=0, |V|=1$) y añadiendo sucesivamente nuevos nodos, cada uno conectado por una única arista nueva. En cada paso se suma un vértice y una arista, manteniendo siempre la relación $|E| = |V|-1$. La siguiente demostración formaliza esta idea mediante el proceso inverso: la deconstrucción del árbol.
 
             \begin{proof}
                 Por inducción en $n=|V(T)|$.
@@ -729,10 +712,9 @@
 
             \begin{teorema}[Teorema de Euler]
                 Sea $G$ un grafo planar conexo con $|V|$ vértices, $|E|$ aristas y $f$ caras. Entonces:
-                \[
-                |V| - |E| + f = 2.
-                \]
             \end{teorema}
+
+            La idea central es que la fórmula se cumple para la estructura más simple posible, un árbol, donde $|V| - (|V|-1) + 1 = 2$. A partir de ahí, cualquier arista que se añada sin dejar de ser planar debe necesariamente dividir una cara existente en dos. Al hacer esto, se suma 1 a $|E|$ y 1 a $f$, por lo que el resultado de la expresión $|V| - |E| + f$ permanece constante e igual a 2. La prueba por inducción formaliza este razonamiento.
 
             \begin{proof}
                 La prueba se realiza por inducción sobre el número de aristas $|E|$.
@@ -830,6 +812,8 @@
                 \dim \mathcal{C}(G)\;=\;\mu(G)\;=\;m-n+p.
                 \]
             \end{teorema}
+
+            La fórmula $\mu = m-n+p$ puede entenderse de forma conceptual. Para conectar $n$ vértices en $p$ componentes sin formar ciclos, se necesita un esqueleto de exactamente $n-p$ aristas (un \textit{bosque generador}). Cada arista adicional que se añade a este esqueleto, más allá de las $n-p$ estructurales, inevitablemente "cierra" un camino y crea un ciclo que es independiente de los demás. Por lo tanto, el número de ciclos independientes es simplemente el conteo de aristas "sobrantes": $m - (n-p) = m-n+p$. La demostración formaliza esta idea.
 
             \begin{proof}[Demostración (constructiva con bosque generador)]
                 Sea $F$ un \emph{bosque generador} de $G$, obtenido tomando un árbol generador en cada componente. Entonces $F$ tiene exactamente $n-p$ aristas.
@@ -1249,8 +1233,9 @@
                 \end{enumerate}
 
             \begin{proposicion}[Correctitud]
-                Cada vez que extraemos un vértice $u$ de $Q$ se cumple $D[u]=d_\ell(s,u)$. En consecuencia, al finalizar obtenemos $D[v]=d_\ell(s,v)$ para todo $v$.
-            \end{proposicion}
+                    \end{proposicion}
+
+            La correctitud del algoritmo de Dijkstra se basa en una idea "codiciosa" (greedy): en cada paso, se confirma la distancia al nodo no visitado más cercano a la fuente. Dado que los pesos de las aristas no son negativos, cualquier otra ruta alternativa para llegar a ese mismo nodo tendría que pasar forzosamente por otro nodo no visitado, que por definición está más lejos. Por lo tanto, esa ruta alternativa sería siempre más larga, lo que garantiza que la primera vez que llegamos a un nodo y lo marcamos como "visitado", lo hemos hecho por el camino más corto posible.
 
             \begin{proof}
                 Demostramos por inducción sobre el número de extracciones. Sea $u$ el primer vértice que viola la propiedad. Como $s$ se extrae con $D[s]=0=d_\ell(s,s)$, existe alguno posterior. Sea $P$ un camino mínimo de $s$ a $u$, y sea $x$ el primer vértice de $P$ que aún no había sido extraído inmediatamente antes de extraer $u$; su predecesor $y$ en $P$ ya fue extraído. En ese momento, al relajar $y\to x$ establecemos $D[x]\le D[y]+\ell(y,x)=d_\ell(s,y)+\ell(y,x)=d_\ell(s,x)$, y por optimalidad $D[x]\ge d_\ell(s,x)$, luego $D[x]=d_\ell(s,x)$. Como $D[u]\le D[x]$ por elección de $u$ (clave mínima), obtenemos $D[u]\le d_\ell(s,x)\le d_\ell(s,u)$; pero siempre $D[u]\ge d_\ell(s,u)$, contradicción. La inducción cierra.
@@ -1380,6 +1365,8 @@
             \begin{teorema}[Corrección]
                 Para todo $k\in\{0,\dots,n\}$ y $i,j\in V$, $d^{(k)}_{ij}$ es la mínima longitud de un camino $i\to j$ cuyos vértices intermedios pertenecen a $\{1,\dots,k\}$. En particular, si no existe ciclo de peso negativo alcanzable, $D^{(n)}$ coincide con la matriz de distancias $d_\ell$.
             \end{teorema}
+
+            La intuición detrás del algoritmo es la programación dinámica. Para encontrar el camino más corto entre dos nodos $i$ y $j$ permitiendo que un conjunto de nodos intermedios $K$ sea utilizado, se consideran dos escenarios: o bien el camino más corto no utiliza un nuevo nodo $k \in K$, en cuyo caso la solución es la que ya se tenía sin $k$; o bien sí lo utiliza, en cuyo caso el camino debe ser la concatenación de los caminos más cortos ya conocidos $i \to k$ y $k \to j$. El algoritmo simplemente itera sobre todos los nodos posibles como intermediarios, construyendo la solución óptima paso a paso.
 
             \begin{proof}
                 Procedemos por inducción en $k$. El caso $k=0$ es la definición. Supongamos cierto para $k-1$. Todo camino $i\to j$ con intermedios en $\{1,\dots,k\}$ o bien no usa el vértice $k$ como intermedio (costo $\ge d^{(k-1)}_{ij}$) o bien lo usa y puede descomponerse como $i\to k$ seguido de $k\to j$, ambos con intermedios en $\{1,\dots,k-1\}$, con costo $\ge d^{(k-1)}_{ik}+d^{(k-1)}_{kj}$. Tomando el mínimo sobre ambas opciones obtenemos la recurrencia. La igualdad se logra porque todo camino del tipo considerado cae en uno de los dos casos, y la inducción asegura optimalidad en los subcaminos.
