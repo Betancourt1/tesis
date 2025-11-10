@@ -1,7 +1,7 @@
 \chapter{Teoría de grafos}
     Antes de comenzar con el estudio de las redes de transporte público, y con el fin de partir desde bases bien fundamentadas, vamos a introducir una serie de definiciones en torno a la teoría de grafos. En este caso nos importa fundamentar adecuadamente qué es un \textit{camino} en el contexto de esta teoría, lo que nos ayudará a tener un formalismo de lo que es una ruta de transporte público. Asimismo, nos interesa explorar cómo la noción de camino nos ayuda a entender la estructura de una red. Para esto también estudiaremos el concepto de \textit{centralidad}, que nos ayudará a evaluar la importancia que tiene un determinado nodo en el contexto del resto del grafo. Finalmente, gracias a lo anterior, estudiaremos distintos algoritmos para lograr encontrar caminos óptimos entre cualesquiera dos nodos.
 
-    Los problemas de movilidad urbana requieren modelos que abstraigan la complejidad de la ciudad sin perder los elementos esenciales de conectividad. La \emph{teoría de grafos} provee justamente ese andamiaje formal: reduce las interacciones físicas a vértices y aristas y, a partir de ahí, permite cuantificar eficiencia, robustez y vulnerabilidad de toda la red (Rodrigues, 2013).
+    Los problemas de movilidad urbana requieren modelos que abstraigan la complejidad de la ciudad sin perder los elementos esenciales de conectividad. La \emph{teoría de grafos} provee justamente ese andamiaje formal: reduce las interacciones físicas a nodos y aristas y, a partir de ahí, permite cuantificar eficiencia, robustez y vulnerabilidad de toda la red (Rodrigues, 2013).
 
     Este capítulo se basa en \cite{diestel2017} y \cite{bangjensen2007}.
 
@@ -10,7 +10,7 @@
         A lo largo de este capítulo, se asumirá que todos los grafos son \textbf{finitos}, a menos que se especifique lo contrario. Las definiciones se presentarán especificando si aplican a grafos \textbf{dirigidos}, \textbf{no dirigidos} o ambos, pues las propiedades y métricas pueden cambiar significativamente según el tipo de grafo.
 
         \begin{definicion}[Grafo]
-            Un \textbf{grafo} $G$ es un par $(V,E)$ que consiste en un conjunto no vacío $V$ de \textbf{vértices} (en delante \textbf{nodos}) y una colección $E$ de \textbf{aristas}, donde cada arista conecta un par de vértices. La definición formal más restrictiva, la de un \textbf{grafo simple}, exige que las aristas conecten pares de vértices distintos y que no haya más de una arista entre el mismo par de vértices. A lo largo de este capítulo, se presentarán variantes como grafos dirigidos, multígrafos o grafos con lazos, que relajan estas condiciones.
+            Un \textbf{grafo} $G$ es un par $(V,E)$ que consiste en un conjunto no vacío $V$ de \textbf{nodos} y una colección $E$ de \textbf{aristas}, donde cada arista conecta un par de nodos. La definición formal más restrictiva, la de un \textbf{grafo simple}, exige que las aristas conecten pares de nodos distintos y que no haya más de una arista entre el mismo par de nodos. A lo largo de este capítulo, se presentarán variantes como grafos dirigidos, multígrafos o grafos con lazos, que relajan estas condiciones.
         \end{definicion}
 
         A un grafo $G$ con conjunto de aristas $V$ también lo podemos definir como un grafo \textit{en} $V$ o simplemente $G(V)$.
@@ -25,11 +25,11 @@
         \end{definicion}
 
         \begin{definicion}
-            Llamamos \textit{orden} de un grafo G al número de vértices que contiene, representado como $|V|$, y \textit{tamaño} a la cantidad de aristas, representada como $|E|$. Un grafo puede ser \textit{finito} o \textit{infinito}.
+            Llamamos \textit{orden} de un grafo G al número de nodos que contiene, representado como $|V|$, y \textit{tamaño} a la cantidad de aristas, representada como $|E|$. Un grafo puede ser \textit{finito} o \textit{infinito}.
         \end{definicion}
 
         \begin{ejemplo}
-            La forma habitual de representar un grafo es dibujando un punto por cada vértice y uniendo dichos puntos con una línea si el par correspondiente forma una arista. La disposición de los puntos y las líneas es irrelevante; lo único que importa es qué pares de vértices están conectados.
+            La forma habitual de representar un grafo es dibujando un punto por cada nodo y uniendo dichos puntos con una línea si el par correspondiente forma una arista. La disposición de los puntos y las líneas es irrelevante; lo único que importa es qué pares de nodos están conectados.
 
             \begin{figure}[ht]
                 \centering
@@ -131,7 +131,7 @@
         \end{ejemplo}
 
         \begin{definicion}[Grafo planar]
-            Un grafo es \textbf{planar} si admite una representación (llamada \emph{dibujo planar}) en el plano tal que ninguna de sus aristas se cruza con otra, salvo en los vértices que comparten.
+            Un grafo es \textbf{planar} si admite una representación (llamada \emph{dibujo planar}) en el plano tal que ninguna de sus aristas se cruza con otra, salvo en los nodos que comparten.
         \end{definicion}
 
         \begin{observacion}
@@ -147,8 +147,8 @@
         Las definiciones de grafo planar y de cara de un grafo planar nos serán útiles cuando estudiemos propiedades globales de un grafo.
 
         \begin{definicion}[Multígrafo]
-            Un \textbf{multígrafo} $G=(V,E)$ es un grafo finito en el que entre un par (ordenado o no ordenado) de vértices se permiten \emph{múltiples aristas} distintas (también llamadas \emph{aristas paralelas}).
-            Opcionalmente, puede permitirse la existencia de \emph{lazos} (aristas cuyos extremos coinciden en un mismo vértice); cuando se permiten lazos, a veces se habla de \emph{pseudografo}.
+            Un \textbf{multígrafo} $G=(V,E)$ es un grafo finito en el que entre un par (ordenado o no ordenado) de nodos se permiten \emph{múltiples aristas} distintas (también llamadas \emph{aristas paralelas}).
+            Opcionalmente, puede permitirse la existencia de \emph{lazos} (aristas cuyos extremos coinciden en un mismo nodo); cuando se permiten lazos, a veces se habla de \emph{pseudografo}.
         \end{definicion}
 
         \begin{observacion}
@@ -164,7 +164,7 @@
 
             \begin{center}
                 \begin{tikzpicture}[scale=1, vertex/.style={draw, circle, minimum size=1cm}, >=stealth]
-                    % Definición de vértices
+                    % Definición de nodos
                     \node[vertex] (A) at (0,0) {A};
                     \node[vertex] (B) at (2,0) {B};
                     \node[vertex] (C) at (1,1.5) {C};
@@ -178,7 +178,7 @@
         \end{ejemplo}
 
         \begin{definicion}[Grafo simple]
-            Un \textbf{grafo simple} $G=(V,E)$ es un grafo no dirigido, finito y que no es multígrafo; esto es, $E\subseteq \{\{u,v\} : u,v\in V,\ u\neq v\}$ y entre dos vértices distintos hay a lo sumo una arista.
+            Un \textbf{grafo simple} $G=(V,E)$ es un grafo no dirigido, finito y que no es multígrafo; esto es, $E\subseteq \{\{u,v\} : u,v\in V,\ u\neq v\}$ y entre dos nodos distintos hay a lo sumo una arista.
         \end{definicion}
 
         \begin{observacion}
@@ -295,7 +295,7 @@
          \subsubsection{Caminos y ciclos}
             \begin{definicion}[Camino]
                 Sea $G = (V, E)$ un grafo.
-                Un \textbf{camino de longitud $k$} es un subgrafo $P = (V_P, E_P)$ de $G$ tal que existen vértices distintos $v_1, v_2, \dots, v_{k+1} \in V$ para los cuales:
+                Un \textbf{camino de longitud $k$} es un subgrafo $P = (V_P, E_P)$ de $G$ tal que existen nodos distintos $v_1, v_2, \dots, v_{k+1} \in V$ para los cuales:
                 \begin{align*}
                     V_P &= \{v_1, v_2, \dots, v_{k+1}\}, \\
                     E_P &= \left\{ (v_i, v_{i+1}) : i = 1, \dots, k \right\},
@@ -378,7 +378,7 @@
             \end{ejemplo}
 
             \begin{definicion}[Ciclo]
-                Un \textbf{ciclo de longitud $k$} es un camino $C = (V_C, E_C)$ tal que existen vértices distintos $v_1, v_2, \dots, v_k$ para los cuales:
+                Un \textbf{ciclo de longitud $k$} es un camino $C = (V_C, E_C)$ tal que existen nodos distintos $v_1, v_2, \dots, v_k$ para los cuales:
                 \begin{align*}
                     V_C &= \{v_1, v_2, \dots, v_k\}, \\
                     E_C &= \{ (v_1, v_2),\ (v_2, v_3),\ \dots,\ (v_{k-1}, v_k),\ (v_k, v_1) \},
@@ -444,15 +444,15 @@
             Ahora que sabemos lo que es un camino y un ciclo, disponemos de una herramienta para formalizar nuestra noción de movimiento dentro de un grafo. Algo que también nos gustaría formalizar es alguna noción de \textit{distancia} entre dos nodos cualesquiera. A continuación, veremos que una propuesta muy buena es pensar la distancia entre dos nodos como el largo del camino más corto que los une. Antes de llegar ahí, establezcamos un par de resultados útiles.
 
             \begin{lema}[Extremos de un camino]
-                Sea $P$ un camino finito (subgrafo conexo y acíclico en el que todos los vértices tienen grado $\le 2$).
-                Entonces $P$ tiene exactamente dos vértices de grado $1$ (extremos) y todos los demás vértices, si los hay, tienen grado $2$.
+                Sea $P$ un camino finito (subgrafo conexo y acíclico en el que todos los nodos tienen grado $\le 2$).
+                Entonces $P$ tiene exactamente dos nodos de grado $1$ (extremos) y todos los demás nodos, si los hay, tienen grado $2$.
             \end{lema}
 
             \begin{proof}
-                Si $|V(P)|=1$, el enunciado es vacuo. Para $|V(P)|\ge 2$, la aciclicidad implica que no puede haber todos los vértices de grado $2$; por el conteo de grados $\sum_{v}\deg(v)=2|E(P)|$ y porque un componente acíclico con $\deg\le 2$ no puede tener más de dos vértices de grado impar, se deduce que hay al menos dos vértices de grado $1$. Si hubiera tres o más de grado $1$, la suma de grados sería $<2|E(P)|$, contradicción.
+                Si $|V(P)|=1$, el enunciado es vacuo. Para $|V(P)|\ge 2$, la aciclicidad implica que no puede haber todos los nodos de grado $2$; por el conteo de grados $\sum_{v}\deg(v)=2|E(P)|$ y porque un componente acíclico con $\deg\le 2$ no puede tener más de dos nodos de grado impar, se deduce que hay al menos dos nodos de grado $1$. Si hubiera tres o más de grado $1$, la suma de grados sería $<2|E(P)|$, contradicción.
             \end{proof}
 
-            \begin{teorema}[Numeración lineal de los vértices de un camino]
+            \begin{teorema}[Numeración lineal de los nodos de un camino]
                 Sea $P$ un camino finito no trivial. Entonces existe una biyección
                 \[
                 \phi:\{1,2,\dots,k\}\longrightarrow V(P)
@@ -463,7 +463,7 @@
 
             \begin{proof}
                 Por el lema, $P$ tiene dos extremos. Fija uno de ellos y llámalo $\phi(1)$. Definimos inductivamente $\phi(i+1)$: dado $\phi(i)$, si $i=1$ tomamos como $\phi(2)$ el único vecino de $\phi(1)$; si $i\ge 2$, tomamos como $\phi(i+1)$ el único vecino de $\phi(i)$ distinto de $\phi(i-1)$.
-                La aciclicidad garantiza que este procedimiento nunca vuelve a un vértice ya visitado y, como $P$ es finito y conexo con grados $\le 2$, el proceso termina exactamente cuando alcanzamos el otro extremo. Así obtenemos un orden lineal $\phi(1),\dots,\phi(k)$ que recorre todos los vértices una única vez y en el que las únicas aristas son las consecutivas por construcción.
+                La aciclicidad garantiza que este procedimiento nunca vuelve a un nodo ya visitado y, como $P$ es finito y conexo con grados $\le 2$, el proceso termina exactamente cuando alcanzamos el otro extremo. Así obtenemos un orden lineal $\phi(1),\dots,\phi(k)$ que recorre todos los nodos una única vez y en el que las únicas aristas son las consecutivas por construcción.
                 La unicidad salvo reversa es clara: cualquier ordenación válida debe empezar en un extremo y seguir el único vecino no visitado en cada paso.
             \end{proof}
 
@@ -505,7 +505,7 @@
         \subsubsection{Árboles}
 
             \begin{definicion}[Árbol]
-                Un \textbf{árbol} es un grafo conexo y acíclico en el que, fijado un vértice raíz $r$, existe exactamente un camino dirigido de $r$ a cualquier otro vértice del grafo.
+                Un \textbf{árbol} es un grafo conexo y acíclico en el que, fijado un nodo raíz $r$, existe exactamente un camino dirigido de $r$ a cualquier otro nodo del grafo.
             \end{definicion}
 
             \begin{ejemplo}[Árbol]
@@ -532,11 +532,11 @@
                 \end{tikzpicture}
                 \end{center}
 
-                Desde la raíz $v_1$, existe exactamente un camino dirigido a cada vértice del árbol.
+                Desde la raíz $v_1$, existe exactamente un camino dirigido a cada nodo del árbol.
             \end{ejemplo}
 
             \begin{definicion}[Hoja]
-                Sea $G=(V,E)$ un grafo finito. Un vértice $v\in V$ es una \textbf{hoja} si tiene grado uno en el grafo subyacente no dirigido, es decir,
+                Sea $G=(V,E)$ un grafo finito. Un nodo $v\in V$ es una \textbf{hoja} si tiene grado uno en el grafo subyacente no dirigido, es decir,
                 \[
                 \deg(v)=1.
                 \]
@@ -554,19 +554,19 @@
             \end{observacion}
 
             \begin{lema}[Existencia de hoja]
-                Sea $T$ un árbol con $|V(T)|\ge 2$. Entonces $T$ tiene al menos una hoja (un vértice de grado $1$).
+                Sea $T$ un árbol con $|V(T)|\ge 2$. Entonces $T$ tiene al menos una hoja (un nodo de grado $1$).
             \end{lema}
 
             \begin{proof}
                 Toma un camino $P$ de longitud máxima en $T$ (existe porque $T$ es finito). Si un extremo de $P$ tuviera grado $\ge 2$, habría una arista adicional que permite prolongar $P$, contradiciendo la maximalidad. Así, ambos extremos de $P$ tienen grado $1$.
             \end{proof}
 
-            Intuitivamente, se puede construir cualquier árbol partiendo de un único nodo (donde $|E|=0, |V|=1$) y añadiendo sucesivamente nuevos nodos, cada uno conectado por una única arista nueva. En cada paso se suma un vértice y una arista, manteniendo siempre la relación $|E| = |V|-1$. La siguiente demostración formaliza esta idea mediante el proceso inverso: la deconstrucción del árbol.
+            Intuitivamente, se puede construir cualquier árbol partiendo de un único nodo (donde $|E|=0, |V|=1$) y añadiendo sucesivamente nuevos nodos, cada uno conectado por una única arista nueva. En cada paso se suma un nodo y una arista, manteniendo siempre la relación $|E| = |V|-1$. La siguiente demostración formaliza esta idea mediante el proceso inverso: la deconstrucción del árbol.
 
             \begin{proof}
                 Por inducción en $n=|V(T)|$.
                 Caso base $n=1$: $|E|=0=n-1$.
-                Paso inductivo: sea $n\ge 2$ y supongamos cierto para todo árbol con $<n$ vértices. Por el lema, $T$ tiene una hoja $x$ con vecino $y$. Consideremos $T'=T-\{x\}$: sigue siendo un árbol (conexo y acíclico) con $n-1$ vértices. Por hipótesis inductiva, $|E(T')|=(n-1)-1=n-2$. Como $E(T)=E(T')\cup\{xy\}$, se tiene $|E(T)|=(n-2)+1=n-1$.
+                Paso inductivo: sea $n\ge 2$ y supongamos cierto para todo árbol con $<n$ nodos. Por el lema, $T$ tiene una hoja $x$ con vecino $y$. Consideremos $T'=T-\{x\}$: sigue siendo un árbol (conexo y acíclico) con $n-1$ nodos. Por hipótesis inductiva, $|E(T')|=(n-1)-1=n-2$. Como E(T)=E(T')\cup\{xy\}, se tiene $|E(T)|=(n-2)+1=n-1$.
             \end{proof}
 
             \begin{lema}[Frontera de cara acotada contiene un ciclo]
@@ -600,7 +600,7 @@
                 \begin{enumerate}
                     \item $E_F \subseteq E$ (mismas $V$, menos aristas),
                     \item $F$ es acíclico,
-                    \item cada componente de $F$ es un árbol que contiene exactamente los vértices de la correspondiente componente de $G$.
+                    \item cada componente de $F$ es un árbol que contiene exactamente los nodos de la correspondiente componente de $G$.
                 \end{enumerate}
                 Equivalente y característico: $F$ es acíclico y maximal por inclusión, o bien $|E_F|=|V|-p$. Si $G$ es conexo ($p=1$), un bosque generador es un \emph{árbol generador}.
             \end{definicion}
@@ -613,14 +613,14 @@
 
             Ahora que disponemos no solo de la noción de grafo y sus elementos básicos, sino también de herramientas para particionarlos y analizarlos, podemos avanzar hacia la definición de métricas e indicadores que permitan caracterizar cuantitativamente su estructura y funcionamiento. Estas medidas nos ayudarán a identificar patrones, puntos críticos y niveles de eficiencia o resiliencia en la red, ofreciendo una base objetiva para comparar distintas topologías, fundamentar intervenciones y detectar limitaciones o vulnerabilidades que no serían evidentes a simple vista.
 
-            Entre las propiedades clásicas que describen la forma en que los vértices se relacionan destacan los siguientes conceptos fundamentales:
+            Entre las propiedades clásicas que describen la forma en que los nodos se relacionan destacan los siguientes conceptos fundamentales:
 
             \begin{definicion}[Conectividad]
-                Decimos que un grafo $G$ es \textbf{conexo} si existe al menos un camino entre cada par de vértices. En caso contrario, la red se fragmenta en varias componentes conexas. Al número de componentes conexas lo llamamos $p$.
+                Decimos que un grafo $G$ es \textbf{conexo} si existe al menos un camino entre cada par de nodos. En caso contrario, la red se fragmenta en varias componentes conexas. Al número de componentes conexas lo llamamos $p$.
             \end{definicion}
 
             \begin{definicion}[Nodo de articulación e istmo]
-                Un \textbf{nodo de articulación} es un vértice cuya supresión (junto con sus aristas incidentes) incrementa el número de componentes conexas de la red.
+                Un \textbf{nodo de articulación} es un nodo cuya supresión (junto con sus aristas incidentes) incrementa el número de componentes conexas de la red.
                 Un \textbf{istmo} (o arista de corte) es una arista cuya supresión incrementa el número de componentes conexas.
             \end{definicion}
 
@@ -683,12 +683,12 @@
             \end{ejemplo}
 
             \begin{definicion}[Diámetro]
-                El \textbf{diámetro} de un grafo es la longitud máxima de los caminos más cortos entre todos los pares de vértices $(u,v)$.
+                El \textbf{diámetro} de un grafo es la longitud máxima de los caminos más cortos entre todos los pares de nodos $(u,v)$.
                 Formalmente: $\displaystyle \mathrm{diam}(G) = \max_{u,v \in V} d(u,v)$, donde $d(u,v)$ es la longitud del camino dirigido más corto de $u$ a $v$.
             \end{definicion}
 
             \begin{definicion}[Número de ciclos independientes]
-                El \textbf{número de ciclos independientes} de un grafo se define como $\mu = |E| - |V| + p$, donde $|E|$ es el número de aristas, $|V|$ es el número de vértices y $p$ el número de componentes conexas.
+                El \textbf{número de ciclos independientes} de un grafo se define como $\mu = |E| - |V| + p$, donde $|E|$ es el número de aristas, $|V|$ es el número de nodos y $p$ el número de componentes conexas.
             \end{definicion}
 
             % ----------------------------------------------------------
@@ -711,7 +711,7 @@
             En algunos casos, cuando disponemos de un grafo planar, somos capaces de saber cuál es el número máximo de ciclos que puede tener. Para poder llegar a esa definición, antes debemos establecer un par de resultados relevantes.
 
             \begin{teorema}[Teorema de Euler]
-                Sea $G$ un grafo planar conexo con $|V|$ vértices, $|E|$ aristas y $f$ caras. Entonces:
+                Sea $G$ un grafo planar conexo con $|V|$ nodos, $|E|$ aristas y $f$ caras. Entonces:
             \end{teorema}
 
             La idea central es que la fórmula se cumple para la estructura más simple posible, un árbol, donde $|V| - (|V|-1) + 1 = 2$. A partir de ahí, cualquier arista que se añada sin dejar de ser planar debe necesariamente dividir una cara existente en dos. Al hacer esto, se suma 1 a $|E|$ y 1 a $f$, por lo que el resultado de la expresión $|V| - |E| + f$ permanece constante e igual a 2. La prueba por inducción formaliza este razonamiento.
@@ -745,7 +745,7 @@
             \end{proof}
 
             \begin{corolario}
-                Para todo grafo planar simple y conexo con $|V| \geq 3$ vértices, se cumple $|E| \leq 3|V| - 6$.
+                Para todo grafo planar simple y conexo con $|V| \geq 3$ nodos, se cumple $|E| \leq 3|V| - 6$.
             \end{corolario}
 
             \begin{proof}
@@ -813,7 +813,7 @@
                 \]
             \end{teorema}
 
-            La fórmula $\mu = m-n+p$ puede entenderse de forma conceptual. Para conectar $n$ vértices en $p$ componentes sin formar ciclos, se necesita un esqueleto de exactamente $n-p$ aristas (un \textit{bosque generador}). Cada arista adicional que se añade a este esqueleto, más allá de las $n-p$ estructurales, inevitablemente "cierra" un camino y crea un ciclo que es independiente de los demás. Por lo tanto, el número de ciclos independientes es simplemente el conteo de aristas "sobrantes": $m - (n-p) = m-n+p$. La demostración formaliza esta idea.
+            La fórmula $\mu = m-n+p$ puede entenderse de forma conceptual. Para conectar $n$ nodos en $p$ componentes sin formar ciclos, se necesita un esqueleto de exactamente $n-p$ aristas (un \textit{bosque generador}). Cada arista adicional que se añade a este esqueleto, más allá de las $n-p$ estructurales, inevitablemente "cierra" un camino y crea un ciclo que es independiente de los demás. Por lo tanto, el número de ciclos independientes es simplemente el conteo de aristas "sobrantes": $m - (n-p) = m-n+p$. La demostración formaliza esta idea.
 
             \begin{proof}[Demostración (constructiva con bosque generador)]
                 Sea $F$ un \emph{bosque generador} de $G$, obtenido tomando un árbol generador en cada componente. Entonces $F$ tiene exactamente $n-p$ aristas.
@@ -846,7 +846,7 @@
                 \[
                 \gamma = \frac{14}{3 \times 8 - 6} = \frac{14}{18} \approx 0.778
                 \]
-                Lo que sugiere alta densidad planar.
+                Lo que sugiere alta densidad planar, indicando que la red está utilizando más del 77% de las conexiones posibles para un grafo planar de su tamaño.
             \end{ejemplo}
 
         Las propiedades que estudiamos hasta ahora son ciertas independientemente del espacio en el que esté embebido nuestra red, si es que está embebido en alguno. A veces también nos interesaría estudiar redes que estén dentro de un espacio. Esto nos proporciona información diferente pues cada nodo tendrá una posición dentro de ese espacio y, de ser métrico, cada arista tendrá una longitud. A continuación vamos a formalizar esta idea de analizar grafos dentro de un espacio.
@@ -906,7 +906,7 @@
 
         % --- Operadores y brecha espectral en redes dirigidas ---
         \begin{definicion}[Operador de transición]
-            Sea $G$ un dígrafo finito, sin vértices aislados. Su \emph{operador de transición} es la matriz fila-estocástica $P=(p_{ij})_{i,j\in V}$ dada por
+            Sea $G$ un dígrafo finito, sin nodos aislados. Su \emph{operador de transición} es la matriz fila-estocástica $P=(p_{ij})_{i,j\in V}$ dada por
             \[
             p_{ij}=\frac{a_{ij}}{\sum_k a_{ik}},
             \]
@@ -1350,7 +1350,7 @@
             \end{definicion}
 
             \paragraph{Esquema de programación dinámica.}
-            Fijamos un orden de los vértices $1,\dots,n$ y, para $k=0,\dots,n$, definimos $D^{(k)}=(d^{(k)}_{ij})$ como la mejor distancia de $i$ a $j$ usando únicamente vértices intermedios del conjunto $\{1,\dots,k\}$:
+            Fijamos un orden de los nodos $1,\dots,n$ y, para $k=0,\dots,n$, definimos $D^{(k)}=(d^{(k)}_{ij})$ como la mejor distancia de $i$ a $j$ usando únicamente nodos intermedios del conjunto $\{1,\dots,k\}$:
             \[
             d^{(0)}_{ij}=
             \begin{cases}
@@ -1363,13 +1363,13 @@
             \]
 
             \begin{teorema}[Corrección]
-                Para todo $k\in\{0,\dots,n\}$ y $i,j\in V$, $d^{(k)}_{ij}$ es la mínima longitud de un camino $i\to j$ cuyos vértices intermedios pertenecen a $\{1,\dots,k\}$. En particular, si no existe ciclo de peso negativo alcanzable, $D^{(n)}$ coincide con la matriz de distancias $d_\ell$.
+                Para todo $k\in\{0,\dots,n\}$ y $i,j\in V$, $d^{(k)}_{ij}$ es la mínima longitud de un camino $i\to j$ cuyos nodos intermedios pertenecen a $\{1,\dots,k\}$. En particular, si no existe ciclo de peso negativo alcanzable, $D^{(n)}$ coincide con la matriz de distancias $d_\ell$.
             \end{teorema}
 
             La intuición detrás del algoritmo es la programación dinámica. Para encontrar el camino más corto entre dos nodos $i$ y $j$ permitiendo que un conjunto de nodos intermedios $K$ sea utilizado, se consideran dos escenarios: o bien el camino más corto no utiliza un nuevo nodo $k \in K$, en cuyo caso la solución es la que ya se tenía sin $k$; o bien sí lo utiliza, en cuyo caso el camino debe ser la concatenación de los caminos más cortos ya conocidos $i \to k$ y $k \to j$. El algoritmo simplemente itera sobre todos los nodos posibles como intermediarios, construyendo la solución óptima paso a paso.
 
             \begin{proof}
-                Procedemos por inducción en $k$. El caso $k=0$ es la definición. Supongamos cierto para $k-1$. Todo camino $i\to j$ con intermedios en $\{1,\dots,k\}$ o bien no usa el vértice $k$ como intermedio (costo $\ge d^{(k-1)}_{ij}$) o bien lo usa y puede descomponerse como $i\to k$ seguido de $k\to j$, ambos con intermedios en $\{1,\dots,k-1\}$, con costo $\ge d^{(k-1)}_{ik}+d^{(k-1)}_{kj}$. Tomando el mínimo sobre ambas opciones obtenemos la recurrencia. La igualdad se logra porque todo camino del tipo considerado cae en uno de los dos casos, y la inducción asegura optimalidad en los subcaminos.
+                Procedemos por inducción en $k$. El caso $k=0$ es la definición. Supongamos cierto para $k-1$. Todo camino $i\to j$ con intermedios en $\{1,\dots,k\}$ o bien no usa el nodo $k$ como intermedio (costo $\ge d^{(k-1)}_{ij}$) o bien lo usa y puede descomponerse como $i\to k$ seguido de $k\to j$, ambos con intermedios en $\{1,\dots,k-1\}$, con costo $\ge d^{(k-1)}_{ik}+d^{(k-1)}_{kj}$. Tomando el mínimo sobre ambas opciones obtenemos la recurrencia. La igualdad se logra porque todo camino del tipo considerado cae en uno de los dos casos, y la inducción asegura optimalidad en los subcaminos.
             \end{proof}
 
             \begin{proposicion}[Detección de ciclos negativos]
@@ -1377,9 +1377,9 @@
             \end{proposicion}
 
             \begin{proof}
-                ($\Rightarrow$) Supongamos que existe un ciclo negativo $C$ alcanzable desde $i$ y que retorna a $i$. Para cada $k$, $d^{(k)}_{ii}$ es la mínima longitud de un camino $i\to i$ cuyos intermedios están en $\{1,\dots,k\}$. Al incorporar como intermedios todos los vértices del ciclo (lo que ocurre no más tarde que en $k=n$), podemos realizar $C$, por lo que $d^{(n)}_{ii}\le \ell(C)<0$.
+                ($\Rightarrow$) Supongamos que existe un ciclo negativo $C$ alcanzable desde $i$ y que retorna a $i$. Para cada $k$, $d^{(k)}_{ii}$ es la mínima longitud de un camino $i\to i$ cuyos intermedios están en $\{1,\dots,k\}$. Al incorporar como intermedios todos los nodos del ciclo (lo que ocurre no más tarde que en $k=n$), podemos realizar $C$, por lo que $d^{(n)}_{ii}\le \ell(C)<0$.
 
-                ($\Leftarrow$) Supongamos $d^{(n)}_{ii}<0$. Entonces existe un camino $W$ de $i$ a $i$ con longitud total negativa y cuyos intermedios están en $\{1,\dots,n\}$ (esto es, un camino dirigido usual). Si $W$ fuera simple en vértices, sería un ciclo negativo y ya estaría demostrado. Si $W$ repite vértices, al descomponerlo en ciclos elementales obtenemos al menos un ciclo con suma de pesos negativa (pues la suma total es negativa), por lo que existe un ciclo negativo alcanzable. Para la afirmación adicional, si $d^{(n)}_{ij},d^{(n)}_{ji}<+\infty$, concatenando un camino $i\to j$, el ciclo negativo (arbitrariamente repetido) y un camino $j\to i$ obtenemos caminos $i\to j$ y $j\to i$ de costo arbitrariamente pequeño, lo que implica $d_\ell(i,j)=d_\ell(j,i)=-\infty$.
+                ($\Leftarrow$) Supongamos $d^{(n)}_{ii}<0$. Entonces existe un camino $W$ de $i$ a $i$ con longitud total negativa y cuyos intermedios están en $\{1,\dots,n\}$ (esto es, un camino dirigido usual). Si $W$ fuera simple en nodos, sería un ciclo negativo y ya estaría demostrado. Si $W$ repite nodos, al descomponerlo en ciclos elementales obtenemos al menos un ciclo con suma de pesos negativa (pues la suma total es negativa), por lo que existe un ciclo negativo alcanzable. Para la afirmación adicional, si $d^{(n)}_{ij},d^{(n)}_{ji}<+\infty$, concatenando un camino $i\to j$, el ciclo negativo (arbitrariamente repetido) y un camino $j\to i$ obtenemos caminos $i\to j$ y $j\to i$ de costo arbitrariamente pequeño, lo que implica $d_\ell(i,j)=d_\ell(j,i)=-\infty$.
             \end{proof}
 
             \paragraph{Reconstrucción de caminos.}
@@ -1446,7 +1446,7 @@
         \subsection{DBSCAN}
 
             \begin{definicion}[Espacio de trabajo]
-                Fijamos un conjunto finito de vértices $V$ y una función de distancia simétrica $d:V\times V\to[0,\infty)$ que satisface $d(u,u)=0$ y $d(u,v)=d(v,u)$; si $d$ no es métrica (p.\,ej.\ proviene de un dígrafo), trabajaremos con una simetrización $d^{\mathrm{sym}}(u,v):=\max\{d(u,v),d(v,u)\}$ o con la distancia sobre el subyacente no dirigido. Sea $N=|V|$.
+                Fijamos un conjunto finito de nodos $V$ y una función de distancia simétrica $d:V\times V\to[0,\infty)$ que satisface $d(u,u)=0$ y $d(u,v)=d(v,u)$; si $d$ no es métrica (p.\,ej.\ proviene de un dígrafo), trabajaremos con una simetrización $d^{\mathrm{sym}}(u,v):=\max\{d(u,v),d(v,u)\}$ o con la distancia sobre el subyacente no dirigido. Sea $N=|V|$.
             \end{definicion}
 
             \begin{definicion}[$\varepsilon$-vecindad y tipos de puntos]
