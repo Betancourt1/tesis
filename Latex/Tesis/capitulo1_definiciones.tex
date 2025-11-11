@@ -35,19 +35,19 @@
                 \centering
                 \begin{tikzpicture}
                     % nodes
-                    \node[draw, circle, inner sep=1pt] (1) at (0,1) {1};
-                    \node[draw, circle, inner sep=1pt] (2) at (0.5,0) {2};
-                    \node[draw, circle, inner sep=1pt] (3) at (1.5,2) {3};
-                    \node[draw, circle, inner sep=1pt] (4) at (2.5,0) {4};
-                    \node[draw, circle, inner sep=1pt] (5) at (2,1.5) {5};
-                    \node[draw, circle, inner sep=1pt] (6) at (3.5,1) {6};
-                    \node[draw, circle, inner sep=1pt] (7) at (4,1.8) {7};
+                    \node[nodo] (1) at (0,1) [label={[etiqueta_nodo]left:1}] {};
+                    \node[nodo] (2) at (0.5,0) [label={[etiqueta_nodo]below:2}] {};
+                    \node[nodo] (3) at (1.5,2) [label={[etiqueta_nodo]above:3}] {};
+                    \node[nodo] (4) at (2.5,0) [label={[etiqueta_nodo]below:4}] {};
+                    \node[nodo] (5) at (2,1.5) [label={[etiqueta_nodo]right:5}] {};
+                    \node[nodo] (6) at (3.5,1) [label={[etiqueta_nodo]right:6}] {};
+                    \node[nodo] (7) at (4,1.8) [label={[etiqueta_nodo]above:7}] {};
                     % edges
-                    \draw (1) -- (2);
-                    \draw (1) -- (5);
-                    \draw (2) -- (5);
-                    \draw (3) -- (4);
-                    \draw (5) to[bend left=20] (7);
+                    \draw[arista] (1) -- (2);
+                    \draw[arista] (1) -- (5);
+                    \draw[arista] (2) -- (5);
+                    \draw[arista] (3) -- (4);
+                    \draw[arista] (5) to[bend left=20] (7);
                 \end{tikzpicture}
                 \caption{Ejemplo de un grafo con $V=\{1, ..., 7\}$ y $E=\{\{1,2\}, \{1,5\}, \{2,5\}, \{3,4\}, \{5,7\}\}$.}
                 \label{fig:ejemplo-grafo}
@@ -66,14 +66,14 @@
             En el siguiente grafo, el nodo $A$ tiene dos aristas entrantes y una saliente, por lo que $deg^{-}(A) = 2$, $deg^{+}(A) = 1$ y $deg(A) = 3$.
 
             \begin{center}
-                \begin{tikzpicture}[scale=1.1, every node/.style={circle, draw, fill=white, inner sep=2.5pt}, >=stealth]
-                    \node (A) at (0,0) {A};
-                    \node (B) at (2,0) {B};
-                    \node (C) at (1,1.5) {C};
+                \begin{tikzpicture}[scale=1.1]
+                    \node[nodo] (A) at (0,0) [label={[etiqueta_nodo]left:A}] {};
+                    \node[nodo] (B) at (2,0) [label={[etiqueta_nodo]right:B}] {};
+                    \node[nodo] (C) at (1,1.5) [label={[etiqueta_nodo]above:C}] {};
 
-                    \draw[->, thick] (B) -- (A);
-                    \draw[->, thick] (C) -- (A);
-                    \draw[->, thick] (A) -- (B);
+                    \draw[flecha] (B) -- (A);
+                    \draw[flecha] (C) -- (A);
+                    \draw[flecha] (A) -- (B);
                 \end{tikzpicture}
             \end{center}
         \end{ejemplo}
@@ -92,19 +92,19 @@
             A continuación se muestra un ejemplo de grafo no dirigido:
 
             \begin{center}
-                \begin{tikzpicture}[scale=1, every node/.style={draw, circle, minimum size=1cm}]
-                    \node (A) at (0,0) {A};
-                    \node (B) at (2,0) {B};
-                    \node (C) at (1,1.5) {C};
-                    \node (D) at (3,1.5) {D};
-                    \node (E) at (4,0) {E};
+                \begin{tikzpicture}[scale=1]
+                    \node[nodo] (A) at (0,0) [label={[etiqueta_nodo]below:A}] {};
+                    \node[nodo] (B) at (2,0) [label={[etiqueta_nodo]below:B}] {};
+                    \node[nodo] (C) at (1,1.5) [label={[etiqueta_nodo]above:C}] {};
+                    \node[nodo] (D) at (3,1.5) [label={[etiqueta_nodo]above:D}] {};
+                    \node[nodo] (E) at (4,0) [label={[etiqueta_nodo]below:E}] {};
 
-                    \draw (A) -- (B);
-                    \draw (A) -- (C);
-                    \draw (B) -- (C);
-                    \draw (B) -- (D);
-                    \draw (B) -- (E);
-                    \draw (D) -- (E);
+                    \draw[arista] (A) -- (B);
+                    \draw[arista] (A) -- (C);
+                    \draw[arista] (B) -- (C);
+                    \draw[arista] (B) -- (D);
+                    \draw[arista] (B) -- (E);
+                    \draw[arista] (D) -- (E);
                 \end{tikzpicture}
             \end{center}
         \end{ejemplo}
@@ -117,15 +117,15 @@
             Ejemplo de grafo dirigido:
 
             \begin{center}
-                \begin{tikzpicture}[scale=1, every node/.style={draw, circle, minimum size=1cm}, >=stealth]
-                    \node (A) at (0,0) {A};
-                    \node (B) at (2,0) {B};
-                    \node (C) at (1,1.5) {C};
+                \begin{tikzpicture}[scale=1]
+                    \node[nodo] (A) at (0,0) [label={[etiqueta_nodo]below:A}] {};
+                    \node[nodo] (B) at (2,0) [label={[etiqueta_nodo]below:B}] {};
+                    \node[nodo] (C) at (1,1.5) [label={[etiqueta_nodo]above:C}] {};
 
-                    \draw[->, thick] (A) -- (B);
-                    \draw[->, thick] (B) -- (C);
-                    \draw[->, thick] (C) -- (A);
-                    \draw[->, thick] (A) -- (C);
+                    \draw[flecha] (A) -- (B);
+                    \draw[flecha] (B) -- (C);
+                    \draw[flecha] (C) -- (A);
+                    \draw[flecha] (A) -- (C);
                 \end{tikzpicture}
             \end{center}
         \end{ejemplo}
@@ -163,16 +163,16 @@
             Ejemplo de grafo ponderado:
 
             \begin{center}
-                \begin{tikzpicture}[scale=1, vertex/.style={draw, circle, minimum size=1cm}, >=stealth]
+                \begin{tikzpicture}[scale=1]
                     % Definición de nodos
-                    \node[vertex] (A) at (0,0) {A};
-                    \node[vertex] (B) at (2,0) {B};
-                    \node[vertex] (C) at (1,1.5) {C};
+                    \node[nodo] (A) at (0,0) [label={[etiqueta_nodo]below:A}] {};
+                    \node[nodo] (B) at (2,0) [label={[etiqueta_nodo]below:B}] {};
+                    \node[nodo] (C) at (1,1.5) [label={[etiqueta_nodo]above:C}] {};
 
                     % Aristas con etiquetas
-                    \draw[->, thick] (A) -- node[above, draw=none, fill=none] {69} (B);
-                    \draw[->, thick] (B) -- node[above right, draw=none, fill=none] {420} (C);
-                    \draw[->, thick] (C) -- node[above left, draw=none, fill=none] {11} (A);
+                    \draw[flecha] (A) -- node[etiqueta_peso, above] {69} (B);
+                    \draw[flecha] (B) -- node[etiqueta_peso, above right] {420} (C);
+                    \draw[flecha] (C) -- node[etiqueta_peso, above left] {11} (A);
                 \end{tikzpicture}
             \end{center}
         \end{ejemplo}
@@ -206,13 +206,13 @@
             Consideremos el siguiente grafo dirigido $G = (V, E)$ con $V = \{A, B, C\}$ y $E = \{(A,B), (B,C), (C,A)\}$:
 
             \begin{center}
-                \begin{tikzpicture}[scale=1, every node/.style={circle, draw, fill=white, inner sep=2pt}, >=stealth]
-                    \node (A) at (0,0) {A};
-                    \node (B) at (2,0) {B};
-                    \node (C) at (1,1.5) {C};
-                    \draw[->, thick] (A) -- (B);
-                    \draw[->, thick] (B) -- (C);
-                    \draw[->, thick] (C) -- (A);
+                \begin{tikzpicture}[scale=1]
+                    \node[nodo] (A) at (0,0) [label={[etiqueta_nodo]left:A}] {};
+                    \node[nodo] (B) at (2,0) [label={[etiqueta_nodo]right:B}] {};
+                    \node[nodo] (C) at (1,1.5) [label={[etiqueta_nodo]above:C}] {};
+                    \draw[flecha] (A) -- (B);
+                    \draw[flecha] (B) -- (C);
+                    \draw[flecha] (C) -- (A);
                 \end{tikzpicture}
             \end{center}
 
@@ -261,29 +261,29 @@
             Sea $G$ el siguiente grafo dirigido:
 
             \begin{center}
-                \begin{tikzpicture}[scale=1, every node/.style={circle, draw, fill=white, inner sep=2pt}, >=stealth]
-                    \node (A) at (0,0) {A};
-                    \node (B) at (2,0) {B};
-                    \node (C) at (1,1.5) {C};
-                    \node (D) at (1,-1.5) {D};
-                    \draw[->, thick] (A) -- (B);
-                    \draw[->, thick] (B) -- (C);
-                    \draw[->, thick] (C) -- (A);
-                    \draw[->, thick] (A) -- (D);
-                    \draw[->, thick] (D) -- (B);
+                \begin{tikzpicture}[scale=1]
+                    \node[nodo] (A) at (0,0) [label={[etiqueta_nodo]left:A}] {};
+                    \node[nodo] (B) at (2,0) [label={[etiqueta_nodo]right:B}] {};
+                    \node[nodo] (C) at (1,1.5) [label={[etiqueta_nodo]above:C}] {};
+                    \node[nodo] (D) at (1,-1.5) [label={[etiqueta_nodo]below:D}] {};
+                    \draw[flecha] (A) -- (B);
+                    \draw[flecha] (B) -- (C);
+                    \draw[flecha] (C) -- (A);
+                    \draw[flecha] (A) -- (D);
+                    \draw[flecha] (D) -- (B);
                 \end{tikzpicture}
             \end{center}
 
             Consideremos el subgrafo $H$ formado por los nodos $A$, $B$ y $C$ y las aristas $(A,B)$, $(B,C)$ y $(C,A)$:
 
             \begin{center}
-                \begin{tikzpicture}[scale=1, every node/.style={circle, draw=black, fill=white, inner sep=2pt}, >=stealth]
-                    \node (A) at (0,0) {A};
-                    \node (B) at (2,0) {B};
-                    \node (C) at (1,1.5) {C};
-                    \draw[->, very thick, blue] (A) -- (B);
-                    \draw[->, very thick, blue] (B) -- (C);
-                    \draw[->, very thick, blue] (C) -- (A);
+                \begin{tikzpicture}[scale=1]
+                    \node[nodo] (A) at (0,0) [label={[etiqueta_nodo]left:A}] {};
+                    \node[nodo] (B) at (2,0) [label={[etiqueta_nodo]right:B}] {};
+                    \node[nodo] (C) at (1,1.5) [label={[etiqueta_nodo]above:C}] {};
+                    \draw[flecha_resaltada] (A) -- (B);
+                    \draw[flecha_resaltada] (B) -- (C);
+                    \draw[flecha_resaltada] (C) -- (A);
                 \end{tikzpicture}
             \end{center}
 
@@ -309,67 +309,65 @@
                 A la derecha, se muestra $P$ como subgrafo.
 
                 \begin{center}
-                    \begin{tikzpicture}[scale=1.2, every node/.style={fill=white, circle, draw, inner sep=2.5pt},
-                        edge/.style={thick, black!40, ->, >=stealth},
-                        highlight/.style={very thick, blue, ->, >=stealth}]
+                    \begin{tikzpicture}[scale=1.2]
                         % Grafo G
                         \begin{scope}
                             % Nodos
-                            \node (a) at (0,2) {};
-                            \node (b) at (1,2.7) {};
-                            \node (c) at (2,2) {};
-                            \node (d) at (0,1) {};
-                            \node (e) at (1,1.8) {};
-                            \node (f) at (2,1) {};
-                            \node (g) at (1,0.3) {};
+                            \node[nodo] (a) at (0,2) {};
+                            \node[nodo] (b) at (1,2.7) {};
+                            \node[nodo] (c) at (2,2) {};
+                            \node[nodo] (d) at (0,1) {};
+                            \node[nodo] (e) at (1,1.8) {};
+                            \node[nodo] (f) at (2,1) {};
+                            \node[nodo] (g) at (1,0.3) {};
 
-                            % Aristas grises
-                            \draw[edge] (a) -- (b);
-                            \draw[edge] (b) -- (c);
-                            \draw[edge] (a) -- (c);
-                            \draw[edge] (c) -- (e);
-                            \draw[edge] (e) -- (f);
-                            \draw[edge] (a) -- (d);
-                            \draw[edge] (d) -- (g);
-                            \draw[edge] (g) -- (f);
+                            % Aristas tenues
+                            \draw[flecha_tenue] (a) -- (b);
+                            \draw[flecha_tenue] (b) -- (c);
+                            \draw[flecha_tenue] (a) -- (c);
+                            \draw[flecha_tenue] (c) -- (e);
+                            \draw[flecha_tenue] (e) -- (f);
+                            \draw[flecha_tenue] (a) -- (d);
+                            \draw[flecha_tenue] (d) -- (g);
+                            \draw[flecha_tenue] (g) -- (f);
 
                             % Camino dirigido resaltado (a -> c -> e -> f)
-                            \draw[highlight] (a) -- (c);
-                            \draw[highlight] (c) -- (e);
-                            \draw[highlight] (e) -- (f);
+                            \draw[flecha_resaltada] (a) -- (c);
+                            \draw[flecha_resaltada] (c) -- (e);
+                            \draw[flecha_resaltada] (e) -- (f);
 
                             % Nombres de los nodos
-                            \node[draw=none,fill=none, left] at (a) {$v_1$};
-                            \node[draw=none,fill=none, above] at (b) {$v_2$};
-                            \node[draw=none,fill=none, right] at (c) {$v_6$};
-                            \node[draw=none,fill=none, left] at (d) {$v_4$};
-                            \node[draw=none,fill=none, above right] at (e) {$v_3$};
-                            \node[draw=none,fill=none, right] at (f) {$v_5$};
-                            \node[draw=none,fill=none, below] at (g) {$v_7$};
+                            \node[etiqueta, left] at (a) {$v_1$};
+                            \node[etiqueta, above] at (b) {$v_2$};
+                            \node[etiqueta, right] at (c) {$v_6$};
+                            \node[etiqueta, left] at (d) {$v_4$};
+                            \node[etiqueta, above right] at (e) {$v_3$};
+                            \node[etiqueta, right] at (f) {$v_5$};
+                            \node[etiqueta, below] at (g) {$v_7$};
 
                             % G label
-                            \node[draw=none, fill=none] at (1,-0.3) {$G$};
+                            \node[etiqueta] at (1,-0.3) {$G$};
                         \end{scope}
 
                         % Subgrafo (camino) a la derecha
                         \begin{scope}[xshift=5cm]
-                            \node (a) at (0,2) {};
-                            \node (c) at (2,2) {};
-                            \node (e) at (1,1.8) {};
-                            \node (f) at (2,1) {};
+                            \node[nodo] (a) at (0,2) {};
+                            \node[nodo] (c) at (2,2) {};
+                            \node[nodo] (e) at (1,1.8) {};
+                            \node[nodo] (f) at (2,1) {};
 
-                            \draw[highlight] (a) -- (c);
-                            \draw[highlight] (c) -- (e);
-                            \draw[highlight] (e) -- (f);
+                            \draw[flecha_resaltada] (a) -- (c);
+                            \draw[flecha_resaltada] (c) -- (e);
+                            \draw[flecha_resaltada] (e) -- (f);
 
                             % Nombres de los nodos
-                            \node[draw=none,fill=none, left] at (a) {$v_1$};
-                            \node[draw=none,fill=none, right] at (c) {$v_6$};
-                            \node[draw=none,fill=none, above right] at (e) {$v_3$};
-                            \node[draw=none,fill=none, right] at (f) {$v_5$};
+                            \node[etiqueta, left] at (a) {$v_1$};
+                            \node[etiqueta, right] at (c) {$v_6$};
+                            \node[etiqueta, above right] at (e) {$v_3$};
+                            \node[etiqueta, right] at (f) {$v_5$};
 
                             % P label
-                            \node[draw=none, fill=none] at (1,-0.3) {$P$};
+                            \node[etiqueta] at (1,-0.3) {$P$};
                         \end{scope}
                     \end{tikzpicture}
                 \end{center}
@@ -394,41 +392,39 @@
                 Sea $G$ el siguiente grafo:
 
                 \begin{center}
-                    \begin{tikzpicture}[scale=1.2, every node/.style={circle, draw, fill=white, inner sep=2.5pt},
-                        edge/.style={thick, black!40, ->, >=stealth},
-                        highlight/.style={very thick, blue, ->, >=stealth}]
+                    \begin{tikzpicture}[scale=1.2]
                         % Grafo G (con otras conexiones grises)
-                        \node (a) at (0,2) {};
-                        \node (b) at (2,2) {};
-                        \node (c) at (2,0) {};
-                        \node (d) at (0,0) {};
-                        \node (e) at (1,1) {};
-                        \node (f) at (1,2.7) {};
+                        \node[nodo] (a) at (0,2) {};
+                        \node[nodo] (b) at (2,2) {};
+                        \node[nodo] (c) at (2,0) {};
+                        \node[nodo] (d) at (0,0) {};
+                        \node[nodo] (e) at (1,1) {};
+                        \node[nodo] (f) at (1,2.7) {};
 
-                        \draw[edge] (a) -- (b);
-                        \draw[edge] (b) -- (c);
-                        \draw[edge] (c) -- (d);
-                        \draw[edge] (d) -- (a);
-                        \draw[edge] (a) -- (e);
-                        \draw[edge] (e) -- (c);
-                        \draw[edge] (b) -- (f);
-                        \draw[edge] (f) -- (a);
+                        \draw[flecha_tenue] (a) -- (b);
+                        \draw[flecha_tenue] (b) -- (c);
+                        \draw[flecha_tenue] (c) -- (d);
+                        \draw[flecha_tenue] (d) -- (a);
+                        \draw[flecha_tenue] (a) -- (e);
+                        \draw[flecha_tenue] (e) -- (c);
+                        \draw[flecha_tenue] (b) -- (f);
+                        \draw[flecha_tenue] (f) -- (a);
 
                         % Ciclo resaltado: a -> b -> c -> d -> a
-                        \draw[highlight] (a) -- (b);
-                        \draw[highlight] (b) -- (c);
-                        \draw[highlight] (c) -- (d);
-                        \draw[highlight] (d) -- (a);
+                        \draw[flecha_resaltada] (a) -- (b);
+                        \draw[flecha_resaltada] (b) -- (c);
+                        \draw[flecha_resaltada] (c) -- (d);
+                        \draw[flecha_resaltada] (d) -- (a);
 
                         % Nombres de los nodos
-                        \node[draw=none,fill=none, left] at (a) {$v_1$};
-                        \node[draw=none,fill=none, above right] at (b) {$v_2$};
-                        \node[draw=none,fill=none, right] at (c) {$v_3$};
-                        \node[draw=none,fill=none, below left] at (d) {$v_4$};
-                        \node[draw=none,fill=none, right] at (e) {$v_5$};
-                        \node[draw=none,fill=none, above] at (f) {$v_6$};
+                        \node[etiqueta, left] at (a) {$v_1$};
+                        \node[etiqueta, above right] at (b) {$v_2$};
+                        \node[etiqueta, right] at (c) {$v_3$};
+                        \node[etiqueta, below left] at (d) {$v_4$};
+                        \node[etiqueta, right] at (e) {$v_5$};
+                        \node[etiqueta, above] at (f) {$v_6$};
 
-                        \node[draw=none, fill=none] at (1,-0.6) {$G$};
+                        \node[etiqueta] at (1,-0.6) {$G$};
                     \end{tikzpicture}
                 \end{center}
 
@@ -512,23 +508,21 @@
                 El siguiente grafo muestra un árbol con raíz en $v_1$:
 
                 \begin{center}
-                \begin{tikzpicture}[scale=1.3, every node/.style={circle, draw, fill=white, inner sep=2.5pt},
-                    edge/.style={thick, ->, >=stealth},
-                    level distance=1.1cm, sibling distance=1.5cm]
+                \begin{tikzpicture}[scale=1.3]
                     % Nodos
-                    \node (v1) at (0,0) {$v_1$};
-                    \node (v2) at (-1,-1) {$v_2$};
-                    \node (v3) at (1,-1) {$v_3$};
-                    \node (v4) at (-1.5,-2) {$v_4$};
-                    \node (v5) at (-0.5,-2) {$v_5$};
-                    \node (v6) at (1,-2) {$v_6$};
+                    \node[nodo] (v1) at (0,0) [label={[etiqueta_nodo]above:$v_1$}] {};
+                    \node[nodo] (v2) at (-1,-1) [label={[etiqueta_nodo]left:$v_2$}] {};
+                    \node[nodo] (v3) at (1,-1) [label={[etiqueta_nodo]right:$v_3$}] {};
+                    \node[nodo] (v4) at (-1.5,-2) [label={[etiqueta_nodo]left:$v_4$}] {};
+                    \node[nodo] (v5) at (-0.5,-2) [label={[etiqueta_nodo]right:$v_5$}] {};
+                    \node[nodo] (v6) at (1,-2) [label={[etiqueta_nodo]right:$v_6$}] {};
 
                     % Aristas dirigidas
-                    \draw[edge] (v1) -- (v2);
-                    \draw[edge] (v1) -- (v3);
-                    \draw[edge] (v2) -- (v4);
-                    \draw[edge] (v2) -- (v5);
-                    \draw[edge] (v3) -- (v6);
+                    \draw[flecha] (v1) -- (v2);
+                    \draw[flecha] (v1) -- (v3);
+                    \draw[flecha] (v2) -- (v4);
+                    \draw[flecha] (v2) -- (v5);
+                    \draw[flecha] (v3) -- (v6);
                 \end{tikzpicture}
                 \end{center}
 
@@ -628,49 +622,52 @@
                 \begin{center}
                     \begin{tabular}{cc}
                     % Nodo de articulación
-                    \begin{tikzpicture}[scale=1.1, every node/.style={circle, draw, fill=white, inner sep=2pt}, articulation/.style={red,fill=red}, edge/.style={thick}]
+                    \begin{tikzpicture}[scale=1.1]
                         % Grafo tipo "Y" con nodo central crítico
-                        \node (A) at (0,1) {A};
-                        \node (B) at (2,1) {B};
-                        \node (C) at (1,0) {C};
-                        \node[articulation] (D) at (1,2) {D};
-                        \draw[edge] (A) -- (D);
-                        \draw[edge] (B) -- (D);
-                        \draw[edge] (C) -- (D);
+                        \node[nodo] (A) at (0,1) [label={[etiqueta_nodo]left:A}] {};
+                        \node[nodo] (B) at (2,1) [label={[etiqueta_nodo]right:B}] {};
+                        \node[nodo] (C) at (1,0) [label={[etiqueta_nodo]below:C}] {};
+                        \node[nodo_resaltado] (D) at (1,2) [label={[etiqueta_nodo]above:D}] {};
+                        \draw[arista] (A) -- (D);
+                        \draw[arista] (B) -- (D);
+                        \draw[arista] (C) -- (D);
                     \end{tikzpicture}
                     &
                     % Istmo/arista de corte
-                    \begin{tikzpicture}[scale=1.1, every node/.style={circle, draw, fill=white, inner sep=2pt}, istmo/.style={blue,very thick}, edge/.style={thick}]
+                    \begin{tikzpicture}[scale=1.1]
                         % Grafo tipo "cadena" con arista central crítica
-                        \node (A) at (0,1) {A};
-                        \node (B) at (1,1) {B};
-                        \node (C) at (2,1) {C};
-                        \node (D) at (3,1) {D};
-                        \draw[edge] (A) -- (B);
-                        \draw[istmo] (B) -- (C);
-                        \draw[edge] (C) -- (D);
+                        \node[nodo] (A) at (0,1) [label={[etiqueta_nodo]left:A}] {};
+                        \node[nodo] (B) at (1,1) [label={[etiqueta_nodo]above:B}] {};
+                        \node[nodo] (C) at (2,1) [label={[etiqueta_nodo]above:C}] {};
+                        \node[nodo] (D) at (3,1) [label={[etiqueta_nodo]right:D}] {};
+                        \draw[arista] (A) -- (B);
+                        \draw[arista_resaltada] (B) -- (C);
+                        \draw[arista] (C) -- (D);
                     \end{tikzpicture}
                     \\
                     \textit{Nodo de articulación (D)} &
                     \textit{Istmo (arista $BC$)} \\
                     % Red tras eliminar el nodo de articulación
-                    \begin{tikzpicture}[scale=1.1, every node/.style={circle, draw=gray!60, fill=gray!10, inner sep=2pt}, edge/.style={thick,gray!60}]
-                        \node (A) at (0,1) {A};
-                        \node (B) at (2,1) {B};
-                        \node (C) at (1,0) {C};
+                    \begin{tikzpicture}[scale=1.1]
+                        \node[nodo] (A) at (0,1) {};
+                        \node[nodo] (B) at (2,1) {};
+                        \node[nodo] (C) at (1,0) {};
                         % Nodo D eliminado
                         % Componentes desconectadas
+                        \draw[arista_tenue] (A) -- (0.5,1.5); % Representación de aristas que iban a D
+                        \draw[arista_tenue] (B) -- (1.5,1.5);
+                        \draw[arista_tenue] (C) -- (1,1);
                     \end{tikzpicture}
                     &
                     % Red tras eliminar el istmo
-                    \begin{tikzpicture}[scale=1.1, every node/.style={circle, draw=gray!60, fill=gray!10, inner sep=2pt}, edge/.style={thick,gray!60}]
-                        \node (A) at (0,1) {A};
-                        \node (B) at (1,1) {B};
-                        \node (C) at (2,1) {C};
-                        \node (D) at (3,1) {D};
-                        \draw[edge] (A) -- (B);
+                    \begin{tikzpicture}[scale=1.1]
+                        \node[nodo] (A) at (0,1) {};
+                        \node[nodo] (B) at (1,1) {};
+                        \node[nodo] (C) at (2,1) {};
+                        \node[nodo] (D) at (3,1) {};
+                        \draw[arista_tenue] (A) -- (B);
                         % Istmo eliminado
-                        \draw[edge] (C) -- (D);
+                        \draw[arista_tenue] (C) -- (D);
                     \end{tikzpicture}
                     \\
                     \textit{Red tras eliminar el nodo de articulación} &
@@ -945,39 +942,36 @@
                 Consideremos el siguiente dígrafo y calculemos $C_c(C)$.
 
                 \begin{center}
-                    \begin{tikzpicture}[scale=1.1,
-                        every node/.style={circle, draw, fill=white, inner sep=2pt, font=\small},
-                        >=stealth, arc/.style={->, thick}, sp/.style={->, very thick, blue}
-                    ]
+                    \begin{tikzpicture}[scale=1.1]
                         % Nodos
-                        \node (A) at (0,1) {A};
-                        \node (B) at (2,2) {B};
-                        \node (C) at (4,1) {C};
-                        \node (D) at (2,0) {D};
-                        \node (E) at (0,-0.2) {E};
+                        \node[nodo] (A) at (0,1) [label={[etiqueta_nodo]left:A}] {};
+                        \node[nodo] (B) at (2,2) [label={[etiqueta_nodo]above:B}] {};
+                        \node[nodo_resaltado] (C) at (4,1) [label={[etiqueta_nodo]right:C}] {};
+                        \node[nodo] (D) at (2,0) [label={[etiqueta_nodo]below:D}] {};
+                        \node[nodo] (E) at (0,-0.2) [label={[etiqueta_nodo]left:E}] {};
 
                         % Arcos (red completa)
-                        \draw[arc] (A) -- (B);
-                        \draw[arc] (A) -- (C);
-                        \draw[arc] (B) -- (C);
-                        \draw[arc] (B) -- (D);
-                        \draw[arc] (D) -- (C);
-                        \draw[arc] (E) -- (B);
-                        \draw[arc] (E) -- (D);
+                        \draw[flecha] (A) -- (B);
+                        \draw[flecha] (A) -- (C);
+                        \draw[flecha] (B) -- (C);
+                        \draw[flecha] (B) -- (D);
+                        \draw[flecha] (D) -- (C);
+                        \draw[flecha] (E) -- (B);
+                        \draw[flecha] (E) -- (D);
 
                         % Resaltado de geodésicas hacia C
-                        \draw[sp] (A) -- (C);      % d(A,C)=1
-                        \draw[sp] (B) -- (C);      % d(B,C)=1
-                        \draw[sp] (D) -- (C);      % d(D,C)=1
-                        \draw[sp] (E) -- (B);      % parte del camino E->B->C
-                        \draw[sp] (B) -- (C);      % completa E->C con longitud 2
+                        \draw[flecha_resaltada] (A) -- (C);      % d(A,C)=1
+                        \draw[flecha_resaltada] (B) -- (C);      % d(B,C)=1
+                        \draw[flecha_resaltada] (D) -- (C);      % d(D,C)=1
+                        \draw[flecha_resaltada] (E) -- (B);      % parte del camino E->B->C
+                        \draw[flecha_resaltada] (B) -- (C);      % completa E->C con longitud 2
 
                         % Etiquetas de distancia hacia C
-                        \node[draw=none, fill=none, right]  at (C) {$v=C$};
-                        \node[draw=none, fill=none, above left]  at (A) {$d(A,C)=1$};
-                        \node[draw=none, fill=none, above]       at (B) {$d(B,C)=1$};
-                        \node[draw=none, fill=none, below]       at (D) {$d(D,C)=1$};
-                        \node[draw=none, fill=none, left]        at (E) {$d(E,C)=2$};
+                        \node[etiqueta, right]  at (C) {$v=C$};
+                        \node[etiqueta, above left]  at (A) {$d(A,C)=1$};
+                        \node[etiqueta, above]       at (B) {$d(B,C)=1$};
+                        \node[etiqueta, below]       at (D) {$d(D,C)=1$};
+                        \node[etiqueta, left]        at (E) {$d(E,C)=2$};
                     \end{tikzpicture}
                 \end{center}
 
@@ -1004,41 +998,34 @@
                 Consideremos el siguiente dígrafo y calculemos $C_b(B)$.
 
                 \begin{center}
-                    \begin{tikzpicture}[scale=1.05,
-                        every node/.style={circle, draw, fill=white, inner sep=2pt, font=\small},
-                        >=stealth,
-                        arc/.style={->, thick},
-                        geod/.style={->, very thick, blue},
-                        altgeod/.style={->, very thick, dashed, blue}
-                    ]
+                    \begin{tikzpicture}[scale=1.05]
                         % Nodos
-                        \node (A) at (0,0.8) {A};
-                        \node (D) at (0,2.0) {D};
-                        \node (E) at (0,-0.6) {E};
-                        \node (B) at (2,0.8) {B};
-                        \node (C) at (4,0.8) {C};
+                        \node[nodo] (A) at (0,0.8) [label={[etiqueta_nodo]left:A}] {};
+                        \node[nodo] (D) at (0,2.0) [label={[etiqueta_nodo]left:D}] {};
+                        \node[nodo] (E) at (0,-0.6) [label={[etiqueta_nodo]left:E}] {};
+                        \node[nodo_resaltado] (B) at (2,0.8) [label={[etiqueta_nodo]above:B}] {};
+                        \node[nodo] (C) at (4,0.8) [label={[etiqueta_nodo]right:C}] {};
 
                         % Arcos de la red
-                        \draw[arc] (A) -- (B);
-                        \draw[arc] (D) -- (B);
-                        \draw[arc] (E) -- (B);
-                        \draw[arc] (B) -- (C);
-                        \draw[arc] (A) -- (D);
-                        \draw[arc] (D) -- (C);
+                        \draw[flecha] (A) -- (B);
+                        \draw[flecha] (D) -- (B);
+                        \draw[flecha] (E) -- (B);
+                        \draw[flecha] (B) -- (C);
+                        \draw[flecha] (A) -- (D);
+                        \draw[flecha] (D) -- (C);
 
                         % Geodésicas hacia C que pasan por B
-                        \draw[geod] (A) -- (B);
-                        \draw[geod] (B) -- (C);
-                        \draw[geod] (E) -- (B);
-                        \draw[geod] (B) -- (C);
+                        \draw[flecha_resaltada] (A) -- (B);
+                        \draw[flecha_resaltada] (B) -- (C);
+                        \draw[flecha_resaltada] (E) -- (B);
+                        \draw[flecha_resaltada] (B) -- (C);
 
                         % Geodésica alternativa A->D->C (misma longitud que A->B->C)
-                        \draw[altgeod] (A) -- (D);
-                        \draw[altgeod] (D) -- (C);
+                        \draw[flecha_alternativa] (A) -- (D);
+                        \draw[flecha_alternativa] (D) -- (C);
 
                         % Etiquetas
-                        \node[draw=none, fill=none, above right] at (B) {$v=B$};
-                        \node[draw=none, fill=none, below] at (2, -0.4) {%
+                        \node[etiqueta, below] at (2, -0.4) {%
                             \begin{minipage}{8cm}\centering
                             Geodésicas hacia $C$: \\
                             $A\to C$: $A\!\to\!B\!\to\!C$ y $A\!\to\!D\!\to\!C$ (longitud $2$). \quad
@@ -1075,37 +1062,32 @@
                 Consideremos el siguiente dígrafo y calculemos $e(C)=\max_{u\in V} d(u,C)$.
 
                 \begin{center}
-                    \begin{tikzpicture}[scale=1.1,
-                        every node/.style={circle, draw, fill=white, inner sep=2pt, font=\small},
-                        >=stealth,
-                        arc/.style={->, thick},
-                        sp/.style={->, very thick, blue}
-                    ]
+                    \begin{tikzpicture}[scale=1.1]
                         % Nodos
-                        \node (A) at (0,1.2) {A};
-                        \node (B) at (2,1.2) {B};
-                        \node (C) at (4,1.2) {C};
-                        \node (D) at (0,-0.2) {D};
-                        \node (E) at (2,-0.2) {E};
+                        \node[nodo] (A) at (0,1.2) [label={[etiqueta_nodo]left:A}] {};
+                        \node[nodo] (B) at (2,1.2) [label={[etiqueta_nodo]above:B}] {};
+                        \node[nodo_resaltado] (C) at (4,1.2) [label={[etiqueta_nodo]right:C}] {};
+                        \node[nodo] (D) at (0,-0.2) [label={[etiqueta_nodo]left:D}] {};
+                        \node[nodo] (E) at (2,-0.2) [label={[etiqueta_nodo]below:E}] {};
 
                         % Arcos de la red
-                        \draw[arc] (A) -- (B);
-                        \draw[arc] (B) -- (C);
-                        \draw[arc] (D) -- (A);
-                        \draw[arc] (E) -- (B);
+                        \draw[flecha] (A) -- (B);
+                        \draw[flecha] (B) -- (C);
+                        \draw[flecha] (D) -- (A);
+                        \draw[flecha] (E) -- (B);
 
                         % Geodésicas hacia C (para visualizar d(u,C))
-                        \draw[sp] (A) -- (B); \draw[sp] (B) -- (C);        % A->C (2)
-                        \draw[sp] (B) -- (C);                               % B->C (1)
-                        \draw[sp] (D) -- (A); \draw[sp] (A) -- (B); \draw[sp] (B) -- (C); % D->C (3)
-                        \draw[sp] (E) -- (B); \draw[sp] (B) -- (C);         % E->C (2)
+                        \draw[flecha_resaltada] (A) -- (B); \draw[flecha_resaltada] (B) -- (C);        % A->C (2)
+                        \draw[flecha_resaltada] (B) -- (C);                               % B->C (1)
+                        \draw[flecha_resaltada] (D) -- (A); \draw[flecha_resaltada] (A) -- (B); \draw[flecha_resaltada] (B) -- (C); % D->C (3)
+                        \draw[flecha_resaltada] (E) -- (B); \draw[flecha_resaltada] (B) -- (C);         % E->C (2)
 
                         % Etiquetas
-                        \node[draw=none, fill=none, right]  at (C) {$v=C$};
-                        \node[draw=none, fill=none, above]  at (A) {$d(A,C)=2$};
-                        \node[draw=none, fill=none, above]  at (B) {$d(B,C)=1$};
-                        \node[draw=none, fill=none, left]   at (D) {$d(D,C)=3$};
-                        \node[draw=none, fill=none, below]  at (E) {$d(E,C)=2$};
+                        \node[etiqueta, right]  at (C) {$v=C$};
+                        \node[etiqueta, above]  at (A) {$d(A,C)=2$};
+                        \node[etiqueta, above]  at (B) {$d(B,C)=1$};
+                        \node[etiqueta, left]   at (D) {$d(D,C)=3$};
+                        \node[etiqueta, below]  at (E) {$d(E,C)=2$};
                     \end{tikzpicture}
                 \end{center}
 
@@ -1291,22 +1273,20 @@
                 Tomamos $s=A$. Dibujamos el grafo:
 
                 \begin{center}
-                    \begin{tikzpicture}[scale=1.0, >=stealth,
-                        v/.style={circle,draw,fill=white,inner sep=2pt,font=\small},
-                        a/.style={->,thick}, lab/.style={midway,sloped,fill=white,inner sep=1pt}]
-                        \node[v] (A) at (0,1) {A};
-                        \node[v] (B) at (2,2) {B};
-                        \node[v] (C) at (2,0) {C};
-                        \node[v] (D) at (4,1) {D};
-                        \node[v] (E) at (6,1) {E};
+                    \begin{tikzpicture}[scale=1.0]
+                        \node[nodo] (A) at (0,1) [label={[etiqueta_nodo]left:A}] {};
+                        \node[nodo] (B) at (2,2) [label={[etiqueta_nodo]above:B}] {};
+                        \node[nodo] (C) at (2,0) [label={[etiqueta_nodo]below:C}] {};
+                        \node[nodo] (D) at (4,1) [label={[etiqueta_nodo]above:D}] {};
+                        \node[nodo] (E) at (6,1) [label={[etiqueta_nodo]right:E}] {};
 
-                        \draw[a] (A)--(B) node[lab,above]{2};
-                        \draw[a] (A)--(C) node[lab,below]{5};
-                        \draw[a] (B)--(C) node[lab,right]{1};
-                        \draw[a] (B)--(D) node[lab,above]{2};
-                        \draw[a] (C)--(D) node[lab,below]{3};
-                        \draw[a] (D)--(E) node[lab,above]{1};
-                        \draw[a] (C)--(E) node[lab,below]{5};
+                        \draw[flecha] (A)--(B) node[etiqueta_peso,above]{2};
+                        \draw[flecha] (A)--(C) node[etiqueta_peso,below]{5};
+                        \draw[flecha] (B)--(C) node[etiqueta_peso,right]{1};
+                        \draw[flecha] (B)--(D) node[etiqueta_peso,above]{2};
+                        \draw[flecha] (C)--(D) node[etiqueta_peso,below]{3};
+                        \draw[flecha] (D)--(E) node[etiqueta_peso,above]{1};
+                        \draw[flecha] (C)--(E) node[etiqueta_peso,below]{5};
                     \end{tikzpicture}
                 \end{center}
 

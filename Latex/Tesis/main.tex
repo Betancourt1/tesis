@@ -17,6 +17,77 @@
 \usepackage{graphicx}
 \usepackage{colortbl} 
 \usepackage{tikz}
+\usetikzlibrary{arrows.meta} % Para la punta de flecha 'Stealth'
+
+\tikzset{
+  % --- ESTILOS PARA NODOS ---
+  % Nodo base: un punto negro. El tamaño se controla con 'inner sep'.
+  nodo/.style = {
+    circle,
+    fill=black,
+    inner sep=1.5pt
+  },
+  % Nodo resaltado: es un nodo normal con un borde grueso y gris que actúa como halo.
+  nodo_resaltado/.style = {
+    nodo,
+    draw=gray!40,
+    line width=4pt
+  },
+  % Estilo para las etiquetas de los nodos (que van por fuera).
+  etiqueta_nodo/.style = {
+    font=\small,
+    text=black
+  },
+
+  % --- ESTILOS PARA ARISTAS ---
+  % Arista base: línea negra y gruesa.
+  arista/.style = {
+    thick,
+    black
+  },
+  % Flecha: hereda de 'arista' y añade una punta.
+  flecha/.style = {
+    arista,
+    ->,
+    >=Stealth
+  },
+  % Arista resaltada: usa 'preaction' para dibujar una línea gris más ancha por debajo.
+  arista_resaltada/.style = {
+    arista,
+    preaction={
+        draw=gray!40,
+        line width=4pt,
+        - % El guion asegura que la preaction es una línea simple
+    }
+  },
+  % Flecha resaltada: igual que la arista, pero el halo también es una flecha.
+  flecha_resaltada/.style = {
+    flecha,
+    preaction={
+        draw=gray!40,
+        line width=4pt,
+        ->, >=Stealth
+    }
+  },
+  % Arista/Flecha tenue: para elementos de fondo.
+  arista_tenue/.style = {
+    arista,
+    draw=gray!50
+  },
+  flecha_tenue/.style = {
+    flecha,
+    draw=gray!50
+  },
+
+  % --- ESTILO PARA ETIQUETAS DE PESO ---
+  etiqueta_peso/.style = {
+    midway,
+    sloped,
+    fill=white,
+    inner sep=1.5pt,
+    font=\small
+  }
+}
 \usepackage{subcaption}
 \usepackage{amsfonts}
 \setlength{\parindent}{.5 cm}   %Activar sangrias
