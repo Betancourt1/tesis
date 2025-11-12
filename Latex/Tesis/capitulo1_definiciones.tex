@@ -1,0 +1,1529 @@
+\chapter{Teoría de grafos}
+    Antes de comenzar con el estudio de las redes de transporte público, y con el fin de partir desde bases bien fundamentadas, vamos a introducir una serie de definiciones en torno a la teoría de grafos. En este caso nos importa fundamentar adecuadamente qué es un \textit{camino} en el contexto de esta teoría, lo que nos ayudará a tener un formalismo de lo que es una ruta de transporte público. Asimismo, nos interesa explorar cómo la noción de camino nos ayuda a entender la estructura de una red. Para esto también estudiaremos el concepto de \textit{centralidad}, que nos ayudará a evaluar la importancia que tiene un determinado nodo en el contexto del resto del grafo. Finalmente, gracias a lo anterior, estudiaremos distintos algoritmos para lograr encontrar caminos óptimos entre cualesquiera dos nodos.
+
+    Los problemas de movilidad urbana requieren modelos que abstraigan la complejidad de la ciudad sin perder los elementos esenciales de conectividad. La \emph{teoría de grafos} provee justamente ese andamiaje formal: reduce las interacciones físicas a nodos y aristas y, a partir de ahí, permite cuantificar eficiencia, robustez y vulnerabilidad de toda la red \cite{rodrigues2020}.
+
+    Este capítulo se basa en \cite{diestel2017} y \cite{bangjensen2007}.
+
+    \section{Definición y conceptos básicos}
+
+        A lo largo de este capítulo, se asumirá que todos los grafos son \textbf{finitos}, a menos que se especifique lo contrario. Las definiciones se presentarán especificando si aplican a grafos \textbf{dirigidos}, \textbf{no dirigidos} o ambos, pues las propiedades y métricas pueden cambiar significativamente según el tipo de grafo.
+
+        \begin{definicion}[Grafo]
+            Un \textbf{grafo} $G$ es un par $(V,E)$ que consiste en un conjunto no vacío $V$ de \textbf{nodos} y una colección $E$ de \textbf{aristas}, donde cada arista conecta un par de nodos. La definición formal más restrictiva, la de un \textbf{grafo simple}, exige que las aristas conecten pares de nodos distintos y que no haya más de una arista entre el mismo par de nodos. A lo largo de este capítulo, se presentarán variantes como grafos dirigidos, multígrafos o grafos con lazos, que relajan estas condiciones.
+        \end{definicion}
+
+        A un grafo $G$ con conjunto de aristas $V$ también lo podemos definir como un grafo \textit{en} $V$ o simplemente $G(V)$.
+
+        \begin{definicion}[Lazo]
+            Un \textbf{lazo} es una arista/arco cuyos extremos coinciden: $\{v,v\}$ en el caso no dirigido, o $(v,v)$ en el caso dirigido.
+        \end{definicion}
+
+        \begin{definicion}[Adyacencia de nodos]
+            Sean $G = (V, E)$ un grafo y $u, v \in V$ dos nodos distintos.
+            Se dice que $u$ y $v$ son \textbf{adyacentes} si existe una arista que los conecta directamente.
+        \end{definicion}
+
+        \begin{definicion}
+            Llamamos \textit{orden} de un grafo G al número de nodos que contiene, representado como $|V|$, y \textit{tamaño} a la cantidad de aristas, representada como $|E|$. Un grafo puede ser \textit{finito} o \textit{infinito}.
+        \end{definicion}
+
+        \begin{ejemplo}
+            La forma habitual de representar un grafo es dibujando un punto por cada nodo y uniendo dichos puntos con una línea si el par correspondiente forma una arista. La disposición de los puntos y las líneas es irrelevante; lo único que importa es qué pares de nodos están conectados.
+
+            \begin{figure}[ht]
+                \centering
+                \begin{tikzpicture}
+                    % nodes
+                    \node[nodo] (1) at (0,1) [label={[etiqueta_nodo]left:1}] {};
+                    \node[nodo] (2) at (0.5,0) [label={[etiqueta_nodo]below:2}] {};
+                    \node[nodo] (3) at (1.5,2) [label={[etiqueta_nodo]above:3}] {};
+                    \node[nodo] (4) at (2.5,0) [label={[etiqueta_nodo]below:4}] {};
+                    \node[nodo] (5) at (2,1.5) [label={[etiqueta_nodo]right:5}] {};
+                    \node[nodo] (6) at (3.5,1) [label={[etiqueta_nodo]right:6}] {};
+                    \node[nodo] (7) at (4,1.8) [label={[etiqueta_nodo]above:7}] {};
+                    % edges
+                    \draw[arista] (1) -- (2);
+                    \draw[arista] (1) -- (5);
+                    \draw[arista] (2) -- (5);
+                    \draw[arista] (3) -- (4);
+                    \draw[arista] (5) to[bend left=20] (7);
+                \end{tikzpicture}
+                \caption{Ejemplo de un grafo con $V=\{1, ..., 7\}$ y $E=\{\{1,2\}, \{1,5\}, \{2,5\}, \{3,4\}, \{5,7\}\}$.}
+                \label{fig:ejemplo-grafo}
+            \end{figure}
+
+
+            El grafo $G$ tiene el orden $|G|=7$ y el número de aristas $|E| = 5$.
+        \end{ejemplo}
+        Más adelante veremos que es posible medir distintas propiedades de un grafo, ya sea en su totalidad o en cada una de sus partes, pero una primera noción en ese sentido es la de \textit{grado de un nodo} que además nos ayudará a demostrar varios resultados importantes más adelante.
+        \begin{definicion}[Grado de un nodo]
+            El \textbf{grado} de un nodo $v$, denotado $deg(v)$, es el número de aristas que inciden en él (los lazos se cuentan dos veces). Para grafos dirigidos, el grado total se descompone en \textbf{grado de entrada} (\emph{indegree}, $deg^{-}(v)$), que es el número de aristas que terminan en $v$, y \textbf{grado de salida} (\emph{outdegree}, $deg^{+}(v)$), que es el número de aristas que comienzan en $v$. En este caso, el grado total es $deg(v) = deg^{-}(v) + deg^{+}(v)$.
+            Este valor refleja la importancia local del nodo como punto de transferencia.
+        \end{definicion}
+
+        \begin{ejemplo}
+            En el siguiente grafo, el nodo $A$ tiene dos aristas entrantes y una saliente, por lo que $deg^{-}(A) = 2$, $deg^{+}(A) = 1$ y $deg(A) = 3$.
+
+            \begin{center}
+                \begin{tikzpicture}[scale=1.1]
+                    \node[nodo] (A) at (0,0) [label={[etiqueta_nodo]left:A}] {};
+                    \node[nodo] (B) at (2,0) [label={[etiqueta_nodo]right:B}] {};
+                    \node[nodo] (C) at (1,1.5) [label={[etiqueta_nodo]above:C}] {};
+
+                    \draw[flecha] (B) -- (A);
+                    \draw[flecha] (C) -- (A);
+                    \draw[flecha] (A) -- (B);
+                \end{tikzpicture}
+            \end{center}
+        \end{ejemplo}
+
+    \section{Tipos de grafos}
+
+        Ahora que sabemos lo que es un grafo, es pertinente preguntarnos si es posible clasificarlos. Aunque posible, la clasificación de los grafos es una tarea multifacética que puede atender a una diversidad de criterios. Es posible categorizarlos, por ejemplo, en función de su estructura general (como en el caso de los grafos planares, bipartitos o completos), de las propiedades de conectividad que exhiben, o incluso de la presencia de ciclos. No obstante, para los fines de esta introducción, nos centraremos en una de las distinciones más fundamentales, la cual emana directamente de las propiedades inherentes al conjunto de aristas $E$. Específicamente, exploraremos la clasificación de los grafos según si sus aristas poseen una dirección definida (grafos dirigidos y no dirigidos) y si se les atribuye un valor numérico (grafos ponderados).
+
+        Estas propiedades dan lugar a un espectro de categorías de grafos, cada una con implicaciones estructurales y algorítmicas particulares. Por consiguiente, a continuación se presentan las definiciones formales:
+
+        \begin{definicion}[Grafo no dirigido]
+            Un grafo es \textbf{no dirigido} si sus aristas no tienen una orientación específica; es decir, $(u, v) \in E$ implica que $(v, u) \in E$.
+        \end{definicion}
+
+        \begin{ejemplo}
+            A continuación se muestra un ejemplo de grafo no dirigido:
+
+            \begin{center}
+                \begin{tikzpicture}[scale=1]
+                    \node[nodo] (A) at (0,0) [label={[etiqueta_nodo]below:A}] {};
+                    \node[nodo] (B) at (2,0) [label={[etiqueta_nodo]below:B}] {};
+                    \node[nodo] (C) at (1,1.5) [label={[etiqueta_nodo]above:C}] {};
+                    \node[nodo] (D) at (3,1.5) [label={[etiqueta_nodo]above:D}] {};
+                    \node[nodo] (E) at (4,0) [label={[etiqueta_nodo]below:E}] {};
+
+                    \draw[arista] (A) -- (B);
+                    \draw[arista] (A) -- (C);
+                    \draw[arista] (B) -- (C);
+                    \draw[arista] (B) -- (D);
+                    \draw[arista] (B) -- (E);
+                    \draw[arista] (D) -- (E);
+                \end{tikzpicture}
+            \end{center}
+        \end{ejemplo}
+
+        \begin{definicion}[Grafo dirigido (dígrafo)]
+            Un grafo es \textbf{dirigido} (o \emph{dígrafo}) si cada arista tiene una dirección; es decir, $(u, v) \in E$ no implica que $(v, u) \in E$ (aunque puede ocurrir). En este caso, diremos que $u$ se dirige a $v$.
+        \end{definicion}
+
+        \begin{ejemplo}
+            Ejemplo de grafo dirigido:
+
+            \begin{center}
+                \begin{tikzpicture}[scale=1]
+                    \node[nodo] (A) at (0,0) [label={[etiqueta_nodo]below:A}] {};
+                    \node[nodo] (B) at (2,0) [label={[etiqueta_nodo]below:B}] {};
+                    \node[nodo] (C) at (1,1.5) [label={[etiqueta_nodo]above:C}] {};
+
+                    \draw[flecha] (A) -- (B);
+                    \draw[flecha] (B) -- (C);
+                    \draw[flecha] (C) -- (A);
+                    \draw[flecha] (A) -- (C);
+                \end{tikzpicture}
+            \end{center}
+        \end{ejemplo}
+
+        \begin{definicion}[Grafo planar]
+            Un grafo es \textbf{planar} si admite una representación (llamada \emph{dibujo planar}) en el plano tal que ninguna de sus aristas se cruza con otra, salvo en los nodos que comparten.
+        \end{definicion}
+
+        \begin{observacion}
+            La planitud de un grafo no depende de una representación particular, sino de la existencia de al menos un dibujo en el plano sin cruces de aristas.
+        \end{observacion}
+
+        \begin{definicion}[Cara de un grafo planar]
+            Sea $G$ un grafo planar, y considérese un dibujo de $G$ en el plano sin cruces de aristas.
+            Una \textbf{cara} es cada una de las regiones conexas en que el dibujo divide el plano, incluyendo la región exterior.
+            Formalmente, las caras son los componentes conexos del complemento del dibujo de $G$ en el plano.
+        \end{definicion}
+
+        Las definiciones de grafo planar y de cara de un grafo planar nos serán útiles cuando estudiemos propiedades globales de un grafo.
+
+        \begin{definicion}[Multígrafo]
+            Un \textbf{multígrafo} $G=(V,E)$ es un grafo finito en el que entre un par (ordenado o no ordenado) de nodos se permiten \emph{múltiples aristas} distintas (también llamadas \emph{aristas paralelas}).
+            Opcionalmente, puede permitirse la existencia de \emph{lazos} (aristas cuyos extremos coinciden en un mismo nodo); cuando se permiten lazos, a veces se habla de \emph{pseudografo}.
+        \end{definicion}
+
+        \begin{observacion}
+            En el contexto dirigido, un \emph{multígrafo dirigido} permite múltiples arcos $(u,v)$ con la misma orientación (y lazos $(v,v)$ si se autorizan). Salvo indicación en contrario, las definiciones de grado y matrices (incidencia/adyacencia) se adaptan contando cada arista paralela con su multiplicidad.
+        \end{observacion}
+
+        \begin{definicion}[Grafo ponderado]
+            Un grafo es \textbf{ponderado} si a cada arista $(u, v) \in E$ se le asigna un peso $w(u, v) \in \mathbb{R}$. Un grafo puede ser ponderado además de dirigido o no dirigido.
+        \end{definicion}
+
+        \begin{ejemplo}
+            Ejemplo de grafo ponderado:
+
+            \begin{center}
+                \begin{tikzpicture}[scale=1]
+                    % Definición de nodos
+                    \node[nodo] (A) at (0,0) [label={[etiqueta_nodo]below:A}] {};
+                    \node[nodo] (B) at (2,0) [label={[etiqueta_nodo]below:B}] {};
+                    \node[nodo] (C) at (1,1.5) [label={[etiqueta_nodo]above:C}] {};
+
+                    % Aristas con etiquetas
+                    \draw[flecha] (A) -- node[etiqueta_peso, above] {69} (B);
+                    \draw[flecha] (B) -- node[etiqueta_peso, above right] {420} (C);
+                    \draw[flecha] (C) -- node[etiqueta_peso, above left] {11} (A);
+                \end{tikzpicture}
+            \end{center}
+        \end{ejemplo}
+
+        \begin{definicion}[Grafo simple]
+            Un \textbf{grafo simple} $G=(V,E)$ es un grafo no dirigido, finito y que no es multígrafo; esto es, $E\subseteq \{\{u,v\} : u,v\in V,\ u\neq v\}$ y entre dos nodos distintos hay a lo sumo una arista.
+        \end{definicion}
+
+        \begin{observacion}
+            Cuando el contexto es dirigido, se habla de \emph{dígrafo simple}: no se permiten lazos y, para cada par ordenado $(u,v)$ con $u\neq v$, hay a lo sumo un arco $(u,v)$.
+        \end{observacion}
+
+    \section{Propiedades fundamentales de los grafos}
+
+        Hasta ahora hemos evaluado a los grafos como un todo, deteniéndonos apenas en sus componentes como una herramienta para definir propiedades globales, pero también es posible y recomendable establecer propiedades de sus componentes. Algunas que son especialmente valiosas para el presente estudio son la \textit{conectividad}, los \textit{caminos}, los \textit{ciclos}, y las representaciones matriciales como la matriz de adyacencia.
+
+        \begin{definicion}[Matriz de adyacencia]
+            Dado un grafo $G=(V,E)$ con $N$ nodos, la \textbf{matriz de adyacencia} es una matriz $A \in \mathbb{R}^{N \times N}$ donde cada elemento $a_{ij}$ indica si existe una conexión directa entre el nodo $i$ y el nodo $j$:
+            \[
+            a_{ij} =
+            \begin{cases}
+            1, & \text{si existe una arista entre } i \text{ y } j,\\
+            0, & \text{en caso contrario.}
+            \end{cases}
+            \]
+            En grafos ponderados, cada $a_{ij}$ toma el valor del peso asignado a la conexión. Además, dos nodos son adyacentes si la entrada correspondiente en la matriz de adyacencia $A$ es distinta de cero, es decir, $a_{uv} \neq 0$.
+
+        \end{definicion}
+
+        \begin{ejemplo}[Matriz de adyacencia]
+            Consideremos el siguiente grafo dirigido $G = (V, E)$ con $V = \{A, B, C\}$ y $E = \{(A,B), (B,C), (C,A)\}$:
+
+            \begin{center}
+                \begin{tikzpicture}[scale=1]
+                    \node[nodo] (A) at (0,0) [label={[etiqueta_nodo]left:A}] {};
+                    \node[nodo] (B) at (2,0) [label={[etiqueta_nodo]right:B}] {};
+                    \node[nodo] (C) at (1,1.5) [label={[etiqueta_nodo]above:C}] {};
+                    \draw[flecha] (A) -- (B);
+                    \draw[flecha] (B) -- (C);
+                    \draw[flecha] (C) -- (A);
+                \end{tikzpicture}
+            \end{center}
+
+            La matriz de adyacencia $A$ correspondiente es:
+            \[
+            A =
+            \begin{pmatrix}
+            0 & 1 & 0 \\
+            0 & 0 & 1 \\
+            1 & 0 & 0 \\
+            \end{pmatrix}
+            \]
+            donde las filas y columnas corresponden al orden $A$, $B$, $C$.
+            Por ejemplo, $a_{12} = 1$ indica una arista dirigida de $A$ a $B$, y $a_{33} = 0$ indica que no hay un lazo en $C$.
+        \end{ejemplo}
+
+        \begin{definicion}[Matriz de incidencia]
+            Sea $G=(V,E)$ un grafo simple con $n=|V|$ y $m=|E|$.
+            \begin{itemize}
+                \item \textbf{No dirigido (orientación arbitraria).} Se fija una orientación arbitraria de cada arista $e=\{u,v\}$ para obtener un par ordenado $(u,v)$. La \emph{matriz de incidencia} es $B\in\{-1,0,1\}^{n\times m}$ definida por
+                \[
+                B_{xe}=\begin{cases}
+                    -1, & \text{si } x=u \text{ (cola de $e$)},\\
+                    +1, & \text{si } x=v \text{ (cabeza de $e$)},\\
+                    0,  & \text{en otro caso.}
+                \end{cases}
+                \]
+                Con esta convención, $\operatorname{rank}(B)=n-p$ y $\dim\ker(B^\top)=m-n+p$.
+                \item \textbf{Dirigido.} Si $G$ ya es dirigido y $e=(u,v)$, se usa la misma convención natural:
+                \[
+                B_{xe}=\begin{cases}
+                    -1, & x=u,\\
+                    +1, & x=v,\\
+                    0,  & \text{en otro caso.}
+                \end{cases}
+                \]
+            \end{itemize}
+            Salvo indicación contraria, se excluyen lazos y aristas múltiples (en multigrafos, cada arista da una columna; para lazos, la convención habitual asigna columna nula o un $2$ en la fila del vértice en la versión no dirigida).
+        \end{definicion}
+
+        \begin{definicion}[Subgrafo]
+            Un \textbf{subgrafo} $H = (V_H, E_H)$ de un grafo $G = (V, E)$ es un grafo tal que $V_H \subseteq V$ y $E_H \subseteq E$. Es decir, un subgrafo es una parte de un grafo que mantiene la estructura de nodos y aristas del grafo original.
+        \end{definicion}
+
+        \begin{ejemplo}[Subgrafo]
+            Sea $G$ el siguiente grafo dirigido:
+
+            \begin{center}
+                \begin{tikzpicture}[scale=1]
+                    \node[nodo] (A) at (0,0) [label={[etiqueta_nodo]left:A}] {};
+                    \node[nodo] (B) at (2,0) [label={[etiqueta_nodo]right:B}] {};
+                    \node[nodo] (C) at (1,1.5) [label={[etiqueta_nodo]above:C}] {};
+                    \node[nodo] (D) at (1,-1.5) [label={[etiqueta_nodo]below:D}] {};
+                    \draw[flecha] (A) -- (B);
+                    \draw[flecha] (B) -- (C);
+                    \draw[flecha] (C) -- (A);
+                    \draw[flecha] (A) -- (D);
+                    \draw[flecha] (D) -- (B);
+                \end{tikzpicture}
+            \end{center}
+
+            Consideremos el subgrafo $H$ formado por los nodos $A$, $B$ y $C$ y las aristas $(A,B)$, $(B,C)$ y $(C,A)$:
+
+            \begin{center}
+                \begin{tikzpicture}[scale=1]
+                    \node[nodo] (A) at (0,0) [label={[etiqueta_nodo]left:A}] {};
+                    \node[nodo] (B) at (2,0) [label={[etiqueta_nodo]right:B}] {};
+                    \node[nodo] (C) at (1,1.5) [label={[etiqueta_nodo]above:C}] {};
+                    \draw[flecha_resaltada] (A) -- (B);
+                    \draw[flecha_resaltada] (B) -- (C);
+                    \draw[flecha_resaltada] (C) -- (A);
+                \end{tikzpicture}
+            \end{center}
+
+            Obsérvese que $H$ se obtiene de $G$ al eliminar el nodo $D$ y las aristas asociadas a $D$.
+        \end{ejemplo}
+
+        La noción de subgrafo es importante en aquellos escenarios en los que no nos interesa, o no nos es posible, estudiar un grafo completo. Es claro que un subgrafo tiene todas las propiedades y tiene todas las propiedades que enunciamos antes para cualquier grafo. Asimismo, hay algunos subgrafos que nos pueden llegar a interesar especialmente por su naturaleza estructural con respecto al resto del grafo al que pertenecen, tal es el caso de los \textit{caminos}, \textit{ciclos} y \textit{árboles}, los cuales definimos a continuación.
+
+         \subsubsection{Recorridos, caminos y ciclos}
+
+            \begin{definicion}[Recorrido]
+                Sea $G=(V,E)$ un grafo finito (dirigido o no). Llamamos \textbf{recorrido} a una sucesión finita
+                \[
+                W=(v_0,e_1,v_1,e_2,\dots,e_k,v_k)
+                \]
+                tal que, para cada $i=1,\dots,k$, el borde $e_i$ une $v_{i-1}$ con $v_i$:
+                \begin{itemize}
+                  \item en grafos no dirigidos, $e_i=\{v_{i-1},v_i\}\in E$;
+                  \item en dígrafos, $e_i=(v_{i-1},v_i)\in E$.
+                \end{itemize}
+                Permitimos repeticiones de vértices y aristas. La \emph{longitud} de $W$ es $k$ (número de aristas). Si $G$ es ponderado con $\ell:E\to[0,\infty)$, el \emph{peso} de $W$ es $\sum_{i=1}^k \ell(e_i)$. Decimos que $W$ es \emph{cerrado} si $v_0=v_k$ y \emph{abierto} en caso contrario.
+            \end{definicion}
+
+            \begin{observacion}
+                Un \emph{recorrido elemental} (o \emph{trayecto}/\emph{trail}) es un recorrido que no repite aristas; un \emph{camino} es un recorrido que no repite vértices. Todo camino es un recorrido elemental y todo recorrido elemental es un recorrido. En grafos no dirigidos, un \emph{ciclo} es un recorrido cerrado sin repetición de vértices salvo $v_0=v_k$.
+            \end{observacion}
+
+            \begin{definicion}[Camino]
+                Sea $G = (V, E)$ un grafo.
+                Un \textbf{camino de longitud $k$} es un subgrafo $P = (V_P, E_P)$ de $G$ tal que existen nodos distintos $v_1, v_2, \dots, v_{k+1} \in V$ para los cuales:
+                \begin{align*}
+                    V_P &= \{v_1, v_2, \dots, v_{k+1}\}, \\
+                    E_P &= \left\{ (v_i, v_{i+1}) : i = 1, \dots, k \right\},
+                \end{align*}
+                y $v_i \neq v_j$ para todo $i \neq j$.
+                Decimos que $P$ es un camino de $v_1$ a $v_{k+1}$ en $G$.
+            \end{definicion}
+
+            \begin{ejemplo}[Camino como subgrafo]
+                Sea $G$ el siguiente dígrafo (a la izquierda), y sea $P$ el subgrafo resaltado, que constituye un camino de longitud $3$ en $G$.
+                A la derecha, se muestra $P$ como subgrafo.
+
+                \begin{center}
+                    \begin{tikzpicture}[scale=1.2]
+                        % Grafo G
+                        \begin{scope}
+                            % Nodos
+                            \node[nodo] (a) at (0,2) {};
+                            \node[nodo] (b) at (1,2.7) {};
+                            \node[nodo] (c) at (2,2) {};
+                            \node[nodo] (d) at (0,1) {};
+                            \node[nodo] (e) at (1,1.8) {};
+                            \node[nodo] (f) at (2,1) {};
+                            \node[nodo] (g) at (1,0.3) {};
+
+                            % Aristas tenues
+                            \draw[flecha_tenue] (a) -- (b);
+                            \draw[flecha_tenue] (b) -- (c);
+                            \draw[flecha_tenue] (a) -- (c);
+                            \draw[flecha_tenue] (c) -- (e);
+                            \draw[flecha_tenue] (e) -- (f);
+                            \draw[flecha_tenue] (a) -- (d);
+                            \draw[flecha_tenue] (d) -- (g);
+                            \draw[flecha_tenue] (g) -- (f);
+
+                            % Camino dirigido resaltado (a -> c -> e -> f)
+                            \draw[flecha_resaltada] (a) -- (c);
+                            \draw[flecha_resaltada] (c) -- (e);
+                            \draw[flecha_resaltada] (e) -- (f);
+
+                            % Nombres de los nodos
+                            \node[etiqueta, left] at (a) {$v_1$};
+                            \node[etiqueta, above] at (b) {$v_2$};
+                            \node[etiqueta, right] at (c) {$v_6$};
+                            \node[etiqueta, left] at (d) {$v_4$};
+                            \node[etiqueta, above right] at (e) {$v_3$};
+                            \node[etiqueta, right] at (f) {$v_5$};
+                            \node[etiqueta, below] at (g) {$v_7$};
+
+                            % G label
+                            \node[etiqueta] at (1,-0.3) {$G$};
+                        \end{scope}
+
+                        % Subgrafo (camino) a la derecha
+                        \begin{scope}[xshift=5cm]
+                            \node[nodo] (a) at (0,2) {};
+                            \node[nodo] (c) at (2,2) {};
+                            \node[nodo] (e) at (1,1.8) {};
+                            \node[nodo] (f) at (2,1) {};
+
+                            \draw[flecha_resaltada] (a) -- (c);
+                            \draw[flecha_resaltada] (c) -- (e);
+                            \draw[flecha_resaltada] (e) -- (f);
+
+                            % Nombres de los nodos
+                            \node[etiqueta, left] at (a) {$v_1$};
+                            \node[etiqueta, right] at (c) {$v_6$};
+                            \node[etiqueta, above right] at (e) {$v_3$};
+                            \node[etiqueta, right] at (f) {$v_5$};
+
+                            % P label
+                            \node[etiqueta] at (1,-0.3) {$P$};
+                        \end{scope}
+                    \end{tikzpicture}
+                \end{center}
+
+            \captionof{figure}{Un camino dirigido $P = (v_1, v_6, v_3, v_5)$ en el dígrafo $G$ y su representación como subgrafo.}
+            \end{ejemplo}
+
+            \begin{definicion}[Ciclo]
+                Un \textbf{ciclo de longitud $k$} es un camino $C = (V_C, E_C)$ tal que existen nodos distintos $v_1, v_2, \dots, v_k$ para los cuales:
+                \begin{align*}
+                    V_C &= \{v_1, v_2, \dots, v_k\}, \\
+                    E_C &= \{ (v_1, v_2),\ (v_2, v_3),\ \dots,\ (v_{k-1}, v_k),\ (v_k, v_1) \},
+                \end{align*}
+                y $v_i \neq v_j$ para $i \neq j$.
+            \end{definicion}
+
+            \begin{definicion}
+                Decimos que un grafo $G$ es \textit{acíclico} si ninguno de sus subgrafos es un ciclo.
+            \end{observacion}
+
+            \begin{ejemplo}[Ciclo como subgrafo]
+                Sea $G$ el siguiente grafo:
+
+                \begin{center}
+                    \begin{tikzpicture}[scale=1.2]
+                        % Grafo G (con otras conexiones grises)
+                        \node[nodo] (a) at (0,2) {};
+                        \node[nodo] (b) at (2,2) {};
+                        \node[nodo] (c) at (2,0) {};
+                        \node[nodo] (d) at (0,0) {};
+                        \node[nodo] (e) at (1,1) {};
+                        \node[nodo] (f) at (1,2.7) {};
+
+                        \draw[flecha_tenue] (a) -- (b);
+                        \draw[flecha_tenue] (b) -- (c);
+                        \draw[flecha_tenue] (c) -- (d);
+                        \draw[flecha_tenue] (d) -- (a);
+                        \draw[flecha_tenue] (a) -- (e);
+                        \draw[flecha_tenue] (e) -- (c);
+                        \draw[flecha_tenue] (b) -- (f);
+                        \draw[flecha_tenue] (f) -- (a);
+
+                        % Ciclo resaltado: a -> b -> c -> d -> a
+                        \draw[flecha_resaltada] (a) -- (b);
+                        \draw[flecha_resaltada] (b) -- (c);
+                        \draw[flecha_resaltada] (c) -- (d);
+                        \draw[flecha_resaltada] (d) -- (a);
+
+                        % Nombres de los nodos
+                        \node[etiqueta, left] at (a) {$v_1$};
+                        \node[etiqueta, above right] at (b) {$v_2$};
+                        \node[etiqueta, right] at (c) {$v_3$};
+                        \node[etiqueta, below left] at (d) {$v_4$};
+                        \node[etiqueta, right] at (e) {$v_5$};
+                        \node[etiqueta, above] at (f) {$v_6$};
+
+                        \node[etiqueta] at (1,-0.6) {$G$};
+                    \end{tikzpicture}
+                \end{center}
+
+                El subgrafo resaltado constituye un ciclo de longitud $4$, dado por la sucesión $v_1 \to v_2 \to v_3 \to v_4 \to v_1$.
+            \end{ejemplo}
+
+            Aunque la teoría de espacios vectoriales se escapa de lo que abarca este trabajo, utilizaremos algunos conceptos de esta teoría para justificar algunos resultados importantes. Todos los resultados utilizados se justificarán en un apéndice al final del documento.
+
+            \begin{definicion}[Espacio de ciclos]
+                Sea $G=(V,E)$ un grafo finito (posiblemente con $p$ componentes). El \emph{espacio de ciclos} $\mathcal{C}(G)$ es el subespacio de $\mathbb{F}_2^{E}$ generado por los vectores característicos de todos los ciclos simples de $G$. La suma es módulo $2$.
+            \end{definicion}
+
+            Ahora que sabemos lo que es un camino y un ciclo, disponemos de una herramienta para formalizar nuestra noción de movimiento dentro de un grafo. Algo que también nos gustaría formalizar es alguna noción de \textit{distancia} entre dos nodos cualesquiera. A continuación, veremos que una propuesta muy buena es pensar la distancia entre dos nodos como el largo del camino más corto que los une. Antes de llegar ahí, establezcamos un par de resultados útiles.
+
+            \begin{lema}[Extremos de un camino]
+                Sea $P$ un camino finito (subgrafo conexo y acíclico en el que todos los nodos tienen grado $\le 2$).
+                Entonces $P$ tiene exactamente dos nodos de grado $1$ (extremos) y todos los demás nodos, si los hay, tienen grado $2$.
+            \end{lema}
+
+            \begin{proof}
+                Si $|V(P)|=1$, el enunciado es vacuo. Para $|V(P)|\ge 2$, la aciclicidad implica que no puede haber todos los nodos de grado $2$; por el conteo de grados $\sum_{v}\deg(v)=2|E(P)|$ y porque un componente acíclico con $\deg\le 2$ no puede tener más de dos nodos de grado impar, se deduce que hay al menos dos nodos de grado $1$. Si hubiera tres o más de grado $1$, la suma de grados sería $<2|E(P)|$, contradicción.
+            \end{proof}
+
+            \begin{teorema}[Numeración lineal de los nodos de un camino]
+                Sea $P$ un camino finito no trivial. Entonces existe una biyección
+                \[
+                \phi:\{1,2,\dots,k\}\longrightarrow V(P)
+                \]
+                tal que las aristas de $P$ son exactamente $\{\phi(i),\phi(i+1)\}$ para $i=1,\dots,k-1$.
+                En particular, $P$ es isomorfo al camino estándar $P_k$ y la numeración es única salvo inversión (reversa).
+            \end{teorema}
+
+            \begin{proof}
+                Por el lema, $P$ tiene dos extremos. Fija uno de ellos y llámalo $\phi(1)$. Definimos inductivamente $\phi(i+1)$: dado $\phi(i)$, si $i=1$ tomamos como $\phi(2)$ el único vecino de $\phi(1)$; si $i\ge 2$, tomamos como $\phi(i+1)$ el único vecino de $\phi(i)$ distinto de $\phi(i-1)$.
+                La aciclicidad garantiza que este procedimiento nunca vuelve a un nodo ya visitado y, como $P$ es finito y conexo con grados $\le 2$, el proceso termina exactamente cuando alcanzamos el otro extremo. Así obtenemos un orden lineal $\phi(1),\dots,\phi(k)$ que recorre todos los nodos una única vez y en el que las únicas aristas son las consecutivas por construcción.
+                La unicidad salvo reversa es clara: cualquier ordenación válida debe empezar en un extremo y seguir el único vecino no visitado en cada paso.
+            \end{proof}
+
+            \begin{observacion}[Caso dirigido]
+                Si $P$ está orientado coherentemente (todas las aristas apuntan en el mismo sentido a lo largo del camino), la numeración puede escogerse de modo que $(\phi(i),\phi(i+1))$ sea el arco para todo $i$. En general, la numeración precedente se construye sobre el subyacente no dirigido.
+            \end{observacion}
+
+            \begin{definicion}[Distancia]
+                Sea $G=(V,E)$ un grafo finito. La \textbf{distancia} de $u$ a $v$, denotada $d(u,v)$, es
+                \[
+                d(u,v)\;=\;\min\{\,k\in\mathbb{N}_0:\ \text{existe un camino de longitud }k\text{ de }u\text{ a }v\,\},
+                \]
+                con la convención $d(u,u)=0$ (camino vacío) y $d(u,v)=+\infty$ si no existe tal camino. La longitud de un camino es el número de aristas que contiene.
+            \end{definicion}
+
+            \begin{definicion}[Distancia ponderada]
+                Si cada arista $e\in E$ tiene un peso no negativo $w(e)\in[0,\infty)$, la \textbf{distancia ponderada} es
+                \[
+                d_w(u,v)\;=\;\inf\Big\{\sum_{e\in P} w(e):\ P \text{ es un camino de }u\text{ a }v\Big\},
+                \]
+                con $d_w(u,u)=0$ y $d_w(u,v)=+\infty$ si no hay camino. Cuando los pesos son enteros positivos, el ínfimo es un mínimo.
+            \end{definicion}
+
+            \begin{definicion}[Geodésica]
+                Un camino $P$ de $u$ a $v$ es \textbf{geodésico} si su longitud (o su peso total, en el caso ponderado) es igual a $d(u,v)$.
+            \end{definicion}
+
+            \begin{observacion}[Propiedades básicas de la distancia]
+                \begin{itemize}
+                    \item $d(u,u)=0$.
+                    \item $d(u,v)\ge 0$; con aristas de longitud unitaria, $d(u,v)=0$ implica $u=v$.
+                    \item Desigualdad triangular: $d(u,v)\le d(u,x)+d(x,v)$ para todo $u,v,x\in V$.
+                    \item En grafos no dirigidos: $d(u,v)=d(v,u)$ cuando $u$ y $v$ pertenecen a la misma componente; si no, $d(u,v)=+\infty$.
+                    \item En grafos dirigidos: en general $d(u,v)\neq d(v,u)$; y $d(u,v)=+\infty$ si no existe camino de $u$ a $v$.
+                    \item En el caso ponderado con pesos no negativos: las propiedades anteriores se mantienen reemplazando “longitud” por “peso total”.
+                \end{itemize}
+            \end{observacion}
+
+        \subsubsection{Árboles}
+
+            \begin{definicion}[Árbol]
+                Un \textbf{árbol} es un grafo conexo y acíclico en el que, fijado un nodo raíz $r$, existe exactamente un camino dirigido de $r$ a cualquier otro nodo del grafo.
+            \end{definicion}
+
+            \begin{ejemplo}[Árbol]
+                El siguiente grafo muestra un árbol con raíz en $v_1$:
+
+                \begin{center}
+                \begin{tikzpicture}[scale=1.3]
+                    % Nodos
+                    \node[nodo] (v1) at (0,0) [label={[etiqueta_nodo]above:$v_1$}] {};
+                    \node[nodo] (v2) at (-1,-1) [label={[etiqueta_nodo]left:$v_2$}] {};
+                    \node[nodo] (v3) at (1,-1) [label={[etiqueta_nodo]right:$v_3$}] {};
+                    \node[nodo] (v4) at (-1.5,-2) [label={[etiqueta_nodo]left:$v_4$}] {};
+                    \node[nodo] (v5) at (-0.5,-2) [label={[etiqueta_nodo]right:$v_5$}] {};
+                    \node[nodo] (v6) at (1,-2) [label={[etiqueta_nodo]right:$v_6$}] {};
+
+                    % Aristas dirigidas
+                    \draw[flecha] (v1) -- (v2);
+                    \draw[flecha] (v1) -- (v3);
+                    \draw[flecha] (v2) -- (v4);
+                    \draw[flecha] (v2) -- (v5);
+                    \draw[flecha] (v3) -- (v6);
+                \end{tikzpicture}
+                \end{center}
+
+                Desde la raíz $v_1$, existe exactamente un camino dirigido a cada nodo del árbol.
+            \end{ejemplo}
+
+            \begin{definicion}[Hoja]
+                Sea $G=(V,E)$ un grafo finito. Un nodo $v\in V$ es una \textbf{hoja} si tiene grado uno en el grafo subyacente no dirigido, es decir,
+                \[
+                \deg(v)=1.
+                \]
+                Equivalente: $v$ es incidente exactamente a una arista del grafo (contando multiplicidades si es multígrafo).
+            \end{definicion}
+
+            \begin{observacion}[Caso dirigido y arborescencias]
+                En dígrafos se mantiene la definición anterior vía el subyacente no dirigido.
+                Cuando el dígrafo es un árbol enraizado (arborescencia):
+                \begin{itemize}
+                  \item en una arborescencia \emph{de salida} con raíz $r$, se llama hojas a los $v\neq r$ con $\deg^{+}(v)=0$;
+                  \item en una arborescencia \emph{de entrada} con raíz $r$, se llama hojas a los $v\neq r$ con $\deg^{-}(v)=0$.
+                \end{itemize}
+                Estas nociones coinciden con $\deg(v)=1$ en el subyacente no dirigido.
+            \end{observacion}
+
+            \begin{lema}[Existencia de hoja]
+                Sea $T$ un árbol con $|V(T)|\ge 2$. Entonces $T$ tiene al menos una hoja (un nodo de grado $1$).
+            \end{lema}
+
+            \begin{proof}
+                Toma un camino $P$ de longitud máxima en $T$ (existe porque $T$ es finito). Si un extremo de $P$ tuviera grado $\ge 2$, habría una arista adicional que permite prolongar $P$, contradiciendo la maximalidad. Así, ambos extremos de $P$ tienen grado $1$.
+            \end{proof}
+
+            Intuitivamente, se puede construir cualquier árbol partiendo de un único nodo (donde $|E|=0, |V|=1$) y añadiendo sucesivamente nuevos nodos, cada uno conectado por una única arista nueva. En cada paso se suma un nodo y una arista, manteniendo siempre la relación $|E| = |V|-1$. La siguiente demostración formaliza esta idea mediante el proceso inverso: la deconstrucción del árbol.
+
+            \begin{proof}
+                Por inducción en $n=|V(T)|$.
+                Caso base $n=1$: $|E|=0=n-1$.
+                Paso inductivo: sea $n\ge 2$ y supongamos cierto para todo árbol con $<n$ nodos. Por el lema, $T$ tiene una hoja $x$ con vecino $y$. Consideremos $T'=T-\{x\}$: sigue siendo un árbol (conexo y acíclico) con $n-1$ nodos. Por hipótesis inductiva, $|E(T')|=(n-1)-1=n-2$. Como E(T)=E(T')\cup\{xy\}, se tiene $|E(T)|=(n-2)+1=n-1$.
+            \end{proof}
+
+            \begin{lema}[Frontera de cara acotada contiene un ciclo]
+                En cualquier dibujo planar de un grafo, la frontera de toda cara acotada contiene un ciclo.
+            \end{lema}
+
+            \begin{proof}
+                La frontera de una cara acotada es un camino cerrado $W$ que usa aristas del grafo.
+                Si $W$ no repite aristas ni vértices, entonces $W$ es un ciclo.
+                Si repite, al descomponer el camino cerrado estándar (eliminando subcaminos inversos por diferencia simétrica) se obtiene un ciclo no vacío contenido en la frontera.
+            \end{proof}
+
+            \begin{proposicion}[Todo árbol es planar y tiene una sola cara]
+                Todo árbol finito $T$ admite un dibujo planar y, en cualquier dibujo planar conexo de $T$, el número de caras es $f=1$.
+            \end{proposicion}
+
+            \begin{proof}
+                \emph{Planaridad:} por inducción en $n=|V(T)|$.
+                Para $n=1$ es trivial.
+                Para $n\ge 2$, toma una hoja $x$ con vecino $y$ y consideremos $T'=T-\{x\}$. Por inducción, $T'$ tiene un dibujo sin cruces. Coloca $x$ en un pequeño vecindario libre alrededor de $y$ y dibuja el segmento $xy$; no introduce cruces. Así, $T$ es planar.
+
+                \emph{Unicidad de la cara:} en cualquier dibujo planar de $T$, si hubiera una cara acotada, su frontera contendría un ciclo por el lema anterior, lo que contradice que $T$ sea acíclico. Por tanto no hay caras acotadas y solo existe la cara exterior, es decir, $f=1$.
+            \end{proof}
+
+            \begin{corolario}
+                Si $T$ es un árbol finito y conexo, entonces $|E(T)|=|V(T)|-1$, $T$ es planar y en cualquier dibujo planar de $T$ se tiene $f=1$.
+            \end{corolario}
+
+            \begin{definicion}[Bosque generador]
+                Sea $G=(V,E)$ un grafo (posiblemente con $p$ componentes). Un \textbf{bosque generador} de $G$ es un subgrafo $F=(V,E_F)$ tal que:
+                \begin{enumerate}
+                    \item $E_F \subseteq E$ (mismas $V$, menos aristas),
+                    \item $F$ es acíclico,
+                    \item cada componente de $F$ es un árbol que contiene exactamente los nodos de la correspondiente componente de $G$.
+                \end{enumerate}
+                Equivalente y característico: $F$ es acíclico y maximal por inclusión, o bien $|E_F|=|V|-p$. Si $G$ es conexo ($p=1$), un bosque generador es un \emph{árbol generador}.
+            \end{definicion}
+
+            \begin{observacion}
+                Para dígrafos, el bosque/árbol generador se entiende sobre el \emph{grafo subyacente no dirigido} salvo que se especifique orientación (arborescencias). En el conteo ciclomático y en el espacio de ciclos se usa esta versión no dirigida.
+            \end{observacion}
+
+        \section{Propiedades estructurales}
+
+            Ahora que disponemos no solo de la noción de grafo y sus elementos básicos, sino también de herramientas para particionarlos y analizarlos, podemos avanzar hacia la definición de métricas e indicadores que permitan caracterizar cuantitativamente su estructura y funcionamiento. Estas medidas nos ayudarán a identificar patrones, puntos críticos y niveles de eficiencia o resiliencia en la red, ofreciendo una base objetiva para comparar distintas topologías, fundamentar intervenciones y detectar limitaciones o vulnerabilidades que no serían evidentes a simple vista.
+
+            Entre las propiedades clásicas que describen la forma en que los nodos se relacionan destacan los siguientes conceptos fundamentales:
+
+            \begin{definicion}[Conectividad]
+                Decimos que un grafo $G$ es \textbf{conexo} si existe al menos un camino entre cada par de nodos. En caso contrario, la red se fragmenta en varias componentes conexas. Al número de componentes conexas lo llamamos $p$.
+            \end{definicion}
+
+            \begin{definicion}[Nodo de articulación e istmo]
+                Un \textbf{nodo de articulación} es un nodo cuya supresión (junto con sus aristas incidentes) incrementa el número de componentes conexas de la red.
+                Un \textbf{istmo} (o arista de corte) es una arista cuya supresión incrementa el número de componentes conexas.
+            \end{definicion}
+
+            \begin{ejemplo}
+                \begin{center}
+                    \begin{tabular}{cc}
+                    % Nodo de articulación
+                    \begin{tikzpicture}[scale=1.1]
+                        % Grafo tipo "Y" con nodo central crítico
+                        \node[nodo] (A) at (0,1) [label={[etiqueta_nodo]left:A}] {};
+                        \node[nodo] (B) at (2,1) [label={[etiqueta_nodo]right:B}] {};
+                        \node[nodo] (C) at (1,0) [label={[etiqueta_nodo]below:C}] {};
+                        \node[nodo_resaltado] (D) at (1,2) [label={[etiqueta_nodo]above:D}] {};
+                        \draw[arista] (A) -- (D);
+                        \draw[arista] (B) -- (D);
+                        \draw[arista] (C) -- (D);
+                    \end{tikzpicture}
+                    &
+                    % Istmo/arista de corte
+                    \begin{tikzpicture}[scale=1.1]
+                        % Grafo tipo "cadena" con arista central crítica
+                        \node[nodo] (A) at (0,1) [label={[etiqueta_nodo]left:A}] {};
+                        \node[nodo] (B) at (1,1) [label={[etiqueta_nodo]above:B}] {};
+                        \node[nodo] (C) at (2,1) [label={[etiqueta_nodo]above:C}] {};
+                        \node[nodo] (D) at (3,1) [label={[etiqueta_nodo]right:D}] {};
+                        \draw[arista] (A) -- (B);
+                        \draw[arista_resaltada] (B) -- (C);
+                        \draw[arista] (C) -- (D);
+                    \end{tikzpicture}
+                    \\
+                    \textit{Nodo de articulación (D)} &
+                    \textit{Istmo (arista $BC$)} \\
+                    % Red tras eliminar el nodo de articulación
+                    \begin{tikzpicture}[scale=1.1]
+                        \node[nodo] (A) at (0,1) {};
+                        \node[nodo] (B) at (2,1) {};
+                        \node[nodo] (C) at (1,0) {};
+                        % Nodo D eliminado
+                        % Componentes desconectadas
+                        \draw[arista_tenue] (A) -- (0.5,1.5); % Representación de aristas que iban a D
+                        \draw[arista_tenue] (B) -- (1.5,1.5);
+                        \draw[arista_tenue] (C) -- (1,1);
+                    \end{tikzpicture}
+                    &
+                    % Red tras eliminar el istmo
+                    \begin{tikzpicture}[scale=1.1]
+                        \node[nodo] (A) at (0,1) {};
+                        \node[nodo] (B) at (1,1) {};
+                        \node[nodo] (C) at (2,1) {};
+                        \node[nodo] (D) at (3,1) {};
+                        \draw[arista_tenue] (A) -- (B);
+                        % Istmo eliminado
+                        \draw[arista_tenue] (C) -- (D);
+                    \end{tikzpicture}
+                    \\
+                    \textit{Red tras eliminar el nodo de articulación} &
+                    \textit{Red tras eliminar el istmo} \\
+                    \end{tabular}
+                \end{center}
+
+                \captionof{figure}{Arriba: ejemplos de nodo de articulación ($D$, en rojo) e istmo ($BC$, en azul).
+                Abajo: la red se fragmenta en componentes al eliminar el nodo o la arista crítica.}
+            \end{ejemplo}
+
+            \begin{definicion}[Diámetro]
+                El \textbf{diámetro} de un grafo es la longitud máxima de los caminos más cortos entre todos los pares de nodos $(u,v)$.
+                Formalmente: $\displaystyle \mathrm{diam}(G) = \max_{u,v \in V} d(u,v)$, donde $d(u,v)$ es la longitud del camino dirigido más corto de $u$ a $v$.
+            \end{definicion}
+
+            \begin{definicion}[Número de ciclos independientes]
+                El \textbf{número de ciclos independientes} de un grafo se define como $\mu = |E| - |V| + p$, donde $|E|$ es el número de aristas, $|V|$ es el número de nodos y $p$ el número de componentes conexas.
+            \end{definicion}
+
+            % ----------------------------------------------------------
+        \subsection{Propiedades a nivel de grafo}
+
+            Cuando estudiamos un grafo, a menudo nos interesa ser capaces de describirlo de forma numérica para entender cómo se comporta globalmente. Basados en estas descripciones, podemos querer inferir propiedades más abstractas como la complejidad o la robustez. Esto también nos ayuda a diferenciar dos grafos y compararlos sin necesidad de analizarlos componente a componente, lo cual puede resultar imposible en la práctica. A continuación describiremos algunas de estas formas que tenemos de describir numéricamente un grafo.
+
+            \begin{definicion}[Índice $\beta$ (conectividad)]
+                El \textbf{índice $\beta$} mide cuántas aristas existen respecto al número de nodos:
+                \[
+                \beta = \frac{|E|}{|V|}
+                \]
+                Valores cercanos a $1$ indican una topología arborescente (pocas alternativas de ruta), mientras que valores crecientes reflejan mayor interconexión y opciones de recorrido.
+            \end{definicion}
+
+            \begin{ejemplo}
+                Para una red con $|V| = 10$ y $|E| = 12$, se tiene $\beta = 1.2$, lo que indica que cada nodo tiene en promedio más de una conexión.
+            \end{ejemplo}
+
+            En algunos casos, cuando disponemos de un grafo planar, somos capaces de saber cuál es el número máximo de ciclos que puede tener. Para poder llegar a esa definición, antes debemos establecer un par de resultados relevantes.
+
+            \begin{teorema}[Teorema de Euler]
+                Sea $G$ un grafo planar conexo con $|V|$ nodos, $|E|$ aristas y $f$ caras. Entonces:
+            \end{teorema}
+
+            La idea central es que la fórmula se cumple para la estructura más simple posible, un árbol, donde $|V| - (|V|-1) + 1 = 2$. A partir de ahí, cualquier arista que se añada sin dejar de ser planar debe necesariamente dividir una cara existente en dos. Al hacer esto, se suma 1 a $|E|$ y 1 a $f$, por lo que el resultado de la expresión $|V| - |E| + f$ permanece constante e igual a 2. La prueba por inducción formaliza este razonamiento.
+
+            \begin{proof}
+                La prueba se realiza por inducción sobre el número de aristas $|E|$.
+
+                \textbf{Caso base:}
+                Si $G$ es un árbol (grafo conexo sin ciclos), es planar y tiene $f=1$ (toda la región exterior), y se sabe que $|E| = |V| - 1$.
+                Por tanto:
+                \[
+                |V| - |E| + f = |V| - (|V|-1) + 1 = 1 + 1 = 2.
+                \]
+
+                \textbf{Paso inductivo:}
+                Suponiendo que el teorema se cumple para todo grafo planar conexo con $k$ aristas.
+                Sea $G$ un grafo planar conexo con $k+1$ aristas.
+                Como $G$ es conexo y tiene más aristas que un árbol, debe contener al menos un ciclo.
+                Elimina una arista que pertenezca a algún ciclo; el grafo resultante $G'$ sigue siendo conexo y planar, tiene $k$ aristas y, al eliminar la arista del ciclo, se fusionan dos caras adyacentes, por lo que el número de caras disminuye en uno ($f' = f - 1$).
+                Por hipótesis inductiva:
+                \[
+                |V| - k + f' = 2.
+                \]
+                Sustituyendo $f = f'+1$ y $|E| = k+1$,
+                \[
+                |V| - (k+1) + (f'+1) = |V| - k - 1 + f' + 1 = |V| - k + f' = 2.
+                \]
+                Por lo tanto, la fórmula se mantiene para $G$.
+
+                Por inducción, la fórmula se cumple para todo grafo planar conexo.
+            \end{proof}
+
+            \begin{corolario}
+                Para todo grafo planar simple y conexo con $|V| \geq 3$ nodos, se cumple $|E| \leq 3|V| - 6$.
+            \end{corolario}
+
+            \begin{proof}
+                Por el teorema de Euler, $|V| - |E| + f = 2$.
+                En todo grafo planar simple, cada cara está limitada por al menos tres aristas, y cada arista delimita a lo sumo dos caras. Por tanto,
+                \[
+                3f \leq 2|E|.
+                \]
+                Despejando $f$ de la fórmula de Euler:
+                \[
+                f = 2 + |E| - |V|,
+                \]
+                y sustituyendo en la desigualdad:
+                \[
+                3(2 + |E| - |V|) \leq 2|E| \\
+                6 + 3|E| - 3|V| \leq 2|E| \\
+                6 + 3|E| - 3|V| - 2|E| \leq 0 \\
+                6 + |E| - 3|V| \leq 0 \\
+                |E| \leq 3|V| - 6.
+                \]
+            \end{proof}
+
+            \begin{corolario}
+                El número máximo de ciclos independientes en un grafo planar simple y conexo es $2|V| - 5$.
+            \end{corolario}
+
+            \begin{proof}
+                El número de ciclos independientes es $\mu = |E| - |V| + 1$ para $p=1$.
+                Al usar el máximo de aristas $|E| = 3|V|-6$,
+                \[
+                \mu_{\max} = (3|V|-6) - |V| + 1 = 2|V| - 5.
+                \]
+            \end{proof}
+
+            \begin{definicion}[Índice $\alpha$ (redundancia)]
+                El \textbf{índice $\alpha$} cuantifica la proporción de ciclos presentes frente al máximo posible en un grafo planar:
+                \[
+                \alpha = \frac{|E| - |V| + p}{2|V| - 5}
+                \]
+                Valores altos sugieren mayor redundancia y resiliencia. El parámetro $p$ representa el número de componentes conexas (en redes totalmente conectadas, $p=1$).
+            \end{definicion}
+
+            \begin{ejemplo}
+                Suponiendo que $|V| = 12$, $|E| = 17$, y la red es conexa ($p = 1$). Entonces:
+                \[
+                \alpha = \frac{17 - 12 + 1}{2 \times 12 - 5} = \frac{6}{19} \approx 0.316
+                \]
+                Esto indica una baja redundancia estructural.
+            \end{ejemplo}
+
+            \begin{definicion}[Índice $\gamma$ (densidad planar)]
+                El \textbf{índice $\gamma$} expresa la fracción de aristas observadas respecto al máximo en un grafo planar simple:
+                \[
+                \gamma = \frac{|E|}{3|V| - 6}
+                \]
+                Un valor cercano a $1$ denota que la red se aproxima a la máxima densidad planar.
+            \end{definicion}
+
+            Como vimos, los resultados anteriores funcionan únicamente para grafos planares. Aunque esta clase de grafos es abundante y su estudio es muy útil, durante este trabajo nos interesaremos por grafos que no necesariamente son planares. Para estos casos usaremos los siguientes resultados.
+
+            \begin{teorema}[Fórmula del número ciclomático]
+                Para todo grafo finito $G$ con $|V|=n$, $|E|=m$ y $p$ componentes conexas, se cumple
+                \[
+                \dim \mathcal{C}(G)\;=\;\mu(G)\;=\;m-n+p.
+                \]
+            \end{teorema}
+
+            La fórmula $\mu = m-n+p$ puede entenderse de forma conceptual. Para conectar $n$ nodos en $p$ componentes sin formar ciclos, se necesita un esqueleto de exactamente $n-p$ aristas (un \textit{bosque generador}). Cada arista adicional que se añade a este esqueleto, más allá de las $n-p$ estructurales, inevitablemente "cierra" un camino y crea un ciclo que es independiente de los demás. Por lo tanto, el número de ciclos independientes es simplemente el conteo de aristas "sobrantes": $m - (n-p) = m-n+p$. La demostración formaliza esta idea.
+
+            \begin{proof}[Demostración (constructiva con bosque generador)]
+                Sea $F$ un \emph{bosque generador} de $G$, obtenido tomando un árbol generador en cada componente. Entonces $F$ tiene exactamente $n-p$ aristas.
+                Cada arista $e\in E\setminus E(F)$, al añadirse a $F$, crea un \emph{ciclo fundamental} $C_e$ único (porque en $F$ hay un único camino entre los extremos de $e$). El conjunto de estos ciclos fundamentales
+                \[
+                \mathcal{B}=\{C_e:\ e\in E\setminus E(F)\}
+                \]
+                tiene cardinalidad $m-(n-p)=m-n+p$.
+
+                Mostramos que $\mathcal{B}$ es una base de $\mathcal{C}(G)$ sobre $\mathbb{F}_2$:
+                \emph{(i) Independencia.} Si existiera una combinación lineal no trivial $\sum \lambda_e C_e=0$ (con $\lambda_e\in\{0,1\}$), eligiendo $e_0$ la arista de $E\setminus E(F)$ de \emph{mayor} nivel de inserción, se observa que $e_0$ aparece en $C_{e_0}$ pero no aparece en ningún otro $C_e$; por tanto, el coeficiente de $e_0$ en la suma no puede anularse, contradicción. \emph{(ii) Generación.} Todo ciclo $C$ de $G$ puede reducirse, por symmetric difference, restando sucesivamente ciclos fundamentales que contienen alguna arista de $E\setminus E(F)$ presente en $C$, hasta quedar (eventualmente) vacío. Luego todo ciclo pertenece al span de $\mathcal{B}$.
+
+                Así, $\mathcal{B}$ es una base y $\dim\mathcal{C}(G)=|\mathcal{B}|=m-n+p$.
+            \end{proof}
+
+            \begin{corolario}
+                Si $G$ es conexo ($p=1$), entonces $\mu(G)=m-n+1$ y, en particular, cualquier árbol tiene $\mu=0$.
+            \end{corolario}
+
+            \begin{observacion}[Versión lineal-algebraica]
+                Si $B$ es la matriz de incidencia de $G$ sobre $\mathbb{R}$ o $\mathbb{F}_2$, entonces $\operatorname{rank}(B)=n-p$ y
+                \[
+                \dim \ker(B^\top)=m-(n-p)=m-n+p,
+                \]
+                lo que coincide con la dimensión del espacio de ciclos.
+            \end{observacion}
+
+            \begin{ejemplo}
+                Si $|V| = 8$, $|E| = 14$, entonces:
+                \[
+                \gamma = \frac{14}{3 \times 8 - 6} = \frac{14}{18} \approx 0.778
+                \]
+                Lo que sugiere alta densidad planar, indicando que la red está utilizando más del 77% de las conexiones posibles para un grafo planar de su tamaño.
+            \end{ejemplo}
+
+        Las propiedades que estudiamos hasta ahora son ciertas independientemente del espacio en el que esté embebido nuestra red, si es que está embebido en alguno. A veces también nos interesaría estudiar redes que estén dentro de un espacio. Esto nos proporciona información diferente pues cada nodo tendrá una posición dentro de ese espacio y, de ser métrico, cada arista tendrá una longitud. A continuación vamos a formalizar esta idea de analizar grafos dentro de un espacio.
+
+        \begin{definicion}[Realización geométrica]
+            Una \emph{realización geométrica} de $G$ en $\mathbb{R}^d$ es una aplicación inyectiva $\varphi:V\to \mathbb{R}^d$.
+            Cuando se desea, puede inducirse una ponderación euclidiana definiendo
+            \[
+            \ell_\varphi(e)=\|\varphi(i)-\varphi(j)\| \quad \text{para } e=(i,j)\in E.
+            \]
+        \end{definicion}
+
+        \begin{observacion}
+            En ausencia de $\varphi$, las longitudes provienen únicamente de $\ell$. Si se dispone de $\varphi$ pero se usan otros pesos (tiempo, tarifa), se mantiene $(G,\ell)$ y la geometría sólo se usa para distancias “extrínsecas” (euclidianas).
+        \end{observacion}
+
+        % --- Longitud total ---
+        \begin{definicion}[Longitud total]
+            Sea $(G,\ell)$ un grafo ponderado. La \textbf{longitud total} es
+            \[
+            L(G)=\sum_{e\in E}\ell(e).
+            \]
+            Si $\ell=\ell_\varphi$ proviene de una realización geométrica, entonces $L(G)=\sum_{(i,j)\in E}\|\varphi(i)-\varphi(j)\|$.
+        \end{definicion}
+
+        \begin{ejemplo}
+            Si $E=\{e_1,e_2,e_3\}$ con $\ell(e_1)=5$, $\ell(e_2)=7$, $\ell(e_3)=3$, entonces $L(G)=15$.
+        \end{ejemplo}
+
+        % --- Distancias y rodeo ---
+        \begin{definicion}[Distancia sobre la red]
+            La \textbf{distancia sobre la red} entre $u,v\in V$ es
+            \[
+            d_\ell(u,v)=\inf\Big\{\,\sum_{e\in P}\ell(e):\; P \text{ camino de }u\text{ a }v\,\Big\},
+            \]
+            con $d_\ell(u,u)=0$ y $d_\ell(u,v)=+\infty$ si no hay camino. Si $\ell\equiv 1$, se recupera la longitud por número de aristas.
+        \end{definicion}
+
+        \begin{definicion}[Distancia extrínseca]
+            Dada una realización $\varphi:V\to\mathbb{R}^d$, la \textbf{distancia extrínseca} entre $u\ne v$ es
+            \[
+            d_{\mathrm{ext}}(u,v)=\|\varphi(u)-\varphi(v)\|.
+            \]
+        \end{definicion}
+
+        \begin{definicion}[Índice de rodeo]
+            Para $u\ne v$ con $d_\ell(u,v)<\infty$ y con realización $\varphi$, definimos el \textbf{índice de rodeo}
+            \[
+            DI(u,v)=\frac{d_\ell(u,v)}{d_{\mathrm{ext}}(u,v)}.
+            \]
+            Si $d_{\mathrm{ext}}(u,v)=0$ (nodos co-localizados) el índice no está definido; usualmente se excluye este caso.
+        \end{definicion}
+
+        \begin{ejemplo}
+            Si $d_\ell(u,v)=12$ y $d_{\mathrm{ext}}(u,v)=10$, entonces $DI(u,v)=1.2$.
+        \end{ejemplo}
+
+        % --- Operadores y brecha espectral en redes dirigidas ---
+        \begin{definicion}[Operador de transición]
+            Sea $G$ un dígrafo finito, sin nodos aislados. Su \emph{operador de transición} es la matriz fila-estocástica $P=(p_{ij})_{i,j\in V}$ dada por
+            \[
+            p_{ij}=\frac{a_{ij}}{\sum_k a_{ik}},
+            \]
+            donde $A=(a_{ij})$ es la matriz de adyacencia (o una versión ponderada coherente con $\ell$).
+        \end{definicion}
+
+        \begin{definicion}[Brecha espectral para dígrafos]
+            Si $P$ es irreducible y aperiódica, entonces su radio espectral es $1$ (Perron–Frobenius) y todos los autovalores satisfacen $|\lambda_1|=1>|\lambda_2|\ge\cdots$. Definimos la \textbf{brecha espectral} como
+            \[
+            \Delta(P)=1-\max_{i\ge 2}|\lambda_i(P)|.
+            \]
+        \end{definicion}
+
+        \begin{observacion}
+            En grafos no dirigidos (o cuando $P$ es reversible respecto de una medida), $P$ es diagonalizable con espectro real y la notación $\Delta=1-\lambda_2$ coincide con $1-\max_{i\ge 2}\lambda_i$. Si prefieres usar Laplaciano normalizado $L_{\mathrm{rw}}=I-P$ (o el simétrico), entonces la brecha suele expresarse como $\lambda_2(L_{\mathrm{rw}})$.
+        \end{observacion}
+
+        \begin{ejemplo}
+            Si $P$ tiene espectro $\{1,\,0.8,\,0.1,\dots\}$, entonces $\Delta(P)=1-0.8=0.2$.
+        \end{ejemplo}
+
+
+        \subsection{Propiedades a nivel de nodo}
+
+            Así como hemos estudiado propiedades que nos ayudan a describir un grafo de forma global, también queremos poder mirar a cada uno de sus nodos y ser capaces de decir cosas respecto a su lugar dentro del mismo. El análisis de propiedades a nivel de nodo nos permite identificar y cuantificar el papel de cada nodo dentro de la estructura del grafo. Mediante medidas locales, podemos distinguir nodos con características particulares, comparar su relevancia relativa y obtener una visión más detallada de la organización interna del grafo, incluso cuando el estudio global resulta insuficiente para captar las diferencias individuales.
+
+            \begin{definicion}[Centralidad de cercanía]
+                La \textbf{centralidad de cercanía} de un nodo $v$, denotada $C_c(v)$, mide la inversa de la suma de distancias desde todos los nodos hasta $v$:
+                \[
+                C_c(v) = \frac{1}{\sum_{u\in V} d(u, v)}
+                \]
+                Un valor elevado indica que $v$ es globalmente accesible dentro de la red.
+            \end{definicion}
+
+            \begin{ejemplo}[Centralidad de cercanía de $v=C$]
+                Consideremos el siguiente dígrafo y calculemos $C_c(C)$.
+
+                \begin{center}
+                    \begin{tikzpicture}[scale=1.1]
+                        % Nodos
+                        \node[nodo] (A) at (0,1) [label={[etiqueta_nodo]left:A}] {};
+                        \node[nodo] (B) at (2,2) [label={[etiqueta_nodo]above:B}] {};
+                        \node[nodo_resaltado] (C) at (4,1) [label={[etiqueta_nodo]right:C}] {};
+                        \node[nodo] (D) at (2,0) [label={[etiqueta_nodo]below:D}] {};
+                        \node[nodo] (E) at (0,-0.2) [label={[etiqueta_nodo]left:E}] {};
+
+                        % Arcos (red completa)
+                        \draw[flecha] (A) -- (B);
+                        \draw[flecha] (A) -- (C);
+                        \draw[flecha] (B) -- (C);
+                        \draw[flecha] (B) -- (D);
+                        \draw[flecha] (D) -- (C);
+                        \draw[flecha] (E) -- (B);
+                        \draw[flecha] (E) -- (D);
+
+                        % Resaltado de geodésicas hacia C
+                        \draw[flecha_resaltada] (A) -- (C);      % d(A,C)=1
+                        \draw[flecha_resaltada] (B) -- (C);      % d(B,C)=1
+                        \draw[flecha_resaltada] (D) -- (C);      % d(D,C)=1
+                        \draw[flecha_resaltada] (E) -- (B);      % parte del camino E->B->C
+                        \draw[flecha_resaltada] (B) -- (C);      % completa E->C con longitud 2
+
+                        % Etiquetas de distancia hacia C
+                        \node[etiqueta, right]  at (C) {$v=C$};
+                        \node[etiqueta, above left]  at (A) {$d(A,C)=1$};
+                        \node[etiqueta, above]       at (B) {$d(B,C)=1$};
+                        \node[etiqueta, below]       at (D) {$d(D,C)=1$};
+                        \node[etiqueta, left]        at (E) {$d(E,C)=2$};
+                    \end{tikzpicture}
+                \end{center}
+
+                Las distancias mínimas hacia $C$ son:
+                \[
+                d(A,C)=1,\quad d(B,C)=1,\quad d(D,C)=1,\quad d(E,C)=2,\quad d(C,C)=0.
+                \]
+                Usando la definición
+                \[
+                C_c(C)=\frac{1}{\sum_{u\in V} d(u,C)}=\frac{1}{\,1+1+1+2+0\,}=\frac{1}{5}=0.2.
+                \]
+                Si se prefiere la convención estándar $\sum_{u\neq v}$ (excluyendo $d(C,C)$), el valor es el mismo.
+            \end{ejemplo}
+
+            \begin{definicion}[Centralidad de intermediación]
+                La \textbf{centralidad de intermediación} de un nodo $v$, denotada $C_b(v)$, es la suma, sobre todos los pares de nodos $(s, t)$ distintos de $v$, de la proporción de caminos más cortos entre $s$ y $t$ que pasan por $v$:
+                \[
+                C_b(v) = \sum_{s \neq v \neq t} \frac{\sigma_{st}(v)}{\sigma_{st}}
+                \]
+                donde $\sigma_{st}$ es el número de caminos geodésicos de $s$ a $t$, y $\sigma_{st}(v)$ aquellos que pasan por $v$.
+            \end{definicion}
+
+            \begin{ejemplo}[Centralidad de intermediación de $v=B$]
+                Consideremos el siguiente dígrafo y calculemos $C_b(B)$.
+
+                \begin{center}
+                    \begin{tikzpicture}[scale=1.05]
+                        % Nodos
+                        \node[nodo] (A) at (0,0.8) [label={[etiqueta_nodo]left:A}] {};
+                        \node[nodo] (D) at (0,2.0) [label={[etiqueta_nodo]left:D}] {};
+                        \node[nodo] (E) at (0,-0.6) [label={[etiqueta_nodo]left:E}] {};
+                        \node[nodo_resaltado] (B) at (2,0.8) [label={[etiqueta_nodo]above:B}] {};
+                        \node[nodo] (C) at (4,0.8) [label={[etiqueta_nodo]right:C}] {};
+
+                        % Arcos de la red
+                        \draw[flecha] (A) -- (B);
+                        \draw[flecha] (D) -- (B);
+                        \draw[flecha] (E) -- (B);
+                        \draw[flecha] (B) -- (C);
+                        \draw[flecha] (A) -- (D);
+                        \draw[flecha] (D) -- (C);
+
+                        % Geodésicas hacia C que pasan por B
+                        \draw[flecha_resaltada] (A) -- (B);
+                        \draw[flecha_resaltada] (B) -- (C);
+                        \draw[flecha_resaltada] (E) -- (B);
+                        \draw[flecha_resaltada] (B) -- (C);
+
+                        % Geodésica alternativa A->D->C (misma longitud que A->B->C)
+                        \draw[flecha_alternativa] (A) -- (D);
+                        \draw[flecha_alternativa] (D) -- (C);
+
+                        % Etiquetas
+                        \node[etiqueta, below] at (2, -0.4) {%
+                            \begin{minipage}{8cm}\centering
+                            Geodésicas hacia $C$: \\
+                            $A\to C$: $A\!\to\!B\!\to\!C$ y $A\!\to\!D\!\to\!C$ (longitud $2$). \quad
+                            $E\to C$: $E\!\to\!B\!\to\!C$ (longitud $2$).
+                            \end{minipage}
+                        };
+                    \end{tikzpicture}
+                \end{center}
+
+                Cómputo:
+                \[
+                \begin{aligned}
+                &\text{Par }(A,C): && \sigma_{AC}=2 \text{ (vías } A\!\to\!B\!\to\!C \text{ y } A\!\to\!D\!\to\!C),
+                && \sigma_{AC}(B)=1 \ \Rightarrow\ \frac{\sigma_{AC}(B)}{\sigma_{AC}}=\tfrac{1}{2}.\\
+                &\text{Par }(E,C): && \sigma_{EC}=1 \text{ (vía } E\!\to\!B\!\to\!C),
+                && \sigma_{EC}(B)=1 \ \Rightarrow\ \frac{\sigma_{EC}(B)}{\sigma_{EC}}=1.
+                \end{aligned}
+                \]
+                Todos los demás pares $(s,t)$ con $s\neq B\neq t$ no aportan (la geodésica no pasa por $B$ o no existe). Por tanto,
+                \[
+                C_b(B)=\frac{1}{2}+1=\frac{3}{2}.
+                \]
+            \end{ejemplo}
+
+            \begin{definicion}[Eccentricidad]
+                La \textbf{eccentricidad} de un nodo $v$, denotada $e(v)$, es la mayor distancia desde $v$ hacia cualquier otro nodo de la red:
+                \[
+                e(v) = \max_{u \in V} d(u, v)
+                \]
+                Mide el “peor caso” de accesibilidad individual.
+            \end{definicion}
+
+            \begin{ejemplo}[Eccentricidad de $v=C$]
+                Consideremos el siguiente dígrafo y calculemos $e(C)=\max_{u\in V} d(u,C)$.
+
+                \begin{center}
+                    \begin{tikzpicture}[scale=1.1]
+                        % Nodos
+                        \node[nodo] (A) at (0,1.2) [label={[etiqueta_nodo]left:A}] {};
+                        \node[nodo] (B) at (2,1.2) [label={[etiqueta_nodo]above:B}] {};
+                        \node[nodo_resaltado] (C) at (4,1.2) [label={[etiqueta_nodo]right:C}] {};
+                        \node[nodo] (D) at (0,-0.2) [label={[etiqueta_nodo]left:D}] {};
+                        \node[nodo] (E) at (2,-0.2) [label={[etiqueta_nodo]below:E}] {};
+
+                        % Arcos de la red
+                        \draw[flecha] (A) -- (B);
+                        \draw[flecha] (B) -- (C);
+                        \draw[flecha] (D) -- (A);
+                        \draw[flecha] (E) -- (B);
+
+                        % Geodésicas hacia C (para visualizar d(u,C))
+                        \draw[flecha_resaltada] (A) -- (B); \draw[flecha_resaltada] (B) -- (C);        % A->C (2)
+                        \draw[flecha_resaltada] (B) -- (C);                               % B->C (1)
+                        \draw[flecha_resaltada] (D) -- (A); \draw[flecha_resaltada] (A) -- (B); \draw[flecha_resaltada] (B) -- (C); % D->C (3)
+                        \draw[flecha_resaltada] (E) -- (B); \draw[flecha_resaltada] (B) -- (C);         % E->C (2)
+
+                        % Etiquetas
+                        \node[etiqueta, right]  at (C) {$v=C$};
+                        \node[etiqueta, above]  at (A) {$d(A,C)=2$};
+                        \node[etiqueta, above]  at (B) {$d(B,C)=1$};
+                        \node[etiqueta, left]   at (D) {$d(D,C)=3$};
+                        \node[etiqueta, below]  at (E) {$d(E,C)=2$};
+                    \end{tikzpicture}
+                \end{center}
+
+                Las distancias mínimas hacia $C$ son:
+                \[
+                d(A,C)=2,\quad d(B,C)=1,\quad d(D,C)=3,\quad d(E,C)=2,\quad d(C,C)=0.
+                \]
+                Por definición,
+                \[
+                e(C)=\max\{2,1,3,2,0\}=3.
+                \]
+            \end{ejemplo}
+
+        \section{Vulnerabilidad y resiliencia}
+
+            \begin{definicion}[Eficiencia global]
+                Sea $G=(V,E)$ un grafo finito con $N=|V|$ y distancia $d(\cdot,\cdot)$ ya definida. La \textbf{eficiencia global} de $G$ es
+                \[
+                E(G)\;=\;\frac{1}{N(N-1)}\sum_{\substack{i,j\in V\\ i\neq j}}\frac{1}{d(i,j)},
+                \]
+                con la convención $\frac{1}{+\infty}=0$. En dígrafos la suma es sobre pares \emph{ordenados}.
+            \end{definicion}
+
+            \begin{proposicion}[Cotas y caso extremo de $E(G)$]
+                Supongamos que $d(i,j)\in\{1,2,\dots\}\cup\{+\infty\}$ para todo $i\neq j$ (por ejemplo, distancias no ponderadas, o ponderadas con pesos mínimos $\ge 1$). Entonces:
+                \[
+                0 \;\le\; E(G) \;\le\; 1,
+                \]
+                y $E(G)=1$ si y sólo si $d(i,j)=1$ para todo $i\neq j$.
+            \end{proposicion}
+
+            \begin{proof}
+                Por definición,
+                \[
+                E(G)=\frac{1}{N(N-1)}\sum_{i\neq j}\frac{1}{d(i,j)},
+                \qquad \text{con } \tfrac{1}{+\infty}=0.
+                \]
+                Cada sumando es no negativo, así que $E(G)\ge 0$. Además, para $i\neq j$ se tiene $d(i,j)\in\{1,2,\dots\}\cup\{+\infty\}$, luego
+                \[
+                0 \;\le\; \frac{1}{d(i,j)} \;\le\; 1.
+                \]
+                Promediando, $E(G)\le 1$. La igualdad $E(G)=1$ ocurre si y sólo si todos los sumandos valen $1$, es decir, si y sólo si $d(i,j)=1$ para todo $i\neq j$.
+            \end{proof}
+
+            \begin{corolario}[Caracterización estructural del caso extremo]
+                Con la misma hipótesis, $E(G)=1$ si y sólo si el grafo tiene arista directa entre todo par ordenado de vértices (en dígrafos) o entre todo par no ordenado (en no dirigidos). Es decir, el dígrafo es completo (todos los arcos entre pares distintos) o el grafo no dirigido es completo.
+            \end{corolario}
+
+            \begin{observacion}[Distancias ponderadas arbitrarias]
+                Si permitimos pesos $<1$, entonces $d(i,j)$ puede ser $<1$ y $1/d(i,j)>1$. En ese caso la cota correcta es
+                \[
+                E(G)\;\le\;\frac{1}{\delta},\qquad \delta:=\min_{i\neq j} d(i,j)\,,
+                \]
+                y recuperamos $E(G)\le 1$ tras reescalar los pesos para que $\delta\ge 1$ (o usando distancias enteras por número de aristas).
+            \end{observacion}
+
+            \begin{definicion}[Eliminación y vulnerabilidad puntual]
+                Sea $H\subseteq V$ (eliminación de vértices) o $H\subseteq E$ (eliminación de aristas). Definimos la \textbf{vulnerabilidad} frente a $H$ por
+                \[
+                V(G;H)\;=\;\frac{E(G)-E(G\setminus H)}{E(G)},
+                \]
+                con la convención $V(G;H)=0$ si $E(G)=0$. Notación abreviada: $V_v:=V(G;\{v\})$ y $V_e:=V(G;\{e\})$.
+            \end{definicion}
+
+            \begin{proposicion}[Monotonicidad por eliminación]
+                Para todo $H\subseteq V$ o $H\subseteq E$ se cumple $E(G\setminus H)\le E(G)$.
+            \end{proposicion}
+
+            \begin{proof}
+                Sea $d_G$ la distancia en $G$ y $d_{G\setminus H}$ la distancia tras eliminar $H$. Quitar vértices o aristas no crea caminos nuevos ni acorta los existentes, de modo que para todo $i\neq j$:
+                \[
+                d_{G\setminus H}(i,j)\;\ge\; d_G(i,j)\quad\text{(o bien }d_{G\setminus H}(i,j)=+\infty\text{)}.
+                \]
+                Con la convención $1/(+\infty)=0$, obtenemos
+                \[
+                \frac{1}{d_{G\setminus H}(i,j)}\;\le\;\frac{1}{d_G(i,j)}\qquad\text{para todo }i\neq j.
+                \]
+                Al promediar sobre todos los pares aparece exactamente $E(G\setminus H)\le E(G)$.
+            \end{proof}
+
+            \begin{definicion}[Curvas de vulnerabilidad y resiliencia]
+                Para $k\in\{1,\dots,N\}$ definimos la \textbf{vulnerabilidad en peor caso}
+                \[
+                V_k^{\max}(G)\;=\;\max_{\substack{H\subseteq V\\ |H|=k}} V(G;H),
+                \]
+                y la \textbf{resiliencia a tamaño $k$} como $R_k(G)=1-V_k^{\max}(G)$. Análogamente se definen variantes por aristas.
+            \end{definicion}
+
+            \begin{definicion}[Vulnerabilidad esperada bajo un modelo de fallo]
+                Sea $\mathbb{P}$ una ley sobre subconjuntos $H$ (p.\,ej. eliminación uniforme de $k$ nodos o eliminación proporcional a una centralidad). La \textbf{vulnerabilidad esperada} es
+                \[
+                V_k^{\mathbb{P}}(G)\;=\;\mathbb{E}_{H\sim\mathbb{P}}\!\big[V(G;H)\big].
+                \]
+            \end{definicion}
+
+            \begin{ejemplo}[Cálculo ilustrativo mínimo]
+                En $P_4$ no dirigido con vértices $1$–$4$, $E(G)$ se obtiene sumando $1/d(i,j)$ sobre $i\neq j$ y normalizando por $12$. Al eliminar $v=2$ el grafo se parte, varias contribuciones pasan a $0$, y $E(G\setminus\{2\})<E(G)$; así $V_v>0$. El mismo procedimiento se aplica en dígrafos con distancias dirigidas.
+            \end{ejemplo}
+
+    \section{Algoritmos fundamentales en teoría de grafos}
+        Al estudiar distancias y caminos mínimos en grafos finitos, necesitamos procedimientos efectivos que, a partir de especificaciones bien definidas, produzcan soluciones correctas en tiempo finito y con garantías de optimalidad. En esta línea situamos dos hitos clásicos: el algoritmo de Dijkstra (formulado en 1956 y publicado en 1959), que resuelve caminos mínimos desde una fuente única con pesos no negativos mediante relajación y selección iterativa del vértice con etiqueta mínima, y el algoritmo de Floyd–Warshall (1962), que computa todas las distancias par–a–par por programación dinámica incorporando vértices intermedios; este último unifica ideas de Floyd para costos mínimos y de Warshall para cierre transitivo, con antecedentes en la aritmética de caminos de Kleene. En lo que sigue fijamos hipótesis, enunciamos invariantes y recurrencias, demostramos corrección y acotamos la complejidad temporal y espacial de ambos métodos.
+
+        Junto a estos algoritmos de distancia, utilizaremos DBSCAN (Ester, Kriegel, Sander y Xu, 1996) para la detección de comunidades a partir de una métrica sobre vértices o sus representaciones: definiremos los parámetros \(\varepsilon\) y \(\mathrm{minPts}\), caracterizaremos puntos núcleo, de borde y ruido, y mostraremos cómo induce particiones sin fijar a priori el número de grupos, preservando la conectividad por densidad. Justificaremos la compatibilidad entre la métrica elegida y la geometría de la red o de sus incrustaciones, y discutiremos las condiciones bajo las cuales DBSCAN resulta estable, de modo que el conjunto de herramientas quede cohesionado: distancias fiables (Dijkstra/Floyd–Warshall) que sustentan una noción de proximidad, y un criterio de agrupamiento (DBSCAN) consistente con dicha proximidad.
+
+        \subsection{Algoritmo de Dijkstra}
+
+            \begin{definicion}[Problema de una fuente]
+                Sea $(G,\ell)$ un grafo finito (dirigido o no) con pesos $\ell:E\to[0,\infty)$ y vértice fuente $s\in V$. Definimos
+                \[
+                d_\ell(s,v)=\inf\Big\{\sum_{e\in P}\ell(e):\ P \text{ es un camino de } s \text{ a } v\Big\},
+                \]
+                con $d_\ell(s,s)=0$ y $d_\ell(s,v)=+\infty$ si no hay camino. El problema consiste en calcular $d_\ell(s,v)$ para todo $v\in V$ y, opcionalmente, un árbol de predecesores que realice estas distancias.
+            \end{definicion}
+
+            \begin{observacion}[Hipótesis]
+                Trabajamos con pesos no negativos. En dígrafos, relajamos arcos salientes de cada vértice extraído; en no dirigidos, relajamos aristas incidentes.
+            \end{observacion}
+
+            \paragraph{Algoritmo (Dijkstra).}
+                Fijamos una cola de prioridad $Q$ con claves reales y mantenemos etiquetas tentativas $D[v]$ y predecesores $\pi[v]$.
+                \begin{enumerate}
+                    \item Inicializamos $D[s]=0$, $D[v]=+\infty$ para $v\neq s$; $\pi[v]=\bot$ para todo $v$; insertamos todos los vértices en $Q$ con sus claves $D[\cdot]$.
+                    \item Mientras $Q$ no esté vacía: extraemos $u=\arg\min_{v\in Q} D[v]$. Para cada arco/arista $u\to w$ con peso $\ell(u,w)$, si $D[w]>D[u]+\ell(u,w)$ entonces actualizamos $D[w]\gets D[u]+\ell(u,w)$, $\pi[w]\gets u$ y disminuimos la clave de $w$ en $Q$.
+                    \item Al terminar, $D[v]=d_\ell(s,v)$ para todo $v$; el conjunto $\{( \pi[v],v): \pi[v]\neq \bot\}$ define un árbol (o bosque) de predecesores.
+                \end{enumerate}
+
+            \begin{proposicion}[Correctitud]
+                    \end{proposicion}
+
+            La correctitud del algoritmo de Dijkstra se basa en una idea "codiciosa" (greedy): en cada paso, se confirma la distancia al nodo no visitado más cercano a la fuente. Dado que los pesos de las aristas no son negativos, cualquier otra ruta alternativa para llegar a ese mismo nodo tendría que pasar forzosamente por otro nodo no visitado, que por definición está más lejos. Por lo tanto, esa ruta alternativa sería siempre más larga, lo que garantiza que la primera vez que llegamos a un nodo y lo marcamos como "visitado", lo hemos hecho por el camino más corto posible.
+
+            \begin{proof}
+                Demostramos por inducción sobre el número de extracciones. Sea $u$ el primer vértice que viola la propiedad. Como $s$ se extrae con $D[s]=0=d_\ell(s,s)$, existe alguno posterior. Sea $P$ un camino mínimo de $s$ a $u$, y sea $x$ el primer vértice de $P$ que aún no había sido extraído inmediatamente antes de extraer $u$; su predecesor $y$ en $P$ ya fue extraído. En ese momento, al relajar $y\to x$ establecemos $D[x]\le D[y]+\ell(y,x)=d_\ell(s,y)+\ell(y,x)=d_\ell(s,x)$, y por optimalidad $D[x]\ge d_\ell(s,x)$, luego $D[x]=d_\ell(s,x)$. Como $D[u]\le D[x]$ por elección de $u$ (clave mínima), obtenemos $D[u]\le d_\ell(s,x)\le d_\ell(s,u)$; pero siempre $D[u]\ge d_\ell(s,u)$, contradicción. La inducción cierra.
+            \end{proof}
+
+            \begin{proposicion}[Complejidad]
+                Sea $n=|V|$ y $m=|E|$. Con una cola de prioridad binaria, el tiempo es $O(m\log n)$ y el espacio $O(n+m)$. Con cola de Fibonacci, $O(m+n\log n)$.
+            \end{proposicion}
+
+            \begin{proof}
+                Trabajamos sobre una representación por listas de adyacencia y mantenemos para cada $v\in V$ una etiqueta $D[v]$, un predecesor $\pi[v]$ y una cola de prioridad $Q$ indexada por vértices con clave $D[\cdot]$. Asumimos pesos no negativos.
+
+                \paragraph{Costes básicos.}
+                La inicialización fija $D[s]=0$, $D[v]=+\infty$ para $v\neq s$, $\pi[v]=\bot$, e inserta los $n$ vértices en $Q$. Esto cuesta $O(n)$ más el coste de $n$ inserciones en $Q$ (que acotaremos según la estructura). El bucle principal extrae exactamente $n$ veces el mínimo de $Q$ y, por cada extracción de $u$, recorre su lista de adyacencia para intentar relajar cada arco saliente $u\to w$. Por tanto, el número total de relajaciones intentadas es
+                \[
+                \sum_{u\in V}\deg^+(u)=m
+                \]
+                (en grafos no dirigidos, cada arista se recorre en ambos sentidos; ello multiplica por una constante y no altera las cotas asintóticas).
+
+                \paragraph{Contabilidad de operaciones sobre $Q$.}
+                Sea $\mathsf{EM}$ el coste de una \emph{extract-min}, $\mathsf{DK}$ el de una \emph{decrease-key} e $\mathsf{INS}$ el de una \emph{insert} en la estructura elegida. Entonces:
+                \begin{itemize}
+                    \item Realizamos exactamente $n$ operaciones \emph{extract-min}: coste $n\cdot \mathsf{EM}$.
+                    \item Intentamos $m$ relajaciones. Cada intento que mejora $D[w]$ induce una \emph{decrease-key} sobre $w$. Cada arco puede provocar a lo sumo una mejora efectiva (y por tanto una \emph{decrease-key}); por lo tanto, el número de \emph{decrease-key} es $\le m$.\footnote{Incluso si un vértice $w$ recibe múltiples mejoras a lo largo del algoritmo, cada mejora proviene de relajar un arco distinto; acotamos por el número total de intentos $m$.}
+                    \item Insertamos $n$ vértices al inicio: coste $n\cdot \mathsf{INS}$.
+                \end{itemize}
+
+                \paragraph{Caso 1: cola de prioridad binaria.}
+                Para un montículo binario, $\mathsf{INS}=O(1)$ amortizado (o $O(\log n)$ si se prefiere insertar con decrecimiento de clave), $\mathsf{EM}=O(\log n)$ y $\mathsf{DK}=O(\log n)$. Por lo tanto,
+                \[
+                T(n,m)\;=\;O(n)\;+\;n\cdot O(\log n)\;+\;m\cdot O(\log n)\;=\;O\big((n+m)\log n\big).
+                \]
+                El espacio almacena el grafo ($O(n+m)$), las etiquetas y predecesores ($O(n)$) y el montículo ($O(n)$): total $O(n+m)$.
+
+                \paragraph{Caso 2: cola de Fibonacci.}
+                Para un montículo de Fibonacci, $\mathsf{INS}=O(1)$ amortizado, $\mathsf{DK}=O(1)$ amortizado y $\mathsf{EM}=O(\log n)$ amortizado. Así,
+                \[
+                T(n,m)\;=\;O(n)\;+\;n\cdot O(\log n)\;+\;m\cdot O(1)\;=\;O\big(m+n\log n\big),
+                \]
+                con el mismo espacio $O(n+m)$.
+
+                \paragraph{Observación sobre grafos no dirigidos.}
+                Si contamos $m$ como el número de aristas no dirigidas, el recorrido de adyacencias ejecuta $2m$ relajaciones; esto solo multiplica por una constante los términos dominantes y deja inalteradas las cotas asintóticas indicadas.
+
+                Con ello, quedan demostradas las cotas afirmadas en la proposición.
+            \end{proof}
+
+            \begin{ejemplo}[Ejecución de Dijkstra]
+                Consideramos el dígrafo con $V=\{A,B,C,D,E\}$ y arcos ponderados
+                \[
+                A\to B:2,\quad A\to C:5,\quad B\to C:1,\quad B\to D:2,\quad C\to D:3,\quad D\to E:1,\quad C\to E:5.
+                \]
+                Tomamos $s=A$. Dibujamos el grafo:
+
+                \begin{center}
+                    \begin{tikzpicture}[scale=1.0]
+                        \node[nodo] (A) at (0,1) [label={[etiqueta_nodo]left:A}] {};
+                        \node[nodo] (B) at (2,2) [label={[etiqueta_nodo]above:B}] {};
+                        \node[nodo] (C) at (2,0) [label={[etiqueta_nodo]below:C}] {};
+                        \node[nodo] (D) at (4,1) [label={[etiqueta_nodo]above:D}] {};
+                        \node[nodo] (E) at (6,1) [label={[etiqueta_nodo]right:E}] {};
+
+                        \draw[flecha] (A)--(B) node[etiqueta_peso,above]{2};
+                        \draw[flecha] (A)--(C) node[etiqueta_peso,below]{5};
+                        \draw[flecha] (B)--(C) node[etiqueta_peso,right]{1};
+                        \draw[flecha] (B)--(D) node[etiqueta_peso,above]{2};
+                        \draw[flecha] (C)--(D) node[etiqueta_peso,below]{3};
+                        \draw[flecha] (D)--(E) node[etiqueta_peso,above]{1};
+                        \draw[flecha] (C)--(E) node[etiqueta_peso,below]{5};
+                    \end{tikzpicture}
+                \end{center}
+
+                Iteramos manteniendo $D[\cdot]$ y predecesores $\pi[\cdot]$:
+
+                \medskip
+                \noindent
+                \begin{tabular}{l|ccccc|ccccc}
+                    \toprule
+                    Paso & $D[A]$ & $D[B]$ & $D[C]$ & $D[D]$ & $D[E]$ & $\pi[A]$ & $\pi[B]$ & $\pi[C]$ & $\pi[D]$ & $\pi[E]$ \\
+                    \midrule
+                    Init & 0 & $\infty$ & $\infty$ & $\infty$ & $\infty$ & $\bot$ & $\bot$ & $\bot$ & $\bot$ & $\bot$ \\
+                    Extrae $A$ & 0 & 2 & 5 & $\infty$ & $\infty$ & $\bot$ & $A$ & $A$ & $\bot$ & $\bot$ \\
+                    Extrae $B$ & 0 & 2 & \textbf{3} & 4 & $\infty$ & $\bot$ & $A$ & \textbf{$B$} & $B$ & $\bot$ \\
+                    Extrae $C$ & 0 & 2 & 3 & 4 & \textbf{8} & $\bot$ & $A$ & $B$ & $B$ & \textbf{$C$} \\
+                    Extrae $D$ & 0 & 2 & 3 & 4 & \textbf{5} & $\bot$ & $A$ & $B$ & $B$ & \textbf{$D$} \\
+                    Extrae $E$ & 0 & 2 & 3 & 4 & 5 & $\bot$ & $A$ & $B$ & $B$ & $D$ \\
+                    \bottomrule
+                \end{tabular}
+
+                \medskip
+                Concluimos $d_\ell(A,\cdot)=(0,2,3,4,5)$. Un árbol de predecesores válido es
+                \[
+                A\to B,\quad B\to C,\quad B\to D,\quad D\to E,
+                \]
+                que realiza los caminos mínimos $A\!-\!B$, $A\!-\!B\!-\!C$, $A\!-\!B\!-\!D$, $A\!-\!B\!-\!D\!-\!E$.
+            \end{ejemplo}
+
+            \begin{observacion}[Limitación]
+                Si existen pesos negativos, el invariante de optimalidad falla. En tal caso debemos emplear reponderación (Johnson) o Bellman–Ford (para una fuente) y Floyd–Warshall (para todos los pares).
+            \end{observacion}
+
+        \subsection{Algoritmo de Floyd-Warshall}
+
+            \begin{definicion}[Problema APSP]
+                Sea $(G,\ell)$ un grafo finito dirigido con $V=\{1,\dots,n\}$ y pesos $\ell:E\to\mathbb{R}$ (admitimos pesos negativos). Para $i,j\in V$ definimos
+                \[
+                d_\ell(i,j)=\inf\Big\{\sum_{e\in P}\ell(e):\ P \text{ es un camino dirigido de }i\text{ a }j\Big\},
+                \]
+                con $d_\ell(i,i)\le 0$ por el camino vacío. Cuando hay ciclos de peso negativo alcanzables de $i$ a $j$, $d_\ell(i,j)=-\infty$ y no existe camino mínimo.
+            \end{definicion}
+
+            \paragraph{Esquema de programación dinámica.}
+            Fijamos un orden de los nodos $1,\dots,n$ y, para $k=0,\dots,n$, definimos $D^{(k)}=(d^{(k)}_{ij})$ como la mejor distancia de $i$ a $j$ usando únicamente nodos intermedios del conjunto $\{1,\dots,k\}$:
+            \[
+            d^{(0)}_{ij}=
+            \begin{cases}
+            0,& i=j,\\
+            \ell(i,j),& (i,j)\in E,\\
+            +\infty,& \text{en otro caso,}
+            \end{cases}
+            \qquad
+            d^{(k)}_{ij}=\min\big\{\,d^{(k-1)}_{ij},\ d^{(k-1)}_{i k}+d^{(k-1)}_{k j}\big\}.
+            \]
+
+            \begin{teorema}[Corrección]
+                Para todo $k\in\{0,\dots,n\}$ y $i,j\in V$, $d^{(k)}_{ij}$ es la mínima longitud de un camino $i\to j$ cuyos nodos intermedios pertenecen a $\{1,\dots,k\}$. En particular, si no existe ciclo de peso negativo alcanzable, $D^{(n)}$ coincide con la matriz de distancias $d_\ell$.
+            \end{teorema}
+
+            La intuición detrás del algoritmo es la programación dinámica. Para encontrar el camino más corto entre dos nodos $i$ y $j$ permitiendo que un conjunto de nodos intermedios $K$ sea utilizado, se consideran dos escenarios: o bien el camino más corto no utiliza un nuevo nodo $k \in K$, en cuyo caso la solución es la que ya se tenía sin $k$; o bien sí lo utiliza, en cuyo caso el camino debe ser la concatenación de los caminos más cortos ya conocidos $i \to k$ y $k \to j$. El algoritmo simplemente itera sobre todos los nodos posibles como intermediarios, construyendo la solución óptima paso a paso.
+
+            \begin{proof}
+                Procedemos por inducción en $k$. El caso $k=0$ es la definición. Supongamos cierto para $k-1$. Todo camino $i\to j$ con intermedios en $\{1,\dots,k\}$ o bien no usa el nodo $k$ como intermedio (costo $\ge d^{(k-1)}_{ij}$) o bien lo usa y puede descomponerse como $i\to k$ seguido de $k\to j$, ambos con intermedios en $\{1,\dots,k-1\}$, con costo $\ge d^{(k-1)}_{ik}+d^{(k-1)}_{kj}$. Tomando el mínimo sobre ambas opciones obtenemos la recurrencia. La igualdad se logra porque todo camino del tipo considerado cae en uno de los dos casos, y la inducción asegura optimalidad en los subcaminos.
+            \end{proof}
+
+            \begin{proposicion}[Detección de ciclos negativos]
+                Existe un ciclo de peso negativo alcanzable si y solo si, al finalizar, algún $d^{(n)}_{ii}<0$. Más aún, si $d^{(n)}_{ii}<0$ y $d^{(n)}_{ij},d^{(n)}_{ji}<+\infty$, entonces $d_\ell(i,j)=-\infty=-d_\ell(j,i)$.
+            \end{proposicion}
+
+            \begin{proof}
+                ($\Rightarrow$) Supongamos que existe un ciclo negativo $C$ alcanzable desde $i$ y que retorna a $i$. Para cada $k$, $d^{(k)}_{ii}$ es la mínima longitud de un camino $i\to i$ cuyos intermedios están en $\{1,\dots,k\}$. Al incorporar como intermedios todos los nodos del ciclo (lo que ocurre no más tarde que en $k=n$), podemos realizar $C$, por lo que $d^{(n)}_{ii}\le \ell(C)<0$.
+
+                ($\Leftarrow$) Supongamos $d^{(n)}_{ii}<0$. Entonces existe un camino $W$ de $i$ a $i$ con longitud total negativa y cuyos intermedios están en $\{1,\dots,n\}$ (esto es, un camino dirigido usual). Si $W$ fuera simple en nodos, sería un ciclo negativo y ya estaría demostrado. Si $W$ repite nodos, al descomponerlo en ciclos elementales obtenemos al menos un ciclo con suma de pesos negativa (pues la suma total es negativa), por lo que existe un ciclo negativo alcanzable. Para la afirmación adicional, si $d^{(n)}_{ij},d^{(n)}_{ji}<+\infty$, concatenando un camino $i\to j$, el ciclo negativo (arbitrariamente repetido) y un camino $j\to i$ obtenemos caminos $i\to j$ y $j\to i$ de costo arbitrariamente pequeño, lo que implica $d_\ell(i,j)=d_\ell(j,i)=-\infty$.
+            \end{proof}
+
+            \paragraph{Reconstrucción de caminos.}
+            Mantenemos una matriz de “siguiente” $N^{(k)}$:
+            \[
+            N^{(0)}_{ij}=
+            \begin{cases}
+            j,& (i,j)\in E\text{ o }i=j,\\
+            \bot,& \text{en otro caso,}
+            \end{cases}
+            \quad
+            \text{y al actualizar } d^{(k)}_{ij}\gets d^{(k-1)}_{ik}+d^{(k-1)}_{kj},\ \text{ponemos } N^{(k)}_{ij}\gets N^{(k-1)}_{ik}.
+            \]
+            Al final, el camino $i\to j$ se obtiene iterando $i,\, i\leftarrow N^{(n)}_{i j}$ hasta llegar a $j$ (si $N^{(n)}_{ij}=\bot$, no hay camino).
+
+            \begin{proposicion}[Complejidad]
+                El algoritmo ejecuta $n$ fases; en cada fase $k$ actualiza todas las parejas $(i,j)$ en $O(1)$. Por tanto, el tiempo es $O(n^3)$ y el espacio $O(n^2)$ (para $D$ y, opcionalmente, $N$).
+            \end{proposicion}
+
+            \begin{proof}
+                Mantenemos matrices $D^{(k)}$ (y opcionalmente $N^{(k)}$) de tamaño $n\times n$. La inicialización de $D^{(0)}$ cuesta $\mathcal{O}(n^2)$. Para cada $k=1,\dots,n$, actualizamos cada par $(i,j)$ mediante
+                \[
+                d^{(k)}_{ij}\gets \min\{\,d^{(k-1)}_{ij},\ d^{(k-1)}_{ik}+d^{(k-1)}_{kj}\,\},
+                \]
+                lo cual requiere tiempo $\mathcal{O}(1)$ por par. Como hay $n$ valores de $k$ y $n^2$ pares $(i,j)$, el tiempo total es $n\cdot n^2\cdot \mathcal{O}(1)=\mathcal{O}(n^3)$. El espacio necesario para almacenar una matriz de distancias es $\mathcal{O}(n^2)$; podemos reciclar memoria guardando sólo $D^{(k-1)}$ y $D^{(k)}$ (o incluso actualizar in-place), por lo que el espacio asintótico permanece en $\mathcal{O}(n^2)$. Si almacenamos además la matriz de “siguiente” $N$, añadimos otro $\mathcal{O}(n^2)$, que no altera la cota.
+            \end{proof}
+
+            \begin{ejemplo}[Instancia pequeña con pesos negativos y sin ciclos negativos]
+                Consideramos $V=\{1,2,3,4\}$ y arcos con pesos
+                \[
+                (1,2):3,\quad (1,3):10,\quad (2,3):-2,\quad (2,4):5,\quad (3,4):1.
+                \]
+                La inicialización da
+                \[
+                D^{(0)}=\begin{pmatrix}
+                0&3&10&+\infty\\
+                +\infty&0&-2&5\\
+                +\infty&+\infty&0&1\\
+                +\infty&+\infty&+\infty&0
+                \end{pmatrix}.
+                \]
+                Tras incorporar $k=1$ no hay mejoras nuevas. Con $k=2$:
+                \[
+                d^{(2)}_{1,3}=\min\{10,\ 3+(-2)\}=1,\qquad
+                d^{(2)}_{1,4}=\min\{+\infty,\ 3+5\}=8.
+                \]
+                Con $k=3$:
+                \[
+                d^{(3)}_{1,4}=\min\{8,\ 1+1\}=2,\qquad
+                d^{(3)}_{2,4}=\min\{5,\ (-2)+1\}= -1.
+                \]
+                Con $k=4$ no hay mejoras. Obtenemos
+                \[
+                D^{(n)}=\begin{pmatrix}
+                0&3&1&2\\
+                +\infty&0&-2&-1\\
+                +\infty&+\infty&0&1\\
+                +\infty&+\infty&+\infty&0
+                \end{pmatrix},
+                \]
+                sin entradas diagonales negativas, luego no hay ciclos de peso negativo. Por ejemplo, el camino mínimo $1\to 4$ es $1\to 2\to 3\to 4$ con costo $3+(-2)+1=2$.
+            \end{ejemplo}
+
+        \subsection{DBSCAN}
+
+            \begin{definicion}[Espacio de trabajo]
+                Fijamos un conjunto finito de nodos $V$ y una función de distancia simétrica $d:V\times V\to[0,\infty)$ que satisface $d(u,u)=0$ y $d(u,v)=d(v,u)$; si $d$ no es métrica (p.\,ej.\ proviene de un dígrafo), trabajaremos con una simetrización $d^{\mathrm{sym}}(u,v):=\max\{d(u,v),d(v,u)\}$ o con la distancia sobre el subyacente no dirigido. Sea $N=|V|$.
+            \end{definicion}
+
+            \begin{definicion}[$\varepsilon$-vecindad y tipos de puntos]
+                Dado $\varepsilon>0$ y $\text{minPts}\in\mathbb{N}$, definimos para $x\in V$ la \emph{vecindad} $\varepsilon$-cercana
+                \[
+                \mathcal{N}_\varepsilon(x):=\{\,y\in V:\ d(x,y)\le \varepsilon\,\}.
+                \]
+                Decimos que:
+                \begin{itemize}
+                  \item $x$ es \emph{núcleo} si $|\mathcal{N}_\varepsilon(x)|\ge \text{minPts}$;
+                  \item $x$ es \emph{borde} si $x$ no es núcleo y existe $z$ núcleo con $x\in \mathcal{N}_\varepsilon(z)$;
+                  \item $x$ es \emph{ruido} si no es núcleo ni borde.
+                \end{itemize}
+            \end{definicion}
+
+            \begin{definicion}[Alcance por densidad]
+                Decimos que $y$ es \emph{directamente alcanzable por densidad} desde $x$ si $x$ es núcleo y $y\in \mathcal{N}_\varepsilon(x)$. Decimos que $y$ es \emph{alcanzable por densidad} desde $x$ si existe una cadena $x=x_0,x_1,\dots,x_k=y$ tal que $x_{i+1}$ es directamente alcanzable por densidad desde $x_i$ para todo $i$, y todos $x_i$ con $i<k$ son núcleos.
+            \end{definicion}
+
+            \begin{definicion}[Conexión por densidad]
+                Dos puntos $x,y\in V$ están \emph{conectados por densidad} si existe $z$ tal que $x$ y $y$ son ambos alcanzables por densidad desde $z$.
+            \end{definicion}
+
+            \begin{definicion}[Cluster DBSCAN]
+                Un \emph{cluster} (o comunidad) es un conjunto no vacío $C\subseteq V$ tal que:
+                \begin{enumerate}
+                  \item \emph{Maximalidad por alcance:} si $x\in C$ y $y$ es alcanzable por densidad desde $x$, entonces $y\in C$;
+                  \item \emph{Conexión por densidad:} para todo $x,y\in C$ existe $z\in C$ que conecta por densidad a $x$ e $y$.
+                \end{enumerate}
+                Llamamos \emph{ruido} al conjunto $V\setminus \bigcup C$, unión sobre todos los clusters.
+            \end{definicion}
+
+            \begin{proposicion}[Partición parcial]
+                La familia de clusters DBSCAN forma una colección de subconjuntos disjuntos de $V$; todo punto de núcleo pertenece a un único cluster y todo punto de borde pertenece a lo sumo a un cluster. El resto es ruido.
+            \end{proposicion}
+
+            \begin{proof}
+                La alcanzabilidad por densidad es reflexiva y transitiva sobre el subconjunto de núcleos; la conexión por densidad induce clases de equivalencia sobre núcleos. Cada clase se expande añadiendo sus puntos de borde adyacentes (que por definición pueden depender de varios núcleos de la clase), sin crear intersecciones entre clases distintas. La maximalidad impide solapamientos entre clusters distintos.
+            \end{proof}
+
+            \begin{proposicion}[Monotonía en los parámetros]
+                Si $\varepsilon_1\le \varepsilon_2$ y $\text{minPts}_1\ge \text{minPts}_2$, entonces todo cluster obtenido con $(\varepsilon_1,\text{minPts}_1)$ es contenido de algún cluster con $(\varepsilon_2,\text{minPts}_2)$ y el conjunto de puntos etiquetados como ruido no aumenta al pasar de $(\varepsilon_1,\text{minPts}_1)$ a $(\varepsilon_2,\text{minPts}_2)$.
+            \end{proposicion}
+
+            \begin{proof}
+                Al crecer $\varepsilon$ o disminuir $\text{minPts}$, las vecindades se expanden y los núcleos no se pierden; por tanto, las cadenas de alcanzabilidad existentes se preservan o se amplían, lo que mantiene o crece los clusters. Consecuentemente, la etiqueta de ruido sólo puede reducirse.
+            \end{proof}
+
+            \paragraph{Algoritmo (DBSCAN).}
+            \begin{enumerate}
+              \item Marcamos todos los puntos como \textsc{no visitado}. Fijamos $C\gets \emptyset$ como la lista de clusters.
+              \item Para cada $x\in V$ no visitado: marcamos $x$ como \textsc{visitado} y calculamos $\mathcal{N}_\varepsilon(x)$.
+                \begin{itemize}
+                  \item Si $|\mathcal{N}_\varepsilon(x)|<\text{minPts}$, etiquetamos $x$ como \textsc{ruido} (etiqueta provisional).
+                  \item Si $|\mathcal{N}_\varepsilon(x)|\ge\text{minPts}$, creamos un nuevo cluster $C_\mathrm{new}$ y \emph{expandimos}:
+                  añadimos $x$ y todos los puntos de $\mathcal{N}_\varepsilon(x)$; para cada $y$ añadido, si no estaba visitado lo marcamos visitado, computamos $\mathcal{N}_\varepsilon(y)$ y, si $y$ es núcleo, añadimos $\mathcal{N}_\varepsilon(y)$ al conjunto a explorar. Reetiquetamos cualquier punto marcado como \textsc{ruido} que sea absorbido por $C_\mathrm{new}$ como \textsc{borde}. Al terminar, añadimos $C_\mathrm{new}$ a $C$.
+                \end{itemize}
+            \end{enumerate}
+
+            \begin{proposicion}[Corrección del algoritmo]
+                El algoritmo produce exactamente la familia de clusters definida por alcanzabilidad y conexión por densidad y etiqueta como ruido los puntos que no pertenecen a ningún cluster.
+            \end{proposicion}
+
+            \begin{proof}
+                La expansión a partir de un núcleo realiza el cierre por alcanzabilidad por densidad (maximalidad) y, al encadenar núcleos, garantiza la conexión por densidad. Todo punto absorbido pertenece por definición al cluster; ningún punto no alcanzable puede añadirse. La iteración sobre todos los puntos asegura que toda clase de conexión por densidad se descubre. Los puntos que no son alcanzables desde ningún núcleo quedan como ruido.
+            \end{proof}
+
+            \begin{proposicion}[Complejidad]
+                Si evaluamos vecindades con búsqueda lineal, el tiempo es $\mathcal{O}(N^2)$ y el espacio $\mathcal{O}(N)$ además del almacenamiento de $V$. Si disponemos de un índice espacial adecuado (p.\,ej.\ árbol $k$-d o ball tree) compatible con $d$, el tiempo esperado es $\mathcal{O}(N\log N)$ en dimensión moderada, manteniéndose el espacio en $\mathcal{O}(N)$ más el índice.
+            \end{proposicion}
+
+            \begin{observacion}[Elección de $d$ en redes]
+                En redes usaremos una distancia $d$ coherente con la estructura: por defecto la distancia de caminos mínimos $d_\ell$ en el subyacente no dirigido; en dígrafos podemos simetrizar con $d^{\mathrm{sym}}(u,v)=\max\{d(u,v),d(v,u)\}$ o trabajar sobre incrustaciones $\varphi:V\to\mathbb{R}^p$ y una métrica euclidiana en el espacio de representación. La consistencia de los clusters depende de esta elección.
+            \end{observacion}
+
+            \begin{ejemplo}[Instancia mínima]
+                Sea $V=\{1,2,3,4,5\}$ con distancias métricas
+                \[
+                d(1,2)=d(2,3)=0.9,\quad d(1,3)=1.6,\quad d(4,5)=0.8,\quad d(x,y)=2.5\ \text{en otro caso}.
+                \]
+                Tomamos $\varepsilon=1$ y $\text{minPts}=2$. Entonces $1,2,3$ forman un cluster (núcleos: $2$; bordes: $1$ y $3$) y $4,5$ forman otro (ambos núcleos). No hay ruido. Si elevamos $\text{minPts}$ a $3$, $\{1,2,3\}$ persiste (núcleo: $2$), pero $\{4,5\}$ pasa a ruido, ilustrando la monotonía en los parámetros.
+            \end{ejemplo}

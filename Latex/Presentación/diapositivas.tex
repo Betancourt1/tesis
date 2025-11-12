@@ -1,0 +1,253 @@
+\documentclass[aspectratio=169,spanish]{beamer}
+%--------------------------------------------------
+%  PAQUETES BÁSICOS
+%--------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{babel}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{tikz}
+\usepackage{booktabs}
+
+%--------------------------------------------------
+%  TEMA Y COLORES
+%--------------------------------------------------
+\usetheme{Madrid}
+\usecolortheme{beaver}
+
+%--------------------------------------------------
+%  DATOS DE LA PRESENTACIÓN
+%--------------------------------------------------
+\title[Transporte ZMG y Teoría de Grafos]{El transporte urbano de la Zona Metropolitana de Guadalajara\\desde la perspectiva de la teoría de grafos}
+\author[F. Betancourt]{Fernando Betancourt Moreno\\\small Director: Dr. Abel Palafox González}
+\institute[CUCEI -- UdeG]{Universidad de Guadalajara\\Centro Universitario de Ciencias Exactas e Ingenierías}
+\date[Feb.~2025]{Febrero de 2025}
+
+%--------------------------------------------------
+%  DIAPOSITIVA DE SECCIÓN
+%--------------------------------------------------
+\AtBeginSection[]{%
+  \begin{frame}[plain]
+    \centering\Huge{\insertsection}
+  \end{frame}}
+
+%--------------------------------------------------
+%  INICIO DEL DOCUMENTO
+%--------------------------------------------------
+\begin{document}
+
+%====================
+%  PORTADA & ÍNDICE
+%====================
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+\begin{frame}{Contenido}
+  \tableofcontents
+\end{frame}
+
+%====================
+%  INTRODUCCIÓN
+%====================
+\section{Introducción}
+
+\begin{frame}{Contexto y problemática}
+  \begin{itemize}
+    \item Expansión urbana acelerada $\rightarrow$ crecimiento desordenado en la ZMG.
+    \item Red de transporte actual: saturación pico, cobertura desigual, baja intermodalidad.
+    \item Necesidad de diagnósticos cuantitativos para guiar políticas de movilidad sostenible (IMEPLAN, 2016).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Relevancia y alcance}
+  \begin{itemize}
+    \item Transporte eficiente = calidad de vida + competitividad regional.
+    \item La \textbf{teoría de grafos} permite:
+      \begin{itemize}
+        \item Detectar cuellos de botella y hubs críticos.
+        \item Medir accesibilidad y rodeo.
+        \item Simular fallas y proponer reforzamientos.
+      \end{itemize}
+    \item Resultados extrapolables a otras metrópolis latinoamericanas.
+  \end{itemize}
+\end{frame}
+
+%====================
+%  OBJETIVOS E HIPÓTESIS
+%====================
+\section{Objetivos e hipótesis}
+
+\begin{frame}{Pregunta de investigación}
+  \begin{block}{Pregunta central}
+    \centering
+    \emph{¿Cómo puede la teoría de grafos proporcionar un marco metodológico para analizar y optimizar la conectividad del sistema de transporte público en la ZMG?}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Objetivos}
+  \textbf{General}
+  \begin{itemize}
+    \item Evaluar la conectividad, accesibilidad y vulnerabilidad de la red de transporte público.
+  \end{itemize}
+  \vspace{0.4cm}
+  \textbf{Específicos}
+  \begin{enumerate}
+    \item Identificar nodos y rutas con mayor centralidad.
+    \item Analizar eficiencia temporal y cobertura espacial.
+    \item Evaluar resiliencia ante fallas en hubs críticos.
+    \item Contrastar con casos de referencia (Sydney, Resistencia).
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Hipótesis}
+  Modelar la red con métricas gráficas (betweenness, spectral gap, índice $\alpha$) permitirá sugerir intervenciones que reduzcan tiempos de viaje y aumenten robustez frente al diseño actual.
+\end{frame}
+
+%====================
+%  MARCO TEÓRICO
+%====================
+\section{Marco teórico}
+
+\begin{frame}{Teoría de grafos \& transporte}
+  \begin{itemize}
+    \item Nodo $\leftrightarrow$ parada o estación.
+    \item Arista $\leftrightarrow$ tramo (ponderado por tiempo, distancia o tarifa).
+    \item Indicadores globales: $\beta$, $\gamma$, diámetro, brecha espectral.
+    \item Indicadores nodales: grado, cercanía, betweenness.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Modelos y datos de soporte}
+  \begin{columns}
+    \column{0.48\textwidth}
+      \textbf{GTFS}
+      \begin{itemize}
+        \item Estándar abierto: rutas, horarios, tarifas.
+        \item Base para simulaciones en \texttt{OpenTripPlanner}.
+      \end{itemize}
+    \column{0.48\textwidth}
+      \textbf{Algoritmos de ruta mínima}
+      \begin{itemize}
+        \item Dijkstra (fuente única).
+        \item Floyd–Warshall (todo par).
+      \end{itemize}
+  \end{columns}
+\end{frame}
+
+%====================
+%  METODOLOGÍA
+%====================
+\section{Metodología}
+
+\begin{frame}{Pasos del estudio}
+  \begin{enumerate}
+    \item Levantamiento GTFS y EOD~2023.
+    \item Construcción del grafo dirigido ponderado.
+    \item Cálculo de métricas (\texttt{networkx}/\texttt{igraph}).
+    \item Simulación de fallas y escenarios de expansión.
+    \item Validación con tiempos de viaje de \texttt{OTP}.
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Métricas clave}
+  \begin{block}{Nivel de red}
+    $\beta$ (conectividad), $\alpha$ (redundancia), $DI$ (rodeos), $\Delta$ (brecha espectral).
+  \end{block}
+  \vspace{0.4cm}
+  \begin{block}{Nivel de nodo}
+    Grado, centralidad de cercanía, betweenness, eccentricidad.
+  \end{block}
+\end{frame}
+
+%====================
+%  CASOS COMPARATIVOS
+%====================
+\section{Casos comparativos}
+
+\begin{frame}{Sydney (Zhao et al., 2024)}
+  \begin{itemize}
+    \item 3,799 paradas; 76 rutas de autobús + metro.
+    \item Modelo gravitacional OD con costos topológicos.
+    \item Ponderación entrópica redujo RMSE 4\,\%.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Resistencia (Cardozo et al., 2009)}
+  \begin{itemize}
+    \item 48 nodos – 61 arcos.
+    \item $\beta = 1.27$, $\alpha = 0.154$.
+    \item Gradiente centro–periferia pronunciado.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Guadalajara (Barraza \& Estrada, 2021)}
+  \begin{columns}
+    \column{0.52\textwidth}
+      \begin{itemize}
+        \item 2,033 nodos, 4,704 aristas.
+        \item Tiempo medio de viaje: 70 min.
+        \item $DI = 0.63$ (trayectos relativamente rectos).
+      \end{itemize}
+    \column{0.48\textwidth}
+      \begin{itemize}
+        \item Tres hubs concentran $>40\%$ del flujo.
+        \item Vulnerabilidad alta a fallas localizadas.
+      \end{itemize}
+  \end{columns}
+\end{frame}
+
+%====================
+%  HALLAZGOS DE LA LITERATURA
+%====================
+\section{Hallazgos de la literatura}
+
+\begin{frame}{Puntos clave – Barraza \& Estrada (2021)}
+  \begin{itemize}
+    \item Índice $\beta = 1.05$ \textrightarrow{} topología casi arborescente.
+    \item Super‑hubs: Centro Histórico, Calzada Lázaro Cárdenas, Periférico Sur.
+    \item Remoción del top 10\% de nodos incrementa la longitud de camino promedio 91\% (APL = 69 paradas).
+  \end{itemize}
+  \medskip
+  {\small\itshape Fuente: Barraza \& Estrada, 2021.}
+\end{frame}
+
+%====================
+%  LIMITACIONES Y FUTURO TRABAJO
+%====================
+\section{Limitaciones y futuro}
+
+\begin{frame}{Limitaciones actuales}
+  \begin{itemize}
+    \item Datos OD agregados limitan la resolución espacial de los flujos.
+    \item Supuestos de homogeneidad vehicular y puntualidad pueden subestimar la variabilidad real.
+    \item No se incluyen factores socio-económicos ni topográficos que condicionan la demanda.
+  \end{itemize}
+\end{frame}
+
+%====================
+%  CONCLUSIONES
+%====================
+\section{Conclusiones}
+
+\begin{frame}{Conclusiones}
+  \begin{itemize}
+    \item La teoría de grafos ofrece un diagnóstico robusto y replicable de la red ZMG.
+    \item Tres super-hubs concentran el flujo, lo que implica alta vulnerabilidad estructural.
+    \item Intervenciones dirigidas (más conexiones periféricas y diagonales) podrían reducir tiempos de viaje en >15 \% y aumentar resiliencia en >20 \%.
+  \end{itemize}
+\end{frame}
+
+%====================
+%  CIERRE
+%====================
+\section*{Preguntas}
+
+\begin{frame}[plain]
+  \centering
+  \Huge\bfseries ¿Preguntas?
+\end{frame}
+
+\end{document}
+

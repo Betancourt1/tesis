@@ -1,101 +1,14 @@
-\documentclass[openany]{book}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{makecell}
-\usepackage{float}
-\usepackage[document]{ragged2e}
-\usepackage[a4paper,top=2.54cm,bottom=2.54cm,left=2.54cm,right=2.54cm,marginparwidth=1.75cm]{geometry}
-\usepackage{amsmath, amssymb}
-\usepackage{graphicx}
-\usepackage{colortbl} 
-\usepackage{tikz}
-\usepackage{subcaption}
-\usepackage{amsfonts}
-\setlength{\parindent}{.5 cm}   %Activar sangrias
+%! Author = fbetancourt
+%! Date = 05/10/2025
 
+% Preamble
+\documentclass[11pt]{article}
+
+% Packages
+\usepackage{amsmath}
+
+% Document
 \begin{document}
-
-\begin{titlepage}
-	\begin{center}
-	\Huge{ UNIVERSIDAD DE GUADALAJARA\\}
-	\vspace{.4 cm}
-	\Huge{Centro Universitario de Ciencias Exactas\\
-	e Ingenierías \\}
-	\vspace{.4 cm}
-	\LARGE{División de Ciencias Básicas\\}
-	\LARGE{Licenciatura en Matemáticas\\}
-	\vspace{1 cm}
-	\includegraphics[scale = .08]{escudo.png}\\
-	\vspace{1 cm}
-	\Large{Proyecto Integrador de Modelación Matemática\\}
-	\vspace{1 cm}
-	\LARGE{El transporte urbano de la Zona Metropolitana de Guadalajara desde la perspectiva de la teoría de grafos}\\
-	\vspace{1 cm}
-	{
-	 	\large Fernando Betancourt Moreno\\
-	}
-	\vspace{1 cm}
-	{
-		\large Dr. Abel Palafox Gonzálex\\}   
-		\end{center}
-		\vspace{3.5 cm}
-		\hfill{Guadalajara, Jal., Febrero 2025\\
-	}
-\end{titlepage}
-
-\tableofcontents
-
-\chapter{Introducción}
-
-	El transporte urbano en la Zona Metropolitana de Guadalajara (ZMG) es un componente fundamental para la movilidad de la población y el desarrollo económico de la región. A lo largo de las últimas décadas, la expansión de la mancha urbana ha avanzado de manera acelerada, promoviendo un crecimiento desordenado y fragmentado del territorio, lo que ha generado diversos retos en términos de movilidad e infraestructura (IMEPLAN, 2024). Este fenómeno ha resultado en una red de transporte público que enfrenta múltiples deficiencias, tales como la saturación en horas pico, tiempos de espera prolongados, falta de cobertura en zonas periféricas y una conectividad limitada entre distintos sistemas de transporte (IMEPLAN, 2024). Estas problemáticas afectan la calidad de vida de los habitantes y reducen la eficiencia de los desplazamientos dentro del área metropolitana.
-
-	El \textit{Plan de Ordenamiento Territorial Metropolitano del AMG (POTmet)} destaca la necesidad de implementar estrategias integrales que favorezcan la movilidad sustentable y permitan una mejor articulación del sistema de transporte público con el desarrollo urbano de la región (IMEPLAN, 2024). En este contexto, es esencial realizar estudios que permitan analizar la estructura actual de la red de transporte público con el objetivo de identificar áreas de mejora y proponer soluciones que optimicen su funcionamiento. La aplicación de herramientas analíticas basadas en modelos matemáticos puede contribuir significativamente a la toma de decisiones en materia de movilidad, proporcionando información cuantificable sobre la eficiencia de la red y sus niveles de accesibilidad.
-
-	Diversos estudios han abordado la movilidad en la ZMG desde distintas perspectivas, incluyendo encuestas de satisfacción de los usuarios, diagnósticos sobre cobertura y accesibilidad, así como planes de reestructuración de rutas. La \textit{Encuesta de Satisfacción a Usuarios del Transporte Público (2024)} señala que la percepción general del servicio es baja, con quejas recurrentes sobre la insuficiencia de rutas, la falta de puntualidad y la inseguridad en los trayectos (Polymetrix Consulting, 2024). Estos hallazgos reflejan la necesidad de analizar con mayor profundidad la estructura de la red y evaluar de manera objetiva su desempeño.
-
-	Dentro del \textit{POTmet}, se destaca la urgencia de fomentar un modelo de movilidad que promueva la intermodalidad, es decir, la combinación eficiente de distintos medios de transporte en un mismo desplazamiento, lo que permitiría reducir tiempos de viaje y mejorar la conectividad entre zonas clave de la metrópoli (IMEPLAN, 2024). Sin embargo, hasta el momento, los estudios sobre movilidad han privilegiado enfoques cualitativos o descriptivos, sin una aplicación sistemática de herramientas cuantitativas que permitan evaluar con precisión la conectividad de la red de transporte público.
-
-	Dado que el transporte público desempeña un papel clave en la movilidad urbana, resulta fundamental adoptar metodologías de análisis que permitan optimizar su funcionamiento. En este sentido, la teoría de grafos se presenta como una herramienta idónea para evaluar la eficiencia de la red de transporte mediante métricas que permiten identificar cuellos de botella, rutas críticas y oportunidades de mejora. Estudios recientes han demostrado la utilidad de la teoría de grafos para modelar matrices de origen-destino y evaluar la accesibilidad en redes multimodales, proporcionando una base cuantitativa para mejorar la planificación del transporte (Zhao et al., 2024; Barraza y Estrada, 2021).
-
-	Este estudio propone una nueva metodología basada en la teoría de grafos para analizar y optimizar la infraestructura del transporte público en la ZMG, promoviendo un esquema de movilidad más eficiente, accesible y equitativo. A través del uso de modelos matemáticos, se pretende analizar la estructura de la red de transporte y proponer intervenciones basadas en evidencia empírica que faciliten su modernización y mejora continua.
-
-	La pregunta de investigación que guía este trabajo es: \textit{¿Cómo puede la teoría de grafos proporcionar un enfoque metodológico para analizar la conectividad del sistema de transporte público en la ZMG?} A partir de esta interrogante, se pretende evaluar la conectividad del sistema de transporte, detectar posibles deficiencias estructurales y sugerir estrategias para optimizar su desempeño.
-
-	Para responder esta pregunta, se aplicará la teoría de grafos para modelar y analizar la red de transporte público en la ZMG. Se recopilarán datos sobre rutas, frecuencias y tiempos de traslado, representándolos en un \textit{grafo dirigido}. A partir de este modelo, se emplearán diversas métricas de análisis, tales como:
-
-	\begin{itemize}
-		\item \textbf{Centralidad}: Para identificar las rutas y nodos más relevantes dentro de la red y evaluar su impacto en la conectividad global del sistema.
-		\item \textbf{Conectividad}: Para analizar la accesibilidad de distintos puntos de la ciudad y medir la eficiencia de las conexiones entre diferentes rutas y modos de transporte.
-		\item \textbf{Eficiencia}: Para examinar la relación entre tiempos de traslado, distancias recorridas y la optimización de la cobertura de la red.
-		\item \textbf{Vulnerabilidad}: Para evaluar la resiliencia de la red ante la eliminación de nodos estratégicos y su impacto en la accesibilidad general (Barraza y Estrada, 2021).
-	\end{itemize}
-
-	Adicionalmente, se compararán estos resultados con modelos de planificación de transporte exitosos en otras ciudades, con el propósito de identificar buenas prácticas y adaptar soluciones que sean viables dentro del contexto de la ZMG.
-
-	Los objetivos de este estudio son los siguientes:
-
-	\textbf{Objetivo general:}
-	\begin{itemize}
-		\item Evaluar la conectividad, accesibilidad y vulnerabilidad de la red de transporte público en la ZMG utilizando herramientas de teoría de grafos.
-	\end{itemize}
-
-	\textbf{Objetivos específicos:}
-	\begin{itemize}
-		\item Identificar los nodos y rutas con mayor centralidad dentro de la red de transporte público.
-		\item Analizar la eficiencia y accesibilidad del sistema en términos de tiempos de traslado y cobertura.
-		\item Evaluar la vulnerabilidad del sistema ante la eliminación de nodos críticos y su impacto en la conectividad.
-		\item Comparar los resultados con modelos de planificación en otras ciudades y proponer mejoras para la ZMG.
-	\end{itemize}
-
-	\textbf{Hipótesis:}
-	\begin{itemize}
-		\item La aplicación de la teoría de grafos permitirá desarrollar y validar un enfoque metodológico cuantitativo para analizar la conectividad de la red de transporte público de la ZMG, proporcionando un marco analítico para futuras estrategias de optimización del sistema.
-	\end{itemize}
-
-	\textbf{Limitaciones:} Si bien el presente estudio aporta un marco metodológico innovador basado en la teoría de grafos para analizar la conectividad del sistema de transporte público en la ZMG, es importante reconocer algunas limitaciones inherentes. En primer lugar, la falta de datos de alta calidad sobre los orígenes y destinos limita la precisión en la estimación de los flujos de pasajeros. Además, el modelo no discrimina entre los diferentes tipos de transporte ni considera las variaciones en el aforo que cada uno soporta, asumiendo una homogeneidad que simplifica la realidad operativa. Finalmente, se ha supuesto que los horarios se cumplen a la perfección, sin contemplar la posibilidad de retrasos u otras variabilidades operativas. Estas limitaciones abren la puerta a futuras investigaciones que integren fuentes de datos complementarias y aborden la heterogeneidad y la incertidumbre en la operación del sistema.
-
-	\textbf{Estructura del documento:}
-	El documento está organizado en cinco capítulos. En el Capítulo 2 se presenta el marco teórico, abordando estudios previos y fundamentos de la teoría de grafos en el análisis de transporte. El Capítulo 3 describe la metodología empleada, detallando la recolección y procesamiento de datos. En el Capítulo 4 se presentan los resultados del análisis y su discusión. Finalmente, en el Capítulo 5 se exponen las conclusiones y recomendaciones para futuras investigaciones.
 
 \chapter{Análisis del transporte público}
 
@@ -108,8 +21,8 @@
 	\section{Modelos matemáticos para el análisis del transporte público}
 		De acuerdo a Rodrigues (2013), el análisis de transporte público se puede segmentar en cuatro niveles, cada uno dependiente del anterior:
 		\begin{enumerate}
-			\item \textbf{Distancia}: El más esencial, de los cuatro. Consiste en conocer la distancia recorrida entre distintas terminales; el concepto de \textit{distancia} se refiere a cualquier función que cumpla con las propiedades de una norma. 
-			\item \textbf{Accesibilidad}: Es la medida de qué tan sencillo es alcanzar una cierta locación partiendo de cualquier otra. Es claro que la accesibilidad aquí es una función del lugar y la distancia. 
+			\item \textbf{Distancia}: El más esencial, de los cuatro. Consiste en conocer la distancia recorrida entre distintas terminales; el concepto de \textit{distancia} se refiere a cualquier función que cumpla con las propiedades de una norma.
+			\item \textbf{Accesibilidad}: Es la medida de qué tan sencillo es alcanzar una cierta locación partiendo de cualquier otra. Es claro que la accesibilidad aquí es una función del lugar y la distancia.
 			\item \textbf{Interacciones espaciales}: Es el conjunto de desplazamientos realizados por los usuarios del transporte público. Se toma en cuenta el origen y el destino de los viajes para contrarrestar la oferta con la demanda existente.
 			\item \textbf{Modelos de uso del transporte}: Es un marco que "busca evaluar las numerosas relaciones y efectos de retroalimentación entre el transporte y la estructura espacial" (Rodrigues, 2013).
 		\end{enumerate}
@@ -127,7 +40,7 @@
 
 		Dentro de los métodos cuantitativos, existen aquellos que parten de una visión multidisciplinaria, como la cartografía, y aquellos que están específicamente enfocados en el transporte y su estudio. Dentro de estos últimos, podemos mencionar a los métodos numéricos enfocados en realizar simulaciones especializadas en el uso del transporte y el suelo. También existe el uso de procesos de optimización que se especializan en responder preguntas tales como dónde ubicar una tienda de retail o una nueva escuela. Finalmente, es común el uso de la teoría de grafos para modelar las redes de transporte público y analizar su estructura. Dentro del presente estudio, nos enfocaremos específicamente en el uso de teoría de grafos para el estudio de redes de transporte público.
 
-	\section{Teoría de grafos}	
+	\section{Teoría de grafos}
 		% --- Fundamentos de la teoría de grafos ---
 		% (redacción ampliada siguiendo el estilo del ejemplo original)
 		% Citas abreviadas al documento de referencia: (Rodrigues, 2013)
@@ -655,256 +568,6 @@
 
 		%--- Fin sección Guadalajara ---
 
-\chapter{Análisis territorial de la Zona Metropolitana de Guadalajara}
-	Dentro del contexto de los métodos cuantitativos creados para analizar las redes de transporte público, existe una constante preocupación de ser "guíados a una perspectiva mecanicista donde la correspondencia con la realidad se vuelve algo secundario" (Rodrigues, 2013). En este sentido, una de las necesidades de estos métodos es la de tener una perspectiva multidisciplinar que integre teorías de otros campos que le den un sentido a cualquier resultado obtenido por métodos cuantitativos.
-
-	Una de estas disciplinas a tener en cuenta es el urbanismo, que provee de un entendimiento de la geografía del terreno, su división político-administrativa, las jerarquías funcionales de sus equipamientos y la dinámica de usos de suelo que, en conjunto, moldean la morfología urbana; de esta manera, los indicadores cuantitativos dejan de ser meras abstracciones numéricas y se reinterpretan como huellas cuantificables de procesos históricos, sociales y económicos que han dado forma —y siguen condicionando— la movilidad cotidiana.
-
-	Cuando hablamos de la Zona Metropolitana de Guadalajara (ZMG), diversos organismos públicos y privados han realizado esfuerzos significativos para comprender su dinámica urbana desde distintas perspectivas. En este capítulo abordaremos específicamente el trabajo del Instituto Metropolitano de Planeación (IMEPLAN), organismo encargado de «diseñar, gestionar e impulsar herramientas para el crecimiento integral de la ciudad desde un enfoque sustentable y resiliente» (IMEPLAN, 2023).
-
-	En primer lugar, analizaremos su Plan de Ordenamiento Territorial, que ofrece una descripción detallada de la geografía de la ZMG, la distribución espacial de diversos indicadores urbanos relevantes y una zonificación específica. Esta información será clave para contextualizar e interpretar los resultados de nuestro análisis.
-
-	Posteriormente, revisaremos cómo IMEPLAN, sobre la base del ordenamiento territorial ya mencionado, ha abordado la movilidad ciudadana en la ZMG. Este análisis aporta una herramienta particularmente útil para nuestro estudio: las líneas del deseo, que ilustran los orígenes y destinos más frecuentes de los desplazamientos cotidianos en la metrópoli. Así, podremos evaluar si la red actual de transporte público cumple efectivamente con su función principal, es decir, conectar de forma adecuada a la ciudadanía con los lugares a los que necesita desplazarse diariamente.
-
-	\section{División territorial de la ZMG}
-		En 2016 se publicó el documento \textit{POTmet: plan de ordenamiento territorial metropolitano del AMG} (POTmet, en delante). Dentro de dicho documento el imeplan propone una forma de segmentar a la ZMG basándose en un modelo policéntrico de ciudad que "busca a través de una identificación metódica de las centralidades, contribuir a un mejor equilibrio espacial en el territorio del AMG, mejorando la distribución de equipamiento, la repartición de la población, la administración de las zonas para crecimiento y en general, todo lo que contribuya a fortalecer un sistema de ciudades aún incipiente en el territorio metropolitano" (imeplan, 2016, p. 265). Dichas centralidades permiten una mejor planificación y análisis de la movilidad urbana, facilitando el diseño de estrategias de transporte más eficientes (imeplan, 2016).
-
-			\subsubsection{Definición y delimitación de la ZMG}
-				La ZMG está conformada por los municipios de Guadalajara, Zapopan, Tlaquepaque, Tonalá, El Salto, Ixtlahuacán de los Membrillos y Juanacatlán.
-				Su delimitación geográfica se encuentra establecida en el Plan de Ordenamiento Territorial Metropolitano (imeplan, 2016).
-
-			\subsubsection{Centralidades}
-				En el POTmet se define centralidad de la siguiente manera:
-				\begin{center}
-					Son unidades urbanas vinculadas por una estructura vial y que desempeñan una función esencial en la dinámica urbana del área metropolitana, definidas esencialmente por su concentración de empleo, población, transporte y prestación de servicios, además se caracterizan por un alto potencial de generación de identidad y arraigo entre sus habitantes.
-				\end{center}
-				Para delimitar estas centralidades se toman en cuenta aquellas concentraciones urbanas de entre 10,000 y 500,000 habitantes (imeplan, 2016), luego se estiman los siguientes métricos para cada una de ellas:
-
-				\begin{itemize}
-					\item \textbf{Productividad}
-					\begin{itemize}
-						\item Unidades económicas: cantidad de unidades económicas por centralidad.
-						\item Personal ocupado: personal ocupado generado por las unidades económicas.
-						\item Índice de demanda laboral (promedio): describe la relación entre población residente local y oferta laboral local.
-						\item Densidad de población residente: Capas de datos que contienen los valores de densidad de población (personas/ha) por manzanas de la ZMG.
-					\end{itemize}
-
-					\item \textbf{Infraestructura}
-					\begin{itemize}
-						\item Rutas de transporte público: Cantidad de rutas que interceptan con la centralidad.
-						\item Capacidad de carga de transporte público: Definida a través del cálculo de flota entre intervalo de las rutas de transporte público que interceptan con la centralidad.
-						\item Transporte público masivo: Cantidad de líneas de transporte público masivo que interceptan por centralidad.
-					\end{itemize}
-
-					\item \textbf{Calidad de vida}
-					\begin{itemize}
-						\item Índice de suficiencia de servicios (promedio).
-						\item Equipamientos distritales: Proporcionados por los municipios en sus PPDU y clasificados con base en el reglamento estatal de zonificación. Son polígonos de equipamiento de educación, cultura, salud, servicios institucionales y culto que sirven a amplios sectores de los centros de población.
-						\item Equipamientos centrales: Proporcionados por los municipios en sus PPDU y clasificados con base en el reglamento estatal de zonificación. Son polígonos de equipamiento que sirven a la totalidad del centro de población.
-						\item Equipamientos regionales: Proporcionados por los municipios en sus PPDU y clasificados con base en el reglamento estatal de zonificación. Son polígonos de equipamiento con cobertura de servicio que supera a la ciudad.
-					\end{itemize}
-
-					\item \textbf{Otros indicadores}
-					\begin{itemize}
-						\item Ponderación: Peso relativo de cada centralidad en la evaluación global.
-					\end{itemize}
-				\end{itemize}
-
-			Una vez se obtienen estas métricas, los datos se normalizan y se otorga un peso a cada centralidad tomando como referencia a la centralidad que mayor puntaje haya obtenido. De este proceso obtenemos la siguiente tabla:
-
-			\begin{table}[H]
-			\centering
-			\scriptsize
-			\setlength{\tabcolsep}{3pt}
-			\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|c|}
-			\hline
-			\textbf{CENTRALIDAD} &
-			\begin{tabular}[c]{@{}c@{}}Rutas\\transp.\\público\end{tabular} &
-			\begin{tabular}[c]{@{}c@{}}Cap.\\carga\\transp.\end{tabular} &
-			\begin{tabular}[c]{@{}c@{}}Dens.\\pobl.\end{tabular} &
-			\begin{tabular}[c]{@{}c@{}}Pers.\\ocup.\end{tabular} &
-			\begin{tabular}[c]{@{}c@{}}Equip.\end{tabular} &
-			\begin{tabular}[c]{@{}c@{}}Línea\\transp.\\masivo\end{tabular} &
-			\begin{tabular}[c]{@{}c@{}}Unid.\\econ.\end{tabular} &
-			\begin{tabular}[c]{@{}c@{}}Índice\\sufic.\\serv.\end{tabular} &
-			\begin{tabular}[c]{@{}c@{}}Índice\\dem.\\lab.\end{tabular} &
-			Pond. \\
-			\hline
-			Centro Guadalajara & 1,00 & 1,00 & 0,40 & 1,00 & 1,00 & 1,00 & 1,00 & 1,00 & 1,00 & 1,00 \\
-			Centro Zapopan & 0,52 & 0,20 & 1,00 & 0,52 & 0,76 & 0,50 & 0,42 & 1,00 & 0,38 & 0,82 \\
-			Centro Tlaquepaque & 0,69 & 0,32 & 1,00 & 0,48 & 0,94 & 0,50 & 0,58 & 1,00 & 0,21 & 0,82 \\
-			Tonalá Centro & 0,37 & 0,21 & 1,00 & 0,52 & 0,13 & 0,00 & 0,66 & 1,00 & 0,27 & 0,74 \\
-			Expo-Chapalita & 0,54 & 0,29 & 0,45 & 0,66 & 0,58 & 0,00 & 0,28 & 0,83 & 0,57 & 0,63 \\
-			Las Águilas & 0,46 & 0,21 & 1,00 & 0,34 & 0,36 & 0,00 & 0,30 & 1,00 & 0,02 & 0,59 \\
-			Oblatos & 0,48 & 0,27 & 1,00 & 0,34 & 0,13 & 0,00 & 0,46 & 1,00 & -0,25 & 0,58 \\
-			Miravalle & 0,35 & 0,17 & 1,00 & 0,23 & 0,27 & 0,50 & 0,30 & 1,00 & -0,27 & 0,58 \\
-			Parque Solidaridad-Tetlán & 0,31 & 0,20 & 1,00 & 0,21 & 0,00 & 0,50 & 0,34 & 1,00 & -0,36 & 0,52 \\
-			Providencia & 0,30 & 0,21 & 0,40 & 0,48 & 0,85 & 0,00 & 0,33 & 0,80 & 0,51 & 0,49 \\
-			Centro Sur & 0,28 & 0,15 & 1,00 & 0,25 & 0,31 & 0,50 & 0,12 & 0,58 & 0,13 & 0,49 \\
-			Santa Anita & 0,14 & 0,05 & 1,00 & 0,12 & 0,22 & 0,00 & 0,16 & 0,45 & -0,05 & 0,46 \\
-			Huentitán & 0,37 & 0,20 & 1,00 & 0,14 & 0,04 & 0,00 & 0,16 & 0,80 & -0,13 & 0,46 \\
-			Las Pintitas & 0,37 & 0,04 & 0,52 & 0,25 & 0,40 & 0,00 & 0,33 & 0,41 & -0,09 & 0,43 \\
-			Santa Fe & 0,26 & 0,16 & 1,00 & 0,12 & 0,00 & 0,00 & 0,12 & 0,60 & -0,18 & 0,43 \\
-			Tlajomulco de Zúñiga & 0,15 & 0,07 & 0,72 & 0,24 & 0,18 & 0,00 & 0,23 & 0,50 & 0,09 & 0,37 \\
-			El Salto & 0,06 & 0,02 & 0,75 & 0,12 & 0,58 & 0,00 & 0,17 & 0,60 & -0,01 & 0,37 \\
-			San Martín de las Flores & 0,09 & 0,02 & 1,00 & 0,09 & 0,18 & 0,00 & 0,14 & 0,43 & -0,16 & 0,31 \\
-			Tesistán & 0,09 & 0,07 & 0,76 & 0,12 & 0,22 & 0,00 & 0,16 & 0,40 & -0,08 & 0,29 \\
-			Zapotlanejo & 0,00 & 0,00 & 0,32 & 0,25 & 0,00 & 0,00 & 0,44 & 0,50 & 0,00 & 0,29 \\
-			Base Aérea & 0,07 & 0,04 & 0,73 & 0,23 & 0,13 & 0,00 & 0,13 & 0,28 & -0,02 & 0,28 \\
-			Toluquilla & 0,26 & 0,16 & 0,47 & 0,18 & 0,18 & 0,00 & 0,06 & 0,28 & 0,04 & 0,28 \\
-			San José del Castillo & 0,06 & 0,02 & 0,74 & 0,13 & 0,00 & 0,00 & 0,10 & 0,36 & -0,04 & 0,27 \\
-			Coyula & 0,17 & 0,09 & 0,40 & 0,07 & 0,18 & 0,00 & 0,09 & 0,43 & -0,02 & 0,24 \\
-			Santa Cruz del Valle & 0,06 & 0,01 & 0,54 & 0,05 & 0,00 & 0,00 & 0,08 & 0,28 & -0,12 & 0,19 \\
-			Santa Cruz de las Flores & 0,02 & 0,00 & 0,53 & 0,06 & 0,04 & 0,00 & 0,05 & 0,10 & -0,04 & 0,16 \\
-			Ixtlahuacán & 0,00 & 0,00 & 0,38 & 0,04 & 0,00 & 0,00 & 0,07 & 0,20 & -0,03 & 0,15 \\
-			\hline
-			\end{tabular}
-			\caption{Centralidades y sus indicadores}
-			\label{tab:centralidades}
-			\end{table}
-
-            Para poder analizar la estructura de la red de transporte público, cada una de las centralidades más extensas se dividen en dos, mientras que aquellas centralidades de menos extensión se combinan en una sola (imeplan, 2023). Una vez realizado este procedimiento, nos queamos con las siguientes zonas por cada municipio:
-
-            \begin{table}[H]
-            \centering
-            \small
-            %\rowcolors{1}{white}
-            \begin{tabular}{|c|l|l|}
-            \hline
-            \textbf{Código} & \textbf{Ubicación} & \textbf{Municipio} \\
-            \hline
-            24A & Bugambilias - Palomar & Tlajomulco de Zúñiga \\
-            24B & Las Águilas - Miramar & Zapopan \\
-            25 & Santa Ana - El Briseño & Zapopan \\
-            26 & La Cantera & Zapopan \\
-            29F & La Alcantarilla & El Salto \\
-            30 & Santa Anita & Tlajomulco de Zúñiga \\
-            30F & Bosques de Santa Anita & Tlajomulco de Zúñiga \\
-            32 & Las Liebres & San Pedro Tlaquepaque \\
-            34 & Toluquilla & San Pedro Tlaquepaque \\
-            35 & Las Pintitas & El Salto \\
-            37F & Santa Cruz del Valle & Tlajomulco de Zúñiga \\
-            38 & Santa Fe - Chulavista & Tlajomulco de Zúñiga \\
-            39F & Lomas del Sur - Hacienda Los Fresnos II & Tlajomulco de Zúñiga \\
-            40 & Lázaro Cárdenas del Río & Tonalá \\
-            41 & Coyula & Tonalá \\
-            42 & Centro Tonalá & Tonalá \\
-            43 & Centro Sur - Balcones de Santa María & San Pedro Tlaquepaque \\
-            44 & Valdepeñas - Centinela & Zapopan \\
-            45 & Tololotlán & Tonalá \\
-            46F & Valle de los Molinos - Copalita & Zapopan \\
-            48F & Matatlán - La Purísima & Zapotlanejo \\
-            49F & La Laja & Zapotlanejo \\
-            50 & Santa Fe Zapotlanejo & Zapotlanejo \\
-            \hline
-            \end{tabular}
-            \end{table}
-
-            \begin{table}[H]
-            \centering
-            \small
-            %\rowcolors{1}{white}
-            \begin{tabular}{|c|l|l|}
-            \hline
-            \textbf{Código} & \textbf{Ubicación} & \textbf{Municipio} \\
-            \hline
-            51F & San Miguel Cuyutlán - San Lucas Evangelista & Tlajomulco de Zúñiga \\
-            52 & San José del Castillo & El Salto \\
-            53 & Atequiza & Ixtlahuacán de los Membrillos \\
-            54 & La Capilla & Ixtlahuacán de los Membrillos \\
-            57 & La Gigantera & San Pedro Tlaquepaque \\
-            59 & Cajititlán & Tlajomulco de Zúñiga \\
-            60 & El Salto & El Salto \\
-            61 & Tesistán & Zapopan \\
-            63F & La Azucena & Zapopan \\
-            65A & El Bajío & Zapopan \\
-            65B & Base Aérea & Zapopan \\
-            68A & Constitución - Auditorio & Zapopan \\
-            68B & Centro Zapopan & Zapopan \\
-            69A & Providencia - Minerva & Guadalajara \\
-            69B & Puerta de Hierro - Autónoma & Zapopan \\
-            70A & San Juan de Dios & Guadalajara \\
-            70B & Centro Guadalajara & Guadalajara \\
-            Acceso Carretera Vallarta & Acceso Carretera Vallarta & Zapopan \\
-            Acceso Carretera Colotlán & Acceso Carretera Colotlán & Zapopan \\
-            Acceso Carretera Saltillo & Acceso Carretera Saltillo & Zapopan \\
-            Acceso Carretera Zapotlanejo & Acceso Carretera Zapotlanejo & Zapotlanejo \\
-            Acceso Carretera Chapala & Acceso Carretera Chapala & Ixtlahuacán de los Membrillos \\
-            Acceso Av. López Mateos & Acceso Av. López Mateos & Tlajomulco de Zúñiga \\
-            Aeropuerto & Aeropuerto & Tlajomulco de Zúñiga \\
-            \hline
-            \end{tabular}
-            \caption{Puntos de acceso}
-            \label{tab:accesos}
-            \end{table}
-
-		\includegraphics[scale = 0.7]{Zonas_clave_eod.png}
-
-
-
-	\section{Encuesta origen-destino 2023}
-        El Instituto de Planeación y Gestión del Desarrollo del Área Metropolitana de Guadalajara (Imeplan) realizó la Encuesta Origen Destino 2023 (EOD-2023) con el fin de obtener una herramienta actualizada y eficaz para la planificación de la movilidad. Esta encuesta permite comprender la evolución urbana, identificar tendencias de desplazamiento y determinar las necesidades de infraestructura y servicios para los habitantes de la metrópoli, especialmente en un contexto post-pandemia. La EOD-2023 busca analizar la relación entre la estructura urbana y los patrones de viaje, detectando deficiencias y sirviendo como insumo fundamental para la actualización del Plan Integral de Movilidad Urbana Sustentable (PIMUS) y del Plan de Ordenamiento Territorial Metropolitano (POTmet).
-
-            \subsection{Metodología y alcances}
-            La EOD-2023 se llevó a cabo entre marzo y mayo de 2023, con la participación de "Polymetrix Consulting S.A de C.V" para el trabajo de campo y levantamiento de información. El universo de estudio comprendió los 9 municipios que conforman el Área Metropolitana de Guadalajara (AMG): Guadalajara, Zapopan, San Pedro Tlaquepaque, Tlajomulco de Zúñiga, Tonalá, El Salto, Juanacatlán, Ixtlahuacán de los Membrillos y Zapotlanejo.
-
-            Se aplicó un Muestreo Aleatorio Estratificado Trietápico Probabilístico, con un nivel de confianza del 95\% y un margen de error de ±5\% por zona de estudio. El diseño muestral se realizó por zonas, delimitadas con base en las centralidades definidas en el POTmet (2016), donde las centralidades de gran extensión se subdividieron en dos zonas y aquellas de dimensiones mínimas se fusionaron en una sola. Esto se hizo para reflejar la estructura de centralidades y asegurar la disponibilidad de información para caracterizar centralidades con menos población.
-
-            La recolección de información se realizó mediante dos cuestionarios:
-            \begin{itemize}
-                \item \textbf{Cuestionario de vivienda:} para caracterizar aspectos generales de la vivienda, número de habitantes, ingresos, tenencia de vehículos, problemas de movilidad en la zona, etc.
-                \item \textbf{Cuestionario de habitantes:} para determinar las características de los viajes de cada habitante (de 6 años o más), modos y propósitos de los mismos.
-            \end{itemize}
-            En total, se realizaron encuestas en 17,901 viviendas y a 58,061 residentes.
-
-            Los principales objetivos y alcances de la encuesta fueron:
-            \begin{itemize}
-                \item Obtener información para caracterizar los viajes cotidianos de los habitantes del AMG.
-                \item Determinar el número y motivo de los viajes, modos de transporte empleados, orígenes y destinos, horarios de mayor demanda, gestión del estacionamiento, duración y costo de los viajes.
-                \item Identificar patrones de movilidad en términos de género, edad, ocupación, ingreso, lugar de residencia y nivel educativo.
-                \item Estimar la cantidad de viajes realizados en el AMG y generar indicadores de movilidad del cuidado.
-                \item Conocer los principales problemas de movilidad en general y del transporte público en particular, por zona de estudio.
-                \item Servir como insumo para la actualización del PIMUS y del POTmet.
-            \end{itemize}
-            Una limitación reconocida es la posible omisión de algunos viajes cortos por parte de los encuestados.
-
-            \subsection{Resultados generales}
-            La EOD-2023 registró un total de 11,769,386 viajes realizados en un día laborable tipo en el AMG. De estos, el 51.7\% fueron realizados por mujeres y el 48.3\% por hombres.
-
-            En cuanto a la distribución modal general, los tres modos de transporte más utilizados fueron:
-            \begin{itemize}
-                \item \textbf{Viajes a pie:} 43.2\% del total.
-                \item \textbf{Vehículo particular:} 28.1\% del total.
-                \item \textbf{Transporte público:} 21.6\% del total.
-            \end{itemize}
-            Se identificaron tres horarios de máxima demanda de viajes: a las 7:00 horas, a las 13:00 horas y a las 18:00 horas. El tiempo promedio de viaje, excluyendo los viajes peatonales, fue de 37 minutos.
-
-            La encuesta también reveló que el 51.5\% de los viajes son internos (es decir, inician y terminan en la misma zona de origen), lo que se traduce en 6,080,016 viajes. De estos viajes internos, el 70.8\% se realizan a pie. El 48.5\% restante de los viajes son externos, conectando diferentes zonas dentro de la metrópoli.
-
-            Zonas como el Centro de Guadalajara (zona 70B), Centro de Zapopan (zona 68B), Las Águilas - Miramar (zona 24B), Centro Tlaquepaque (zona 07 según la EOD, que corresponde a la centralidad Centro Tlaquepaque) y Parque Solidaridad - Tetlán (zona 08 según la EOD) destacan por concentrar el mayor número de viajes totales (originados y atraídos), reflejando su alta densidad poblacional, consolidación y actividad económica.
-
-            \subsection{Líneas del deseo}
-            Las líneas del deseo se entienden como la representación gráfica de la coincidencia en cantidad de viajes entre orígenes y destinos específicos, usualmente visualizadas sobre un mapa para mostrar los flujos de transporte. Para la EOD-2023, los viajes externos (aquellos que inician en una zona y terminan en otra distinta dentro del AMG) suman 5,716,370 desplazamientos. La distribución modal de estos viajes externos es:
-            \begin{itemize}
-                \item Transporte particular: 41.7\%
-                \item Transporte público: 35.6\%
-                \item A pie: 13.8\%
-            \end{itemize}
-            El análisis de las líneas del deseo muestra una concentración significativa: el 91.9\% de las líneas de deseo identificadas (con flujos de 1 a 4,999 viajes) representan solo el 37.9\% del total de viajes externos. En contraste, el 8.1\% restante de las líneas de deseo (con flujos de 5,000 a 47,555 viajes) concentran el 62.1\% de los viajes externos.
-
-            Dentro del rango más alto de viajes producidos (20,000 a 47,555 viajes), que corresponde al 1.1\% de las líneas de deseo, se concentra el 21.0\% de los viajes externos totales. Algunos de los pares de zonas origen-destino con mayor flujo de viajes externos son:
-            \begin{itemize}
-                \item Entre Zona Industrial (06A) y Miravalle (06B): aproximadamente 47,555 y 47,489 viajes respectivamente.
-                \item Entre Base Aérea (65B) y Centro Zapopan (68B): con flujos de 40,002 y 38,344 viajes.
-                \item Entre La Estancia - Chapalita (21A) y Las Águilas - Miramar (24B): con 39,445 y 39,401 viajes.
-                \item Entre San Juan de Dios (70A) y Centro Guadalajara (70B): con 38,558 y 37,857 viajes.
-            \end{itemize}
-            Estos datos, que en el informe detallado de la EOD-2023 se visualizan en mapas de líneas de deseo (como los Mapas 07 y 08 del informe de IMEPLAN), son fundamentales para evaluar si la red de transporte público existente atiende adecuadamente las principales demandas de movilidad y para identificar corredores prioritarios para la mejora o implementación de servicios. Un aspecto relevante es la alta proporción de viajes externos de corta distancia (menos de 5 km) entre zonas adyacentes, donde el transporte particular tiene un uso significativo (35.8\%), lo que sugiere un potencial para la promoción de modos de transporte más sostenibles como el transporte público (30.2\%) y los viajes a pie (25.5\%) en estos corredores.
-
-
-\chapter{Modelo propuesto para el transporte público en la Zona Metropolitana de Guadalajara}
-	\section{Descripción de rutas y paradas}
-	\section{Grafo direccionado de rutas}
 
 \chapter{Resultados}
 
@@ -913,5 +576,6 @@
 \chapter{Apéndices}
 
 \chapter{Anexos}
+
 
 \end{document}
