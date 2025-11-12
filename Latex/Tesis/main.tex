@@ -19,6 +19,8 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta} % Para la punta de flecha 'Stealth'
 
+\renewcommand{\baselinestretch}{1.3}
+
 \tikzset{
   % --- ESTILOS PARA NODOS ---
   % Nodo base: un punto negro. El tamaño se controla con 'inner sep'.
@@ -56,8 +58,7 @@
     arista,
     preaction={
         draw=gray!40,
-        line width=4pt,
-        - % El guion asegura que la preaction es una línea simple
+        line width=4pt
     }
   },
   % Flecha resaltada: igual que la arista, pero el halo también es una flecha.
