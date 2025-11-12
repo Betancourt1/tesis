@@ -62,7 +62,7 @@
                     $$
                 \end{definicion}
 
-                En el $L\text{-espacio}$, las aristas representan la existencia de un vínculo físico, no necesariamente de una misma línea o servicio, sino de un segmento compartido de la infraestructura. Esta característica lo convierte en un modelo idóneo para estudiar la \textit{topología estructural} del sistema de transporte, ya que preserva la continuidad espacial de la red, su forma geométrica y sus restricciones físicas \cite{dingluo2019,vanferber2009}. A partir de este modelo pueden calcularse métricas fundamentales como la conectividad global, el diámetro de la red, la longitud media de los caminos, la densidad de nodos o la distribución de grados, las cuales permiten caracterizar la eficiencia, redundancia y resiliencia de la infraestructura ante fallas o bloqueos locales.
+                En el $L\text{-espacio}$, las aristas representan la existencia de un vínculo físico, no necesariamente de una misma línea o servicio, sino de un segmento compartido de la infraestructura. Esta característica lo convierte en un modelo ideal para estudiar la \textit{topología estructural} del sistema de transporte, ya que preserva la continuidad espacial de la red, su forma geométrica y sus restricciones físicas \cite{dingluo2019,vanferber2009}. A partir de este modelo pueden calcularse métricas fundamentales como la conectividad global, el diámetro de la red, la longitud media de los caminos, la densidad de nodos o la distribución de grados, las cuales permiten caracterizar la eficiencia, redundancia y resiliencia de la infraestructura ante fallas o bloqueos locales.
 
                 Otra ventaja del $L\text{-espacio}$ es que permite estudiar la relación entre la estructura del transporte y la morfología urbana. En particular, al representar explícitamente las intersecciones, el modelo puede extenderse para incluir como nodos tanto las paradas como los cruces de vías relevantes, de manera que:
                 $$
@@ -70,22 +70,22 @@
                 $$
                 donde $V_p$ representa el conjunto de paradas y $V_i$ el de intersecciones. En este caso, dos tipos de aristas pueden definirse: las que conectan paradas consecutivas dentro de una misma ruta y las que vinculan intersecciones adyacentes, enriqueciendo el análisis de continuidad espacial del sistema y su integración con la red vial.
 
-                El $L\text{-espacio}$ se corresponde con lo que la literatura denomina un \textit{grafo planar}, es decir, un grafo que puede representarse en el plano sin que sus aristas se crucen. Esta propiedad es especialmente relevante para redes de transporte urbano, donde la estructura topológica se encuentra restringida por la disposición física del territorio y la infraestructura \cite{rodrigues2020}. En contextos metropolitanos complejos, como el de Guadalajara, dicha representación permite relacionar directamente la geometría de las rutas con la accesibilidad territorial y con los patrones de concentración de la demanda \cite{gobjalisco2024,inegi2024,iieg2024}.
+                El $L\text{-espacio}$ se corresponde con un \textit{grafo planar}, es decir, un grafo que puede representarse en el plano sin que sus aristas se crucen. Esta propiedad es especialmente relevante para redes de transporte urbano, donde la estructura topológica se encuentra restringida por la disposición física del territorio y la infraestructura \cite{rodrigues2020}. En contextos metropolitanos complejos, como el de Guadalajara, dicha representación permite relacionar directamente la geometría de las rutas con la accesibilidad territorial y con los patrones de concentración de la demanda \cite{barraza2021}.
 
-                Formalmente, el $L\text{-espacio}$ puede considerarse una proyección de la red bipartita general $G_B=(V\cup R,E_B)$ sobre el conjunto $V$ de paradas, donde dos vértices se conectan si existe una ruta $r\in R$ que las enlaza consecutivamente. Esta proyección conserva la estructura local de conectividad y sirve como base para definir métricas estructurales como:
+                Formalmente, el $L\text{-espacio}$ puede considerarse una proyección de la red bipartita general $G_B=(V \cup R,E_B)$ sobre el conjunto $V$ de paradas, donde dos vértices se conectan si existe una ruta $r \in R$ que las enlaza consecutivamente. Esta proyección conserva la estructura local de conectividad y sirve como base para definir métricas estructurales como:
                 $$
                 C_i = \frac{2e_i}{k_i(k_i - 1)}, \qquad L = \frac{1}{|V|(|V|-1)} \sum_{i\neq j} d(i,j),
                 $$
-                donde $C_i$ es el coeficiente de agrupamiento del nodo $i$, $k_i$ su grado y $L$ la longitud media de los caminos en el grafo. Dichos indicadores describen la cohesión topológica de la red, su compacidad y la eficiencia promedio de los desplazamientos posibles a lo largo de la infraestructura \cite{balle1998,diestel2017}.
+                donde $C_i$ es el coeficiente de agrupamiento del nodo $i$, $k_i$ su grado y $L$ la longitud media de los caminos en el grafo. Dichos indicadores describen la cohesión topológica de la red, su compacidad y la eficiencia promedio de los desplazamientos posibles a lo largo de la infraestructura.
 
             % AGENTE PON AQUÍ UN TIKZ USANDO EL TIKZSET DEL ARCHIVO MAIN.TEX HDP
 
             \subsubsection{$P\text{-espacio}$}
 
-                El $P$-espacio —o \textit{espacio de rutas}— constituye una representación alternativa de la red de transporte público en la cual las relaciones entre paradas no se definen por su conexión física inmediata, como en el $L$-espacio, sino por su pertenencia funcional a una misma ruta o línea de servicio. En este modelo, dos paradas o estaciones se consideran adyacentes si existe al menos una ruta que las conecta de manera directa, sin necesidad de transbordo \cite{dingluo2019,barraza2021}. En otras palabras, las aristas del grafo representan la posibilidad de desplazarse entre dos puntos de la red bajo una misma operación o trayecto, y no la existencia de una infraestructura material que los enlace.
+                El $P$-espacio —o \textit{espacio de rutas}— constituye una representación alternativa de la red de transporte público en la cual las relaciones entre paradas no se definen por su conexión física inmediata, como en el $L$-espacio, sino por su pertenencia funcional a una misma ruta o línea de servicio. En este modelo, dos paradas o estaciones se consideran adyacentes si existe al menos una ruta que las conecta de manera directa, sin necesidad de transbordo \cite{dingluo2019}. En otras palabras, las aristas del grafo representan la posibilidad de desplazarse entre dos puntos de la red bajo una misma operación o trayecto, y no la existencia de una infraestructura material que los enlace.
 
                 \begin{definicion}[P-espacio]
-                    Sea $R$ el conjunto de rutas o servicios de transporte y, para cada $r\in R$, sea $V_r$ el conjunto de paradas servidas por la ruta $r$. El grafo del $P$-espacio se define como $G_P=(V,E_P)$, donde $V=\bigcup_{r\in R} V_r$ y
+                    Sea $R$ el conjunto de rutas o servicios de transporte y, para cada $r \in R$, sea $V_r$ el conjunto de paradas servidas por la ruta $r$. El grafo del $P$-espacio se define como $G_P=(V,E_P)$, donde $V=\bigcup_{r\in R} V_r$ y
                     $$
                         (i,j)\in E_P \iff \exists r\in R \text{ tal que } i,j\in V_r.
                     $$
@@ -94,9 +94,9 @@
 
                 De esta manera, el $P$-espacio modela la red como un conjunto de \textit{cliques} (subgrafos completos) correspondientes a las rutas del sistema, en los cuales todos los vértices están mutuamente conectados. La superposición de estas cliques genera un grafo denso, que revela con claridad la estructura de integración del sistema desde la perspectiva de los desplazamientos posibles sin transbordo. En términos de teoría de grafos, el $P$-espacio puede interpretarse como una proyección del grafo bipartito $G_B=(V\cup R,E_B)$ sobre el conjunto de vértices $V$, donde $(v,r)\in E_B$ indica que la parada $v$ pertenece a la ruta $r$.
 
-                Esta representación permite estudiar propiedades globales y locales que reflejan la \textit{eficiencia funcional} del sistema. A nivel global, el análisis de conectividad, diámetro y densidad de $G_P$ proporciona una medida de cuán integrado está el sistema de transporte sin considerar transbordos, mientras que, a nivel local, las métricas de centralidad —como el grado, la intermediación o la cercanía— indican qué paradas concentran mayor conectividad operacional dentro de sus rutas. En particular, los vértices con alto grado en el $P$-espacio corresponden a paradas con un número elevado de conexiones posibles sin cambio de línea, lo que las convierte en nodos de alta accesibilidad dentro de la estructura de servicio \cite{fielbaum2016,ki2023}.
+                Esta representación permite estudiar propiedades globales y locales que reflejan la \textit{eficiencia funcional} del sistema. A nivel global, el análisis de conectividad, diámetro y densidad de $G_P$ proporciona una medida de cuán integrado está el sistema de transporte sin considerar transbordos, mientras que, a nivel local, las métricas de centralidad —como el grado, la intermediación o la cercanía— indican qué paradas concentran mayor conectividad operacional dentro de sus rutas. En particular, los vértices con alto grado en el $P$-espacio corresponden a paradas con un número elevado de conexiones posibles sin cambio de línea, lo que las convierte en nodos de alta accesibilidad dentro de la estructura de servicio \cite{dingluo2019}.
 
-                El $P$-espacio es, por tanto, una representación orientada a la experiencia del usuario y a la operación del sistema más que a su soporte físico. Mientras que el $L$-espacio permite evaluar la continuidad de la infraestructura, el $P$-espacio permite estudiar la continuidad del viaje. Este enfoque es particularmente relevante cuando se pretende analizar la integración de servicios troncales y alimentadores, o la eficiencia de un rediseño de rutas en términos de reducción de transbordos. En el caso de la Zona Metropolitana de Guadalajara, por ejemplo, la estructura de rutas troncales y complementarias documentada por la Secretaría de Transporte \cite{gobjalisco2024} y los patrones de movilidad registrados por el IIEG \cite{iieg2024} pueden representarse adecuadamente en este modelo, ya que permite detectar redundancias entre líneas, superposiciones de cobertura y cuellos de botella en la conectividad entre servicios.
+                El $P$-espacio es, por tanto, una representación orientada a la experiencia del usuario y a la operación del sistema más que a su soporte físico. Mientras que el $L$-espacio permite evaluar la continuidad de la infraestructura, el $P$-espacio permite estudiar la continuidad del viaje. Este enfoque es particularmente relevante cuando se pretende analizar la integración de servicios troncales y alimentadores, o la eficiencia de un rediseño de rutas en términos de reducción de transbordos.
 
                 Desde un punto de vista analítico, el $P$-espacio también puede ponderarse incorporando atributos asociados a la oferta de transporte, como la frecuencia de paso, la longitud de las rutas o el volumen de pasajeros atendidos. Así, cada arista puede definirse con un peso $w_{ij}$ proporcional al número de rutas que comparten ambas paradas o al flujo estimado de usuarios entre ellas:
                 $$
@@ -106,14 +106,19 @@
 
             % AGENTE PON AQUÍ UN TIKZ USANDO EL TIKZSET DEL ARCHIVO MAIN.TEX HDP
 
-            \paragraph{}
-            Aunque la gran mayoría de la literatura se centra en estas dos formas de modelar una sistema de transporte público \cite{dingluo2019}, existen otras dos formas que vamos a revisar brevemente, pero que no utilizaremos en el resto de este trabajo.
-
             \subsubsection*{El $C$-espacio}
 
-                El $C\text{-espacio}$ o \textit{espacio de conexión} amplía el enfoque del $P\text{-espacio}$ al considerar no sólo las paradas servidas por una misma línea, sino las interacciones entre diferentes líneas o modos de transporte que comparten un punto de transferencia. En este modelo, los nodos representan rutas o servicios completos y las aristas se establecen cuando dos rutas tienen al menos una parada en común. Así, el grafo $G_C=(R,E_C)$ está compuesto por el conjunto de rutas $R$ y un conjunto de aristas $E_C$ tal que $(r_i,r_j)\in E_C$ si y sólo si existe $v\in V$ con $v\in V_{r_i}\cap V_{r_j}$.
+                El $C\text{-espacio}$ o \textit{espacio de conexión} amplía el enfoque del $P\text{-espacio}$ al considerar no sólo las paradas servidas por una misma línea, sino las interacciones entre diferentes líneas o modos de transporte que comparten un punto de transferencia. En este modelo, los nodos representan rutas o servicios completos y las aristas se establecen cuando dos rutas tienen al menos una parada en común. Así, el grafo se define de la siguiente manera.
 
-                El $C\text{-espacio}$ traslada la atención desde la movilidad del usuario individual hacia la \textit{estructura de interconectividad del sistema}. Permite identificar los puntos de transferencia crítica, la redundancia entre líneas y la robustez del sistema frente a perturbaciones localizadas. En la práctica, su análisis se asocia con el estudio de la \textit{resiliencia operacional}, al revelar cómo los flujos pueden redistribuirse entre rutas en caso de fallas o cierres parciales. Esta representación también resulta útil para evaluar el grado de integración modal dentro del transporte metropolitano, al modelar explícitamente las relaciones entre líneas de autobús, tren ligero o BRT bajo un mismo marco topológico \cite{rodrigues2020,diestel2017,balle1998}.
+                \begin{definicion}[$C$-espacio]
+                    Sea $R$ el conjunto de rutas o servicios de transporte y $V$ el conjunto de paradas o estaciones. El $C$-espacio se define como un grafo $G_C=(R,E_C)$, donde las rutas se consideran vértices y las aristas representan la existencia de puntos de transferencia entre ellas. Formalmente,
+                    $$
+                        (r_i,r_j)\in E_C \iff \exists v\in V \text{ tal que } v\in V_{r_i}\cap V_{r_j}.
+                    $$
+                    Es decir, dos rutas están conectadas si comparten al menos una parada o estación. En este modelo, los vértices son las líneas del sistema y las aristas representan las posibilidades de transbordo entre servicios.
+                \end{definicion}
+
+                El $C$-espacio permite analizar la \textit{interconectividad estructural} del sistema de transporte, ya que traduce las relaciones entre líneas en una red de transferencias. En términos operativos, cada nodo representa una unidad funcional del sistema (una ruta o modo de transporte), y las aristas describen los puntos en los que los pasajeros pueden cambiar de línea. Así, las medidas de centralidad, conectividad y grado en $G_C$ ofrecen una descripción cuantitativa de la integración modal del sistema y de la importancia relativa de cada servicio en la red completa. Este enfoque es fundamental para identificar rutas troncales, redundancias entre líneas y nodos de transferencia con alta carga operativa.
 
                 De manera análoga a los grafos de correlación en otras áreas, el $C\text{-espacio}$ permite aplicar métricas de centralidad sobre rutas —en lugar de paradas—, proporcionando una medida directa de la importancia estratégica de cada línea en la conectividad del conjunto. Así, la topología del $C\text{-espacio}$ complementa la visión local del $L\text{-espacio}$ y la visión funcional del $P\text{-espacio}$, constituyendo una capa intermedia de análisis que describe la forma en que los distintos subsistemas se articulan en un entorno metropolitano.
 
@@ -128,8 +133,33 @@
                     \]
                 \end{definicion}
 
-                El $B\text{-espacio}$, o \textit{espacio bipartito}, constituye una representación más general del sistema de transporte al modelarlo como un grafo bipartito $G_B=(V\cup R, E_B)$, donde un conjunto de vértices corresponde a las paradas $V$ y el otro a las rutas $R$. Una arista $(v,r)\in E_B$ existe si la parada $v$ pertenece a la ruta $r$. A diferencia del $L\text{-espacio}$ y el $P\text{-espacio}$, que surgen de proyecciones de esta estructura bipartita sobre uno de sus conjuntos de vértices, el $B\text{-espacio}$ conserva simultáneamente la relación de pertenencia entre ambos dominios, permitiendo una descripción más completa y neutra del sistema \cite{diestel2017,balle1998}.
+                \begin{definicion}[$B$-espacio]
+                    El $B$-espacio —también denominado \textit{espacio bipartito}— se define como un grafo bipartito
+                    $$
+                        G_B = (V \cup R, E_B),
+                    $$
+                    donde $V$ es el conjunto de paradas o estaciones, $R$ es el conjunto de rutas o líneas, y 
+                    $$
+                        (v,r)\in E_B \iff v\in V_r.
+                    $$
+                    Esto es, una arista une una parada $v$ con una ruta $r$ si dicha parada pertenece a esa ruta. Por construcción, el grafo $G_B$ cumple que ningún par de vértices del mismo tipo está conectado directamente, por lo que
+                    $$
+                        E_B \subseteq \{(v,r)\ |\ v\in V,\ r\in R\}, \quad V\cap R=\emptyset.
+                    $$
+                \end{definicion}
+                
+                El $B$-espacio constituye la estructura más general de modelación de un sistema de transporte, al capturar simultáneamente la relación entre infraestructura ($V$) y operación ($R$). Tanto el $L$-espacio como el $P$- y el $C$-espacio pueden obtenerse como proyecciones de $G_B$ sobre uno de sus conjuntos de vértices:
+                $$
+                    G_L = \Pi_V^{\text{adyacencia}}(G_B), \quad 
+                    G_P = \Pi_V^{\text{pertenencia}}(G_B), \quad
+                    G_C = \Pi_R(G_B).
+                $$
 
                 Este modelo resulta útil cuando se busca analizar propiedades de cobertura, redundancia o centralidad conjunta entre paradas y rutas, ya que las medidas calculadas sobre el grafo bipartito reflejan simultáneamente la importancia estructural de las estaciones y de los servicios que las conectan. Además, la estructura $B$-bipartita puede proyectarse de manera natural sobre cualquiera de los dos conjuntos, generando como casos particulares los modelos $L$- y $C$-espacio, según se proyecte sobre paradas o sobre rutas. De esta forma, el $B\text{-espacio}$ actúa como el nivel más general de formalización topológica del sistema de transporte, a partir del cual pueden definirse los demás espacios según el tipo de interacción o análisis requerido.
 
-                Desde el punto de vista metodológico, el $B\text{-espacio}$ constituye la base de una modelación modular y extensible: permite incorporar pesos derivados de frecuencia, capacidad, tiempos de transferencia o flujos de pasajeros, y facilita la integración con modelos de matriz origen–destino o de propagación de perturbaciones \cite{zhao2024,rodrigues2020}. En síntesis, el grafo bipartito $G_B$ ofrece una representación formalmente completa de la red de transporte público, en la que las relaciones estructurales entre infraestructura, operación y movilidad pueden ser exploradas mediante un único marco matemático.
+                Desde el punto de vista metodológico, el $B\text{-espacio}$ constituye la base de una modelación modular y extensible: permite incorporar pesos derivados de frecuencia, capacidad, tiempos de transferencia o flujos de pasajeros, y facilita la integración con modelos de matriz origen–destino o de propagación de perturbaciones. En síntesis, el grafo bipartito $G_B$ ofrece una representación formalmente completa de la red de transporte público, en la que las relaciones estructurales entre infraestructura, operación y movilidad pueden ser exploradas mediante un único marco matemático.
+
+        \paragraph{}
+        Hasta este punto, no solamente hemos mostrado que los sistemas de transporte público \textit{pueden} modelarse como red, sino además hemos proporcionado cuatro formas distintas de llevar a cabo dicha tarea. Cada una de las formas antes expuestas nos ayudan a revelar una serie de aspectos distintos de estas redes y tienen casos de uso particulares. En el contexto de este trabajo y las secciones siguientes, nos limitaremos a discutir los primeros dos espacios expuestos, pues son los que la literatura ha abarcado con mayor profundidad y con un mayor número de aplicaciones.
+
+    \section{Estado del Arte}
