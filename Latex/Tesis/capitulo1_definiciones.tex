@@ -290,6 +290,24 @@
             Obsérvese que $H$ se obtiene de $G$ al eliminar el nodo $D$ y las aristas asociadas a $D$.
         \end{ejemplo}
 
+        \begin{definicion}[Clique]
+            Sea $G=(V,E)$ un grafo simple no dirigido. Llamamos \textbf{clique} a un conjunto no vacío $S\subseteq V$ tal que todo par de vértices distintos en $S$ es adyacente; equivalentemente, el subgrafo inducido $G[S]$ es un grafo completo $K_{|S|}$. Cuando $|S|=k$, decimos que $S$ es una \emph{$k$-clique}.
+        \end{definicion}
+
+        \begin{definicion}[Maximal y máxima clique; número de clique]
+            Decimos que una clique $S$ es \textbf{maximal} si no está propiamente contenida en ninguna otra clique. Decimos que es \textbf{máxima} si su cardinalidad es la mayor posible entre todas las cliques de $G$. Al tamaño de una clique máxima lo llamamos \textbf{número de clique} de $G$ y lo denotamos por $\omega(G)$.
+        \end{definicion}
+
+        \begin{observacion}[Caso dirigido]
+            Si $G$ es dirigido, por defecto entendemos las cliques respecto del subyacente no dirigido de $G$. Alternativamente pueden usarse dos variantes:
+            \begin{itemize}
+                \item \emph{Clique fuerte (bidirigida):} $S\subseteq V$ tal que, para todo par $u\ne v$ en $S$, se verifican ambos arcos $(u,v)$ y $(v,u)\in E$.
+                \item \emph{Clique débil (orientada):} $S\subseteq V$ tal que, para todo par $u\ne v$ en $S$, existe al menos uno de los arcos $(u,v)$ o $(v,u)$.
+            \end{itemize}
+            En ambos casos podemos definir cliques maximales/máximas y el análogo de $\omega(G)$ restringido a la variante elegida.
+        \end{observacion}
+
+
         La noción de subgrafo es importante en aquellos escenarios en los que no nos interesa, o no nos es posible, estudiar un grafo completo. Es claro que un subgrafo tiene todas las propiedades y tiene todas las propiedades que enunciamos antes para cualquier grafo. Asimismo, hay algunos subgrafos que nos pueden llegar a interesar especialmente por su naturaleza estructural con respecto al resto del grafo al que pertenecen, tal es el caso de los \textit{caminos}, \textit{ciclos} y \textit{árboles}, los cuales definimos a continuación.
 
          \subsubsection{Recorridos, caminos y ciclos}
