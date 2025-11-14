@@ -84,7 +84,7 @@
 
                 El $P$-espacio —o \textit{espacio de rutas}— constituye una representación alternativa de la red de transporte público en la cual las relaciones entre paradas no se definen por su conexión física inmediata, como en el $L$-espacio, sino por su pertenencia funcional a una misma ruta o línea de servicio. En este modelo, dos paradas o estaciones se consideran adyacentes si existe al menos una ruta que las conecta de manera directa, sin necesidad de transbordo \cite{dingluo2019}. En otras palabras, las aristas del grafo representan la posibilidad de desplazarse entre dos puntos de la red bajo una misma operación o trayecto, y no la existencia de una infraestructura material que los enlace.
 
-                \begin{definicion}[P-espacio]
+                \begin{definicion}[$P$-espacio]
                     Sea $R$ el conjunto de rutas o servicios de transporte y, para cada $r \in R$, sea $V_r$ el conjunto de paradas servidas por la ruta $r$. El grafo del $P$-espacio se define como $G_P=(V,E_P)$, donde $V=\bigcup_{r\in R} V_r$ y
                     $$
                         (i,j)\in E_P \iff \exists r\in R \text{ tal que } i,j\in V_r.
@@ -166,3 +166,116 @@
         En este punto ya contamos con varias formas de modelar un sistema de transporte público como grafo. Hemos visto que usaremos una u otra dependiendo del caso, pero que nos centraremos en las primeras dos: $L\text{-espacio}$ y $P\text{-espacio}$. Esto nos permitirá describir tanto la infraestructura como el servicio del transporte público. Ahora bien, algo que nos gustaría es que las propiedades que ya hemos estudiado sobre grafos en el capítulo anterior, nos digan algo acerca del transporte público una vez las apliquemos a sus respectivos modelos de grafo. Esa es nuestra tarea en esta sección.
 
         Primero, revisaremos las propiedades de grafo de los $L\text{-espacios}$ para hablar de las interpretaciones que estas propiedades han tenido en la literatura reciente, luego haremos lo mismo para los $P\text{-espacios}$. Con esto lograremos, no solamente modelar sino también describir exitosamente propiedades de los sistemas de transporte público con grafos.
+
+        \subsection{Propiedades del $L\text{-espacio}$}
+            Recordemos que en la representación $L\text{-espacio}$, los nodos son paradas o estaciones y las aristas representan tramos físicos directos entre ellas. Este modelo preserva la forma de la red y respeta la geografía y restricciones físicas del sistema de transporte \cite{dingluo2019}. Por ello, el $L\text{-espacio}$ es ideal para estudiar la topología estructural de la infraestructura de transporte (por ejemplo, la forma de la red vial o ferroviaria utilizada por el transporte público). A partir de este grafo pueden calcularse diversas métricas globales y locales cuyas interpretaciones se vinculan con aspectos físicos del sistema.
+
+            \paragraph{Conectividad}
+            En $L\text{-espacio}$ es fundamental evaluar las siguientes características de conectividad:
+
+            \begin{itemize}
+                \item \textbf{Conectividad global}: Se evalúa si el grafo es conexo, típicamente esperando que todas las paradas estén en un mismo componente conectado. Una sola componente gigante implica que cualquier estación es alcanzable desde cualquier otra siguiendo las vías de transporte (aunque el recorrido pueda ser largo).
+                
+                \item \textbf{Diámetro de la red}: La mayor distancia en número de paradas entre dos nodos ofrece una medida de la \textit{extensión} de la infraestructura. Un diámetro grande sugiere zonas periféricas mal conectadas o trayectos indirectos, mientras que valores bajos indican una red más \textit{eficiente} en términos de recorrido físico promedio. \cite{barraza2021, rodrigues2020}
+                
+                \item \textbf{Longitud media de los caminos}: La distancia promedio entre pares de paradas proporciona una medida de la \textit{compacidad} de la infraestructura. Caminos muy largos pueden señalar una infraestructura poco directa (viajes largos) o la falta de rutas físicas alternativas (\textit{baja redundancia}) \cite{rodrigues2020}.
+            \end{itemize}
+
+             Estas métricas permiten evaluar la eficiencia de la infraestructura para facilitar desplazamientos, así como su redundancia, lo cual es importante al considerar fallas en el sistema.
+
+            \paragraph{Centralidad}
+            El análisis del grado y las métricas de centralidad en el $L\text{-espacio}$ proporciona información valiosa sobre la importancia local y estructural de las paradas:
+
+            \begin{itemize}
+                \item \textbf{Grado de nodos}: El grado de un nodo en $L\text{-espacio}$ (número de aristas incidentes) equivale al número de conexiones físicas directas que tiene esa parada con otras. Esta es una medida simple pero reveladora de la importancia local de una estación como punto de enlace físico. Paradas terminales de una sola ruta suelen tener grado 1, mientras que estaciones donde convergen múltiples líneas o intersecciones importantes pueden exhibir grados elevados. Un nodo de alto grado en $L\text{-espacio}$ suele corresponder a un nodo de transferencia física o un cruce estratégico en la infraestructura (por ejemplo, una estación central donde confluyen varias rutas).
+
+                \item \textbf{Centralidad de cercanía}: Esta métrica mide la distancia media de una parada a todas las demás en la red física. Un valor alto de cercanía indicaría una parada espacialmente central, desde la cual el resto de la ciudad es alcanzable en pocos tramos físicos. Estas paradas céntricas suelen estar en el corazón geográfico de la red o en posiciones intermedias muy convenientes.
+
+                \item \textbf{Centralidad de intermediación}: Identifica qué nodos sirven con mayor frecuencia como puentes físicos en las rutas más cortas entre pares de estaciones. Un nodo con alta intermediación en $L\text{-espacio}$ señala un cuello de botella de la infraestructura: muchos viajes mínimos pasan por él, lo que implica que su interrupción fragmentaría la red o alargaría mucho los desvíos.
+            \end{itemize}
+
+            Algunos estudios han usado la intermediación para detectar estaciones críticas cuya falla desconectaría secciones enteras del sistema. Estos nodos representan \textit{puntos vulnerables}: su saturación o bloqueo (por obras, accidentes, etc.) puede comprometer la conectividad global. \cite{wang2023, barraza2021}
+
+            \paragraph{Coeficiente de agrupamiento y ciclos}
+            El análisis del coeficiente de agrupamiento y la estructura de ciclos en el $L\text{-espacio}$ proporciona información crucial sobre la redundancia de la infraestructura:
+
+            \begin{itemize}
+                \item \textbf{Coeficiente de agrupamiento}: El coeficiente de agrupamiento (clustering) en $L\text{-espacio}$ mide la tendencia a que las paradas adyacentes de una estación estén también conectadas entre sí, formando triángulos (ciclos de longitud 3) en el grafo. Un ejemplo son las redes de transporte puramente arborescentes (p.ej. rutas de autobús que no comparten tramos) en las cuales el clustering suele ser bajo, ya que la mayoría de vecinos de un nodo no están conectados directamente entre sí (las rutas tienden a formar caminos lineales).
+
+                \item \textbf{Presencia de ciclos y redundancia}: La presencia de ciclos y clustering mayor puede indicar redundancia en la infraestructura (rutas alternativas físicas). Si dos estaciones están conectadas por más de un camino (quizá dos líneas diferentes que pasan por rutas distintas pero unen los mismos puntos), se forma un ciclo en el grafo $L$. Un clustering elevado a nivel global sugiere una red con múltiples interconexiones (propia de sistemas bien mallados, como ciertas redes ferroviarias o de metro con bucles), mientras que valores bajos (frecuentes en redes de autobús radial) indican estructura de árbol donde cada ramal es único.
+            \end{itemize}
+
+            Estas propiedades topológicas permiten evaluar la robustez estructural: la presencia de ciclos suele correlacionar con mayor tolerancia a fallos (hay rutas alternativas si un tramo se cae), mientras que una red tipo árbol (sin ciclos) es más frágil a cortes.
+
+            En \cite{vanferber2009} analizaron redes de transporte europeas y notaron que muchas exhiben propiedades de \textit{pequeño mundo} -aquél en el que el camino más corto promedio entre cualesquiera dos nodos es igual o menor a seis- en $L\text{-espacio}$ únicamente cuando existen ciertos lazos o bucles en la infraestructura, de lo contrario el camino promedio se alarga considerablemente.
+
+            \paragraph{Modularidad y comunidades}
+            Aplicar algoritmos de detección de comunidades (por ejemplo, optimización de la \textit{modularidad}) en el grafo $L\text{-espacio}$ puede revelar agrupamientos de estaciones según la densidad de conexiones físicas entre ellas. En el contexto físico, es esperable que las comunidades identificadas correspondan aproximadamente a subredes geográficas o corredores de infraestructura. Por ejemplo, un conjunto de paradas en una misma área de la ciudad altamente interconectadas entre sí pero con pocas conexiones físicas hacia otras zonas formaría una comunidad.
+
+            \begin{itemize}
+                \item \textbf{Modularidad alta}: Un alto valor de modularidad indicaría que la red puede separarse en módulos con relativamente poca interconexión entre ellos, lo que podría reflejar sectores urbanos semi-desconectados o corredores que funcionan casi independientes (p.ej. un suburbio con un circuito interno de rutas y solo un par de accesos al resto de la red).
+
+                \item \textbf{Modularidad baja}: Una modularidad baja sugiere una malla más uniforme o varios enlaces entre todas las partes de la ciudad, indicando mayor integración entre diferentes zonas geográficas.
+            \end{itemize}
+
+            Diversos autores han propuesto utilizar medidas globales como la modularidad, la assortatividad, o indicadores basados en \textit{PageRank} para identificar clusters de estaciones fuertemente conectados dentro de la red de transporte. En \cite{wang2023} argumentan que dichas comunidades en el $L\text{-espacio}$ pueden indicar distintos \textit{niveles jerárquicos} dentro de la red (p.ej., un clúster central de estaciones muy bien comunicadas entre sí frente a periferias menos conectadas). En términos prácticos, esto puede ayudar a planificadores a reconocer zonas con buena conectividad interna pero pobre conexión externa, priorizando allí mejoras para integrar mejor esos módulos al resto de la ciudad.
+
+        \subsection{Propiedades del $P\text{-espacio}$}
+            Mientras el $L$-espacio nos permite evaluar muy bien la infraestructura del sistema de transporte público, no es tan útil a la hora de medir el servicio. En general, las personas no estarán interesadas en saber cuántas estaciones tuvieron que pasar para llegar a su destino, tampoco tendrá un impacto decisivo en la calidad de la experiencia. En la representación $P$-espacio, las paradas se conectan si comparten al menos una ruta común. Esta representación no se preocupa por la distancia física ni la continuidad geográfica, sino por la continuidad del viaje desde la perspectiva del usuario: qué tan lejos puede llegar alguien sin hacer transbordo. Por ello, suele describirse al $P$-espacio como la red “vista por el pasajero” o red de alcance de servicio, más vinculada a la accesibilidad operativa que a la infraestructura física. Analizar propiedades de este grafo permite evaluar la eficiencia funcional del sistema de transporte, la integración de las rutas y la conveniencia de desplazamiento.
+
+            \paragraph{Integración y componentes conectados}
+                Las propiedades globales del $P\text{-espacio}$ revelan características fundamentales sobre la integración funcional del sistema:
+
+                \begin{itemize}
+                    \item \textbf{Conectividad ideal}: En un buen sistema de transporte público integrado, el grafo $P\text{-espacio}$ idealmente será conexo, reflejando que desde cualquier parada se puede llegar a cualquier otra usando alguna combinación de líneas (aunque impliquen transbordos). En cambio, si en $P\text{-espacio}$ aparecieran múltiples componentes, significaría que existen subconjuntos de paradas aislados en términos de servicio – es decir, ciertas rutas o grupos de rutas que no comparten ninguna parada con el resto del sistema, imposibilitando viajar de ese subgrafo a otro sin cambiar fuera del sistema. En la práctica urbana, la conectividad global de $G_P$ suele ser alta; incluso si la red física es desconexa (por ejemplo dos tranvías sin unión), mientras haya un punto de intercambio (parada en común o estación de transferencia) entre modos o líneas, el $P$-grafo unirá esos subgrupos.
+
+                    \item \textbf{Diámetro y integración sin transbordos}: Métricas globales como el diámetro y la densidad de $G_P$ cuantifican la \textit{integración sin transbordos}: un diámetro pequeño en $P$ (pocos pasos para conectar cualquier par de nodos) indica que se requieren pocos transbordos máximos para cubrir toda la ciudad, lo cual es deseable en términos operativos.
+
+                    \item \textbf{Densidad elevada por estructura de cliques}: La densidad (proporción de aristas existentes de entre las posibles) tiende a ser elevada en $P\text{-espacio}$ justamente por la formación de cliques por ruta – por ejemplo, en una ciudad con $N$ paradas y rutas que cubren muchas de ellas, $G_P$ puede acercarse a un grafo casi completo. Esto contrasta con el $L\text{-espacio}$ mucho menos denso en términos de aristas.
+
+                    \item \textbf{Propiedades de pequeño mundo}: Un sistema con características de pequeño mundo en $P\text{-espacio}$ (que es lo común) tendrá distancias muy cortas: típicamente cualquier parada se conecta a cualquier otra con tan solo 1 o 2 transbordos gracias a que las rutas se sobreponen en algunos puntos (esto se ha confirmado observando que las redes en $P$ suelen tener clustering alto y camino medio bajo, a diferencia del $L\text{-espacio}$).
+                \end{itemize}
+
+                En \cite{zhang2019} hallaron que la red de autobuses de Beijing en $P\text{-espacio}$ exhibe claras propiedades de \textit{mundo pequeño} y una alta conectividad, indicando que funcionalmente el sistema permitía traslados eficientes entre la mayoría de las zonas.
+
+            \paragraph{Centralidad de grado (conectividad operacional)}
+            El análisis del grado en el $P\text{-espacio}$ proporciona información fundamental sobre la accesibilidad operacional de las paradas:
+
+            \begin{itemize}
+                \item \textbf{Definición del grado en $P\text{-espacio}$}: Una de las métricas más informativas en $P\text{-espacio}$ es el grado de los nodos, que aquí equivale al número de paradas distintas a las que se puede llegar \textit{directamente por alguna ruta} desde la parada en cuestión. Un nodo con grado $k$ en $G_P$ significa que esa estación comparte al menos una línea con $k$ otras estaciones. Las paradas de alto grado en $P$ son típicamente aquellas servidas por muchas rutas diferentes, ya que al estar en múltiples líneas, quedan conectadas con todas las paradas de cada una de esas líneas.
+
+                \item \textbf{Hubs y terminales estratégicas}: Estas estaciones pueden ser grandes terminales o hubs donde confluyen numerosas rutas (p. ej., una central de transferencia de autobuses): para un usuario, representan nodos de alta accesibilidad, porque desde allí puede abordar directamente (sin cambio) a una gran cantidad de destinos. En \cite{dingluo2019} señalan que dichas paradas de grado elevado en $P\text{-espacio}$ funcionan como nodos estratégicos de acceso, concentrando conectividad operativa y por tanto resultan clave para mantener bajo el número de transbordos en viajes por la ciudad. En redes bien diseñadas, suelen coincidir con puntos céntricos o intercambiadores donde se procura que los usuarios puedan cambiar de línea fácilmente.
+
+                \item \textbf{Paradas de grado bajo}: Una parada con grado muy bajo (1 o 2) en $P\text{-espacio}$ podría indicar un punto atendido por pocas rutas, a menudo un extremo de línea o una parada en una periferia con escasa oferta directa; dichos nodos ofrecen poca accesibilidad directa y dependen de transbordos para conectarse con el resto.
+            \end{itemize}
+
+            \paragraph{Centralidad de cercanía y accesibilidad global}
+            La centralidad de cercanía en el $P\text{-espacio}$ captura cuán accesible es una parada cuando se mide el viaje en términos de transbordos: un nodo con cercanía alta requiere, en promedio, pocos cambios de ruta para alcanzar cualquier otro destino del sistema. Esta métrica funciona como un indicador de accesibilidad estructural, pues sintetiza la facilidad global de movimiento desde cada parada. En redes urbanas, las zonas centrales o nodos de convergencia suelen presentar mayor cercanía, mientras que las áreas periféricas muestran valores bajos, lo que se traduce en mayores tiempos de viaje y menor integración funcional. Estos gradientes permiten evaluar desigualdades territoriales en accesibilidad y se han utilizado como insumos analíticos en estudios que combinan teoría de grafos con medidas de viaje efectivo como en \cite{dingluo2019}.
+
+            \begin{itemize}
+                \item \textbf{Interpretación operativa}: La cercanía mide el número promedio de transbordos necesarios para alcanzar el resto de paradas. Un valor alto indica que la parada se encuentra “cerca” del resto del sistema en términos topológicos, incluso si las distancias físicas sean mayores. Paradas ubicadas en zonas céntricas, corredores troncales o puntos donde convergen varias rutas tienden a exhibir cercanía elevada en $G_P$, lo que equivale a buena accesibilidad y rapidez en la conexión con múltiples destinos. Por otro lado, nodos ubicados en rutas marginales o extremos de línea muestran cercanía baja, implicando que requieren varios transbordos para llegar a la mayoría de destinos; esto se traduce en tiempos de viaje largos y accesibilidad desigual.
+
+                \item \textbf{Evaluación de equidad espacial}: El gradiente de cercanía permite detectar desigualdades territoriales en el acceso al sistema. Valores bajos concentrados en suburbios o zonas periféricas indican brechas estructurales de conectividad y potencial desventaja en movilidad.
+            \end{itemize}
+
+            Estudios como \cite{dingluo2019} combinan cercanía topológica con tiempos reales de viaje, mostrando que ambas medidas capturan dimensiones complementarias de accesibilidad.
+
+            \paragraph{Centralidad de intermediación y nodos críticos de transferencia}
+            La intermediación en el $P\text{-espacio}$ identifica qué tan indispensable es una parada para articular los caminos mínimos entre pares de estaciones, lo que equivale a medir su rol como nodo de transferencia. Un valor alto revela que numerosos viajes con el mínimo de transbordos deben pasar por esa parada, lo que la vuelve un hub funcional que une líneas que de otro modo permanecerían desconectadas. Por ello, la intermediación se utiliza para detectar vulnerabilidades, planificar redundancias y evaluar qué tan dependiente es la ciudad de ciertos puntos para mantener trayectos eficientes.
+
+            La betweenness mide cuántos pares origen–destino requieren pasar por una parada para realizar un viaje con el mínimo de transbordos. Un valor alto indica que el nodo articula grandes porciones del flujo potencial de la red. Paradas con alta intermediación suelen ser centros de transbordo donde convergen rutas que no se conectan en otro punto. Estos nodos funcionan como puentes que enlazan sectores urbanos que de otra manera quedarían separados en términos de conectividad topológica. La eliminación de un nodo con betweenness muy alta puede incrementar drásticamente los transbordos necesarios o incluso desconectar sectores enteros. La identificación de intermediación elevada permite diseñar rutas alternativas, descentralizar la transferencia o desarrollar hubs secundarios que distribuyan la carga. De esta forma se reduce la dependencia extrema de un único punto y se mejora la resiliencia del sistema ante fallas locales. Nodos con betweenness sobresaliente suelen ubicarse en las fronteras entre comunidades de rutas y permiten que viajes entre sectores de la ciudad mantengan pocos transbordos. Su papel es análogo al de \textit{articuladores} en redes sociales, que enlazan grupos densamente conectados.
+
+            \paragraph{Clustering y redundancia de rutas}
+            El coeficiente de agrupamiento en el $P\text{-espacio}$ tiende a ser elevado debido a la estructura intrínseca del modelo: cada ruta genera un subgrafo casi completo, produciendo numerosos triángulos entre paradas que comparten la misma línea. Un clustering global alto indica un sistema con fuerte solapamiento de rutas y múltiples conexiones directas entre grupos de paradas, lo que se interpreta como redundancia operacional. En la práctica, esto señala que los usuarios disponen de varias alternativas para desplazarse sin transbordos entre ciertos sectores, reforzando la comodidad y la resiliencia del servicio. La evidencia empírica confirma este patrón: estudios comparativos muestran que las redes en $P$ presentan clustering significativamente mayor que grafos aleatorios con igual distribución de grado, reforzando su carácter de pequeño mundo.
+
+            \begin{itemize}
+                \item \textbf{Formación automática de triángulos}: En $G_P$, cualquier trío de paradas pertenecientes a la misma línea queda completamente conectado. Las rutas reales generan así cliques locales que inflan el clustering incluso sin necesidad de múltiples líneas.
+
+                \item \textbf{Redundancia operacional}: Un clustering elevado refleja la existencia de varios caminos directos posibles entre grupos de paradas, producto del solapamiento entre rutas. Esto implica que para ciertos desplazamientos existen alternativas sin transbordo, lo que mejora robustez y experiencia de viaje.
+
+                \item \textbf{Solapamiento de rutas}: Cuando dos o más líneas conectan barrios similares por trayectorias distintas, las paradas quedan enlazadas por múltiples rutas posibles. En el $P\text{-espacio}$ esto aparece como circuitos cerrados adicionales y mayor cohesión local.
+
+                \item \textbf{Casos de clustering bajo}: Un coeficiente reducido indicaría un sistema donde cada parada pertenece prácticamente a una sola ruta sin compartir tramos con otras. Es una situación poco común en sistemas urbanos modernos y revela poca redundancia y escaso margen de operación ante fallas.
+
+                \item \textbf{Implicaciones de pequeño mundo}: La combinación de clustering alto con distancias cortas es característica del pequeño mundo en $P\text{-espacio}$. Esta estructura mezcla cohesión local intensa con accesibilidad global eficiente, un patrón ampliamente confirmado en sistemas reales.
+            \end{itemize}
