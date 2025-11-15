@@ -23,12 +23,12 @@
             \item De acuerdo al nivel de agregación de los datos.
         \end{itemize}
 
-    En el presente trabajo nos enfocaremos en metodologías cuantitativas, concretamente aquellas que ofrecen una descripción del transporte público. En el siguiente capítulo nos extenderemos respecto al tipo de agregación del que dispondremos para nustro modelo propuesto.
+    En el presente trabajo nos enfocaremos en metodologías cuantitativas, concretamente aquellas que ofrecen una descripción del transporte público. En el siguiente capítulo nos extenderemos respecto al tipo de agregación del que dispondremos para nuestro modelo propuesto.
 
     Dentro de los métodos cuantitativos, existen aquellos que parten de una visión multidisciplinaria, como la cartografía, y aquellos que están específicamente enfocados en el transporte y su estudio. Dentro de estos últimos, podemos mencionar a los métodos numéricos enfocados en realizar simulaciones especializadas en el uso del transporte y el suelo. También existe el uso de procesos de optimización que se especializan en responder preguntas tales como dónde ubicar una tienda de retail o una nueva escuela. Finalmente, es común el uso de la teoría de grafos para modelar las redes de transporte público y analizar su estructura. Dentro del presente estudio, nos enfocaremos específicamente en el uso de teoría de grafos para el estudio de redes de transporte público.
 
     \section{El transporte público como grafo}
-        En el capítulo anterior nos propusimos conseguir definir lo que es un grafo, así como sus propiedades principales y varios resultados interesantes en torno a estos. Algunas de las definiciones que adquirimos fue la de recorrido, que nos proporciona una noción de movimiento dentro de un grafo. Asimismo, definimos un tipo de distancia entre dos nodos que nos puede indicar cómo de largo es el recorrido más corto entre estos.
+        En el capítulo anterior se definió el concepto de grafo, así como sus propiedades principales y varios resultados interesantes en torno a estos. Algunas de las definiciones que adquirimos fue la de recorrido, que nos proporciona una noción de movimiento dentro de un grafo. Asimismo, definimos un tipo de distancia entre dos nodos que nos puede indicar cómo de largo es el recorrido más corto entre estos.
 
         Nuestra meta en esta sección es mostrar que cualquier red de transporte público puede modelarse como un grafo haciendo uso de toda la teoría vista en el capítulo anterior. Más aún, algunos de los resultados que estudiamos para grafos, también nos dicen cosas muy interesantes del transporte público en tanto tal. Esto hace a los grafos una herramienta valiosísima para modelar esta clase de redes y analizar su comportamiento.
 
@@ -41,9 +41,29 @@
                 \item rutas.
             \end{itemize}
 
-            % AGENTE PON AQUÍ UN TIKZ USANDO EL TIKZSET DEL ARCHIVO MAIN.TEX HDP
-
             Asimismo, nos propone que construyamos un grafo a partir de tres reglas: 1) cada parada o estación, corresponde a un nodo; 2) si es posible ir de una parada o estación a otra a través de una ruta, una arista las une; 3) si dos aristas se intersectan, la intersección corresponde a otro nodo.
+
+            \begin{figure}[H]
+                \centering
+                \begin{tikzpicture}
+                    % Nodos (paradas)
+                    \node[nodo, label={[etiqueta_nodo]left:1}] (1) at (0,0) {};
+                    \node[nodo, label={[etiqueta_nodo]above:2}] (2) at (2,0) {};
+                    \node[nodo, label={[etiqueta_nodo,yshift=5pt]above:3}] (3) at (4,0) {};
+                    \node[nodo, label={[etiqueta_nodo]above:4}] (4) at (6,0) {};
+                    \node[nodo, label={[etiqueta_nodo]right:5}] (5) at (8,0) {};
+
+                    % Rutas
+                    \draw[arista, blue, thick] (1) -- (2) -- (3);
+                    \draw[arista, red, thick] (3) -- (4) -- (5);
+
+                    % Etiquetas de ruta
+                    \node[font=\small, blue] at (1, 0.3) {Ruta A};
+                    \node[font=\small, red] at (7, 0.3) {Ruta B};
+                \end{tikzpicture}
+                \caption{Representación de un sistema de transporte con dos rutas (A y B) y cinco paradas. La parada 3 es un punto de transferencia.}
+                \label{fig:transporte_conceptual}
+            \end{figure}
 
             Las reglas 1 y 2 son estándar en la literatura \cite{barraza2021, fielbaum2016, vanferber2009, dingluo2019}, mientras que la regla 3 no está tan presente en otros trabajos, pero es útil en los casos en los que queremos que el grafo resultante del modelo sea también un \textit{grafo planar}.
 
@@ -78,7 +98,25 @@
                 $$
                 donde $C_i$ es el coeficiente de agrupamiento del nodo $i$, $k_i$ su grado y $L$ la longitud media de los caminos en el grafo. Dichos indicadores describen la cohesión topológica de la red, su compacidad y la eficiencia promedio de los desplazamientos posibles a lo largo de la infraestructura.
 
-            % AGENTE PON AQUÍ UN TIKZ USANDO EL TIKZSET DEL ARCHIVO MAIN.TEX HDP
+            \begin{figure}[H]
+                \centering
+                \begin{tikzpicture}
+                    % Nodos
+                    \node[nodo, label={[etiqueta_nodo]left:1}] (1) at (0,0) {};
+                    \node[nodo, label={[etiqueta_nodo]above:2}] (2) at (2,0) {};
+                    \node[nodo, label={[etiqueta_nodo]above:3}] (3) at (4,0) {};
+                    \node[nodo, label={[etiqueta_nodo]above:4}] (4) at (6,0) {};
+                    \node[nodo, label={[etiqueta_nodo]right:5}] (5) at (8,0) {};
+
+                    % Aristas del L-espacio
+                    \draw[arista] (1) -- (2);
+                    \draw[arista] (2) -- (3);
+                    \draw[arista] (3) -- (4);
+                    \draw[arista] (4) -- (5);
+                \end{tikzpicture}
+                \caption{Grafo del $L\text{-espacio}$ correspondiente al sistema de la Figura \ref{fig:transporte_conceptual}. Las aristas representan tramos físicos directos entre paradas consecutivas.}
+                \label{fig:l_espacio}
+            \end{figure}
 
             \subsubsection{$P\text{-espacio}$}
 
@@ -104,9 +142,31 @@
                 $$
                 donde $f$ es una función de ponderación que puede calibrarse según los objetivos del análisis (por ejemplo, para modelar tiempos esperados o demanda efectiva). Este tipo de extensión transforma el grafo en una red ponderada que describe la estructura potencial de movilidad dentro del sistema.
 
-            % AGENTE PON AQUÍ UN TIKZ USANDO EL TIKZSET DEL ARCHIVO MAIN.TEX HDP
+            \begin{figure}[H]
+                \centering
+                \begin{tikzpicture}
+                    % Nodos
+                    \node[nodo, label={[etiqueta_nodo]left:1}] (1) at (0,0) {};
+                    \node[nodo, label={[etiqueta_nodo]above:2}] (2) at (1,1.5) {};
+                    \node[nodo, label={[etiqueta_nodo,yshift=5pt]above:3}] (3) at (2,0) {};
+                    \node[nodo, label={[etiqueta_nodo]above:4}] (4) at (3,1.5) {};
+                    \node[nodo, label={[etiqueta_nodo]right:5}] (5) at (4,0) {};
 
-            \subsubsection*{El $C$-espacio}
+                    % Aristas del P-espacio (Clique Ruta A)
+                    \draw[arista, blue] (1) -- (2);
+                    \draw[arista, blue] (2) -- (3);
+                    \draw[arista, blue] (1) -- (3);
+
+                    % Aristas del P-espacio (Clique Ruta B)
+                    \draw[arista, red] (3) -- (4);
+                    \draw[arista, red] (4) -- (5);
+                    \draw[arista, red] (3) -- (5);
+                \end{tikzpicture}
+                \caption{Grafo del $P\text{-espacio}$ para el mismo sistema. Las aristas conectan cualquier par de paradas que compartan una ruta, formando una clique para la Ruta A (azul) y otra para la Ruta B (rojo).}
+                \label{fig:p_espacio}
+            \end{figure}
+
+            \subsubsection{El $C$-espacio}
 
                 El $C\text{-espacio}$ o \textit{espacio de conexión} amplía el enfoque del $P\text{-espacio}$ al considerar no sólo las paradas servidas por una misma línea, sino las interacciones entre diferentes líneas o modos de transporte que comparten un punto de transferencia. En este modelo, los nodos representan rutas o servicios completos y las aristas se establecen cuando dos rutas tienen al menos una parada en común. Así, el grafo se define de la siguiente manera.
 
@@ -118,11 +178,25 @@
                     Es decir, dos rutas están conectadas si comparten al menos una parada o estación. En este modelo, los vértices son las líneas del sistema y las aristas representan las posibilidades de transbordo entre servicios.
                 \end{definicion}
 
+                \begin{figure}[H]
+                    \centering
+                    \begin{tikzpicture}
+                        % Nodos (Rutas)
+                        \node[draw, circle, font=\small, inner sep=3pt] (A) at (0,0) {Ruta A};
+                        \node[draw, circle, font=\small, inner sep=3pt] (B) at (3,0) {Ruta B};
+
+                        % Arista (punto de transferencia)
+                        \draw[arista] (A) -- (B) node[etiqueta_peso, below=2pt] {Parada 3};
+                    \end{tikzpicture}
+                    \caption{Grafo del $C\text{-espacio}$. Los nodos son las rutas y una arista las une si comparten al menos una parada, representando un punto de transferencia.}
+                    \label{fig:c_espacio}
+                \end{figure}
+
                 El $C$-espacio permite analizar la \textit{interconectividad estructural} del sistema de transporte, ya que traduce las relaciones entre líneas en una red de transferencias. En términos operativos, cada nodo representa una unidad funcional del sistema (una ruta o modo de transporte), y las aristas describen los puntos en los que los pasajeros pueden cambiar de línea. Así, las medidas de centralidad, conectividad y grado en $G_C$ ofrecen una descripción cuantitativa de la integración modal del sistema y de la importancia relativa de cada servicio en la red completa. Este enfoque es fundamental para identificar rutas troncales, redundancias entre líneas y nodos de transferencia con alta carga operativa.
 
                 De manera análoga a los grafos de correlación en otras áreas, el $C\text{-espacio}$ permite aplicar métricas de centralidad sobre rutas —en lugar de paradas—, proporcionando una medida directa de la importancia estratégica de cada línea en la conectividad del conjunto. Así, la topología del $C\text{-espacio}$ complementa la visión local del $L\text{-espacio}$ y la visión funcional del $P\text{-espacio}$, constituyendo una capa intermedia de análisis que describe la forma en que los distintos subsistemas se articulan en un entorno metropolitano.
 
-            \subsubsection*{El $B$-espacio}
+            \subsubsection{El $B$-espacio}
 
                 Una última forma de modelar los sistemas de transporte público, son los $B\text{-espacios}$, pero antes de definirlos, debemos definir lo que es un grafo bipartito.
 
@@ -147,6 +221,34 @@
                         E_B \subseteq \{(v,r)\ |\ v\in V,\ r\in R\}, \quad V\cap R=\emptyset.
                     $$
                 \end{definicion}
+
+                \begin{figure}[H]
+                    \centering
+                    \begin{tikzpicture}
+                        % Nodos de Parada (V)
+                        \node[nodo, label={[etiqueta_nodo]left:1}] (s1) at (0,2) {};
+                        \node[nodo, label={[etiqueta_nodo]left:2}] (s2) at (0,1) {};
+                        \node[nodo, label={[etiqueta_nodo]left:3}] (s3) at (0,0) {};
+                        \node[nodo, label={[etiqueta_nodo]left:4}] (s4) at (0,-1) {};
+                        \node[nodo, label={[etiqueta_nodo]left:5}] (s5) at (0,-2) {};
+                        \node[font=\large] at (-1, 0) {$V$};
+
+                        % Nodos de Ruta (R)
+                        \node[draw, rectangle, rounded corners, font=\small] (rA) at (3,1) {Ruta A};
+                        \node[draw, rectangle, rounded corners, font=\small] (rB) at (3,-1) {Ruta B};
+                        \node[font=\large] at (4.2, 0) {$R$};
+
+                        % Aristas
+                        \draw[arista_tenue] (s1) -- (rA);
+                        \draw[arista_tenue] (s2) -- (rA);
+                        \draw[arista_tenue] (s3) -- (rA);
+                        \draw[arista_tenue] (s3) -- (rB);
+                        \draw[arista_tenue] (s4) -- (rB);
+                        \draw[arista_tenue] (s5) -- (rB);
+                    \end{tikzpicture}
+                    \caption{Grafo del $B\text{-espacio}$ (bipartito). Un conjunto de nodos representa las paradas ($V$) y el otro las rutas ($R$). Las aristas conectan una parada con una ruta si la parada pertenece a esa ruta.}
+                    \label{fig:b_espacio}
+                \end{figure}
                 
                 El $B$-espacio constituye la estructura más general de modelación de un sistema de transporte, al capturar simultáneamente la relación entre infraestructura ($V$) y operación ($R$). Tanto el $L$-espacio como el $P$- y el $C$-espacio pueden obtenerse como proyecciones de $G_B$ sobre uno de sus conjuntos de vértices:
                 $$
@@ -159,11 +261,10 @@
 
                 Desde el punto de vista metodológico, el $B\text{-espacio}$ constituye la base de una modelación modular y extensible: permite incorporar pesos derivados de frecuencia, capacidad, tiempos de transferencia o flujos de pasajeros, y facilita la integración con modelos de matriz origen–destino o de propagación de perturbaciones. En síntesis, el grafo bipartito $G_B$ ofrece una representación formalmente completa de la red de transporte público, en la que las relaciones estructurales entre infraestructura, operación y movilidad pueden ser exploradas mediante un único marco matemático.
 
-        \paragraph{}
         Hasta este punto, no solamente hemos mostrado que los sistemas de transporte público \textit{pueden} modelarse como red, sino además hemos proporcionado cuatro formas distintas de llevar a cabo dicha tarea. Cada una de las formas antes expuestas nos ayudan a revelar una serie de aspectos distintos de estas redes y tienen casos de uso particulares. En el contexto de este trabajo y las secciones siguientes, nos limitaremos a discutir los primeros dos espacios expuestos, pues son los que la literatura ha abarcado con mayor profundidad y con un mayor número de aplicaciones.
 
     \section{Estado del Arte}
-        En este punto ya contamos con varias formas de modelar un sistema de transporte público como grafo. Hemos visto que usaremos una u otra dependiendo del caso, pero que nos centraremos en las primeras dos: $L\text{-espacio}$ y $P\text{-espacio}$. Esto nos permitirá describir tanto la infraestructura como el servicio del transporte público. Ahora bien, algo que nos gustaría es que las propiedades que ya hemos estudiado sobre grafos en el capítulo anterior, nos digan algo acerca del transporte público una vez las apliquemos a sus respectivos modelos de grafo. Esa es nuestra tarea en esta sección.
+        En este punto ya contamos con varias formas de modelar un sistema de transporte público como grafo. Hemos visto que usaremos una u otra dependiendo del caso, pero que nos centraremos en las primeras dos: $L\text{-espacio}$ y $P\text{-espacio}$. Esto nos permitirá describir tanto la infraestructura como el servicio del transporte público. Por tanto, se busca que las propiedades de los grafos estudiadas previamente permitan interpretar el comportamiento del sistema de transporte público una vez aplicadas a sus respectivos modelos. Este es el objetivo de la presente sección.
 
         Primero, revisaremos las propiedades de grafo de los $L\text{-espacios}$ para hablar de las interpretaciones que estas propiedades han tenido en la literatura reciente, luego haremos lo mismo para los $P\text{-espacios}$. Con esto lograremos, no solamente modelar sino también describir exitosamente propiedades de los sistemas de transporte público con grafos.
 
@@ -338,6 +439,6 @@
 
         \subsection{Relación con la presente investigación}
 
-            Este trabajo toma como punto de partida la metodología de \cite{barraza2021}, pero la amplía al considerar distintos tipos de representaciones de red (espacios $L$ y $P$) y al aplicar métricas adicionales como \textbf{modularidad} y \textbf{coeficiente de agrupamiento}. De esta forma, se busca extender el alcance de este estudio, analizando la estructura topológica de la red actual de transporte público, estableciendo un punto de referencia cuantitativo y metodológico para el análisis estructural contemporáneo del sistema de transporte metropolitano.
+            Este trabajo toma como punto de partida la metodología de \cite{barraza2021}, pero la amplía al considerar distintos tipos de representaciones de red (espacios $L$ y $P$) y al aplicar métricas adicionales como \textbf{modularidad} y \textbf{coeficiente de agrupamiento}. De esta forma, se busca extender el alcance de este estudio. Específicamente, mediante el análisis de modularidad, se investigará si la red actual se organiza en comunidades funcionales que no se corresponden con la geografía, sino con patrones de demanda. Asimismo, el coeficiente de agrupamiento permitirá cuantificar la redundancia local del servicio, un aspecto no abordado por el análisis de vulnerabilidad de hubs. Con ello, se busca establecer un punto de referencia cuantitativo y metodológico para el análisis estructural contemporáneo del sistema de transporte metropolitano.
 
 
