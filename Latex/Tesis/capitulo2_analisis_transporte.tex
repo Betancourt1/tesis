@@ -297,4 +297,47 @@
 
     \section{Antecedente Clave: Análisis Previo de la Red de Guadalajara}
 
+        Hemos indicado en la introducción del presenta trabajo que nuestra finalidad es modelar el sistema de transporte público de la Zona Metropolitana de Guadalajara como grafo y, a través del estudio de dicho modelo, deducir propiedades físicas y de servicio del mismo. En este sentido, \cite{barraza2021} sienta un precedente directo que se hace necesario analizar, ya que constituye el antecedente más directo y relevante en el análisis estructural del sistema de transporte público de la Zona Metropolitana de Guadalajara desde el enfoque de la teoría de grafos. El modelo parte de la premisa de que el desempeño operativo y energético del sistema de transporte está íntimamente ligado a su estructura, y que la planificación metropolitana debe integrar explícitamente propiedades topológicas y geométricas de la red en la toma de decisiones. En esta sección analizaremos su contenido y lo conectaremos con las intenciones de este trabajo.
+
+        \subsection{Metodología general y construcción de la red}
+
+        Los autores utilizaron la especificación \textit{General Transit Feed Specification} (GTFS) como base para construir la representación del sistema alternativo de transporte, integrando 2033 paradas y 39 rutas con un diseño ortogonal. Se delimitaron 398 zonas hexagonales con un apotema de 670 metros que cubren el 97\% de la población metropolitana. Los centroides de estas zonas se emplearon como nodos de origen y destino para la evaluación de los indicadores estructurales. Además, la información vial de \textit{OpenStreetMap} permitió incorporar las distancias peatonales.
+
+        Para el análisis, el procesamiento se realizó mediante el motor de rutas \textit{OpenTripPlanner} (OTP) y el lenguaje \textsf{R}, lo cual permitió estimar matrices de tiempos de viaje entre los centroides y medir las propiedades globales de la red bajo tres dimensiones: accesibilidad, fricción espacial y vulnerabilidad.
+
+        \subsection{Métricas aplicadas}
+
+            El estudio seleccionó tres métricas fundamentales, todas derivadas de la teoría de grafos y de la literatura sobre redes de transporte:
+
+            \begin{enumerate}
+                \item \textbf{Grado de Accesibilidad (Índice de Shimbel)}: Mide la eficiencia en términos de tiempo de viaje. El artículo lo evalúa a nivel nodal (Grado de Accesibilidad) como el tiempo de viaje promedio ($ATT$) desde un nodo $x$ al resto de nodos $y$:
+                \[
+                    ATT_{(x)}=\frac{\sum_{x}d(x,y)}{N}
+                \]
+                Y también a nivel de red con el \textbf{Índice de Shimbel} ($C_{(x)}$):
+                \[
+                    C_{(x)}=\frac{N-1}{\sum_{y}d(x,y)}
+                \]
+
+                \item \textbf{Índice de rodeo o de desvío} (\textit{Detour Index} o \textit{Deuter Index}): Mide la fricción espacial de la red al comparar la distancia euclidiana entre dos puntos con la distancia de viaje real en la red. Un valor cercano a 1 indica trayectos más directos.
+
+                \item \textbf{Dependencia de hubs}: Estima la vulnerabilidad estructural. El artículo utiliza un conjunto de indicadores para esto, principalmente la \textbf{centralidad de intermediación} (\textit{betweenness centrality}), para identificar nodos críticos cuya afectación puede comprometer el desempeño de toda la red.
+            \end{enumerate}
+
+            Estas tres propiedades corresponden, respectivamente, a los tres ejes analíticos del trabajo: \textit{accesibilidad estructural}, \textit{fricción espacial} y \textit{vulnerabilidad topológica}.
+
+        \subsection{Principales hallazgos y conclusiones}
+
+            El análisis de la red alternativa mostró que el tiempo de viaje promedio fue de 70 minutos. Las zonas centrales mostraron mejor accesibilidad (tiempos de viaje promedio más bajos, de 46 min), mientras que las zonas periféricas presentaron mayor impedancia (hasta 115 min). Los autores señalan explícitamente que no fue posible realizar una comparación directa con la red tradicional existente debido a la falta de datos (GTFS) de esta última.
+
+            En cuanto a la fricción espacial, el \textit{Detour Index} fue de 0.63, lo cual los autores consideran bajo (eficiente) y lo atribuyen al diseño ortogonal de la red propuesta.
+
+            Respecto a la vulnerabilidad, el estudio identificó este como el hallazgo más significativo, mostrando un \textbf{pobre desempeño} (\textit{poor performance}) y una \textbf{gran polarización} (\textit{great polarization}) de los flujos hacia unos pocos nodos. El sistema evidenció una alta dependencia de nodos críticos; la afectación de solo el 10\% de los nodos con mayor centralidad de intermediación resultó en el punto crítico de falla, casi duplicando el tiempo de viaje promedio de 70 a 133 minutos.
+
+            En síntesis, el estudio de \cite{barraza2021} demuestra la aplicabilidad de la teoría de grafos al análisis del transporte metropolitano y proporciona una línea base metodológica. Sus resultados (para la red alternativa) confirman que las métricas estructurales permiten caracterizar el desempeño de la red.
+
+        \subsection{Relación con la presente investigación}
+
+            Este trabajo toma como punto de partida la metodología de \cite{barraza2021}, pero la amplía al considerar distintos tipos de representaciones de red (espacios $L$ y $P$) y al aplicar métricas adicionales como \textbf{modularidad} y \textbf{coeficiente de agrupamiento}. De esta forma, se busca extender el alcance de este estudio, analizando la estructura topológica de la red actual de transporte público, estableciendo un punto de referencia cuantitativo y metodológico para el análisis estructural contemporáneo del sistema de transporte metropolitano.
+
 
