@@ -1,122 +1,121 @@
 \chapter{Datos y Construcción de las Redes}
 
-La transformación de datos de transporte público en modelos de red analizables es un proceso multifacético que requiere decisiones metodológicas explícitas. Este capítulo detalla el viaje desde la materia prima —los datos crudos del \textit{General Transit Feed Specification} (GTFS)— hasta la construcción de dos representaciones de red complementarias: el \textbf{L-espacio}, que modela la infraestructura física, y el \textbf{P-espacio}, que captura la conectividad del servicio desde la perspectiva del usuario.
+    La transformación de datos de transporte público en modelos de red analizables es un proceso multifacético que requiere decisiones metodológicas explícitas. Este capítulo detalla el viaje desde la materia prima —los datos crudos del \textit{General Transit Feed Specification} (GTFS)— hasta la construcción de dos representaciones de red complementarias: el \textbf{L-espacio}, que modela la infraestructura física, y el \textbf{P-espacio}, que captura la conectividad del servicio desde la perspectiva del usuario.
+    
+    El objetivo es doble: primero, documentar de forma transparente y reproducible cada paso del preprocesamiento, la limpieza y la validación de los datos; y segundo, justificar las decisiones tomadas para construir los grafos, asegurando que los modelos resultantes sean representaciones fieles y útiles de la red de transporte de la Zona Metropolitana de Guadalajara.
+    
+    \section{l GTFS de la Zona Metropolitana de Guadalajara}
+    
+        La base de este estudio son los datos de la red de transporte público de la Zona Metropolitana de Guadalajara, obtenidos de una fuente pública en formato \textit{General Transit Feed Specification} (GTFS). La versión que usaremos corresponde a la publicada en Marzo del 2024.
+        
+        El estándar GTFS organiza la información del transporte en una serie de archivos de texto plano (.csv) interrelacionados. Aunque el estándar completo es exhaustivo (ver Apéndice \ref{ap:gtfs_files}), para la construcción de nuestros modelos de red, los siguientes archivos son de importancia crítica:
+        \begin{itemize}
+            \item \texttt{stops.csv}: Contiene las coordenadas geográficas de cada parada. Es la base para crear los nodos de nuestros grafos.
+            \item \texttt{routes.csv}: Define las distintas rutas o líneas de transporte.
+            \item \texttt{trips.csv}: Enumera los viajes específicos que se realizan para cada ruta.
+            \item \texttt{stop_times.csv}: Es el archivo más importante, ya que vincula los viajes con las paradas, especificando la secuencia y los horarios de llegada y salida. Es la fuente principal para construir las aristas.
+        \end{itemize}
+        
+        La riqueza de este estándar permite una modelación detallada, pero su naturaleza compleja y la posibilidad de inconsistencias en los datos hacen que un preprocesamiento riguroso sea un requisito indispensable antes de cualquier análisis.
+        
+    \section{Construcción de los Modelos de Red}
+    
+        A partir de los datos GTFS, se construyen dos grafos distintos, cada uno diseñado para responder a diferentes preguntas sobre la red. El primero, el L-espacio, se enfoca en la infraestructura, mientras que el segundo, el P-espacio, se centra en el servicio.
+        
+        \subsection{Construcción del L-espacio (Red de Infraestructura)}
+        
+            El objetivo de este modelo es representar la estructura física y la conectividad directa de la red. El proceso sigue dos fases principales: una limpieza inicial y una consolidación espacial.
 
-El objetivo es doble: primero, documentar de forma transparente y reproducible cada paso del preprocesamiento, la limpieza y la validación de los datos; y segundo, justificar las decisiones tomadas para construir los grafos, asegurando que los modelos resultantes sean representaciones fieles y útiles de la red de transporte de la Zona Metropolitana de Guadalajara (ZMG).
+            \paragraph{Fase 1: Limpieza y Grafo Inicial.}
+            El primer paso consiste en traducir los datos GTFS a un grafo preliminar. Sin embargo, los datos crudos a menudo contienen "ruido" que puede distorsionar el análisis, como paradas inactivas o errores en los registros de viaje. Por ello, se realiza un proceso de validación y limpieza:
+            \begin{enumerate}
+                \item \textbf{Validación estructural y referencial:} Se verifica la presencia de los archivos clave y la integridad de las relaciones entre ellos (e.g., que cada viaje en \texttt{stop_times} corresponda a una ruta válida).
+                \item \textbf{Validación espacial y temporal:} Se comprueba que las coordenadas de las paradas sean válidas y que las secuencias de tiempo y paradas en los viajes sean lógicas.
+                \item \textbf{Eliminación de nodos aislados:} Se identifican y eliminan las paradas que no forman parte de ninguna ruta activa (nodos de grado cero).
+            \end{enumerate}
+            Este proceso de depuración da como resultado un grafo inicial más limpio, pero aún muy granular.
 
-\section{La Materia Prima: El GTFS de la ZMG}
+            \begin{table}[H]
+                \centering
+                \caption{Resultados del Proceso de Construcción y Limpieza del Grafo Inicial.}
+                \label{tab:construccion_grafo}
+                \begin{tabular}{lr}
+                    \hline
+                    \textbf{Métrica} & \textbf{Valor} \\
+                    \hline
+                    Nodos iniciales (total de paradas) & 12,231 \\
+                    Arcos iniciales (segmentos de viaje) & 12,714 \\
+                    Nodos aislados eliminados & 1,609 \\
+                    \hline
+                    \textbf{Nodos en grafo limpio} & \textbf{10,622} \\
+                    \textbf{Arcos en grafo limpio} & \textbf{12,714} \\
+                    \hline
+                \end{tabular}
+            \end{table}
 
-La base de este estudio son los datos de la red de transporte público de la ZMG, obtenidos de una fuente pública en formato \textit{General Transit Feed Specification} (GTFS).
-% TODO: AÑADIR FUENTE Y FECHA EXACTA DE LOS DATOS GTFS. Ejemplo: "Los datos, correspondientes a marzo de 2024, fueron descargados del portal de datos abiertos del Gobierno de Jalisco."
+            \paragraph{Fase 2: Consolidación Espacial.}
+            Un análisis a nivel de más de 10,000 paradas individuales es computacionalmente intensivo y, más importante, no refleja cómo un usuario percibe la red. Un pasajero no distingue entre dos postes de parada ubicados en la misma esquina; los percibe como un único punto de acceso al sistema.
 
-El estándar GTFS organiza la información del transporte en una serie de archivos de texto plano (.csv) interrelacionados. Aunque el estándar completo es exhaustivo (ver Apéndice \ref{ap:gtfs_files}), para la construcción de nuestros modelos de red, los siguientes archivos son de importancia crítica:
-\begin{itemize}
-    \item \texttt{stops.csv}: Contiene las coordenadas geográficas de cada parada. Es la base para crear los nodos de nuestros grafos.
-    \item \texttt{routes.csv}: Define las distintas rutas o líneas de transporte.
-    \item \texttt{trips.csv}: Enumera los viajes específicos que se realizan para cada ruta.
-    \item \texttt{stop_times.csv}: Es el archivo más importante, ya que vincula los viajes con las paradas, especificando la secuencia y los horarios de llegada y salida. Es la fuente principal para construir las aristas.
-\end{itemize}
+            Para modelar esta realidad y analizar la red a una escala de "zonas de servicio", se implementa un proceso de consolidación espacial usando el algoritmo \textbf{DBSCAN}. Se agrupan todas las paradas que se encuentren en un radio de 100 metros. Cada grupo o clúster se convierte en un único "supernodo" en el grafo final del L-espacio. Se eligió DBSCAN por su capacidad para identificar clústeres de forma densa sin requerir un número predefinido de grupos.
 
-La riqueza de este estándar permite una modelación detallada, pero su naturaleza compleja y la posibilidad de inconsistencias en los datos hacen que un preprocesamiento riguroso sea un requisito indispensable antes de cualquier análisis.
+            Este paso reduce drásticamente la complejidad de la red, como se muestra en la Tabla \ref{tab:consolidacion_grafo_lspace}, resultando en un modelo más abstracto y manejable, ideal para los análisis de centralidad y accesibilidad.
 
-\section{Construcción de los Modelos de Red}
+            \begin{table}[H]
+                \centering
+                \caption{Resultados de la Consolidación Espacial para el L-espacio.}
+                \label{tab:consolidacion_grafo_lspace}
+                \begin{tabular}{lrr}
+                    \hline
+                    \textbf{Métrica} & \textbf{Grafo Limpio} & \textbf{Grafo L-espacio} \\
+                    \hline
+                    Número de Nodos & 10,622 & 4,203 \\
+                    Número de Aristas & 12,714 & 8,591 \\
+                    \hline
+                \end{tabular}
+            \end{table}
 
-A partir de los datos GTFS, se construyen dos grafos distintos, cada uno diseñado para responder a diferentes preguntas sobre la red. El primero, el L-espacio, se enfoca en la infraestructura, mientras que el segundo, el P-espacio, se centra en el servicio.
+        \subsection{Construcción del P-espacio (Red de Servicio)}
+        
+            Mientras que el L-espacio modela la infraestructura, el P-espacio modela la experiencia del viaje sin transbordos. El objetivo es construir un grafo donde una arista signifique "puedo llegar de A a B sin cambiar de autobús".
 
-\subsection{Construcción del L-espacio (Red de Infraestructura)}
+            \paragraph{Algoritmo de Construcción.}
+            La construcción del P-espacio parte de los mismos 4,203 nodos consolidados del L-espacio, asegurando que ambos modelos sean comparables. Sin embargo, la definición de las aristas es radicalmente diferente:
+            \begin{enumerate}
+                \item Para cada ruta definida en el GTFS, se identifica el conjunto de todos los nodos consolidados por los que pasa.
+                \item Dentro de ese conjunto, se crea una \textbf{clique}: cada nodo se conecta con todos los demás nodos del conjunto. Esto formaliza la idea de que si un grupo de paradas comparte una ruta, se puede viajar entre cualquiera de ellas directamente.
+                \item El grafo P-espacio final es la unión de todas las cliques generadas para cada una de las rutas del sistema.
+            \end{enumerate}
 
-El objetivo de este modelo es representar la estructura física y la conectividad directa de la red. El proceso sigue dos fases principales: una limpieza inicial y una consolidación espacial.
+            Este procedimiento genera un grafo no dirigido, ya que la pertenencia a una misma ruta es una relación simétrica. El resultado es una red mucho más densa que el L-espacio, que revela la conectividad funcional del servicio en lugar de la contigüidad física.
 
-\paragraph{Fase 1: Limpieza y Grafo Inicial.}
-El primer paso consiste en traducir los datos GTFS a un grafo preliminar. Sin embargo, los datos crudos a menudo contienen "ruido" que puede distorsionar el análisis, como paradas inactivas o errores en los registros de viaje. Por ello, se realiza un proceso de validación y limpieza:
-\begin{enumerate}
-    \item \textbf{Validación estructural y referencial:} Se verifica la presencia de los archivos clave y la integridad de las relaciones entre ellos (e.g., que cada viaje en \texttt{stop_times} corresponda a una ruta válida).
-    \item \textbf{Validación espacial y temporal:} Se comprueba que las coordenadas de las paradas sean válidas y que las secuencias de tiempo y paradas en los viajes sean lógicas.
-    \item \textbf{Eliminación de nodos aislados:} Se identifican y eliminan las paradas que no forman parte de ninguna ruta activa (nodos de grado cero).
-\end{enumerate}
-Este proceso de depuración da como resultado un grafo inicial más limpio, pero aún muy granular.
+    \section{Definición de los Grafos Finales}
+    
+        Como resultado de los procesos anteriores, obtenemos dos modelos de red distintos, cuyas propiedades formales se resumen a continuación.
+        
+        \subsection{Grafo L-espacio: Modelo de Infraestructura}
+            \begin{itemize}
+                \item \textbf{Nodos (V):} 4,203 "supernodos" que representan zonas de servicio consolidadas. Cada nodo conoce su centroide geográfico y las paradas originales que lo componen.
+                \item \textbf{Aristas (E):} 8,591 aristas \textbf{dirigidas}. Una arista (u, v) existe si un autobús viaja de una parada en el clúster u a una en el clúster v.
+                \item \textbf{Pesos:} Cada arista está ponderada por el tiempo de viaje promedio en minutos, calculado a partir de los datos de \texttt{stop_times}.
+            \end{itemize}
 
-\begin{table}[H]
-\centering
-\caption{Resultados del Proceso de Construcción y Limpieza del Grafo Inicial.}
-\label{tab:construccion_grafo}
-\begin{tabular}{lr}
-\hline
-\textbf{Métrica} & \textbf{Valor} \\
-\hline
-Nodos iniciales (total de paradas) & 12,231 \\
-Arcos iniciales (segmentos de viaje) & 12,714 \\
-Nodos aislados eliminados & 1,609 \\
-\hline
-\textbf{Nodos en grafo limpio} & \textbf{10,622} \\
-\textbf{Arcos en grafo limpio} & \textbf{12,714} \\
-\hline
-\end{tabular}
-\end{table}
-
-\paragraph{Fase 2: Consolidación Espacial.}
-Un análisis a nivel de más de 10,000 paradas individuales es computacionalmente intensivo y, más importante, no refleja cómo un usuario percibe la red. Un pasajero no distingue entre dos postes de parada ubicados en la misma esquina; los percibe como un único punto de acceso al sistema.
-
-Para modelar esta realidad y analizar la red a una escala de "zonas de servicio", se implementa un proceso de consolidación espacial usando el algoritmo \textbf{DBSCAN}. Se agrupan todas las paradas que se encuentren en un radio de 100 metros. Cada grupo o clúster se convierte en un único "supernodo" en el grafo final del L-espacio. Se eligió DBSCAN por su capacidad para identificar clústeres de forma densa sin requerir un número predefinido de grupos.
-
-Este paso reduce drásticamente la complejidad de la red, como se muestra en la Tabla \ref{tab:consolidacion_grafo_lspace}, resultando en un modelo más abstracto y manejable, ideal para los análisis de centralidad y accesibilidad.
-
-\begin{table}[H]
-\centering
-\caption{Resultados de la Consolidación Espacial para el L-espacio.}
-\label{tab:consolidacion_grafo_lspace}
-\begin{tabular}{lrr}
-\hline
-\textbf{Métrica} & \textbf{Grafo Limpio} & \textbf{Grafo L-espacio} \\
-\hline
-Número de Nodos & 10,622 & 4,203 \\
-Número de Aristas & 12,714 & 8,591 \\
-\hline
-\end{tabular}
-\end{table}
-
-\subsection{Construcción del P-espacio (Red de Servicio)}
-
-Mientras que el L-espacio modela la infraestructura, el P-espacio modela la experiencia del viaje sin transbordos. El objetivo es construir un grafo donde una arista signifique "puedo llegar de A a B sin cambiar de autobús".
-
-\paragraph{Algoritmo de Construcción.}
-La construcción del P-espacio parte de los mismos 4,203 nodos consolidados del L-espacio, asegurando que ambos modelos sean comparables. Sin embargo, la definición de las aristas es radicalmente diferente:
-\begin{enumerate}
-    \item Para cada ruta definida en el GTFS, se identifica el conjunto de todos los nodos consolidados por los que pasa.
-    \item Dentro de ese conjunto, se crea una \textbf{clique}: cada nodo se conecta con todos los demás nodos del conjunto. Esto formaliza la idea de que si un grupo de paradas comparte una ruta, se puede viajar entre cualquiera de ellas directamente.
-    \item El grafo P-espacio final es la unión de todas las cliques generadas para cada una de las rutas del sistema.
-\end{enumerate}
-
-Este procedimiento genera un grafo no dirigido, ya que la pertenencia a una misma ruta es una relación simétrica. El resultado es una red mucho más densa que el L-espacio, que revela la conectividad funcional del servicio en lugar de la contigüidad física.
-
-\section{Definición de los Grafos Finales}
-
-Como resultado de los procesos anteriores, obtenemos dos modelos de red distintos, cuyas propiedades formales se resumen a continuación.
-
-\subsection{Grafo L-espacio: Modelo de Infraestructura}
-\begin{itemize}
-    \item \textbf{Nodos (V):} 4,203 "supernodos" que representan zonas de servicio consolidadas. Cada nodo conoce su centroide geográfico y las paradas originales que lo componen.
-    \item \textbf{Aristas (E):} 8,591 aristas \textbf{dirigidas}. Una arista (u, v) existe si un autobús viaja de una parada en el clúster u a una en el clúster v.
-    \item \textbf{Pesos:} Cada arista está ponderada por el tiempo de viaje promedio en minutos, calculado a partir de los datos de \texttt{stop_times}.
-\end{itemize}
-
-\subsection{Grafo P-espacio: Modelo de Servicio}
-\begin{itemize}
-    \item \textbf{Nodos (V):} Los mismos 4,203 "supernodos" del L-espacio.
-    \item \textbf{Aristas (E):} Aristas \textbf{no dirigidas}. Una arista (u, v) existe si al menos una ruta de autobús pasa por ambos nodos u y v. El número de aristas es significativamente mayor que en el L-espacio, reflejando una red funcionalmente muy densa.
-    \item \textbf{Pesos:} Por defecto, el grafo no es ponderado, ya que el interés principal es la conectividad. Sin embargo, las aristas podrían ponderarse en análisis futuros, por ejemplo, por el número de rutas que conectan los dos nodos.
-\end{itemize}
-
-\section{Limitaciones de los Datos y Modelos}
-
-Es fundamental reconocer que los modelos construidos, a pesar de su robustez, se basan en supuestos que introducen limitaciones. La interpretación de los resultados debe considerar lo siguiente:
-
-\paragraph{Naturaleza estática de los datos.} El modelo se construye a partir de una instantánea de los datos GTFS. No captura la dinámica operativa de la red, como variaciones estacionales, modificaciones de rutas o disrupciones del servicio en tiempo real.
-
-\paragraph{Abstracción de la operación y la demanda.} Los modelos se enfocan en la topología y el servicio programado. No se considera la capacidad de los vehículos, el tipo de unidad, ni la demanda real de pasajeros. Una arista indica que un servicio existe, no cuántas personas lo utilizan.
-
-\paragraph{Abstracción del componente temporal.} Aunque el L-espacio usa el tiempo de viaje como peso, los grafos son una representación estática. No se modela la frecuencia de los autobuses ni los tiempos de espera en las paradas.
-
-\paragraph{Modelado de transbordos.} El proceso de consolidación modela implícitamente los transbordos peatonales de corta distancia (<100m). Sin embargo, no se contemplan explícitamente las caminatas de mayor distancia que un usuario podría realizar para conectar dos rutas.
-
-A pesar de estas limitaciones, los grafos resultantes son representaciones fieles de la estructura y el servicio programado de la red. Son herramientas poderosas para el análisis de la conectividad, la centralidad y la accesibilidad estructural, que son los objetivos centrales de esta investigación.
+        \subsection{Grafo P-espacio: Modelo de Servicio}
+            \begin{itemize}
+                \item \textbf{Nodos (V):} Los mismos 4,203 "supernodos" del L-espacio.
+                \item \textbf{Aristas (E):} Aristas \textbf{no dirigidas}. Una arista (u, v) existe si al menos una ruta de autobús pasa por ambos nodos u y v. El número de aristas es significativamente mayor que en el L-espacio, reflejando una red funcionalmente muy densa.
+                \item \textbf{Pesos:} Por defecto, el grafo no es ponderado, ya que el interés principal es la conectividad. Sin embargo, las aristas podrían ponderarse en análisis futuros, por ejemplo, por el número de rutas que conectan los dos nodos.
+            \end{itemize}
+        
+    \section{Limitaciones de los Datos y Modelos}
+    
+        Es fundamental reconocer que los modelos construidos, a pesar de su robustez, se basan en supuestos que introducen limitaciones. La interpretación de los resultados debe considerar lo siguiente:
+        
+        \paragraph{Naturaleza estática de los datos.} El modelo se construye a partir de una instantánea de los datos GTFS. No captura la dinámica operativa de la red, como variaciones estacionales, modificaciones de rutas o disrupciones del servicio en tiempo real.
+        
+        \paragraph{Abstracción de la operación y la demanda.} Los modelos se enfocan en la topología y el servicio programado. No se considera la capacidad de los vehículos, el tipo de unidad, ni la demanda real de pasajeros. Una arista indica que un servicio existe, no cuántas personas lo utilizan.
+        
+        \paragraph{Abstracción del componente temporal.} Aunque el L-espacio usa el tiempo de viaje como peso, los grafos son una representación estática. No se modela la frecuencia de los autobuses ni los tiempos de espera en las paradas.
+        
+        \paragraph{Modelado de transbordos.} El proceso de consolidación modela implícitamente los transbordos peatonales de corta distancia (<100m). Sin embargo, no se contemplan explícitamente las caminatas de mayor distancia que un usuario podría realizar para conectar dos rutas.
+        
+        A pesar de estas limitaciones, los grafos resultantes son representaciones fieles de la estructura y el servicio programado de la red. Son herramientas poderosas para el análisis de la conectividad, la centralidad y la accesibilidad estructural, que son los objetivos centrales de esta investigación.
