@@ -279,3 +279,22 @@
 
                 \item \textbf{Implicaciones de pequeño mundo}: La combinación de clustering alto con distancias cortas es característica del pequeño mundo en $P\text{-espacio}$. Esta estructura mezcla cohesión local intensa con accesibilidad global eficiente, un patrón ampliamente confirmado en sistemas reales.
             \end{itemize}
+
+            \paragraph{Modularidad y comunidades de paradas y rutas}
+            La modularidad en el $P\text{-espacio}$ permite identificar subconjuntos de paradas que comparten de manera sistemática varias rutas, formando grupos altamente interconectados por solapamiento de líneas. Estas comunidades no describen geografía física, sino organización funcional del servicio: zonas donde muchas rutas coinciden, corredores troncales o subredes locales con fuerte cohesión interna. Un valor de modularidad elevado indica que el sistema contiene sectores operativamente diferenciados, mientras que modularidad baja sugiere un entrelazamiento generalizado de rutas en toda la ciudad. Resultados como los de \cite{zhang2019} muestran cómo estas comunidades revelan patrones de servicio que no son evidentes al observar únicamente el trazado físico.
+
+            \begin{itemize}
+                \item \textbf{Comunidades por solapamiento de rutas}: En $G_P$, paradas que comparten varias líneas generan cliques densos y tienden a agruparse como comunidades. Estas no representan necesariamente proximidad espacial, sino coincidencia operativa de rutas.
+
+                \item \textbf{Sub-sistemas funcionales}: Las comunidades pueden corresponder a grupos de líneas locales que sirven un barrio o municipio específico, donde las paradas comparten múltiples rutas entre sí pero tienen pocas conexiones directas con otras zonas.
+
+                \item \textbf{Corredores troncales y agrupamientos fuertes}: Corredores donde muchas rutas coinciden crean módulos muy densos en el $P\text{-espacio}$. Estos sectores concentran transferencia y accesibilidad dentro de un subbloque del sistema.
+
+                \item \textbf{Interpretación de la modularidad}: Un valor alto indica comunidades bien definidas y subconjuntos de paradas con conectividad interna superior a la externa, lo que puede sugerir sectores semiautónomos dentro de la red. Valores bajos implican rutas muy mezcladas que producen una estructura homogénea y altamente interconectada.
+
+                \item \textbf{Relación con la geografía y el L-espacio}: Mientras las comunidades en $L$ suelen reflejar proximidad física o continuidad de corredores reales, las del $P$ expresan organización del servicio. Es posible que paradas lejanas geográficamente caigan en la misma comunidad si comparten una línea larga de alta cobertura.
+            \end{itemize}
+
+    \section{Antecedente Clave: Análisis Previo de la Red de Guadalajara}
+
+
