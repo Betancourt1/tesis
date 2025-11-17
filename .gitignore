@@ -15,4 +15,6 @@ QGIS/transporte_publico_grafo_p_space_centralidades.gexf
 QGIS/transporte_publico_grafo_p_space_comunidades.gexf
 QGIS/transporte_publico_grafo_consolidado.gexf
 QGIS/transporte_publico_grafo.gexf
-*gexf
+*.gexf
+*.csv
+*.json
