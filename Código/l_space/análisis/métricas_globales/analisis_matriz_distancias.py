@@ -29,12 +29,25 @@ def analizar_matriz_shimbel():
     if not os.getenv("L_SPACE_DISTANCES_MATRIX_PATH") or not os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH"):
         print("Error: Asegúrate de que las variables L_SPACE_DISTANCES_MATRIX_PATH y L_SPACE_CONSOLIDATED_GRAPH_PATH estén definidas en tu archivo .env")
         return
+
+    # Validación robusta de rutas
     if not os.path.exists(INPUT_FILE):
         print(f"Error: No se encontró el archivo de la matriz de distancias en la ruta especificada en .env: {INPUT_FILE}")
-        print("Ejecuta 'distancias.py' primero.")
+        print("Verifica que L_SPACE_DISTANCES_MATRIX_PATH apunte a un ARCHIVO JSON (no a un directorio).")
+        print("Ejecuta 'distancias.py' primero, y luego ajusta la ruta si es necesario.")
         return
+    if os.path.isdir(INPUT_FILE):
+        print(f"Error: La ruta L_SPACE_DISTANCES_MATRIX_PATH apunta a un directorio, no a un archivo: {INPUT_FILE}")
+        print("Actualiza tu archivo .env para que L_SPACE_DISTANCES_MATRIX_PATH apunte al archivo JSON de la matriz de distancias (por ejemplo, 'grafos/l_space/matriz_distancias.json').")
+        return
+
     if not os.path.exists(GRAPH_PATH):
         print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
+        print("Verifica que L_SPACE_CONSOLIDATED_GRAPH_PATH apunte al archivo del grafo (por ejemplo, un .pkl) y no a un directorio.")
+        return
+    if os.path.isdir(GRAPH_PATH):
+        print(f"Error: La ruta L_SPACE_CONSOLIDATED_GRAPH_PATH apunta a un directorio, no a un archivo: {GRAPH_PATH}")
+        print("Actualiza tu archivo .env para que L_SPACE_CONSOLIDATED_GRAPH_PATH apunte al archivo del grafo consolidado.")
         return
 
     print(f"Cargando la matriz de distancias desde {INPUT_FILE}...")

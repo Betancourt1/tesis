@@ -50,7 +50,7 @@ def calcular_matriz_distancias():
 
         # --- 3. GUARDADO DE RESULTADOS ---
         print(f"Guardando la matriz de distancias en {OUTPUT_FILE}...")
-        os.makedirs(OUTPUT_DIR, exist_ok=True)
+        os.makedirs(OUTPUT_FILE, exist_ok=True)
         with open(OUTPUT_FILE, 'w') as f:
             json.dump(distancias, f, indent=4)
         

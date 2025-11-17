@@ -1,4 +1,4 @@
-
+import pickle
 import networkx as nx
 import os
 from dotenv import load_dotenv
