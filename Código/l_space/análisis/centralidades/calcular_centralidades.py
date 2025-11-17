@@ -1,6 +1,7 @@
 import networkx as nx
 import os
 import pandas as pd
+from dotenv import load_dotenv
 
 def calcular_centralidades_y_enriquecer():
     """
@@ -9,11 +10,15 @@ def calcular_centralidades_y_enriquecer():
     El grafo modificado se guarda sobrescribiendo el archivo original.
     """
     # --- 1. CONFIGURACIÓN Y CARGA DE DATOS ---
-    BASE_DIR = r"C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis"
-    GRAPH_PATH = os.path.join(BASE_DIR, "QGIS", "transporte_publico_grafo_consolidado.gexf")
+    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '.env'))
+    GRAPH_PATH = os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH")
+    
+    if not GRAPH_PATH or not os.path.exists(GRAPH_PATH):
+        print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
+        return
 
     print(f"Cargando grafo desde {GRAPH_PATH}...")
-    G = nx.read_gexf(GRAPH_PATH)
+    G = nx.read_gpickle(GRAPH_PATH)
     print("Grafo cargado.")
 
     # --- 2. CÁLCULO DE CENTRALIDADES ---
@@ -49,7 +54,7 @@ def calcular_centralidades_y_enriquecer():
 
     # --- 4. GUARDAR EL GRAFO ENRIQUECIDO ---
     print(f"Guardando el grafo enriquecido en {GRAPH_PATH} (sobrescribiendo)...")
-    nx.write_gexf(G, GRAPH_PATH)
+    nx.write_gpickle(G, GRAPH_PATH)
     print("¡Proceso completado!")
 
     # --- 5. MOSTRAR TOP 10 DE CADA MÉTRICA ---

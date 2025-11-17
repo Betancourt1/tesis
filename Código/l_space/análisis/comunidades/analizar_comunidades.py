@@ -3,6 +3,7 @@ import networkx as nx
 import os
 import pandas as pd
 import numpy as np
+from dotenv import load_dotenv
 
 def analizar_comunidades():
     """
@@ -13,14 +14,15 @@ def analizar_comunidades():
     - Imprime un resumen para ser usado en la redacción de la tesis.
     """
     # --- 1. CONFIGURACIÓN Y CARGA DE DATOS ---
-    BASE_DIR = r"C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis"
-    GRAPH_PATH = os.path.join(BASE_DIR, "QGIS", "transporte_publico_grafo_comunidades.gexf")
+    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '.env'))
+    GRAPH_PATH = os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH")
 
     print(f"Cargando grafo con comunidades desde {GRAPH_PATH}...")
-    if not os.path.exists(GRAPH_PATH):
-        print("Error: No se encontró el archivo del grafo con comunidades. Ejecuta 'detectar_comunidades.py' primero.")
+    if not GRAPH_PATH or not os.path.exists(GRAPH_PATH):
+        print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
+        print("Ejecuta 'detectar_comunidades.py' primero.")
         return
-    G = nx.read_gexf(GRAPH_PATH)
+    G = nx.read_gpickle(GRAPH_PATH)
     print("Grafo cargado.")
 
     # --- 2. ANÁLISIS DE COMUNIDADES ---

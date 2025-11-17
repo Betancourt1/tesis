@@ -6,12 +6,13 @@ import os
 import multiprocessing
 from functools import partial
 import time
+from dotenv import load_dotenv
 
-def load_graph(gexf_path):
-    """Carga el grafo desde un archivo GEXF."""
-    if not os.path.exists(gexf_path):
-        raise FileNotFoundError(f"No se encontró el archivo del grafo en: {gexf_path}")
-    return nx.read_gexf(gexf_path)
+def load_graph(graph_path):
+    """Carga el grafo desde un archivo gpickle."""
+    if not os.path.exists(graph_path):
+        raise FileNotFoundError(f"No se encontró el archivo del grafo en: {graph_path}")
+    return nx.read_gpickle(graph_path)
 
 def calculate_lcc_size(G):
     """Calcula el tamaño del componente conectado más grande (LCC) para grafos dirigidos."""
@@ -117,15 +118,22 @@ def get_node_order_by_centrality(G, centrality_name):
 
 def main():
     """Función principal para ejecutar el análisis de robustez."""
+    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '.env'))
     
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    gexf_path = os.path.normpath(os.path.join(script_dir, '..', '..', '..', '..', 'QGIS', 'transporte_publico_grafo_enriquecido.gexf'))
-    output_dir = os.path.join(script_dir, 'resultados_robustez')
-    
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    GRAPH_PATH = os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH")
+    OUTPUT_DIR = os.getenv("L_SPACE_ROBUSTNESS_OUTPUT_DIR")
+
+    if not GRAPH_PATH or not os.path.exists(GRAPH_PATH):
+        print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
+        return
+    if not OUTPUT_DIR:
+        print("Error: La variable L_SPACE_ROBUSTNESS_OUTPUT_DIR no está definida en .env")
+        return
+
+    if not os.path.exists(OUTPUT_DIR):
+        os.makedirs(OUTPUT_DIR)
         
-    G = load_graph(gexf_path)
+    G = load_graph(GRAPH_PATH)
     
     num_nodes_to_remove = int(G.number_of_nodes() * 0.05)
 
@@ -141,7 +149,7 @@ def main():
         print(f"\n--- Iniciando simulación para: {name.upper()} ---")
         df = simulate_failures(G, node_order, num_nodes_to_remove)
         results_dfs[name] = df
-        df.to_csv(os.path.join(output_dir, f'robustez_ataque_{name}.csv'), index=False)
+        df.to_csv(os.path.join(OUTPUT_DIR, f'robustez_ataque_{name}.csv'), index=False)
 
     plt.style.use('seaborn-v0_8-whitegrid')
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 12), sharex=True)
@@ -169,7 +177,7 @@ def main():
     ax2.legend()
     
     plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, 'grafico_robustez_comparativo.png'), dpi=300)
+    plt.savefig(os.path.join(OUTPUT_DIR, 'grafico_robustez_comparativo.png'), dpi=300)
 
 if __name__ == '__main__':
     multiprocessing.freeze_support()

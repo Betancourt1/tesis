@@ -2,6 +2,7 @@
 import networkx as nx
 import os
 from networkx.algorithms import community as nx_comm
+from dotenv import load_dotenv
 
 def detectar_comunidades():
     """
@@ -10,17 +11,17 @@ def detectar_comunidades():
     con los nodos coloreados por comunidad.
     """
     # --- 1. CONFIGURACIÓN Y CARGA DE DATOS ---
-    BASE_DIR = r"C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis"
+    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '.env'))
     
-    # Rutas de entrada
-    GRAPH_PATH = os.path.join(BASE_DIR, "QGIS", "transporte_publico_grafo_consolidado.gexf")
+    # Rutas de entrada/salida
+    GRAPH_PATH = os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH")
     
-    # Ruta de salida
-    OUTPUT_DIR = os.path.join(BASE_DIR, "QGIS")
-    OUTPUT_GRAPH_PATH = os.path.join(OUTPUT_DIR, "transporte_publico_grafo_consolidado.gexf")
+    if not GRAPH_PATH or not os.path.exists(GRAPH_PATH):
+        print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
+        return
 
     print(f"Cargando grafo desde {GRAPH_PATH}...")
-    G = nx.read_gexf(GRAPH_PATH)
+    G = nx.read_gpickle(GRAPH_PATH)
     print("Grafo cargado.")
 
     # --- 2. DETECCIÓN DE COMUNIDADES (MÉTODO DE LOUVAIN) ---
@@ -50,9 +51,9 @@ def detectar_comunidades():
     nx.set_node_attributes(G, node_community_mapping, 'community')
 
     # --- 4. GUARDAR EL GRAFO CON COMUNIDADES ---
-    print(f"Guardando el grafo con atributos de comunidad en {OUTPUT_GRAPH_PATH}...")
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-    nx.write_gexf(G, OUTPUT_GRAPH_PATH)
+    print(f"Guardando el grafo con atributos de comunidad en {GRAPH_PATH}...")
+    os.makedirs(os.path.dirname(GRAPH_PATH), exist_ok=True)
+    nx.write_gpickle(G, GRAPH_PATH)
     
     print("\n¡Proceso completado!")
     print("El nuevo archivo GEXF ahora contiene un atributo 'community' en cada nodo.")

@@ -3,6 +3,7 @@ import json
 import os
 import numpy as np
 import networkx as nx
+from dotenv import load_dotenv
 
 def analizar_matriz_shimbel():
     """
@@ -10,20 +11,25 @@ def analizar_matriz_shimbel():
     de accesibilidad, cobertura y tiempos de viaje extremos.
     """
     # --- 1. CARGA DE DATOS ---
-    BASE_DIR = r"C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis"
-    INPUT_FILE = os.path.join(BASE_DIR, "Código", "etapas", "análisis", "métricas_globales", "matriz_distancias_shimbel.json")
-    GRAPH_PATH = os.path.join(BASE_DIR, "QGIS", "transporte_publico_grafo_consolidado.gexf")
+    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '.env'))
+    INPUT_FILE = os.getenv("L_SPACE_DISTANCES_MATRIX_PATH")
+    GRAPH_PATH = os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH")
+
+    if not INPUT_FILE or not os.path.exists(INPUT_FILE):
+        print(f"Error: No se encontró el archivo de la matriz de distancias en la ruta especificada en .env: {INPUT_FILE}")
+        print("Ejecuta 'distancias.py' primero.")
+        return
+    if not GRAPH_PATH or not os.path.exists(GRAPH_PATH):
+        print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
+        return
 
     print(f"Cargando la matriz de distancias desde {INPUT_FILE}...")
-    if not os.path.exists(INPUT_FILE):
-        print("Error: El archivo de la matriz no existe. Ejecuta primero 'distancias.py'.")
-        return
     with open(INPUT_FILE, 'r') as f:
         distancias = json.load(f)
     print("Matriz cargada.")
 
     print(f"Cargando el grafo para obtener atributos de nodos desde {GRAPH_PATH}...")
-    G = nx.read_gexf(GRAPH_PATH)
+    G = nx.read_gpickle(GRAPH_PATH)
     print("Grafo cargado.")
 
     # --- 2. ANÁLISIS DE ACCESIBILIDAD ---

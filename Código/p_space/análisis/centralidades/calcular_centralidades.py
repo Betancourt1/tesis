@@ -2,23 +2,23 @@
 import networkx as nx
 import os
 import pandas as pd
+from dotenv import load_dotenv
 
 def calcular_centralidades_p_space():
     """
     Carga el grafo P-space, calcula varias métricas de centralidad y
     las añade como atributos a los nodos del grafo.
-    El grafo enriquecido se guarda en un nuevo archivo.
+    El grafo enriquecido se guarda sobrescribiendo el archivo original.
     """
     # --- 1. CONFIGURACIÓN Y CARGA DE DATOS ---
-    BASE_DIR = '.'
-    INPUT_GRAPH_PATH = os.path.join(BASE_DIR, "QGIS", "transporte_publico_grafo_p_space.gexf")
-    OUTPUT_GRAPH_PATH = os.path.join(BASE_DIR, "QGIS", "transporte_publico_grafo_p_space_centralidades.gexf")
+    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '.env'))
+    GRAPH_PATH = os.getenv("P_SPACE_GRAPH_PATH")
 
-    print(f"Cargando grafo P-space desde {INPUT_GRAPH_PATH}...")
+    print(f"Cargando grafo P-space desde {GRAPH_PATH}...")
     try:
-        G = nx.read_gexf(INPUT_GRAPH_PATH)
+        G = nx.read_gpickle(GRAPH_PATH)
     except FileNotFoundError:
-        print(f"Error: No se encontró el archivo del grafo en {INPUT_GRAPH_PATH}.")
+        print(f"Error: No se encontró el archivo del grafo en {GRAPH_PATH}.")
         print("Asegúrate de haber ejecutado primero el script de construcción del grafo P-space.")
         return
     print("Grafo cargado.")
@@ -53,9 +53,9 @@ def calcular_centralidades_p_space():
     print("Atributos añadidos correctamente.")
 
     # --- 4. GUARDAR EL GRAFO ENRIQUECIDO ---
-    os.makedirs(os.path.dirname(OUTPUT_GRAPH_PATH), exist_ok=True)
-    print(f"Guardando el grafo P-space enriquecido en {OUTPUT_GRAPH_PATH}...")
-    nx.write_gexf(G, OUTPUT_GRAPH_PATH)
+    os.makedirs(os.path.dirname(GRAPH_PATH), exist_ok=True)
+    print(f"Guardando el grafo P-space enriquecido en {GRAPH_PATH} (sobrescribiendo)...")
+    nx.write_gpickle(G, GRAPH_PATH)
     print("¡Proceso completado!")
 
     # --- 5. MOSTRAR TOP 10 DE CADA MÉTRICA ---

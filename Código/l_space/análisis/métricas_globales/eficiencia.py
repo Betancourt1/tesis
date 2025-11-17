@@ -3,6 +3,7 @@ import networkx as nx
 import os
 import numpy as np
 import random
+from dotenv import load_dotenv
 
 def haversine(lat1, lon1, lat2, lon2):
     """
@@ -25,11 +26,15 @@ def analizar_eficiencia():
     la longitud promedio del camino más corto y el índice de desvío.
     """
     # --- 1. CARGA DE DATOS ---
-    BASE_DIR = r"C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis"
-    GRAPH_PATH = os.path.join(BASE_DIR, "QGIS", "transporte_publico_grafo_consolidado.gexf")
+    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '.env'))
+    GRAPH_PATH = os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH")
     
     print(f"Cargando grafo desde {GRAPH_PATH}...")
-    G = nx.read_gexf(GRAPH_PATH)
+    if not GRAPH_PATH or not os.path.exists(GRAPH_PATH):
+        print(f"Error: El archivo del grafo no se encontró en la ruta especificada en .env: {GRAPH_PATH}")
+        return
+
+    G = nx.read_gpickle(GRAPH_PATH)
     print("Grafo cargado.")
 
     # --- 2. PREPARACIÓN DEL GRAFO ---

@@ -5,13 +5,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import time
+from dotenv import load_dotenv
 
-def load_graph(gexf_path):
-    """Carga el grafo desde un archivo GEXF."""
-    if not os.path.exists(gexf_path):
-        raise FileNotFoundError(f"No se encontró el archivo del grafo en: {gexf_path}")
+def load_graph(graph_path):
+    """Carga el grafo desde un archivo gpickle."""
+    if not os.path.exists(graph_path):
+        raise FileNotFoundError(f"No se encontró el archivo del grafo en: {graph_path}")
     # El grafo P-space es no dirigido
-    return nx.read_gexf(gexf_path)
+    return nx.read_gpickle(graph_path)
 
 def calculate_lcc_size(G):
     """Calcula el tamaño del componente conectado más grande (LCC) para grafos no dirigidos."""
@@ -78,15 +79,22 @@ def get_node_order_by_centrality(G, centrality_name):
 
 def main():
     """Función principal para ejecutar el análisis de robustez en P-space."""
+    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '.env'))
     
-    BASE_DIR = '.'
-    INPUT_GRAPH_PATH = os.path.join(BASE_DIR, "out", "p_space", "transporte_publico_grafo_p_space_centralidades.gexf")
-    OUTPUT_DIR = os.path.join(BASE_DIR, "out", "p_space", "analisis", "robustez")
-    
+    GRAPH_PATH = os.getenv("P_SPACE_GRAPH_PATH")
+    OUTPUT_DIR = os.getenv("P_SPACE_ROBUSTNESS_OUTPUT_DIR")
+
+    if not GRAPH_PATH or not os.path.exists(GRAPH_PATH):
+        print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
+        return
+    if not OUTPUT_DIR:
+        print("Error: La variable P_SPACE_ROBUSTNESS_OUTPUT_DIR no está definida en .env")
+        return
+
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
         
-    G = load_graph(INPUT_GRAPH_PATH)
+    G = load_graph(GRAPH_PATH)
     
     # Atacar un % del total de rutas
     num_nodes_to_remove = int(G.number_of_nodes() * 0.20) # Aumentamos a 20% para ver mejor el efecto

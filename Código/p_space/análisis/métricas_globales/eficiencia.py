@@ -1,6 +1,7 @@
 
 import networkx as nx
 import os
+from dotenv import load_dotenv
 
 def analizar_eficiencia_p_space():
     """
@@ -8,15 +9,16 @@ def analizar_eficiencia_p_space():
     y la longitud promedio del camino más corto (en número de trasbordos).
     """
     # --- 1. CARGA DE DATOS ---
-    BASE_DIR = '.'
-    GRAPH_PATH = os.path.join(BASE_DIR, "out", "p_space", "transporte_publico_grafo_p_space.gexf")
+    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '.env'))
+    GRAPH_PATH = os.getenv("P_SPACE_GRAPH_PATH")
     
     print(f"Cargando grafo P-space desde {GRAPH_PATH}...")
-    if not os.path.exists(GRAPH_PATH):
-        print(f"Error: El archivo del grafo no se encontró en la ruta especificada.")
+    if not GRAPH_PATH or not os.path.exists(GRAPH_PATH):
+        print(f"Error: El archivo del grafo no se encontró en la ruta especificada en .env: {GRAPH_PATH}")
+        print("Asegúrate de haber ejecutado primero el script de construcción del grafo P-space.")
         return
         
-    G = nx.read_gexf(GRAPH_PATH)
+    G = nx.read_gpickle(GRAPH_PATH)
     print("Grafo P-space cargado.")
 
     # --- 2. PREPARACIÓN DEL GRAFO ---

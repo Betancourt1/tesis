@@ -1,21 +1,22 @@
 
 import networkx as nx
 import os
+from dotenv import load_dotenv
 
 def analizar_conectividad():
     """
     Carga el grafo consolidado y calcula métricas de conectividad y básicas.
     """
     # --- 1. CARGA DE DATOS ---
-    BASE_DIR = r"C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis"
-    GRAPH_PATH = os.path.join(BASE_DIR, "QGIS", "transporte_publico_grafo_consolidado.gexf")
+    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '.env'))
+    GRAPH_PATH = os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH")
     
     print(f"Cargando grafo desde {GRAPH_PATH}...")
-    if not os.path.exists(GRAPH_PATH):
-        print(f"Error: El archivo del grafo no se encontró en la ruta especificada.")
+    if not GRAPH_PATH or not os.path.exists(GRAPH_PATH):
+        print(f"Error: El archivo del grafo no se encontró en la ruta especificada en .env: {GRAPH_PATH}")
         return
 
-    G = nx.read_gexf(GRAPH_PATH)
+    G = nx.read_gpickle(GRAPH_PATH)
     print("Grafo cargado exitosamente.")
 
     # --- 2. CÁLCULO DE MÉTRICAS BÁSICAS Y DE CONECTIVIDAD ---

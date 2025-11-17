@@ -2,6 +2,7 @@
 import networkx as nx
 import os
 import json
+from dotenv import load_dotenv
 
 def calcular_matriz_distancias():
     """
@@ -10,13 +11,19 @@ def calcular_matriz_distancias():
     Guarda la matriz en un archivo JSON.
     """
     # --- 1. CARGA DE DATOS ---
-    BASE_DIR = r"C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis"
-    GRAPH_PATH = os.path.join(BASE_DIR, "QGIS", "transporte_publico_grafo_consolidado.gexf")
-    OUTPUT_DIR = os.path.join(BASE_DIR, "Código", "etapas", "análisis", "métricas_globales")
-    OUTPUT_FILE = os.path.join(OUTPUT_DIR, "matriz_distancias_shimbel.json")
+    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '.env'))
+    GRAPH_PATH = os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH")
+    OUTPUT_FILE = os.getenv("L_SPACE_DISTANCES_MATRIX_PATH")
     
+    if not GRAPH_PATH or not os.path.exists(GRAPH_PATH):
+        print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
+        return
+    if not OUTPUT_FILE:
+        print("Error: La variable L_SPACE_DISTANCES_MATRIX_PATH no está definida en .env")
+        return
+
     print(f"Cargando grafo desde {GRAPH_PATH}...")
-    G = nx.read_gexf(GRAPH_PATH)
+    G = nx.read_gpickle(GRAPH_PATH)
     print("Grafo cargado exitosamente.")
 
     # --- 2. CÁLCULO DE LA MATRIZ DE DISTANCIAS (ÍNDICE DE SHIMBEL) ---

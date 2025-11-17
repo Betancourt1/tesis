@@ -2,6 +2,7 @@
 import networkx as nx
 import os
 import json
+from dotenv import load_dotenv
 
 def calcular_matriz_distancias_p_space():
     """
@@ -9,17 +10,19 @@ def calcular_matriz_distancias_p_space():
     (número de trasbordos). Guarda la matriz en un archivo JSON.
     """
     # --- 1. CARGA DE DATOS ---
-    BASE_DIR = '.'
-    GRAPH_PATH = os.path.join(BASE_DIR, "out", "p_space", "transporte_publico_grafo_p_space.gexf")
-    OUTPUT_DIR = os.path.join(BASE_DIR, "out", "p_space", "analisis")
-    OUTPUT_FILE = os.path.join(OUTPUT_DIR, "matriz_distancias_p_space.json")
+    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '.env'))
+    GRAPH_PATH = os.getenv("P_SPACE_GRAPH_PATH")
+    OUTPUT_FILE = os.getenv("P_SPACE_DISTANCES_MATRIX_PATH")
     
-    print(f"Cargando grafo P-space desde {GRAPH_PATH}...")
-    if not os.path.exists(GRAPH_PATH):
-        print(f"Error: El archivo del grafo no se encontró en la ruta especificada.")
+    if not GRAPH_PATH or not os.path.exists(GRAPH_PATH):
+        print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
+        return
+    if not OUTPUT_FILE:
+        print("Error: La variable P_SPACE_DISTANCES_MATRIX_PATH no está definida en .env")
         return
 
-    G = nx.read_gexf(GRAPH_PATH)
+    print(f"Cargando grafo P-space desde {GRAPH_PATH}...")
+    G = nx.read_gpickle(GRAPH_PATH)
     print("Grafo P-space cargado exitosamente.")
 
     # --- 2. CÁLCULO DE LA MATRIZ DE DISTANCIAS ---
