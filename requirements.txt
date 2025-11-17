@@ -1,0 +1,6 @@
+python-dotenv
+networkx
+pandas
+numpy
+scikit-learn
+haversine
