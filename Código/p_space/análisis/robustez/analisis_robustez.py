@@ -79,16 +79,27 @@ def get_node_order_by_centrality(G, centrality_name):
 
 def main():
     """Función principal para ejecutar el análisis de robustez en P-space."""
-    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '.env'))
+    try:
+        dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '.env'))
+        if not os.path.exists(dotenv_path):
+            raise FileNotFoundError
+        load_dotenv(dotenv_path=dotenv_path)
+        project_root = os.path.dirname(dotenv_path)
+    except FileNotFoundError:
+        print("Error: No se pudo encontrar el archivo .env en la raíz del proyecto.")
+        sys.exit(1)
     
-    GRAPH_PATH = os.getenv("P_SPACE_GRAPH_PATH")
-    OUTPUT_DIR = os.getenv("P_SPACE_ROBUSTNESS_OUTPUT_DIR")
+    GRAPH_PATH = os.path.join(project_root, os.getenv("P_SPACE_GRAPH_PATH"))
+    OUTPUT_DIR = os.path.join(project_root, os.getenv("P_SPACE_ROBUSTNESS_OUTPUT_DIR"))
 
-    if not GRAPH_PATH or not os.path.exists(GRAPH_PATH):
-        print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
+    if not os.getenv("P_SPACE_GRAPH_PATH"):
+        print(f"Error: La variable P_SPACE_GRAPH_PATH no está definida en .env")
         return
-    if not OUTPUT_DIR:
+    if not os.getenv("P_SPACE_ROBUSTNESS_OUTPUT_DIR"):
         print("Error: La variable P_SPACE_ROBUSTNESS_OUTPUT_DIR no está definida en .env")
+        return
+    if not os.path.exists(GRAPH_PATH):
+        print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
         return
 
     if not os.path.exists(OUTPUT_DIR):

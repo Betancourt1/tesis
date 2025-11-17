@@ -3,14 +3,23 @@ import networkx as nx
 import os
 from dotenv import load_dotenv
 
-# Cargar variables de entorno desde el archivo .env en la raíz del proyecto
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '.env'))
+# --- CONFIGURACIÓN DE RUTAS ---
+# Encontrar la raíz del proyecto (donde se encuentra el .env) y cargar las variables
+try:
+    dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '.env'))
+    if not os.path.exists(dotenv_path):
+        raise FileNotFoundError
+    load_dotenv(dotenv_path=dotenv_path)
+    project_root = os.path.dirname(dotenv_path)
+except FileNotFoundError:
+    print("Error: No se pudo encontrar el archivo .env en la raíz del proyecto.")
+    sys.exit(1)
 
-# Obtener rutas desde las variables de entorno
-GTFS_DIR = os.getenv("GTFS_DIR")
-OUTPUT_PATH = os.getenv("L_SPACE_INITIAL_GRAPH_PATH")
+# Construir rutas absolutas a partir de las variables de entorno
+GTFS_DIR = os.path.join(project_root, os.getenv("GTFS_DIR"))
+OUTPUT_PATH = os.path.join(project_root, os.getenv("L_SPACE_INITIAL_GRAPH_PATH"))
 
-if not GTFS_DIR or not OUTPUT_PATH:
+if not os.getenv("GTFS_DIR") or not os.getenv("L_SPACE_INITIAL_GRAPH_PATH"):
     raise ValueError("Asegúrate de que las variables GTFS_DIR y L_SPACE_INITIAL_GRAPH_PATH estén definidas en tu archivo .env")
 
 # Cargar los archivos GTFS en DataFrames de pandas

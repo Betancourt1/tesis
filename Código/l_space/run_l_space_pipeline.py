@@ -73,3 +73,6 @@ def run_l_space_pipeline():
     print("=============================================")
     print("=== L-Space Graph Analysis Completed ========")
     print("=============================================")
+
+if __name__ == '__main__':
+    run_l_space_pipeline()

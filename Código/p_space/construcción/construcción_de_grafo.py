@@ -7,7 +7,15 @@ import os
 from dotenv import load_dotenv
 
 # Cargar variables de entorno desde el archivo .env en la raíz del proyecto
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '.env'))
+try:
+    dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '.env'))
+    if not os.path.exists(dotenv_path):
+        raise FileNotFoundError
+    load_dotenv(dotenv_path=dotenv_path)
+    project_root = os.path.dirname(dotenv_path)
+except FileNotFoundError:
+    print("Error: No se pudo encontrar el archivo .env en la raíz del proyecto.")
+    sys.exit(1)
 
 # --- DESCRIPCIÓN ---
 # Este script construye el grafo P-espacio de acuerdo a la metodología de la tesis.
@@ -21,12 +29,13 @@ load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..'
 # 5. Guarda el grafo resultante en formato gpickle para preservar los tipos de datos.
 
 # --- RUTAS DE ARCHIVOS ---
-CONSOLIDATED_GRAPH_PATH = os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH")
-GTFS_DIR = os.getenv("GTFS_DIR")
-OUTPUT_GRAPH_PATH = os.getenv("P_SPACE_GRAPH_PATH")
+CONSOLIDATED_GRAPH_PATH = os.path.join(project_root, os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH"))
+GTFS_DIR = os.path.join(project_root, os.getenv("GTFS_DIR"))
+OUTPUT_GRAPH_PATH = os.path.join(project_root, os.getenv("P_SPACE_GRAPH_PATH"))
 
-if not all([CONSOLIDATED_GRAPH_PATH, GTFS_DIR, OUTPUT_GRAPH_PATH]):
+if not os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH") or not os.getenv("GTFS_DIR") or not os.getenv("P_SPACE_GRAPH_PATH"):
     raise ValueError("Asegúrate de que las variables L_SPACE_CONSOLIDATED_GRAPH_PATH, GTFS_DIR y P_SPACE_GRAPH_PATH estén definidas en tu archivo .env")
+
 
 
 def construir_p_space_correcto():

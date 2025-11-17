@@ -10,15 +10,24 @@ def calcular_matriz_distancias_p_space():
     (número de trasbordos). Guarda la matriz en un archivo JSON.
     """
     # --- 1. CARGA DE DATOS ---
-    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '.env'))
-    GRAPH_PATH = os.getenv("P_SPACE_GRAPH_PATH")
-    OUTPUT_FILE = os.getenv("P_SPACE_DISTANCES_MATRIX_PATH")
+    try:
+        dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '.env'))
+        if not os.path.exists(dotenv_path):
+            raise FileNotFoundError
+        load_dotenv(dotenv_path=dotenv_path)
+        project_root = os.path.dirname(dotenv_path)
+    except FileNotFoundError:
+        print("Error: No se pudo encontrar el archivo .env en la raíz del proyecto.")
+        sys.exit(1)
+
+    GRAPH_PATH = os.path.join(project_root, os.getenv("P_SPACE_GRAPH_PATH"))
+    OUTPUT_FILE = os.path.join(project_root, os.getenv("P_SPACE_DISTANCES_MATRIX_PATH"))
     
-    if not GRAPH_PATH or not os.path.exists(GRAPH_PATH):
-        print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
+    if not os.getenv("P_SPACE_GRAPH_PATH") or not os.getenv("P_SPACE_DISTANCES_MATRIX_PATH"):
+        print("Error: Asegúrate de que las variables P_SPACE_GRAPH_PATH y P_SPACE_DISTANCES_MATRIX_PATH estén definidas en .env")
         return
-    if not OUTPUT_FILE:
-        print("Error: La variable P_SPACE_DISTANCES_MATRIX_PATH no está definida en .env")
+    if not os.path.exists(GRAPH_PATH):
+        print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
         return
 
     print(f"Cargando grafo P-space desde {GRAPH_PATH}...")

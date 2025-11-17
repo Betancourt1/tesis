@@ -7,8 +7,17 @@ import json
 import os
 from dotenv import load_dotenv
 
-# Cargar variables de entorno desde el archivo .env en la raíz del proyecto
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '.env'))
+# --- CONFIGURACIÓN DE RUTAS ---
+# Encontrar la raíz del proyecto (donde se encuentra el .env) y cargar las variables
+try:
+    dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '.env'))
+    if not os.path.exists(dotenv_path):
+        raise FileNotFoundError
+    load_dotenv(dotenv_path=dotenv_path)
+    project_root = os.path.dirname(dotenv_path)
+except FileNotFoundError:
+    print("Error: No se pudo encontrar el archivo .env en la raíz del proyecto.")
+    sys.exit(1)
 
 # --- CONFIGURACIÓN ---
 # Distancia máxima en metros para considerar que las paradas forman parte de un clúster.
@@ -17,10 +26,10 @@ UMBRAL_DISTANCIA_METROS = 100
 RADIO_TIERRA_METROS = 6371000
 
 # --- RUTAS DE ARCHIVOS ---
-INPUT_GRAPH_PATH = os.getenv("L_SPACE_INITIAL_GRAPH_PATH")
-OUTPUT_GRAPH_PATH = os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH")
+INPUT_GRAPH_PATH = os.path.join(project_root, os.getenv("L_SPACE_INITIAL_GRAPH_PATH"))
+OUTPUT_GRAPH_PATH = os.path.join(project_root, os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH"))
 
-if not INPUT_GRAPH_PATH or not OUTPUT_GRAPH_PATH:
+if not os.getenv("L_SPACE_INITIAL_GRAPH_PATH") or not os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH"):
     raise ValueError("Asegúrate de que las variables L_SPACE_INITIAL_GRAPH_PATH y L_SPACE_CONSOLIDATED_GRAPH_PATH estén definidas en tu archivo .env")
 
 
@@ -120,7 +129,8 @@ def consolidar_grafo():
 
     # --- 6. GUARDAR RESULTADOS ---
     print(f"Guardando grafo consolidado en {OUTPUT_GRAPH_PATH}...")
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    output_dir = os.path.dirname(OUTPUT_GRAPH_PATH) # Define OUTPUT_DIR here
+    os.makedirs(output_dir, exist_ok=True)
     with open(OUTPUT_GRAPH_PATH, "wb") as f:
         pickle.dump(G_consolidado, f, pickle.HIGHEST_PROTOCOL)
 

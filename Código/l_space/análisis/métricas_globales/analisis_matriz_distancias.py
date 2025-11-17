@@ -11,15 +11,27 @@ def analizar_matriz_shimbel():
     de accesibilidad, cobertura y tiempos de viaje extremos.
     """
     # --- 1. CARGA DE DATOS ---
-    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '.env'))
-    INPUT_FILE = os.getenv("L_SPACE_DISTANCES_MATRIX_PATH")
-    GRAPH_PATH = os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH")
+    try:
+        dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '.env'))
+        if not os.path.exists(dotenv_path):
+            raise FileNotFoundError
+        load_dotenv(dotenv_path=dotenv_path)
+        project_root = os.path.dirname(dotenv_path)
+    except FileNotFoundError:
+        print("Error: No se pudo encontrar el archivo .env en la raíz del proyecto.")
+        sys.exit(1)
 
-    if not INPUT_FILE or not os.path.exists(INPUT_FILE):
+    INPUT_FILE = os.path.join(project_root, os.getenv("L_SPACE_DISTANCES_MATRIX_PATH"))
+    GRAPH_PATH = os.path.join(project_root, os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH"))
+
+    if not os.getenv("L_SPACE_DISTANCES_MATRIX_PATH") or not os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH"):
+        print("Error: Asegúrate de que las variables L_SPACE_DISTANCES_MATRIX_PATH y L_SPACE_CONSOLIDATED_GRAPH_PATH estén definidas en tu archivo .env")
+        return
+    if not os.path.exists(INPUT_FILE):
         print(f"Error: No se encontró el archivo de la matriz de distancias en la ruta especificada en .env: {INPUT_FILE}")
         print("Ejecuta 'distancias.py' primero.")
         return
-    if not GRAPH_PATH or not os.path.exists(GRAPH_PATH):
+    if not os.path.exists(GRAPH_PATH):
         print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
         return
 
