@@ -4,7 +4,7 @@
     
     El objetivo es doble: primero, documentar de forma transparente y reproducible cada paso del preprocesamiento, la limpieza y la validación de los datos; y segundo, justificar las decisiones tomadas para construir los grafos, asegurando que los modelos resultantes sean representaciones fieles y útiles de la red de transporte de la Zona Metropolitana de Guadalajara.
     
-    \section{l GTFS de la Zona Metropolitana de Guadalajara}
+    \section{GTFS de la Zona Metropolitana de Guadalajara}
     
         La base de este estudio son los datos de la red de transporte público de la Zona Metropolitana de Guadalajara, obtenidos de una fuente pública en formato \textit{General Transit Feed Specification} (GTFS). La versión que usaremos corresponde a la publicada en Marzo del 2024.
         
@@ -100,10 +100,11 @@
             \end{itemize}
 
         \subsection{Grafo P-espacio: Modelo de Servicio}
+            El proceso, implementado en el script \texttt{Código/p_space/construcción/construcción_de_grafo.py}, resulta en un grafo con las siguientes propiedades:
             \begin{itemize}
                 \item \textbf{Nodos (V):} Los mismos 4,203 "supernodos" del L-espacio.
-                \item \textbf{Aristas (E):} Aristas \textbf{no dirigidas}. Una arista (u, v) existe si al menos una ruta de autobús pasa por ambos nodos u y v. El número de aristas es significativamente mayor que en el L-espacio, reflejando una red funcionalmente muy densa.
-                \item \textbf{Pesos:} Por defecto, el grafo no es ponderado, ya que el interés principal es la conectividad. Sin embargo, las aristas podrían ponderarse en análisis futuros, por ejemplo, por el número de rutas que conectan los dos nodos.
+                \item \textbf{Aristas (E):} 385,225 aristas \textbf{no dirigidas}. Una arista (u, v) existe si al menos una ruta de autobús pasa por ambos nodos u y v. El número de aristas es significativamente mayor que en el L-espacio, reflejando una red funcionalmente muy densa.
+                \item \textbf{Pesos:} Cada arista está ponderada por un entero que representa el número de rutas que conectan los dos nodos. Esto permite medir la "fuerza" de la conexión de servicio entre dos zonas.
             \end{itemize}
         
     \section{Limitaciones de los Datos y Modelos}
