@@ -4,6 +4,8 @@ import os
 import numpy as np
 import random
 from dotenv import load_dotenv
+import pickle
+import sys
 
 def haversine(lat1, lon1, lat2, lon2):
     """
@@ -46,7 +48,8 @@ def analizar_eficiencia():
         print(f"Error: El archivo del grafo no se encontró en la ruta especificada en .env: {GRAPH_PATH}")
         return
 
-    G = nx.read_gpickle(GRAPH_PATH)
+    with open(GRAPH_PATH, "rb") as f:
+        G = pickle.load(f)
     print("Grafo cargado.")
 
     # --- 2. PREPARACIÓN DEL GRAFO ---

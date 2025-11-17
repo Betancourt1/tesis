@@ -29,6 +29,10 @@ def analizar_conectividad_p_space():
         print("Asegúrate de haber ejecutado primero el script de construcción del grafo P-space.")
         return
 
+    with open(GRAPH_PATH, "rb") as f:
+        G = pickle.load(f)
+    print("Grafo P-space cargado exitosamente.")
+
     # --- 2. CÁLCULO DE MÉTRICAS BÁSICAS Y DE CONECTIVIDAD ---
     num_nodos = G.number_of_nodes()
     num_aristas = G.number_of_edges()

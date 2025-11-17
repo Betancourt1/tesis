@@ -114,7 +114,8 @@ def construir_p_space_correcto():
 
     # --- 4. Guardar el grafo ---
     print(f"Guardando el grafo P-espacio en {OUTPUT_GRAPH_PATH}...")
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    output_dir = os.path.dirname(OUTPUT_GRAPH_PATH) # Define OUTPUT_DIR here
+    os.makedirs(output_dir, exist_ok=True)
     with open(OUTPUT_GRAPH_PATH, "wb") as f:
         pickle.dump(G_pspace, f, pickle.HIGHEST_PROTOCOL)
 

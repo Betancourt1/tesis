@@ -34,7 +34,7 @@ def analizar_comunidades():
         print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
         print("Ejecuta 'detectar_comunidades.py' primero.")
         return
-    G = nx.read_gpickle(GRAPH_PATH)
+    G = pickle.load(open(GRAPH_PATH, "rb"))
     print("Grafo cargado.")
 
     # --- 2. ANÁLISIS DE COMUNIDADES ---

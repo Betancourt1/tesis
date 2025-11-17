@@ -2,6 +2,8 @@
 import networkx as nx
 import os
 from dotenv import load_dotenv
+import pickle
+import sys
 
 def analizar_eficiencia_p_space():
     """
@@ -30,7 +32,8 @@ def analizar_eficiencia_p_space():
         print("Asegúrate de haber ejecutado primero el script de construcción del grafo P-space.")
         return
         
-    G = nx.read_gpickle(GRAPH_PATH)
+    with open(GRAPH_PATH, "rb") as f:
+        G = pickle.load(f)
     print("Grafo P-space cargado.")
 
     # --- 2. PREPARACIÓN DEL GRAFO ---

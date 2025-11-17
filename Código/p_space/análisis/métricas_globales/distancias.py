@@ -3,6 +3,8 @@ import networkx as nx
 import os
 import json
 from dotenv import load_dotenv
+import pickle
+import sys
 
 def calcular_matriz_distancias_p_space():
     """
@@ -31,7 +33,8 @@ def calcular_matriz_distancias_p_space():
         return
 
     print(f"Cargando grafo P-space desde {GRAPH_PATH}...")
-    G = nx.read_gpickle(GRAPH_PATH)
+    with open(GRAPH_PATH, "rb") as f:
+        G = pickle.load(f)
     print("Grafo P-space cargado exitosamente.")
 
     # --- 2. CÁLCULO DE LA MATRIZ DE DISTANCIAS ---
@@ -46,7 +49,8 @@ def calcular_matriz_distancias_p_space():
 
     # --- 3. GUARDADO DE RESULTADOS ---
     print(f"Guardando la matriz de distancias en {OUTPUT_FILE}...")
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    output_dir = os.path.dirname(OUTPUT_FILE)
+    os.makedirs(output_dir, exist_ok=True)
     with open(OUTPUT_FILE, 'w') as f:
         json.dump(distancias, f, indent=4)
     

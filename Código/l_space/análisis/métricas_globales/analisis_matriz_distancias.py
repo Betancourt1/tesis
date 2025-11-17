@@ -4,6 +4,8 @@ import os
 import numpy as np
 import networkx as nx
 from dotenv import load_dotenv
+import pickle
+import sys
 
 def analizar_matriz_shimbel():
     """
@@ -41,7 +43,8 @@ def analizar_matriz_shimbel():
     print("Matriz cargada.")
 
     print(f"Cargando el grafo para obtener atributos de nodos desde {GRAPH_PATH}...")
-    G = nx.read_gpickle(GRAPH_PATH)
+    with open(GRAPH_PATH, "rb") as f:
+        G = pickle.load(f)
     print("Grafo cargado.")
 
     # --- 2. ANÁLISIS DE ACCESIBILIDAD ---

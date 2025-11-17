@@ -3,6 +3,8 @@ import networkx as nx
 import os
 from networkx.algorithms import community as nx_comm
 from dotenv import load_dotenv
+import pickle
+import sys
 
 def detectar_comunidades_p_space():
     """
@@ -24,7 +26,8 @@ def detectar_comunidades_p_space():
 
     print(f"Cargando grafo P-space desde {GRAPH_PATH}...")
     try:
-        G = nx.read_gpickle(GRAPH_PATH)
+        with open(GRAPH_PATH, "rb") as f:
+            G = pickle.load(f)
     except FileNotFoundError:
         print(f"Error: No se encontró el archivo del grafo en {GRAPH_PATH}.")
         print("Asegúrate de haber ejecutado primero el script de cálculo de centralidades para P-space.")
@@ -55,7 +58,8 @@ def detectar_comunidades_p_space():
     # --- 4. GUARDAR EL GRAFO CON COMUNIDADES ---
     os.makedirs(os.path.dirname(GRAPH_PATH), exist_ok=True)
     print(f"Guardando el grafo P-space con atributos de comunidad en {GRAPH_PATH} (sobrescribiendo)...")
-    nx.write_gpickle(G, GRAPH_PATH)
+    with open(GRAPH_PATH, "wb") as f:
+        pickle.dump(G, f, pickle.HIGHEST_PROTOCOL)
     
     print("\n¡Proceso completado!")
     print("El nuevo archivo GEXF ahora contiene un atributo 'community' en cada nodo (ruta).")

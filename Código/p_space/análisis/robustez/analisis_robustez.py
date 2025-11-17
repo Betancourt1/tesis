@@ -6,13 +6,16 @@ import numpy as np
 import os
 import time
 from dotenv import load_dotenv
+import pickle
+import sys
 
 def load_graph(graph_path):
     """Carga el grafo desde un archivo gpickle."""
     if not os.path.exists(graph_path):
         raise FileNotFoundError(f"No se encontró el archivo del grafo en: {graph_path}")
     # El grafo P-space es no dirigido
-    return nx.read_gpickle(graph_path)
+    with open(graph_path, "rb") as f:
+        return pickle.load(f)
 
 def calculate_lcc_size(G):
     """Calcula el tamaño del componente conectado más grande (LCC) para grafos no dirigidos."""

@@ -25,8 +25,12 @@ def analizar_estructura_local_p_space():
         print(f"Error: La variable P_SPACE_GRAPH_PATH no está definida en .env")
         return
     if not os.path.exists(GRAPH_PATH):
-        print(f"Error: El archivo del grafo no se encontró en la ruta especificada en .env: {GRAPH_PATH}")
+        print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
         return
+
+    with open(GRAPH_PATH, "rb") as f:
+        G = pickle.load(f)
+    print("Grafo P-space cargado exitosamente.")
 
     # --- 2. CÁLCULO DEL COEFICIENTE DE CLUSTERING GLOBAL ---
     # La transitividad mide la probabilidad de que dos vecinos de un nodo sean también vecinos.

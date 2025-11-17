@@ -3,6 +3,8 @@ import networkx as nx
 import os
 import json
 from dotenv import load_dotenv
+import pickle
+import sys
 
 def calcular_matriz_distancias():
     """
@@ -32,7 +34,8 @@ def calcular_matriz_distancias():
         return
 
     print(f"Cargando grafo desde {GRAPH_PATH}...")
-    G = nx.read_gpickle(GRAPH_PATH)
+    with open(GRAPH_PATH, "rb") as f:
+        G = pickle.load(f)
     print("Grafo cargado exitosamente.")
 
     # --- 2. CÁLCULO DE LA MATRIZ DE DISTANCIAS (ÍNDICE DE SHIMBEL) ---

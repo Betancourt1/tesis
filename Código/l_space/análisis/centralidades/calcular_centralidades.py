@@ -2,6 +2,8 @@ import networkx as nx
 import os
 import pandas as pd
 from dotenv import load_dotenv
+import pickle
+import sys
 
 def calcular_centralidades_y_enriquecer():
     """
@@ -30,7 +32,8 @@ def calcular_centralidades_y_enriquecer():
         return
 
     print(f"Cargando grafo desde {GRAPH_PATH}...")
-    G = nx.read_gpickle(GRAPH_PATH)
+    with open(GRAPH_PATH, "rb") as f:
+        G = pickle.load(f)
     print("Grafo cargado.")
 
     # --- 2. CÁLCULO DE CENTRALIDADES ---
@@ -66,7 +69,8 @@ def calcular_centralidades_y_enriquecer():
 
     # --- 4. GUARDAR EL GRAFO ENRIQUECIDO ---
     print(f"Guardando el grafo enriquecido en {GRAPH_PATH} (sobrescribiendo)...")
-    nx.write_gpickle(G, GRAPH_PATH)
+    with open(GRAPH_PATH, "wb") as f:
+        pickle.dump(G, f, pickle.HIGHEST_PROTOCOL)
     print("¡Proceso completado!")
 
     # --- 5. MOSTRAR TOP 10 DE CADA MÉTRICA ---

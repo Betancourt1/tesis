@@ -3,6 +3,8 @@ import networkx as nx
 import os
 from networkx.algorithms import community as nx_comm
 from dotenv import load_dotenv
+import pickle
+import sys
 
 def detectar_comunidades():
     """
@@ -32,7 +34,8 @@ def detectar_comunidades():
         return
 
     print(f"Cargando grafo desde {GRAPH_PATH}...")
-    G = nx.read_gpickle(GRAPH_PATH)
+    with open(GRAPH_PATH, "rb") as f:
+        G = pickle.load(f)
     print("Grafo cargado.")
 
     # --- 2. DETECCIÓN DE COMUNIDADES (MÉTODO DE LOUVAIN) ---
@@ -64,7 +67,8 @@ def detectar_comunidades():
     # --- 4. GUARDAR EL GRAFO CON COMUNIDADES ---
     print(f"Guardando el grafo con atributos de comunidad en {GRAPH_PATH}...")
     os.makedirs(os.path.dirname(GRAPH_PATH), exist_ok=True)
-    nx.write_gpickle(G, GRAPH_PATH)
+    with open(GRAPH_PATH, "wb") as f:
+        pickle.dump(G, f, pickle.HIGHEST_PROTOCOL)
     
     print("\n¡Proceso completado!")
     print("El nuevo archivo GEXF ahora contiene un atributo 'community' en cada nodo.")
