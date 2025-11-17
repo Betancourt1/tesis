@@ -1,25 +1,31 @@
 import pandas as pd
 import networkx as nx
 import os
+from dotenv import load_dotenv
 
-# Definir la ruta base a la carpeta de datos
-# Se recomienda usar rutas relativas o variables de entorno para mayor portabilidad
-BASE_PATH = r'C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\Datasets\gtfs_amg_20240312\Datos'
+# Cargar variables de entorno desde el archivo .env en la raíz del proyecto
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '.env'))
+
+# Obtener rutas desde las variables de entorno
+GTFS_DIR = os.getenv("GTFS_DIR")
+OUTPUT_PATH = os.getenv("L_SPACE_INITIAL_GRAPH_PATH")
+
+if not GTFS_DIR or not OUTPUT_PATH:
+    raise ValueError("Asegúrate de que las variables GTFS_DIR y L_SPACE_INITIAL_GRAPH_PATH estén definidas en tu archivo .env")
 
 # Cargar los archivos GTFS en DataFrames de pandas
 try:
-    routes_df = pd.read_csv(os.path.join(BASE_PATH, 'routes.csv'))
-    trips_df = pd.read_csv(os.path.join(BASE_PATH, 'trips.csv'))
-    stop_times_df = pd.read_csv(os.path.join(BASE_PATH, 'stop_times_cleaned.csv'))
-    stops_df = pd.read_csv(os.path.join(BASE_PATH, 'stops.csv'))
+    routes_df = pd.read_csv(os.path.join(GTFS_DIR, 'routes.csv'))
+    trips_df = pd.read_csv(os.path.join(GTFS_DIR, 'trips.csv'))
+    stop_times_df = pd.read_csv(os.path.join(GTFS_DIR, 'stop_times_cleaned.csv'))
+    stops_df = pd.read_csv(os.path.join(GTFS_DIR, 'stops.csv'))
 
     # Convertir columnas de tiempo a formato timedelta para poder realizar cálculos
     stop_times_df['arrival_time'] = pd.to_timedelta(stop_times_df['arrival_time'])
     stop_times_df['departure_time'] = pd.to_timedelta(stop_times_df['departure_time'])
 
 except FileNotFoundError as e:
-    print(f"Error: Asegúrate de que los archivos CSV ({e.filename}) estén en el mismo directorio que el notebook.")
-    # Detener la ejecución si los archivos no se encuentran
+    print(f"Error: No se encontró el archivo CSV en la ruta especificada en .env: {e.filename}")
     raise SystemExit
 
 # Fusionar los DataFrames
@@ -104,10 +110,9 @@ if G.number_of_edges() > 0:
     sample_edge = list(G.edges(data=True))[0]
     print(f"\nDatos de la arista de ejemplo: De '{sample_edge[0]}' a '{sample_edge[1]}' -> {sample_edge[2]}")
 
-# Nombre del archivo de salida
-OUTPUT_DIR = r"C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\QGIS"
-os.makedirs(OUTPUT_DIR, exist_ok=True)  # Asegura que el directorio de salida exista
-output_filename = os.path.join(OUTPUT_DIR, "transporte_publico_grafo.gexf")
+# Asegurarse de que el directorio de salida exista
+output_dir = os.path.dirname(OUTPUT_PATH)
+os.makedirs(output_dir, exist_ok=True)
 
 # Exportar el grafo a formato GEXF, que Gephi puede importar.
 try:
@@ -122,8 +127,8 @@ try:
             if not isinstance(value, (str, int, float, bool)):
                 G.edges[u, v][key] = str(value)
 
-    nx.write_gexf(G, output_filename)
-    print(f"\nGrafo exportado exitosamente como '{output_filename}'.")
+    nx.write_gexf(G, OUTPUT_PATH)
+    print(f"\nGrafo exportado exitosamente como '{OUTPUT_PATH}'.")
     print("Puedes importar este archivo directamente en Gephi.")
 except NameError:
     print("Error: El grafo 'G' no fue encontrado. Asegúrate de ejecutar la celda anterior primero.")

@@ -2,8 +2,13 @@ import pandas as pd
 import networkx as nx
 import numpy as np
 from sklearn.cluster import DBSCAN
+import pickle
 import json
 import os
+from dotenv import load_dotenv
+
+# Cargar variables de entorno desde el archivo .env en la raíz del proyecto
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '.env'))
 
 # --- CONFIGURACIÓN ---
 # Distancia máxima en metros para considerar que las paradas forman parte de un clúster.
@@ -12,10 +17,12 @@ UMBRAL_DISTANCIA_METROS = 100
 RADIO_TIERRA_METROS = 6371000
 
 # --- RUTAS DE ARCHIVOS ---
-BASE_DIR = r"C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis"
-INPUT_GRAPH_PATH = os.path.join(BASE_DIR, "QGIS", "transporte_publico_grafo.gexf")
-OUTPUT_DIR = os.path.join(BASE_DIR, "QGIS")
-OUTPUT_GRAPH_PATH = os.path.join(OUTPUT_DIR, "transporte_publico_grafo_consolidado.gexf")
+INPUT_GRAPH_PATH = os.getenv("L_SPACE_INITIAL_GRAPH_PATH")
+OUTPUT_GRAPH_PATH = os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH")
+
+if not INPUT_GRAPH_PATH or not OUTPUT_GRAPH_PATH:
+    raise ValueError("Asegúrate de que las variables L_SPACE_INITIAL_GRAPH_PATH y L_SPACE_CONSOLIDATED_GRAPH_PATH estén definidas en tu archivo .env")
+
 
 def consolidar_grafo():
     """
@@ -114,7 +121,8 @@ def consolidar_grafo():
     # --- 6. GUARDAR RESULTADOS ---
     print(f"Guardando grafo consolidado en {OUTPUT_GRAPH_PATH}...")
     os.makedirs(OUTPUT_DIR, exist_ok=True)
-    nx.write_gexf(G_consolidado, OUTPUT_GRAPH_PATH)
+    with open(OUTPUT_GRAPH_PATH, "wb") as f:
+        pickle.dump(G_consolidado, f, pickle.HIGHEST_PROTOCOL)
 
     print("\nProceso completado.")
     print(f"Nodos en grafo original: {G.number_of_nodes()}")
