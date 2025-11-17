@@ -2,6 +2,7 @@
 import networkx as nx
 import os
 from dotenv import load_dotenv
+import pickle
 
 def analizar_conectividad():
     """
