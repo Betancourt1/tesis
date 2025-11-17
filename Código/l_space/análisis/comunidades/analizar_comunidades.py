@@ -1,6 +1,7 @@
 
 import networkx as nx
 import os
+import pickle
 import pandas as pd
 import numpy as np
 from dotenv import load_dotenv
