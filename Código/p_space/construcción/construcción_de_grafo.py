@@ -1,62 +1,115 @@
 
 import pandas as pd
 import networkx as nx
+import pickle
 from itertools import combinations
 import os
+from dotenv import load_dotenv
 
-def construir_grafo_p_space(gtfs_path, output_path):
+# Cargar variables de entorno desde el archivo .env en la raíz del proyecto
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '.env'))
+
+# --- DESCRIPCIÓN ---
+# Este script construye el grafo P-espacio de acuerdo a la metodología de la tesis.
+# 1. Carga el grafo consolidado (L-espacio) para obtener los "supernodos".
+# 2. Crea un mapa que asocia cada parada original con su supernodo correspondiente.
+# 3. Usa los datos GTFS para determinar qué supernodos son servidos por cada ruta.
+# 4. Construye el grafo P-espacio:
+#    - Los nodos son los 4,203 supernodos.
+#    - Una arista conecta dos supernodos si comparten al menos una ruta.
+#    - El peso de la arista es el número de rutas que comparten.
+# 5. Guarda el grafo resultante en formato gpickle para preservar los tipos de datos.
+
+# --- RUTAS DE ARCHIVOS ---
+CONSOLIDATED_GRAPH_PATH = os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH")
+GTFS_DIR = os.getenv("GTFS_DIR")
+OUTPUT_GRAPH_PATH = os.getenv("P_SPACE_GRAPH_PATH")
+
+if not all([CONSOLIDATED_GRAPH_PATH, GTFS_DIR, OUTPUT_GRAPH_PATH]):
+    raise ValueError("Asegúrate de que las variables L_SPACE_CONSOLIDATED_GRAPH_PATH, GTFS_DIR y P_SPACE_GRAPH_PATH estén definidas en tu archivo .env")
+
+
+def construir_p_space_correcto():
     """
-    Construye un grafo en P-space a partir de datos GTFS.
-
-    En P-space, los nodos son las rutas de transporte y se crea una arista
-    entre dos rutas si comparten al menos una parada.
-
-    Args:
-        gtfs_path (str): Ruta al directorio que contiene los archivos GTFS.
-        output_path (str): Ruta donde se guardará el grafo GEXF resultante.
+    Construye y guarda el grafo P-espacio siguiendo la metodología de la tesis.
     """
-    # Cargar los datos necesarios
+    print("--- Iniciando la construcción del P-espacio (metodología de tesis) ---")
+
+    # --- 1. Cargar grafo consolidado y crear mapa de paradas ---
+    print(f"Cargando grafo consolidado desde {CONSOLIDATED_GRAPH_PATH}...")
+    if not os.path.exists(CONSOLIDATED_GRAPH_PATH):
+        print(f"Error: No se encontró el grafo consolidado en {CONSOLIDATED_GRAPH_PATH}.")
+        print("Asegúrate de ejecutar primero el pipeline de construcción del L-espacio.")
+        return
+    
+    with open(CONSOLIDATED_GRAPH_PATH, "rb") as f:
+        G_consolidado = pickle.load(f)
+
+    stop_to_supernode_map = {}
+    print("Creando mapa de paradas a supernodos...")
+    for supernode_id, data in G_consolidado.nodes(data=True):
+        # El atributo puede tener nombres diferentes dependiendo del script que lo generó
+        original_stops_str = data.get('original_stops', '')
+        if isinstance(original_stops_str, list): # Si ya es una lista
+            original_stops = original_stops_str
+        else: # Si es un string separado por comas
+            original_stops = original_stops_str.split(',')
+            
+        for stop_id in original_stops:
+            stop_to_supernode_map[str(stop_id)] = str(supernode_id)
+    print(f"Mapa creado con {len(stop_to_supernode_map)} paradas originales.")
+
+    # --- 2. Cargar datos GTFS y mapear rutas a supernodos ---
+    print("Cargando datos GTFS...")
     try:
-        stops = pd.read_csv(os.path.join(gtfs_path, 'stops.csv'))
-        stop_times = pd.read_csv(os.path.join(gtfs_path, 'stop_times.csv'))
-        trips = pd.read_csv(os.path.join(gtfs_path, 'trips.csv'))
-        routes = pd.read_csv(os.path.join(gtfs_path, 'routes.csv'))
+        stop_times_df = pd.read_csv(os.path.join(GTFS_DIR, 'stop_times.csv'), dtype={'trip_id': str, 'stop_id': str})
+        trips_df = pd.read_csv(os.path.join(GTFS_DIR, 'trips.csv'), dtype={'trip_id': str, 'route_id': str})
     except FileNotFoundError as e:
         print(f"Error: No se encontró el archivo GTFS: {e.filename}")
         return
 
-    # Unir los dataframes para obtener las paradas por ruta
-    df = stop_times.merge(trips, on='trip_id')
-    df = df.merge(routes, on='route_id')
+    # Unir dataframes para obtener route_id por cada stop_id
+    route_stops_df = pd.merge(stop_times_df, trips_df, on='trip_id')[['route_id', 'stop_id']].drop_duplicates()
 
-    # Crear un diccionario de rutas y sus paradas
-    paradas_por_ruta = df.groupby('route_id')['stop_id'].apply(set).to_dict()
+    print("Agrupando supernodos por ruta...")
+    supernodes_por_ruta = {}
+    # Mapear stop_id a supernode_id
+    route_stops_df['supernode_id'] = route_stops_df['stop_id'].map(stop_to_supernode_map)
+    # Eliminar paradas que no están en el grafo consolidado
+    route_stops_df.dropna(subset=['supernode_id'], inplace=True)
+    
+    # Agrupar por ruta para obtener el conjunto de supernodos
+    grouped = route_stops_df.groupby('route_id')['supernode_id'].apply(set)
+    supernodes_por_ruta = grouped.to_dict()
+    print(f"Se procesaron {len(supernodes_por_ruta)} rutas.")
 
-    # Crear el grafo P-space
-    G = nx.Graph()
+    # --- 3. Construir el grafo P-espacio ---
+    print("Construyendo el grafo P-espacio...")
+    G_pspace = nx.Graph()
+    
+    # Añadir todos los supernodos para asegurar consistencia con L-espacio
+    G_pspace.add_nodes_from(G_consolidado.nodes(data=True))
 
-    # Añadir nodos (rutas)
-    for route_id, route_info in routes.iterrows():
-        G.add_node(route_id, 
-                   route_short_name=route_info['route_short_name'], 
-                   route_long_name=route_info['route_long_name'],
-                   route_type=route_info['route_type'])
+    # Generar aristas creando cliques por cada ruta
+    for route_id, supernodes_in_route in supernodes_por_ruta.items():
+        if len(supernodes_in_route) >= 2:
+            for u, v in combinations(supernodes_in_route, 2):
+                if G_pspace.has_edge(u, v):
+                    G_pspace[u][v]['weight'] += 1
+                else:
+                    G_pspace.add_edge(u, v, weight=1)
+    
+    print("Grafo P-espacio construido.")
+    print(f"Nodos: {G_pspace.number_of_nodes()}")
+    print(f"Aristas: {G_pspace.number_of_edges()}")
 
-    # Añadir aristas si las rutas comparten paradas
-    for ruta1, ruta2 in combinations(paradas_por_ruta.keys(), 2):
-        if not paradas_por_ruta[ruta1].isdisjoint(paradas_por_ruta[ruta2]):
-            G.add_edge(ruta1, ruta2)
+    # --- 4. Guardar el grafo ---
+    print(f"Guardando el grafo P-espacio en {OUTPUT_GRAPH_PATH}...")
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    with open(OUTPUT_GRAPH_PATH, "wb") as f:
+        pickle.dump(G_pspace, f, pickle.HIGHEST_PROTOCOL)
 
-    # Guardar el grafo
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    nx.write_gexf(G, output_path)
-    print(f"Grafo P-space construido y guardado en: {output_path}")
-    print(f"Nodos: {G.number_of_nodes()}, Aristas: {G.number_of_edges()}")
+    print("--- Proceso de construcción de P-espacio finalizado. ---")
 
 if __name__ == '__main__':
-    # Rutas de entrada y salida
-    GTFS_DIR = 'Datasets/gtfs_amg_20240312/Datos'
-    OUTPUT_DIR = 'out/p_space'
-    OUTPUT_FILE = os.path.join(OUTPUT_DIR, 'transporte_publico_grafo_p_space.gexf')
-
-    construir_grafo_p_space(GTFS_DIR, OUTPUT_FILE)
+    construir_p_space_correcto()
