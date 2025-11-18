@@ -1,0 +1,102 @@
+C:\Users\fbetancourt\AppData\Local\anaconda3\envs\Tesis\python.exe "C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\Código\p_space\run_p_space_pipeline.py" 
+=============================================
+=== Starting P-Space Graph Construction ===
+=============================================
+
+--- Construcción del grafo P-espacio (metodología de tesis) ---
+Executing command: C:\Users\fbetancourt\AppData\Local\anaconda3\envs\Tesis\python.exe C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\Código\p_space\construcción\construcción_de_grafo.py
+--- Iniciando la construcción del P-espacio (metodología de tesis) ---
+Cargando grafo consolidado desde C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\grafos/l_space/grafo_consolidado.gpickle...
+Creando mapa de paradas a supernodos...
+Mapa creado con 10622 paradas originales.
+Cargando datos GTFS...
+Agrupando supernodos por ruta...
+Se procesaron 247 rutas.
+Construyendo el grafo P-espacio...
+Grafo P-espacio construido.
+Nodos: 4203
+Aristas: 385225
+Guardando el grafo P-espacio en C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\grafos/p_space/grafo_p_space_correcto.gpickle...
+--- Proceso de construcción de P-espacio finalizado. ---
+SUCCESS: Construcción del grafo P-espacio (metodología de tesis) completed.
+=============================================
+=== P-Space Graph Construction Completed ====
+=============================================
+
+=============================================
+=== Starting P-Space Graph Analysis =======
+=============================================
+
+--- Cálculo de centralidades para el grafo P-espacio ---
+Executing command: C:\Users\fbetancourt\AppData\Local\anaconda3\envs\Tesis\python.exe C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\Código\p_space\análisis\centralidades\calcular_centralidades.py
+SUCCESS: Cálculo de centralidades para el grafo P-espacio completed.
+
+--- Detección de comunidades para el grafo P-espacio ---
+Executing command: C:\Users\fbetancourt\AppData\Local\anaconda3\envs\Tesis\python.exe C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\Código\p_space\análisis\comunidades\detectar_comunidades.py
+Cargando grafo P-space desde C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\grafos/p_space/grafo_p_space_correcto.gpickle...
+Grafo cargado.
+Detectando comunidades de rutas con el método de Louvain...
+Se detectaron 11 comunidades de rutas.
+Asignando ID de comunidad a cada ruta (nodo)...
+Guardando el grafo P-space con atributos de comunidad en C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\grafos/p_space/grafo_p_space_correcto.gpickle (sobrescribiendo)...
+
+¡Proceso completado!
+El nuevo archivo GEXF ahora contiene un atributo 'community' en cada nodo (ruta).
+Puedes usar este atributo en Gephi para colorear las rutas y visualizar las comunidades.
+SUCCESS: Detección de comunidades para el grafo P-espacio completed.
+
+--- Análisis de conectividad del grafo P-espacio ---
+Executing command: C:\Users\fbetancourt\AppData\Local\anaconda3\envs\Tesis\python.exe C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\Código\p_space\análisis\métricas_globales\conectividad.py
+Cargando grafo P-space desde C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\grafos/p_space/grafo_p_space_correcto.gpickle...
+Grafo P-space cargado exitosamente.
+
+--- ANÁLISIS DE CONECTIVIDAD (P-SPACE) ---
+Número de nodos (rutas): 4203
+Número de aristas (trasbordos): 385225
+Densidad del grafo: 0.043624
+¡Atención! La red de rutas está fragmentada en 2 componentes no conectados entre sí.
+Esto significa que hay grupos de rutas que no tienen ninguna parada en común con rutas de otros grupos.
+SUCCESS: Análisis de conectividad del grafo P-espacio completed.
+
+--- Cálculo de la matriz de distancias del grafo P-espacio ---
+Executing command: C:\Users\fbetancourt\AppData\Local\anaconda3\envs\Tesis\python.exe C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\Código\p_space\análisis\métricas_globales\distancias.py
+Cargando grafo P-space desde C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\grafos/p_space/grafo_p_space_correcto.gpickle...
+Grafo P-space cargado exitosamente.
+Calculando la matriz de distancias (número de trasbordos)...
+Esto puede tardar dependiendo del tamaño del grafo.
+Cálculo completado.
+Guardando la matriz de distancias en C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\grafos/p_space\matriz_distancias_p_space.json...
+
+--- ANÁLISIS DE DISTANCIAS (P-SPACE) ---
+La matriz de distancias ha sido calculada y guardada exitosamente.
+El archivo contiene las rutas más cortas (en número de trasbordos) entre todos los pares de rutas alcanzables.
+
+Ejemplo de datos para la ruta '0':
+  -> Para llegar a la ruta '0': 0 trasbordo(s)
+  -> Para llegar a la ruta '782': 1 trasbordo(s)
+  -> Para llegar a la ruta '795': 1 trasbordo(s)
+SUCCESS: Cálculo de la matriz de distancias del grafo P-espacio completed.
+
+--- Análisis de eficiencia del grafo P-espacio ---
+Executing command: C:\Users\fbetancourt\AppData\Local\anaconda3\envs\Tesis\python.exe C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\Código\p_space\análisis\métricas_globales\eficiencia.py
+Cargando grafo P-space desde C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\grafos/p_space/grafo_p_space_correcto.gpickle...
+Grafo P-space cargado.
+Análisis realizado sobre el componente conectado más grande (4198 rutas).
+
+--- ANÁLISIS DE EFICIENCIA DE LA RED (P-SPACE) ---
+Diámetro de la red de rutas (máximo número de trasbordos): 6
+Longitud promedio del camino más corto (trasbordos promedio): 2.41
+Eficiencia global de la red de rutas: 0.4476
+SUCCESS: Análisis de eficiencia del grafo P-espacio completed.
+
+--- Análisis de la estructura local del grafo P-espacio ---
+Executing command: C:\Users\fbetancourt\AppData\Local\anaconda3\envs\Tesis\python.exe C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\Código\p_space\análisis\métricas_globales\estructura_local.py
+Cargando grafo P-space desde C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\grafos/p_space/grafo_p_space_correcto.gpickle...
+Grafo P-space cargado exitosamente.
+
+--- ANÁLISIS DE ESTRUCTURA LOCAL (P-SPACE) ---
+Coeficiente de Clustering Global (Transitividad): 0.408523
+Este valor representa la probabilidad de que dos rutas que comparten paradas con una tercera, también compartan paradas entre sí.
+Un valor más cercano a 1 indica una mayor tendencia a la formación de clústeres de rutas (zonas de alta conectividad).
+SUCCESS: Análisis de la estructura local del grafo P-espacio completed.
+
