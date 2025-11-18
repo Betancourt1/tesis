@@ -1587,15 +1587,73 @@
 
         \subsection{Modularidad y método de Louvain}
 
-            Para detectar comunidades en un grafo no dirigido (posiblemente ponderado) $G=(V,E)$ usamos el criterio de \textbf{modularidad}. Sea $A$ la matriz de adyacencia (o de pesos), $k_i=\sum_j A_{ij}$ el grado ponderado de $i$ y $2m=\sum_{i,j}A_{ij}$ el peso total. Dada una partición $\mathcal{C}$ de $V$ en comunidades $c(i)$, la modularidad se define como
-            \[
-            Q(\mathcal{C})=\frac{1}{2m}\sum_{i,j}\Big(A_{ij}-\frac{k_i k_j}{2m}\Big)\,\mathbf{1}_{\{c(i)=c(j)\}},
-            \]
-            que compara el peso interno observado con el esperado bajo el modelo nulo de configuración (preserva grados pero conecta al azar). Valores altos de $Q$ indican densidad interna mayor a la esperada y pocas conexiones externas.
+            \begin{definicion}[Modularidad (grafo no dirigido, ponderado)]
+                Sea $G=(V,E)$ un grafo simple no dirigido (posible ponderación no negativa) con matriz de pesos $A=(A_{ij})$, grados ponderados $k_i=\sum_j A_{ij}$ y peso total $2m=\sum_{i,j}A_{ij}=\sum_i k_i$.
+                Dada una partición $\mathcal{C}$ de $V$ y la asignación $c:V\to\{1,\dots,C\}$, definimos la \textbf{modularidad}
+                \[
+                Q(\mathcal{C})=\frac{1}{2m}\sum_{i,j}\Bigl(A_{ij}-\frac{k_i k_j}{2m}\Bigr)\,\mathbf{1}_{\{c(i)=c(j)\}}.
+                \]
+                El segundo término es la contribución esperada bajo el modelo nulo de configuración (preserva grados pero conecta al azar).
+            \end{definicion}
 
-            El \textbf{método de Louvain} maximiza $Q$ de manera heurística en dos fases iteradas:
-            \begin{enumerate}
-              \item \emph{Optimización local.} Inicialmente cada nodo es su propia comunidad. Se recorren nodos y, para cada uno, se evalúa el cambio de modularidad $\Delta Q$ al moverlo a la comunidad de cada vecino. El nodo se mueve a la comunidad que produzca la mayor $\Delta Q>0$. El proceso se repite hasta no poder mejorar $Q$ con movimientos individuales.
-              \item \emph{Agregación.} Cada comunidad encontrada se contrae en un \emph{supernodo}; los pesos entre supernodos son la suma de los pesos entre comunidades originales. Con este grafo reducido se repite la Fase 1.
-            \end{enumerate}
-            El algoritmo alterna ambas fases hasta que no hay mejoras de modularidad. Trabaja en tiempo casi lineal $\mathcal{O}(|E|)$ por iteración y admite pesos; para grafos dirigidos suele aplicarse a su versión no dirigida (o a una simetrización de pesos) para mantener la definición estándar de $Q$.
+            \begin{proposicion}[Forma por comunidades]
+                Sea, para cada comunidad $X$,
+                \[
+                \Sigma_{\mathrm{in}}(X)=\sum_{i,j\in X}A_{ij}\quad\text{y}\quad
+                \Sigma_{\mathrm{tot}}(X)=\sum_{i\in X}k_i.
+                \]
+                Entonces
+                \[
+                Q(\mathcal{C})=\sum_{X\in\mathcal{C}}\Bigl(\frac{\Sigma_{\mathrm{in}}(X)}{2m}-\Bigl(\frac{\Sigma_{\mathrm{tot}}(X)}{2m}\Bigr)^2\Bigr).
+                \]
+            \end{proposicion}
+
+            \begin{proof}
+                Reordenamos la suma de la definición por bloques $X$ y usamos que $\sum_{i\in X}\sum_{j\in X}k_i k_j=(\sum_{i\in X}k_i)^2$.
+            \end{proof}
+
+            \begin{lema}[Incremento de modularidad al mover un vértice]
+                Sea $i\in V$ y sean $R=c(i)$ y $S\neq R$ dos comunidades. Definimos
+                \[
+                k_i^{\mathrm{in}}(Y)=\sum_{j\in Y}A_{ij}\qquad(Y\subseteq V),
+                \]
+                y denotamos por $\Sigma_{\mathrm{in}}$ y $\Sigma_{\mathrm{tot}}$ las cantidades previas para cada comunidad.
+                Si movemos $i$ de $R$ a $S$, el cambio de modularidad es
+                \[
+                \Delta Q(i: R\to S)
+                =\Biggl[\frac{\Sigma_{\mathrm{in}}(S)+k_i^{\mathrm{in}}(S)}{2m}-\Bigl(\frac{\Sigma_{\mathrm{tot}}(S)+k_i}{2m}\Bigr)^2\Biggr]
+                +\Biggl[\frac{\Sigma_{\mathrm{in}}(R)-k_i^{\mathrm{in}}(R)}{2m}-\Bigl(\frac{\Sigma_{\mathrm{tot}}(R)-k_i}{2m}\Bigr)^2\Biggr]
+                -\Biggl[\frac{\Sigma_{\mathrm{in}}(S)}{2m}-\Bigl(\frac{\Sigma_{\mathrm{tot}}(S)}{2m}\Bigr)^2\Biggr]
+                -\Biggl[\frac{\Sigma_{\mathrm{in}}(R)}{2m}-\Bigl(\frac{\Sigma_{\mathrm{tot}}(R)}{2m}\Bigr)^2\Biggr].
+                \]
+                \]
+                En particular, podemos computar $\Delta Q$ en $O(\deg(i))$ con pre-cómputo de $\Sigma_{\mathrm{in}}(\cdot)$ y $\Sigma_{\mathrm{tot}}(\cdot)$ y de $k_i^{\mathrm{in}}(\cdot)$ respecto de las comunidades vecinas de $i$.
+            \end{lema}
+
+            \begin{proof}
+                Sustituimos la forma por comunidades antes y después del movimiento y observamos que sólo cambian los sumandos de $R$ y $S$. La contribución interna varía en $+k_i^{\mathrm{in}}(S)$ para $S$ y en $-k_i^{\mathrm{in}}(R)$ para $R$. Las masas totales pasan de $\Sigma_{\mathrm{tot}}(S)$ a $\Sigma_{\mathrm{tot}}(S)+k_i$ y de $\Sigma_{\mathrm{tot}}(R)$ a $\Sigma_{\mathrm{tot}}(R)-k_i$. Restamos y simplificamos.
+            \end{proof}
+
+            \begin{definicion}[Método de Louvain]
+                El método consta de iterar dos fases sobre el grafo (inicialmente $G$) hasta estacionarse:
+                \begin{enumerate}
+                  \item \emph{Optimización local:} inicializamos $c(i)=i$. Recorremos vértices; para cada $i$ consideramos sólo comunidades de sus vecinos y elegimos el movimiento $i:R\to S$ que maximiza $\Delta Q(i:R\to S)$. Si la mejor $\Delta Q>0$, ejecutamos el movimiento y actualizamos las cantidades agregadas; repetimos barridos hasta que ningún movimiento individual mejora $Q$.
+                  \item \emph{Agregación:} contraemos cada comunidad $X$ a un supernodo; el peso entre supernodos $X$ y $Y$ es la suma de pesos entre vértices de $X$ y de $Y$ (y el peso loop de $X$ es $\Sigma_{\mathrm{in}}(X)$). Reiniciamos la Fase 1 sobre el grafo agregado.
+                \end{enumerate}
+            \end{definicion}
+
+            \begin{proposicion}[Monotonía y terminación]
+                Cada movimiento aceptado en la Fase 1 satisface $\Delta Q>0$, por lo que $Q$ crece estrictamente. Como el número de particiones finitas es finito y $Q$ está acotada superiormente por $1$, la Fase 1 termina. La Fase 2 preserva la modularidad de la partición al operar sobre el grafo agregado con los mismos bloques; repetir ambas fases produce una sucesión no decreciente de valores de $Q$ que debe estacionarse en número finito de iteraciones.
+            \end{proposicion}
+
+            \begin{proof}
+                La primera parte es inmediata por construcción. La agregación realiza la misma función objetivo en un grafo menor donde cada comunidad es un supernodo; la modularidad de la partición “trivial” en supernodos coincide con la modularidad de la partición previa (se comprueba sustituyendo las definiciones), por lo que no hay descenso. El conjunto de particiones accesibles es finito y la cadena de valores de $Q$ es estrictamente creciente dentro de cada Fase 1, luego el procedimiento termina.
+            \end{proof}
+
+            \begin{proposicion}[Costo por iteración]
+                Si mantenemos para cada comunidad sus $\Sigma_{\mathrm{in}}$ y $\Sigma_{\mathrm{tot}}$ y para cada vértice la suma $k_i^{\mathrm{in}}(S)$ hacia las comunidades de sus vecinos, el coste de un barrido completo es $\mathcal{O}(|E|)$; la agregación es lineal en el número de aristas (computación de pesos entre supernodos). En consecuencia, cada “pasada” Louvain (optimización local + agregación) cuesta $\tilde{\mathcal{O}}(|E|)$ en grafos esparsos.
+            \end{proposicion}
+
+            \begin{observacion}[Dirigidos y variantes]
+                Para grafos dirigidos podemos aplicar una simetrización de pesos $A^{\mathrm{sym}}=A+A^\top$ y la definición anterior de $Q$, o usar modularidad dirigida (Leicht–Newman) reemplazando $k_i$ por los pares $(k_i^{\mathrm{out}},k_i^{\mathrm{in}})$ y el término nulo $k_i k_j/(2m)$ por $k_i^{\mathrm{out}}k_j^{\mathrm{in}}/(2m)$. La heurística de Louvain se adapta sin cambios en ambos casos.
+            \end{observacion}
