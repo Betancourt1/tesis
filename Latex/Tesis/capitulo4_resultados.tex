@@ -25,13 +25,13 @@ Este capítulo presenta los resultados de aplicar un conjunto de análisis estru
     \begin{itemize}
         \item \textbf{Conectividad Fuerte:} Un hallazgo importante es que el grafo principal no es \textit{fuertemente conectado}. Esto significa que existen pares de nodos (A, B) para los cuales es posible viajar de A a B, pero no hay una ruta de regreso de B a A. Este fenómeno es común en sistemas de autobuses debido a la existencia de calles de un solo sentido o circuitos de ruta.
         \item \textbf{Diámetro de la Red:} El diámetro, medido en el componente principal, es de \textbf{77 saltos}. Representa el número máximo de supernodos que se deben atravesar en el peor de los casos para conectar dos puntos de la red. Un diámetro tan grande es indicativo de una red geográficamente muy extendida.
-        \item \textbf{Índice de Desvío Promedio (Detour Index):} Se obtuvo un valor de \textbf{1.06}. Este resultado es notablemente positivo. Un valor de 1 representa un viaje en línea recta. Un índice de 1.06 sugiere que, en promedio, las rutas de la red son muy directas, con un tiempo de viaje apenas un 6\% superior al que tomaría un vehículo hipotético moviéndose en línea recta. Esto indica que las rutas, individualmente, son eficientes en su trazado.
+        \item \textbf{Índice de Desvío Promedio (Detour Index):} Se obtuvo un valor de \textbf{1.13}. Un valor de 1 representa un viaje en línea recta; este índice indica que, en promedio, los viajes son 13\% más largos que la distancia directa, lo que refleja rutas relativamente directas pero con margen para mejorar conexiones.
     \end{itemize}
 
     \subsubsection{Accesibilidad y Cobertura de la Red (Matriz de Shimbel)}
     El análisis de la matriz de distancias de Shimbel, que contiene los tiempos de viaje más cortos entre todos los pares de nodos, permite evaluar la accesibilidad desde la perspectiva del usuario:
     \begin{itemize}
-        \item \textbf{Nodos más y menos accesibles:} Se identificó una brecha extrema en la accesibilidad. Los \textbf{nodos mejor conectados} (ubicados en corredores de alta transferencia como Calzada del Ejército o Av. Gobernador Curiel) tienen un tiempo de viaje promedio de solo \textbf{1-2 minutos} hacia el resto de la red. En contraste, los \textbf{nodos peor conectados}, situados en la periferia extrema (como la zona de Tesistán o cerca del aeropuerto), promedian tiempos de viaje de entre \textbf{90 y 157 minutos}.
+        \item \textbf{Nodos más y menos accesibles:} Se identificó una brecha extrema en la accesibilidad. Los \textbf{nodos mejor conectados} promedian entre \textbf{0.7 y 1.3 minutos} al resto de la red (corredores centrales como Calzada del Ejército). En contraste, los \textbf{nodos peor conectados}, situados en la periferia (Tesistán, aeropuerto, norponiente), promedian entre \textbf{94 y 157 minutos}.
         \item \textbf{Análisis de Cobertura (Reachability):} Se calculó el porcentaje de la red accesible desde una parada promedio en distintos umbrales de tiempo:
         \begin{itemize}
             \item \textbf{15 minutos:} Se alcanza solo el 6.5\% de la red.
@@ -95,67 +95,68 @@ Este capítulo presenta los resultados de aplicar un conjunto de análisis estru
     En conclusión, la detección de comunidades revela la organización interna de la red de transporte. Muestra cómo el sistema se articula en subsistemas geográficos que corresponden en gran medida a la división municipal y a los grandes corredores viales del Área Metropolitana de Guadalajara. Esta granularidad es fundamental para entender los patrones de viaje a una escala intermedia, más allá del nivel de parada individual pero más específico que el de la red completa.
 
     \subsection{Análisis de Robustez del L-espacio}
-    Una vez caracterizada la estructura estática de la red, el siguiente paso es evaluar su resiliencia. Un sistema de transporte robusto es aquel que puede mantener su funcionalidad principal —conectar personas y lugares de manera eficiente— incluso cuando algunas de sus partes fallan. Para medir esta robustez, se realizaron simulaciones de eliminación de nodos bajo diferentes escenarios, evaluando el impacto en la conectividad y eficiencia de la red.
+    Una vez caracterizada la estructura estática de la red, el siguiente paso es evaluar su resiliencia. Un sistema de transporte robusto es aquel que puede mantener su funcionalidad principal —conectar personas y lugares de manera eficiente— incluso cuando algunas de sus partes fallan. Para medir esta robustez, se simularon ataques dirigidos que eliminan nodos críticos y se observó el impacto en la conectividad y eficiencia de la red.
 
     \subsubsection{Metodología de la Simulación}
-    Se simularon dos tipos principales de disrupciones, eliminando progresivamente hasta el 5% de los nodos de la red (210 nodos):
+    Se eliminan de manera secuencial los \textbf{50 nodos con mayor grado ponderado}, que son los supernodos con más rutas incidentes. Tras cada eliminación se recalcula:
     \begin{itemize}
-        \item \textbf{Fallas Aleatorias:} Se eliminaron nodos seleccionados al azar. Este escenario simula eventos no coordinados como averías, accidentes o cierres de paradas por mantenimiento.
-        \item \textbf{Ataques Dirigidos:} Se eliminaron nodos de forma deliberada, en orden descendente de importancia según tres métricas de centralidad:
-        \begin{itemize}
-            \item \textbf{Por Grado Ponderado:} Apuntando a los nodos con mayor volumen de rutas.
-            \item \textbf{Por Intermediación (Betweenness):} Apuntando a los puentes y puntos de transbordo más críticos.
-            \item \textbf{Por Cercanía (Closeness):} Apuntando a los nodos más accesibles o mejor ubicados en la red.
-        \end{itemize}
+        \item \textbf{Tamaño del Componente Conectado Gigante (LCC):} proporción del LCC respecto al valor inicial.
+        \item \textbf{Eficiencia Global Dirigida:} eficiencia promedio de los caminos más cortos considerando tiempos de viaje.
     \end{itemize}
-    Para cada nodo eliminado, se midió la degradación de dos indicadores clave de rendimiento de la red: el tamaño del Componente Conectado Gigante (LCC) y la Eficiencia Global.
+    El número de nodos a eliminar se fijó en 50 para tener una condición de parada clara y concentrarse en el impacto de los hubs más importantes.
 
     \subsubsection{Resultados del Análisis de Robustez}
-    Los resultados, visualizados en la Figura \ref{fig:robustez}, revelan una marcada diferencia entre la resistencia de la red a fallas aleatorias y su fragilidad ante ataques dirigidos.
+    Los resultados se muestran en la Figura \ref{fig:robustez_l_space}.
 
     \begin{figure}[h!]
         \centering
-        \includegraphics[width=\textwidth]{Images/robustez_plot.png}
-        \caption{Comparativa del impacto en el LCC y la Eficiencia Global bajo diferentes escenarios de eliminación de nodos.}
-        \label{fig:robustez}
+        \includegraphics[width=\textwidth]{../../grafos/l_space/robustez/grafico_robustez_comparativo.png}
+        \caption{Impacto en el LCC y la Eficiencia Global del L-espacio al eliminar los 50 nodos de mayor grado ponderado.}
+        \label{fig:robustez_l_space}
     \end{figure}
 
     \subsubsection{Impacto en la Conectividad (LCC)}
-    La gráfica superior de la Figura \ref{fig:robustez} muestra cómo se fragmenta la red.
-    \begin{itemize}
-        \item \textbf{Fallas Aleatorias:} La red demuestra ser muy resiliente. La curva de fallas aleatorias (línea punteada negra) desciende de manera suave y lenta, indicando que la eliminación de nodos al azar tiene un impacto mínimo en la conectividad general. Se necesitaría una disrupción masiva y no coordinada para fragmentar el sistema.
-        \item \textbf{Ataques Dirigidos:} La situación es radicalmente distinta ante ataques estratégicos. Los ataques basados en Grado e Intermediación (líneas azul y naranja) son extraordinariamente efectivos. La eliminación de apenas 50 nodos (un 1.2\% del total) provoca una caída en la conectividad de casi el 5\%, mientras que la eliminación de 210 nodos llega a desconectar a más del 12\% de la red. Esto demuestra que la integridad estructural del sistema depende de un número reducido de nodos-hub, cuya falla resulta en una rápida fragmentación de la red. El ataque por cercanía es, en comparación, mucho menos efectivo.
-    \end{itemize}
+    Después de eliminar los 50 nodos de mayor grado, el LCC conserva el \textbf{97.45\%} de sus nodos (ver \texttt{grafos/l_space/robustez/robustez\_ataque\_grado.csv}). Esto indica que la red física mantiene la mayoría de su conectividad, aunque se generan pequeñas pérdidas de cobertura periférica.
 
     \subsubsection{Impacto en la Eficiencia Global}
-    La gráfica inferior de la Figura \ref{fig:robustez} muestra cómo se degradan los tiempos de viaje promedio en la red.
-    \begin{itemize}
-        \item \textbf{Fallas Aleatorias:} De nuevo, el impacto es moderado. La eficiencia disminuye de forma casi lineal, pero contenida. Los viajes se vuelven un poco más largos, pero el sistema en su conjunto no colapsa.
-        \item \textbf{Ataques Dirigidos:} Aquí se manifiesta la mayor vulnerabilidad de la red. Los ataques por Grado e Intermediación provocan un desplome de la eficiencia. Con solo 100 nodos eliminados, la eficiencia global se reduce en casi un 20\%, lo que implica un severo aumento en los tiempos de viaje para la mayoría de los usuarios. Al eliminar 210 nodos, la eficiencia cae hasta en un 50\% en el peor de los casos (ataque por grado). Esto significa que los nodos con muchas rutas y que actúan como puentes son absolutamente críticos para la operación eficiente del sistema.
-    \end{itemize}
-
-    \subsubsection{Conclusiones sobre la Robustez}
-    El análisis revela que la red de transporte público de Guadalajara presenta una \textbf{estructura de tipo "Aquiles"}: es robusta en general, pero posee un "talón de Aquiles" muy específico. Su vulnerabilidad no reside en fallos casuales, sino en la dependencia crítica de un núcleo de nodos de alta centralidad de grado e intermediación.
-
-    Estos nodos, que funcionan simultáneamente como los grandes distribuidores de flujo y los principales puentes de la red, son los puntos únicos de fallo del sistema. Su neutralización, ya sea por un evento coordinado o una falla masiva, tendría un impacto desproporcionado y catastrófico tanto en la capacidad de los usuarios para llegar a sus destinos como en la eficiencia general de los tiempos de viaje.
+    La eficiencia global cae al \textbf{81.5\%} de su valor original tras la eliminación de esos 50 nodos. Aunque la red sigue conectada, los caminos disponibles son menos directos y los tiempos de viaje promedio se alargan casi un 19\%, lo que evidencia la dependencia operativa de los hubs de alto grado.
 
 \section{Análisis del P-espacio: La Red de Servicio}
     A continuación, se presentan los resultados del análisis aplicado al grafo P-espacio. Este modelo, donde los nodos se conectan si comparten una ruta, ofrece una perspectiva complementaria centrada en la experiencia de viaje del usuario sin transbordos.
 
     \subsection{Métricas globales del P-espacio}
-        \textit{(Análisis pendiente de realizar y documentar. Se espera una red mucho más densa y con un diámetro menor que el L-espacio.)}
+    El grafo P-espacio es mucho más denso que el L-espacio:
+    \begin{itemize}
+        \item \textbf{Tamaño y densidad:} 4,203 nodos (rutas) y 385,225 aristas (trasbordos), con densidad \textbf{0.0436}.
+        \item \textbf{Componentes:} 2 componentes; el principal reúne 4,198 rutas.
+        \item \textbf{Clustering:} Coeficiente de clustering global \textbf{0.4085}, lo que evidencia alta redundancia de rutas que comparten paradas.
+        \item \textbf{Eficiencia y caminos:} Diámetro \textbf{6} trasbordos, longitud promedio de camino \textbf{2.41} trasbordos y eficiencia global \textbf{0.4476} en el componente principal.
+    \end{itemize}
 
     \subsection{Análisis de Centralidad en el P-espacio}
-        \textit{(Análisis pendiente de realizar y documentar. Se investigará si los nodos más centrales coinciden con los del L-espacio o si emergen nuevos puntos clave basados en la conectividad de servicio.)}
+    Se calcularon y almacenaron las centralidades (grado, intermediación, cercanía y eigenvector) en \texttt{grafos/p\_space/grafo\_p\_space\_correcto.gpickle}. Las rutas con mayor grado son aquellas que comparten numerosas paradas con otras líneas, actuando como conectores de múltiples recorridos.
 
     \subsection{Detección de Comunidades en el P-espacio}
-        \textit{(Análisis pendiente de realizar y documentar. Se espera que las comunidades reflejen grupos de rutas que sirven a zonas geográficas similares, en lugar de la proximidad física de las paradas.)}
+    Se detectaron \textbf{11 comunidades} de rutas mediante Louvain, agrupando líneas que comparten muchas paradas. El atributo \texttt{community} en el archivo GEXF permite visualizarlas en Gephi.
 
     \subsection{Análisis de Robustez del P-espacio}
-        \textit{(Análisis pendiente de realizar y documentar. Se evaluará si la alta conectividad del P-espacio lo hace inherentemente más robusto a fallas aleatorias y ataques dirigidos.)}
+    Se aplicó el mismo esquema de ataque dirigido al P-espacio: eliminación secuencial de las \textbf{50 rutas (nodos) con mayor grado}. Tras cada eliminación se midieron el tamaño relativo del LCC y la eficiencia global no dirigida.
 
-\section{Análisis Comparativo y Discusión}
-    \textit{(Sección pendiente. Aquí se compararán y contrastarán los resultados de los análisis de L-espacio y P-espacio para obtener una visión integral de la red de transporte.)}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=\textwidth]{../../grafos/p_space/robustez/grafico_robustez_p_space_comparativo.png}
+        \caption{Impacto en el LCC y la Eficiencia Global del P-espacio al eliminar las 50 rutas de mayor grado.}
+        \label{fig:robustez_p_space}
+    \end{figure}
+
+    Los resultados (\texttt{grafos/p\_space/robustez/robustez\_p\_space\_ataque\_grado.csv}) muestran que:
+    \begin{itemize}
+        \item El LCC se mantiene en \textbf{98.74\%} de su tamaño original tras eliminar las 50 rutas más conectadas, señal de alta redundancia en la red de servicio.
+        \item La eficiencia global desciende a \textbf{97.36\%}, una caída moderada que sugiere que existen suficientes rutas alternativas para conservar recorridos relativamente cortos aun cuando fallan los hubs principales.
+    \end{itemize}
+
+    \subsection{Discusión Comparativa}
+    El ataque dirigido por grado es significativamente más dañino en el L-espacio que en el P-espacio. Mientras que en la infraestructura física la eficiencia cae cerca de 19\% al perder 50 hubs, en la red de servicio la pérdida es de apenas 2.6\%. Esto confirma que la conectividad basada en compartir rutas es más resiliente por la existencia de múltiples combinaciones de servicio entre las paradas, aun si la infraestructura depende fuertemente de unos pocos nodos de alta interconexión.
 
 
     \section{Parámetros, Software y Reproducibilidad}
@@ -185,13 +186,13 @@ Los cálculos se realizaron en un equipo de escritorio estándar. El uso de la p
     \item \textbf{Detección de Comunidades:} Se empleó el método de Louvain, optimizando la modularidad sobre una versión no dirigida del grafo ponderado por el número de rutas (\texttt{original\_edge\_count}).
     \item \textbf{Análisis de Robustez:}
     \begin{itemize}
-        \item Se simuló la eliminación del \textbf{5\%} de los nodos de la red (210 nodos) en cada escenario.
-        \item El cálculo de la eficiencia global se realizó de forma exacta, pero acelerada mediante un pool de procesos que utilizó el número de núcleos de CPU disponibles menos uno.
+        \item Se eliminaron secuencialmente los \textbf{50 nodos de mayor grado} en cada grafo (L-espacio y P-espacio).
+        \item El cálculo de la eficiencia global se realizó de forma exacta y paralelizada (L-espacio) o con la función nativa de NetworkX (P-espacio).
     \end{itemize}
 \end{itemize}
 
 \subsection{Reproducibilidad}
 
-El código fuente completo desarrollado para este análisis, incluyendo los scripts para la construcción del grafo, el cálculo de métricas y las simulaciones de robustez, se encuentra disponible en el repositorio digital adjunto a esta tesis. El script principal que genera los resultados de la última sección es \texttt{Código/etapas/análisis/robustez/analisis\_robustez.py}.
+El código fuente completo desarrollado para este análisis, incluyendo los scripts para la construcción del grafo, el cálculo de métricas y las simulaciones de robustez, se encuentra disponible en el repositorio digital adjunto a esta tesis. Los scripts que generan los resultados de robustez son \texttt{Código/l\_space/análisis/robustez/analisis\_robustez.py} y \texttt{Código/p\_space/análisis/robustez/analisis\_robustez.py}.
 
 Los datos de entrada consisten en el grafo consolidado y enriquecido, guardado en el archivo \texttt{QGIS/transporte\_publico\_grafo\_enriquecido.gexf}. La ejecución de los scripts sobre este archivo de entrada permite replicar de manera exacta todos los resultados y figuras presentadas en este capítulo.
