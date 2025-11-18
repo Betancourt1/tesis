@@ -132,12 +132,30 @@ Este capítulo presenta los resultados de aplicar un conjunto de análisis estru
         \item \textbf{Clustering:} Coeficiente de clustering global \textbf{0.4085}, lo que evidencia alta redundancia de rutas que comparten paradas.
         \item \textbf{Eficiencia y caminos:} Diámetro \textbf{6} trasbordos, longitud promedio de camino \textbf{2.41} trasbordos y eficiencia global \textbf{0.4476} en el componente principal.
     \end{itemize}
+    Interpretación: la densidad, casi dos órdenes de magnitud mayor que en el L-espacio, indica que la red de servicio ofrece muchas alternativas de trasbordo entre rutas. El clustering elevado refleja cliques de rutas en las mismas paradas (redundancia operativa), mientras que un diámetro de sólo 6 trasbordos y camino medio de 2.41 muestran que cualquier ruta está a pocos pasos de otra, sugiriendo buena conectividad percibida por el usuario, aunque con riesgo de saturación en nodos altamente conectados.
 
     \subsection{Análisis de Centralidad en el P-espacio}
     Se calcularon y almacenaron las centralidades (grado, intermediación, cercanía y eigenvector) en \texttt{grafos/p\_space/grafo\_p\_space\_correcto.gpickle}. Las rutas con mayor grado son aquellas que comparten numerosas paradas con otras líneas, actuando como conectores de múltiples recorridos.
 
+    Los cuatro indicadores coinciden en ubicar el máximo de centralidad en el hipercentro (Coords aprox. $20.668^{\circ}$ N, $-103.348^{\circ}$ O). Destacan:
+    \begin{itemize}
+        \item \textbf{Supernodo 264} (7 paradas). Top 1 en las cuatro métricas. Concentra al menos 30 rutas (ej. C05, C06, C111-V1/V3, C118) y funge como hub de transferencia natural en el centro.
+        \item \textbf{Supernodo 262} (15 paradas) y \textbf{698} (5 paradas). También en el clúster central; comparten más de 25 rutas y aparecen en los primeros lugares de betweenness y cercanía.
+        \item \textbf{Supernodos 1138 y 2117} (zona poniente; $\sim 20.646^{\circ}$ N, $-103.406^{\circ}$ O). Dominan eigenvector y cercanía en el sector occidental, con rutas como C104, C108, C123 y C124.
+        \item Otros hubs relevantes: \textbf{2033}, \textbf{288} y \textbf{2073} (corredor central), y \textbf{151} en el oriente (C105, C106, C17).
+    \end{itemize}
+    En conjunto, la centralidad revela una red de servicio fuertemente articulada alrededor del centro histórico y varios corredores troncales, con abundante redundancia de rutas que permite mantener alta cercanía y conectividad incluso al remover nodos aislados.
+
     \subsection{Detección de Comunidades en el P-espacio}
-    Se detectaron \textbf{11 comunidades} de rutas mediante Louvain, agrupando líneas que comparten muchas paradas. El atributo \texttt{community} en el archivo GEXF permite visualizarlas en Gephi.
+    Se detectaron \textbf{11 comunidades} de rutas mediante Louvain, agrupando líneas que comparten muchas paradas (modularidad $0.54$). El atributo \texttt{community} en el archivo GEXF permite visualizarlas en Gephi. Las cinco mayores concentran el 67\% de los supernodos del servicio:
+    \begin{itemize}
+        \item \textbf{Comunidad 5} (\textasciitilde\!18.2\%): centroide $(20.5748,-103.3608)$, domina el sur-poniente.
+        \item \textbf{Comunidad 1} (\textasciitilde\!15.2\%): centroide $(20.6887,-103.2992)$, eje nororiente.
+        \item \textbf{Comunidad 8} (\textasciitilde\!11.7\%): centroide $(20.7404,-103.3939)$, norponiente.
+        \item \textbf{Comunidad 2} (\textasciitilde\!11.5\%): centroide $(20.6293,-103.2990)$, oriente-centro.
+        \item \textbf{Comunidad 6} (\textasciitilde\!10.3\%): centroide $(20.6573,-103.2995)$, corredor central-oriente.
+    \end{itemize}
+    El resto incluye clusters poniente (Comunidad 4, 9) y núcleos menores (Communidades 0, 3, 7), mientras que sólo una comunidad es pequeña (\textless=5 nodos), reflejando alta conectividad transversal del servicio.
 
     \subsection{Análisis de Robustez del P-espacio}
     Se aplicó el mismo esquema de ataque dirigido al P-espacio: eliminación secuencial de las \textbf{50 rutas (nodos) con mayor grado}. Tras cada eliminación se midieron el tamaño relativo del LCC y la eficiencia global no dirigida.
@@ -154,6 +172,7 @@ Este capítulo presenta los resultados de aplicar un conjunto de análisis estru
         \item El LCC se mantiene en \textbf{98.74\%} de su tamaño original tras eliminar las 50 rutas más conectadas, señal de alta redundancia en la red de servicio.
         \item La eficiencia global desciende a \textbf{97.36\%}, una caída moderada que sugiere que existen suficientes rutas alternativas para conservar recorridos relativamente cortos aun cuando fallan los hubs principales.
     \end{itemize}
+    Comparativamente, el P-espacio es mucho más resiliente que el L-espacio: la pérdida de eficiencia es de apenas 2.6\% frente al 19\% observado en la infraestructura física. Esto se explica porque múltiples rutas comparten paradas y pueden sustituirse entre sí. Operativamente, el resultado sugiere que caídas de rutas troncales se amortiguan si existen líneas paralelas o variantes, pero también que la redundancia descansa en el centro; un rediseño periférico podría mejorar la resistencia fuera del hipercentro.
 
     \subsection{Discusión Comparativa}
     El ataque dirigido por grado es significativamente más dañino en el L-espacio que en el P-espacio. Mientras que en la infraestructura física la eficiencia cae cerca de 19\% al perder 50 hubs, en la red de servicio la pérdida es de apenas 2.6\%. Esto confirma que la conectividad basada en compartir rutas es más resiliente por la existencia de múltiples combinaciones de servicio entre las paradas, aun si la infraestructura depende fuertemente de unos pocos nodos de alta interconexión.

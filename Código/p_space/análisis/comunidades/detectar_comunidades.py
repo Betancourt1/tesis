@@ -5,12 +5,14 @@ from networkx.algorithms import community as nx_comm
 from dotenv import load_dotenv
 import pickle
 import sys
-from collections import Counter
+import pandas as pd
+import numpy as np
 
 def detectar_comunidades_p_space():
     """
     Carga el grafo P-space, detecta comunidades usando el método de Louvain
-    y guarda un nuevo grafo GEXF con los nodos coloreados por comunidad.
+    y guarda un nuevo grafo con el atributo de comunidad.
+    Además, imprime un resumen explicativo listo para la redacción.
     """
     # --- 1. CONFIGURACIÓN Y CARGA DE DATOS ---
     try:
@@ -42,7 +44,7 @@ def detectar_comunidades_p_space():
     # El grafo P-space ya es no dirigido.
     communities = nx_comm.louvain_communities(G, seed=123)
     modularidad = nx_comm.modularity(G, communities)
-    print(f"Se detectaron {len(communities)} comunidades de rutas. Moduralidad: {modularidad:.4f}")
+    print(f"Se detectaron {len(communities)} comunidades de rutas. Modularidad: {modularidad:.4f}")
 
     # Resumen de tamaños
     sizes = sorted([len(c) for c in communities], reverse=True)
@@ -65,6 +67,50 @@ def detectar_comunidades_p_space():
     # Añadir el atributo 'community' al grafo
     nx.set_node_attributes(G, node_community_mapping, 'community')
 
+    # --- 4. ANÁLISIS Y RESUMEN EXPLICATIVO ---
+    print("\nAnalizando comunidades para generar resumen...")
+    df_nodes = pd.DataFrame([{'node_id': node, **data} for node, data in G.nodes(data=True)])
+    if 'community' not in df_nodes.columns:
+        print("No se encontró el atributo 'community' en los nodos. Se omite el análisis.")
+    else:
+        community_counts = df_nodes['community'].value_counts().reset_index()
+        community_counts.columns = ['community_id', 'node_count']
+        num_communities = len(community_counts)
+
+        trivial_threshold = 5
+        num_trivial = community_counts[community_counts['node_count'] <= trivial_threshold].shape[0]
+        top_communities = community_counts.nlargest(10, 'node_count')
+
+        detalles = []
+        for _, row in top_communities.iterrows():
+            cid = row['community_id']
+            nodes_in_comm = df_nodes[df_nodes['community'] == cid]
+            latitudes = pd.to_numeric(nodes_in_comm.get('stop_lat'), errors='coerce').dropna()
+            longitudes = pd.to_numeric(nodes_in_comm.get('stop_lon'), errors='coerce').dropna()
+            center_lat = latitudes.mean() if not latitudes.empty else np.nan
+            center_lon = longitudes.mean() if not longitudes.empty else np.nan
+            detalles.append({
+                'community_id': cid,
+                'node_count': row['node_count'],
+                'center_lat': center_lat,
+                'center_lon': center_lon
+            })
+        df_detalles = pd.DataFrame(detalles)
+
+        print("\n--- RESUMEN DEL ANÁLISIS DE COMUNIDADES P-SPACE ---")
+        print(f"- Comunidades detectadas: {num_communities}")
+        print(f"- Comunidades pequeñas o aisladas (<= {trivial_threshold} nodos): {num_trivial}")
+        print("\nPrincipales comunidades (Top 10 por tamaño):")
+        for _, row in df_detalles.iterrows():
+            print(f"  - Comunidad {int(row['community_id'])}: {int(row['node_count'])} supernodos."
+                  f" Centroide aprox: (Lat: {row['center_lat']:.4f}, Lon: {row['center_lon']:.4f})")
+
+        print("\nInterpretación sugerida:")
+        print("- La estructura modular identifica agrupamientos de supernodos conectados por rutas en común.")
+        print("- Las comunidades grandes pueden corresponder a zonas densas o corredores troncales.")
+        print("- Las comunidades pequeñas podrían ser alimentadoras o áreas periféricas con conexiones limitadas.")
+        print("- Cruza los centroides con un mapa para nombrar o caracterizar las comunidades principales.")
+
     # --- 4. GUARDAR EL GRAFO CON COMUNIDADES ---
     os.makedirs(os.path.dirname(GRAPH_PATH), exist_ok=True)
     print(f"Guardando el grafo P-space con atributos de comunidad en {GRAPH_PATH} (sobrescribiendo)...")
@@ -72,7 +118,7 @@ def detectar_comunidades_p_space():
         pickle.dump(G, f, pickle.HIGHEST_PROTOCOL)
     
     print("\n¡Proceso completado!")
-    print("El nuevo archivo GEXF ahora contiene un atributo 'community' en cada nodo (ruta).")
+    print("El grafo ahora contiene un atributo 'community' en cada nodo (ruta/supernodo).")
     print("Puedes usar este atributo en Gephi para colorear las rutas y visualizar las comunidades.")
 
 if __name__ == '__main__':

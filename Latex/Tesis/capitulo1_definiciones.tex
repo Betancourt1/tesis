@@ -1584,3 +1584,18 @@
                 \]
                 Tomamos $\varepsilon=1$ y $\text{minPts}=2$. Entonces $1,2,3$ forman un cluster (núcleos: $2$; bordes: $1$ y $3$) y $4,5$ forman otro (ambos núcleos). No hay ruido. Si elevamos $\text{minPts}$ a $3$, $\{1,2,3\}$ persiste (núcleo: $2$), pero $\{4,5\}$ pasa a ruido, ilustrando la monotonía en los parámetros.
             \end{ejemplo}
+
+        \subsection{Modularidad y método de Louvain}
+
+            Para detectar comunidades en un grafo no dirigido (posiblemente ponderado) $G=(V,E)$ usamos el criterio de \textbf{modularidad}. Sea $A$ la matriz de adyacencia (o de pesos), $k_i=\sum_j A_{ij}$ el grado ponderado de $i$ y $2m=\sum_{i,j}A_{ij}$ el peso total. Dada una partición $\mathcal{C}$ de $V$ en comunidades $c(i)$, la modularidad se define como
+            \[
+            Q(\mathcal{C})=\frac{1}{2m}\sum_{i,j}\Big(A_{ij}-\frac{k_i k_j}{2m}\Big)\,\mathbf{1}_{\{c(i)=c(j)\}},
+            \]
+            que compara el peso interno observado con el esperado bajo el modelo nulo de configuración (preserva grados pero conecta al azar). Valores altos de $Q$ indican densidad interna mayor a la esperada y pocas conexiones externas.
+
+            El \textbf{método de Louvain} maximiza $Q$ de manera heurística en dos fases iteradas:
+            \begin{enumerate}
+              \item \emph{Optimización local.} Inicialmente cada nodo es su propia comunidad. Se recorren nodos y, para cada uno, se evalúa el cambio de modularidad $\Delta Q$ al moverlo a la comunidad de cada vecino. El nodo se mueve a la comunidad que produzca la mayor $\Delta Q>0$. El proceso se repite hasta no poder mejorar $Q$ con movimientos individuales.
+              \item \emph{Agregación.} Cada comunidad encontrada se contrae en un \emph{supernodo}; los pesos entre supernodos son la suma de los pesos entre comunidades originales. Con este grafo reducido se repite la Fase 1.
+            \end{enumerate}
+            El algoritmo alterna ambas fases hasta que no hay mejoras de modularidad. Trabaja en tiempo casi lineal $\mathcal{O}(|E|)$ por iteración y admite pesos; para grafos dirigidos suele aplicarse a su versión no dirigida (o a una simetrización de pesos) para mantener la definición estándar de $Q$.
