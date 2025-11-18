@@ -70,12 +70,14 @@ def simulate_failures(G, node_order, iterations):
 
 def get_node_order_by_centrality(G, centrality_name):
     """Ordena las rutas (nodos) según una métrica de centralidad."""
-    try:
+    if centrality_name == 'degree':
+        # Si la métrica no viene precalculada, usamos el grado simple del grafo
+        centrality_dict = dict(G.degree())
+        nx.set_node_attributes(G, centrality_dict, 'degree')
+    else:
         centrality_dict = nx.get_node_attributes(G, centrality_name)
         if not centrality_dict:
-             raise KeyError
-    except KeyError:
-        raise ValueError(f"La centralidad '{centrality_name}' no se encontró como atributo en los nodos del grafo.")
+            raise ValueError(f"La centralidad '{centrality_name}' no se encontró como atributo en los nodos del grafo.")
 
     sorted_nodes = sorted(centrality_dict, key=centrality_dict.get, reverse=True)
     return sorted_nodes
@@ -110,14 +112,12 @@ def main():
         
     G = load_graph(GRAPH_PATH)
     
-    # Atacar un % del total de rutas
-    num_nodes_to_remove = int(G.number_of_nodes() * 0.20) # Aumentamos a 20% para ver mejor el efecto
+    # Limitar a eliminación de 50 rutas (nodos) como máximo
+    num_nodes_to_remove = min(50, G.number_of_nodes())
 
     scenarios = {
-        'aleatoria': list(np.random.permutation(list(G.nodes()))),
-        'grado': get_node_order_by_centrality(G, 'degree'),
-        'intermediacion': get_node_order_by_centrality(G, 'betweenness'),
-        'cercania': get_node_order_by_centrality(G, 'closeness')
+        # Removemos rutas en orden descendente por grado
+        'grado': get_node_order_by_centrality(G, 'degree')
     }
 
     results_dfs = {}

@@ -23,12 +23,15 @@ def calcular_matriz_distancias():
         print("Error: No se pudo encontrar el archivo .env en la raíz del proyecto.")
         sys.exit(1)
 
-    GRAPH_PATH = os.path.join(project_root, os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH"))
-    OUTPUT_FILE = os.path.join(project_root, os.getenv("L_SPACE_DISTANCES_MATRIX_PATH"))
-    
-    if not os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH") or not os.getenv("L_SPACE_DISTANCES_MATRIX_PATH"):
+    graph_rel_path = os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH")
+    output_rel_path = os.getenv("L_SPACE_DISTANCES_MATRIX_PATH")
+
+    if not graph_rel_path or not output_rel_path:
         print("Error: Asegúrate de que las variables L_SPACE_CONSOLIDATED_GRAPH_PATH y L_SPACE_DISTANCES_MATRIX_PATH estén definidas en .env")
         return
+
+    GRAPH_PATH = os.path.join(project_root, graph_rel_path)
+    OUTPUT_PATH_RAW = os.path.join(project_root, output_rel_path)
     if not os.path.exists(GRAPH_PATH):
         print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
         return
@@ -49,10 +52,22 @@ def calcular_matriz_distancias():
         print("Cálculo completado.")
 
         # --- 3. GUARDADO DE RESULTADOS ---
-        print(f"Guardando la matriz de distancias en {OUTPUT_FILE}...")
-        os.makedirs(OUTPUT_FILE, exist_ok=True)
-        with open(OUTPUT_FILE, 'w') as f:
-            json.dump(distancias, f, indent=4)
+        # Si la ruta apunta a un directorio o no tiene extensión, guardamos en grafos/l_space/ con nombre por defecto.
+        if os.path.isdir(OUTPUT_PATH_RAW) or not os.path.splitext(OUTPUT_PATH_RAW)[1]:
+            output_dir = OUTPUT_PATH_RAW
+            output_file = os.path.join(output_dir, "matriz_distancias_shimbel.json")
+        else:
+            output_dir = os.path.dirname(OUTPUT_PATH_RAW)
+            output_file = OUTPUT_PATH_RAW
+        if not output_dir:
+            # Fallback a la carpeta esperada grafos/l_space si algo viene vacío
+            output_dir = os.path.join(project_root, "grafos", "l_space")
+            output_file = os.path.join(output_dir, "matriz_distancias_shimbel.json")
+
+        print(f"Guardando la matriz de distancias en {output_file}...")
+        os.makedirs(output_dir, exist_ok=True)
+        with open(output_file, 'w', encoding='utf-8') as f:
+            json.dump(distancias, f, indent=4, ensure_ascii=False)
         
         print("\n--- ANÁLISIS DE DISTANCIAS (ÍNDICE DE SHIMBEL) ---")
         print(f"La matriz de distancias ha sido calculada y guardada exitosamente.")

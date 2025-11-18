@@ -23,40 +23,53 @@ def analizar_matriz_shimbel():
         print("Error: No se pudo encontrar el archivo .env en la raíz del proyecto.")
         sys.exit(1)
 
-    INPUT_FILE = os.path.join(project_root, os.getenv("L_SPACE_DISTANCES_MATRIX_PATH"))
-    GRAPH_PATH = os.path.join(project_root, os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH"))
+    dist_rel_path = os.getenv("L_SPACE_DISTANCES_MATRIX_PATH")
+    graph_rel_path = os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH")
 
-    if not os.getenv("L_SPACE_DISTANCES_MATRIX_PATH") or not os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH"):
+    if not dist_rel_path or not graph_rel_path:
         print("Error: Asegúrate de que las variables L_SPACE_DISTANCES_MATRIX_PATH y L_SPACE_CONSOLIDATED_GRAPH_PATH estén definidas en tu archivo .env")
         return
 
+    # Resolver rutas en disco: si es directorio o sin extensión, usar grafos/l_space/matriz_distancias_shimbel.json
+    dist_raw = os.path.join(project_root, dist_rel_path)
+    graph_path = os.path.join(project_root, graph_rel_path)
+
+    if os.path.isdir(dist_raw) or not os.path.splitext(dist_raw)[1]:
+        dist_dir = dist_raw
+        dist_file = os.path.join(dist_dir, "matriz_distancias_shimbel.json")
+    else:
+        dist_dir = os.path.dirname(dist_raw)
+        dist_file = dist_raw
+    if not dist_dir:
+        dist_dir = os.path.join(project_root, "grafos", "l_space")
+        dist_file = os.path.join(dist_dir, "matriz_distancias_shimbel.json")
+
     # Validación robusta de rutas
-    if not os.path.exists(INPUT_FILE):
-        print(f"Error: No se encontró el archivo de la matriz de distancias en la ruta especificada en .env: {INPUT_FILE}")
-        print("Verifica que L_SPACE_DISTANCES_MATRIX_PATH apunte a un ARCHIVO JSON (no a un directorio).")
-        print("Ejecuta 'distancias.py' primero, y luego ajusta la ruta si es necesario.")
+    if not os.path.exists(dist_file):
+        print(f"Error: No se encontró el archivo de la matriz de distancias en la ruta esperada: {dist_file}")
+        print("Ejecuta 'distancias.py' primero o ajusta L_SPACE_DISTANCES_MATRIX_PATH para que apunte a grafos/l_space/.")
         return
-    if os.path.isdir(INPUT_FILE):
-        print(f"Error: La ruta L_SPACE_DISTANCES_MATRIX_PATH apunta a un directorio, no a un archivo: {INPUT_FILE}")
-        print("Actualiza tu archivo .env para que L_SPACE_DISTANCES_MATRIX_PATH apunte al archivo JSON de la matriz de distancias (por ejemplo, 'grafos/l_space/matriz_distancias.json').")
+    if os.path.isdir(dist_file):
+        print(f"Error: La ruta L_SPACE_DISTANCES_MATRIX_PATH apunta a un directorio, no a un archivo: {dist_file}")
+        print("Actualiza tu archivo .env para que L_SPACE_DISTANCES_MATRIX_PATH apunte al archivo JSON de la matriz de distancias (por ejemplo, 'grafos/l_space/matriz_distancias_shimbel.json').")
         return
 
-    if not os.path.exists(GRAPH_PATH):
-        print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
+    if not os.path.exists(graph_path):
+        print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {graph_path}")
         print("Verifica que L_SPACE_CONSOLIDATED_GRAPH_PATH apunte al archivo del grafo (por ejemplo, un .pkl) y no a un directorio.")
         return
-    if os.path.isdir(GRAPH_PATH):
-        print(f"Error: La ruta L_SPACE_CONSOLIDATED_GRAPH_PATH apunta a un directorio, no a un archivo: {GRAPH_PATH}")
+    if os.path.isdir(graph_path):
+        print(f"Error: La ruta L_SPACE_CONSOLIDATED_GRAPH_PATH apunta a un directorio, no a un archivo: {graph_path}")
         print("Actualiza tu archivo .env para que L_SPACE_CONSOLIDATED_GRAPH_PATH apunte al archivo del grafo consolidado.")
         return
 
-    print(f"Cargando la matriz de distancias desde {INPUT_FILE}...")
-    with open(INPUT_FILE, 'r') as f:
+    print(f"Cargando la matriz de distancias desde {dist_file}...")
+    with open(dist_file, 'r', encoding='utf-8') as f:
         distancias = json.load(f)
     print("Matriz cargada.")
 
-    print(f"Cargando el grafo para obtener atributos de nodos desde {GRAPH_PATH}...")
-    with open(GRAPH_PATH, "rb") as f:
+    print(f"Cargando el grafo para obtener atributos de nodos desde {graph_path}...")
+    with open(graph_path, "rb") as f:
         G = pickle.load(f)
     print("Grafo cargado.")
 

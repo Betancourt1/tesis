@@ -59,7 +59,7 @@ def calcular_matriz_distancias_p_space():
 
     # --- 3. GUARDADO DE RESULTADOS ---
     # Interpretamos la ruta del .env de forma robusta:
-    # - Si es un directorio (como 'grafos/p_space'), guardamos
+    # - Si es un directorio (como 'grafos/p_space') o no tiene extensión, guardamos
     #   en ese directorio con un nombre de archivo por defecto.
     # - Si parece ser un archivo (tiene extensión), lo usamos tal cual.
     if os.path.isdir(OUTPUT_PATH_RAW) or not os.path.splitext(OUTPUT_PATH_RAW)[1]:
@@ -70,6 +70,9 @@ def calcular_matriz_distancias_p_space():
         # Parece ser un archivo
         output_dir = os.path.dirname(OUTPUT_PATH_RAW)
         output_file = OUTPUT_PATH_RAW
+    if not output_dir:
+        output_dir = os.path.join(project_root, "grafos", "p_space")
+        output_file = os.path.join(output_dir, "matriz_distancias_p_space.json")
 
     print(f"Guardando la matriz de distancias en {output_file}...")
     os.makedirs(output_dir, exist_ok=True)

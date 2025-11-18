@@ -41,7 +41,7 @@ def _calculate_efficiency_chunk(nodes_chunk, G, weight):
     return total_efficiency
 
 def calculate_parallel_directed_global_efficiency(G, weight='travel_time_minutes'):
-    """Calcula la eficiencia global para un grafo dirigido usando paralelización."""
+    """Calcula la eficiencia global exacta para un grafo dirigido usando paralelización."""
     n = G.number_of_nodes()
     if n < 2:
         return 0.0
@@ -131,15 +131,15 @@ def main():
         print("Error: No se pudo encontrar el archivo .env en la raíz del proyecto.")
         sys.exit(1)
     
-    GRAPH_PATH = os.path.join(project_root, os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH"))
-    OUTPUT_DIR = os.path.join(project_root, os.getenv("L_SPACE_ROBUSTNESS_OUTPUT_DIR"))
+    graph_rel = os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH")
+    robustness_rel = os.getenv("L_SPACE_ROBUSTNESS_OUTPUT_DIR") or "grafos/l_space/robustez"
 
-    if not os.getenv("L_SPACE_CONSOLIDATED_GRAPH_PATH"):
+    if not graph_rel:
         print(f"Error: La variable L_SPACE_CONSOLIDATED_GRAPH_PATH no está definida en .env")
         return
-    if not os.getenv("L_SPACE_ROBUSTNESS_OUTPUT_DIR"):
-        print("Error: La variable L_SPACE_ROBUSTNESS_OUTPUT_DIR no está definida en .env")
-        return
+
+    GRAPH_PATH = os.path.join(project_root, graph_rel)
+    OUTPUT_DIR = os.path.join(project_root, robustness_rel)
     if not os.path.exists(GRAPH_PATH):
         print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
         return
@@ -149,13 +149,11 @@ def main():
         
     G = load_graph(GRAPH_PATH)
     
-    num_nodes_to_remove = int(G.number_of_nodes() * 0.05)
+    num_nodes_to_remove = min(50, G.number_of_nodes())  # Limitar a los 50 nodos más altos en grado
 
+    # Atacamos removiendo nodos en orden descendente por grado ponderado
     scenarios = {
-        'aleatoria': np.random.permutation(list(G.nodes())),
-        'grado': get_node_order_by_centrality(G, 'weighted degree'),
-        'intermediacion': get_node_order_by_centrality(G, 'betweenness'),
-        'cercania': get_node_order_by_centrality(G, 'closeness')
+        'grado': get_node_order_by_centrality(G, 'weighted degree')
     }
 
     results_dfs = {}
@@ -192,7 +190,6 @@ def main():
     
     plt.tight_layout()
     plt.savefig(os.path.join(OUTPUT_DIR, 'grafico_robustez_comparativo.png'), dpi=300)
-
+    
 if __name__ == '__main__':
-    multiprocessing.freeze_support()
     main()
