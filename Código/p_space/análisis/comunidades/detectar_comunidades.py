@@ -5,6 +5,7 @@ from networkx.algorithms import community as nx_comm
 from dotenv import load_dotenv
 import pickle
 import sys
+from collections import Counter
 
 def detectar_comunidades_p_space():
     """
@@ -40,8 +41,17 @@ def detectar_comunidades_p_space():
     # El método de Louvain funciona mejor en grafos no dirigidos.
     # El grafo P-space ya es no dirigido.
     communities = nx_comm.louvain_communities(G, seed=123)
-    
-    print(f"Se detectaron {len(communities)} comunidades de rutas.")
+    modularidad = nx_comm.modularity(G, communities)
+    print(f"Se detectaron {len(communities)} comunidades de rutas. Moduralidad: {modularidad:.4f}")
+
+    # Resumen de tamaños
+    sizes = sorted([len(c) for c in communities], reverse=True)
+    total = G.number_of_nodes()
+    print("\n--- Tamaños de comunidades (top 5) ---")
+    for idx, size in enumerate(sizes[:5], start=1):
+        print(f"  {idx}) {size} rutas ({(size/total)*100:.2f}% del total)")
+    if len(sizes) > 5:
+        print(f"  ... tamaño mínimo: {sizes[-1]} rutas")
 
     # --- 3. AÑADIR ATRIBUTOS DE COMUNIDAD AL GRAFO ---
     print("Asignando ID de comunidad a cada ruta (nodo)...")

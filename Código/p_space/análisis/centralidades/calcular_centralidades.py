@@ -1,4 +1,3 @@
-
 import networkx as nx
 import os
 import pandas as pd
@@ -36,6 +35,35 @@ def calcular_centralidades_p_space():
     print(f"Cargando grafo P-space desde {GRAPH_PATH}...")
     with open(GRAPH_PATH, "rb") as f:
         G = pickle.load(f)
+    print("Grafo cargado.")
+
+    # --- 2. CÁLCULO DE CENTRALIDADES ---
+    print("Calculando centralidades... (esto puede tardar)")
+
+    # a) Centralidad de Grado (no dirigido)
+    degree = dict(G.degree())
+
+    # b) Centralidad de Intermediación
+    betweenness = nx.betweenness_centrality(G, normalized=True)
+
+    # c) Centralidad de Cercanía
+    closeness = nx.closeness_centrality(G)
+
+    # d) Centralidad de Eigenvector
+    try:
+        eigenvector = nx.eigenvector_centrality(G, max_iter=1000)
+    except nx.PowerIterationFailedConvergence:
+        print("La centralidad de Eigenvector no convergió. Se asignará 0 a todos los nodos.")
+        eigenvector = {node: 0.0 for node in G.nodes()}
+
+    print("Cálculos completados.")
+
+    # --- 3. AÑADIR ATRIBUTOS AL GRAFO ---
+    print("Añadiendo atributos de centralidad a los nodos del grafo...")
+    nx.set_node_attributes(G, degree, name='degree')
+    nx.set_node_attributes(G, betweenness, name='betweenness')
+    nx.set_node_attributes(G, closeness, name='closeness')
+    nx.set_node_attributes(G, eigenvector, name='eigenvector')
     print("Atributos añadidos correctamente.")
 
     # --- 4. GUARDAR EL GRAFO ENRIQUECIDO ---
@@ -44,3 +72,25 @@ def calcular_centralidades_p_space():
     with open(GRAPH_PATH, "wb") as f:
         pickle.dump(G, f, pickle.HIGHEST_PROTOCOL)
     print("¡Proceso completado!")
+
+    # --- 5. MOSTRAR TOP 10 DE CADA MÉTRICA ---
+    print("\n--- TOP 10 RUTAS POR CENTRALIDAD ---")
+    node_data = {node: data for node, data in G.nodes(data=True)}
+    df = pd.DataFrame.from_dict(node_data, orient='index')
+
+    def _ruta_repr(row, index):
+        rid = row.get('route_id') or row.get('route_short_name')
+        return f"Ruta {rid}" if rid is not None else f"Nodo {index}"
+
+    for metrica in ['degree', 'betweenness', 'closeness', 'eigenvector']:
+        if metrica in df.columns:
+            print(f"\n--- Top 10 por: {metrica} ---")
+            top_10 = df.nlargest(10, metrica)
+            for index, row in top_10.iterrows():
+                print(f"  - {_ruta_repr(row, index)}: {row[metrica]:.4f}")
+        else:
+            print(f"\n--- Métrica '{metrica}' no encontrada en el grafo ---")
+
+
+if __name__ == "__main__":
+    calcular_centralidades_p_space()

@@ -108,7 +108,7 @@ Este capítulo presenta los resultados de aplicar un conjunto de análisis estru
     \subsubsection{Resultados del Análisis de Robustez}
     Los resultados se muestran en la Figura \ref{fig:robustez_l_space}.
 
-    \begin{figure}[h!]
+    \begin{figure}[H!]
         \centering
         \includegraphics[width=\textwidth]{../../grafos/l_space/robustez/grafico_robustez_comparativo.png}
         \caption{Impacto en el LCC y la Eficiencia Global del L-espacio al eliminar los 50 nodos de mayor grado ponderado.}
@@ -116,7 +116,7 @@ Este capítulo presenta los resultados de aplicar un conjunto de análisis estru
     \end{figure}
 
     \subsubsection{Impacto en la Conectividad (LCC)}
-    Después de eliminar los 50 nodos de mayor grado, el LCC conserva el \textbf{97.45\%} de sus nodos (ver \texttt{grafos/l_space/robustez/robustez\_ataque\_grado.csv}). Esto indica que la red física mantiene la mayoría de su conectividad, aunque se generan pequeñas pérdidas de cobertura periférica.
+    Después de eliminar los 50 nodos de mayor grado, el LCC conserva el \textbf{97.45\%} de sus nodos. Esto indica que la red física mantiene la mayoría de su conectividad, aunque se generan pequeñas pérdidas de cobertura periférica.
 
     \subsubsection{Impacto en la Eficiencia Global}
     La eficiencia global cae al \textbf{81.5\%} de su valor original tras la eliminación de esos 50 nodos. Aunque la red sigue conectada, los caminos disponibles son menos directos y los tiempos de viaje promedio se alargan casi un 19\%, lo que evidencia la dependencia operativa de los hubs de alto grado.
