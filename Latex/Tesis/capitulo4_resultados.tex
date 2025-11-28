@@ -9,30 +9,30 @@
         En esta sección se presentan los resultados del análisis aplicado al grafo L-espacio, que modela la contigüidad física de la red de paradas y rutas.
 
         \subsection{Métricas globales del L-espacio}
-        El primer paso para comprender la red es calcular un conjunto de métricas a nivel de grafo que describan sus características fundamentales de tamaño, conexión y eficiencia. Para ello, se utilizó la librería \texttt{NetworkX} en Python para ejecutar los análisis sobre el grafo consolidado.
+        El primer objeto de nuestro análisis son las paradas y estaciones del sistema de transporte público. En concreto, nos interesa saber cómo de bien conectadas están con el resto de la infraestructura, cómo de accesibles son en términos de distancia y cómo se distribuye la infraestructura en el espacio.
 
         \subsubsection{Conectividad y Estructura General}
             Las métricas iniciales revelan una visión panorámica de la red:
             \begin{itemize}
                 \item \textbf{Tamaño de la Red:} El grafo consolidado consta de \textbf{4,203 nodos} (supernodos que agrupan paradas) y \textbf{8,591 aristas} (conexiones directas por una ruta).
-                \item \textbf{Densidad del Grafo:} La densidad es de \textbf{0.000486}, un valor extremadamente bajo. Esto es característico de las redes de transporte, que son grafos dispersos donde los nodos solo se conectan con unos pocos vecinos, en contraste con redes sociales o biológicas más densas.
+		\item \textbf{Densidad del Grafo:} La densidad es de \textbf{0.000486}, un valor esperado. Esto es así porque en el grafo que estamos estudiando, dos nodos solamente están conectados si sus estaciones correspondientes están conectadas por una ruta que vaya directamente de uno a otro. Es decir, cada nodo tiene por lo general dos conexiones. Es posible que un supernodo tenga más conexiones, pues aglomera varias paradas, pero el número de estas conexiones está acotado por el número de paradas que aglomera; en el peor de los casos, un supernodo tiene dos conexiones por cada ruta que lo atraviesa.
                 \item \textbf{Conectividad:} El análisis de componentes conectados arrojó un resultado clave: la red está fragmentada en \textbf{2 componentes}. Uno de ellos es masivo, conteniendo 4,198 nodos (el 99.8\% del total), mientras que el segundo es un fragmento aislado de apenas 5 nodos. Esto sugiere que, en la práctica, la red funciona casi como un todo unificado, pero existe una pequeña \textit{isla} de paradas sin conexión con el resto del sistema.
-                \item \textbf{Coeficiente de Clustering Global:} La transitividad de la red es de \textbf{0.1088}. Este valor, cercano a cero, indica una baja tendencia a la formación de clústeres locales. En otras palabras, es poco probable que dos paradas conectadas a una tercera estén también conectadas entre sí. Esto sugiere una topología de red más arbórea o con forma de estrella (\textit{hub-and-spoke}) que una estructura de malla densa, lo cual es típico en sistemas que conectan una periferia amplia con corredores centrales.
+                \item \textbf{Coeficiente de Clustering Global:} La transitividad de la red es de \textbf{0.1088}. Este valor, cercano a cero, indica una baja tendencia a la formación de clústeres locales. En otras palabras, es poco probable que dos paradas conectadas a una tercera estén también conectadas entre sí. Esto sugiere una topología de red más arbórea o con forma de estrella (\textit{hub-and-spoke}) que una estructura de malla densa, lo cual puede indicar que la red se centra en conectar zonas periféricas con otras más centrales. 
             \end{itemize}
 
         \subsubsection{Eficiencia y Tiempos de Viaje}
-            Este análisis se centra en qué tan eficientes son los trayectos dentro de la red:
+            Además de las propiedades vistas antes, nos interesa saber qué tan alejadas están entre sí cualesquiera dos paradas o estaciones. Esto puede responderse fijándose en varias métricas que vemos a continuación:
             \begin{itemize}
-                \item \textbf{Conectividad Fuerte:} Un hallazgo importante es que el grafo principal no es \textit{fuertemente conectado}. Esto significa que existen pares de nodos (A, B) para los cuales es posible viajar de A a B, pero no hay una ruta de regreso de B a A. Este fenómeno es común en sistemas de autobuses debido a la existencia de calles de un solo sentido o circuitos de ruta.
-                \item \textbf{Diámetro de la Red:} El diámetro, medido en el componente principal, es de \textbf{77 saltos}. Representa el número máximo de supernodos que se deben atravesar en el peor de los casos para conectar dos puntos de la red. Un diámetro tan grande es indicativo de una red geográficamente muy extendida.
+                \item \textbf{Conectividad Fuerte:} Un detalle importante es que el grafo principal no es \textit{fuertemente conectado}. Esto significa que existen pares de nodos (A, B) para los cuales es posible viajar de A a B, pero no hay una ruta de regreso de B a A. Este fenómeno es común en sistemas de autobuses debido a la existencia de calles de un solo sentido o circuitos de ruta.
+                \item \textbf{Diámetro de la Red:} El diámetro, medido en el componente principal, es de \textbf{77 saltos}. Representa el número máximo de supernodos que se deben atravesar en el peor de los casos para conectar dos puntos de la red. Algo que nos indica esta cifra es que el sistema de transporte público abarca una zona extensa de territorio, lo que por otro lado sabemos porque conocemos la extensión de la Zona Metropolitana de Guadalajara.
                 \item \textbf{Índice de Desvío Promedio (Detour Index):} Se obtuvo un valor de \textbf{1.13}. Un valor de 1 representa un viaje en línea recta; este índice indica que, en promedio, los viajes son 13\% más largos que la distancia directa, lo que refleja rutas relativamente directas pero con margen para mejorar conexiones.
             \end{itemize}
 
         \subsubsection{Accesibilidad y Cobertura de la Red (Matriz de Shimbel)}
-            El análisis de la matriz de distancias de Shimbel, que contiene los tiempos de viaje más cortos entre todos los pares de nodos, permite evaluar la accesibilidad desde la perspectiva del usuario:
+            El análisis de la matriz de distancias de Shimbel, que contiene los tiempos de viaje más cortos entre todos los pares de nodos, permite evaluar la accesibilidad desde la perspectiva del usuario en términos de tiempo de viaje:
             \begin{itemize}
-                \item \textbf{Nodos más y menos accesibles:} Se identificó una brecha extrema en la accesibilidad. Los \textbf{nodos mejor conectados} promedian entre \textbf{0.7 y 1.3 minutos} al resto de la red (corredores centrales como Calzada del Ejército). En contraste, los \textbf{nodos peor conectados}, situados en la periferia (Tesistán, aeropuerto, norponiente), promedian entre \textbf{94 y 157 minutos}.
-                \item \textbf{Análisis de Cobertura (Reachability):} Se calculó el porcentaje de la red accesible desde una parada promedio en distintos umbrales de tiempo:
+                \item \textbf{Nodos más y menos accesibles:} Se identificó una brecha extrema en la accesibilidad. Los \textbf{nodos mejor conectados} promedian entre \textbf{0.7 y 1.3 minutos} al resto de la red. En contraste, los \textbf{nodos peor conectados}, situados en la periferia (Tesistán, aeropuerto, norponiente), promedian entre \textbf{94 y 157 minutos}.
+                \item \textbf{Análisis de Cobertura:} Se calculó el porcentaje de la red accesible desde una parada promedio en distintos umbrales de tiempo:
                 \begin{itemize}
                     \item \textbf{15 minutos:} Se alcanza solo el 6.5\% de la red.
                     \item \textbf{30 minutos:} Se alcanza el 33.1\% de la red.
@@ -40,30 +40,37 @@
                     \item \textbf{60 minutos:} Se alcanza el 80.1\% de la red.
                 \end{itemize}
                 Estos datos muestran que el umbral de 45-60 minutos es crítico para acceder a la mayor parte de la ciudad, mientras que el acceso a oportunidades en viajes cortos (menos de 30 minutos) es considerablemente limitado.
-                \item \textbf{El Viaje más Largo:} El trayecto más largo posible dentro de la red toma \textbf{244 minutos (más de 4 horas)}, conectando una zona relativamente céntrica (cerca del Parque Agua Azul) con la periferia norponiente. Este caso extremo subraya la enorme escala de tiempo que implica atravesar la ciudad y la ineficiencia de ciertas conexiones específicas.
+                \item \textbf{El Viaje más Largo:} El trayecto más largo posible dentro de la red toma \textbf{244 minutos (más de 4 horas)}, conectando una zona relativamente céntrica con la periferia norponiente. Este caso extremo subraya la enorme escala de tiempo que implica atravesar la ciudad y la ineficiencia de ciertas conexiones específicas.
             \end{itemize}
 
-            En resumen, las métricas globales pintan el retrato de una red de transporte extensa y con rutas individuales eficientes, pero con debilidades estructurales en su conectividad (fragmentación y unidireccionalidad) y una profunda desigualdad en la accesibilidad entre zonas centrales y periféricas.
+	    En resumen, los indicadores nos dicen que el sistema de transporte público es extenso, bien distribuido en el espacio, aunque también desigual. La alta arboricidad con la que cuenta nos indica que las rutas están pensadas principalmente para conectar las zonas céntricas de los distintos municipios con sus respectivas periferias. Una consecuencia de esto es que muchos caminos tienen que pasar por estas zonas céntricas para poder acceder al resto de la red, algo que nos puede alertar de posibles cuellos de botella en el servicio, aglomeraciones y sobredemanda. Algo que conecta directamente con esto es el concepto de \textit{centralidad} introducido en el capítulo 1, este concepto es uno del que echaremos mano a continuación para evaluar si estos cuellos de botella existen y, de existir, dónde se encuentran.
 
         \subsection{Análisis de Centralidad en el L-espacio}
-            A diferencia de las métricas globales, el análisis de centralidad se enfoca en la importancia relativa de cada nodo dentro de la red. Un nodo puede ser "importante" por distintas razones: por ser un punto de alto tráfico, por actuar como un puente crítico, por su cercanía al resto del sistema o por su influencia en corredores clave. A continuación, se analizan cuatro tipos de centralidad, cada una revelando una faceta distinta de la estructura de la red. Los resultados fueron calculados para cada uno de los 4,203 nodos y añadidos como atributos al grafo en el archivo \texttt{transporte\_publico\_grafo\_enriquecido.gexf}.
+            A diferencia de las métricas globales, el análisis de centralidad se enfoca en la importancia relativa de cada nodo dentro de la red. Un nodo puede ser "importante" por distintas razones: por ser un punto de alto tráfico, por actuar como un puente crítico, por su cercanía al resto del sistema o por su influencia en corredores clave. A continuación, se analizan cuatro tipos de centralidad, cada una revelando una faceta distinta de la estructura de la red. Los resultados fueron calculados para cada uno de los 4,203 nodos.
 
-        \subsubsection{Centralidad de Grado Ponderado (Weighted Degree)}
+        \subsubsection{Centralidad de Grado Ponderado}
             Esta es la medida más directa de la actividad de un nodo. En lugar de solo contar las conexiones, se pondera cada una por el atributo \texttt{original\_edge\_count}, que representa el número de rutas reales que conforman esa arista consolidada. Así, el grado ponderado refleja el \textbf{volumen total de rutas} que atiende una parada.
             \begin{itemize}
-                \item \textbf{Hallazgos Clave:} Los nodos con mayor grado ponderado no se encuentran en el centro de la ciudad, sino en las \textbf{intersecciones viales más importantes}. Puntos como el cruce de Lázaro Cárdenas y Mariano Otero, o la zona de López Mateos y Las Águilas, emergen como los principales distribuidores de tráfico, donde converge físicamente el mayor número de líneas de autobús.
+                \item \textbf{Hallazgos Clave:} Los nodos con mayor grado ponderado no solamente se encuentran en el centro de la ciudad, sino en las \textbf{intersecciones viales más importantes}. Puntos como la Nueva Central Camionera, Estación Periférico Sur, o la zona de López Mateos y Las Águilas, emergen como los principales distribuidores de tráfico, donde converge físicamente el mayor número de líneas de autobús.
             \end{itemize}
 
-        \subsubsection{Centralidad de Intermediación (Betweenness Centrality)}
+        \subsubsection{Centralidad de Intermediación}
             Esta métrica identifica los nodos que con mayor frecuencia se encuentran en los caminos más cortos (en tiempo de viaje) entre otros pares de nodos. Son los \textbf{puentes y puntos de trasbordo más críticos} de la red. Para su cálculo, se utilizó el tiempo de viaje (\texttt{travel\_time\_minutes}) como peso, identificando así los nodos cruciales para las rutas más rápidas.
             \begin{itemize}
                 \item \textbf{Hallazgos Clave:} El \textbf{Centro Histórico} emerge como el corazón neurálgico para los trasbordos. Nodos situados en Av. 16 de Septiembre y sus alrededores obtuvieron las puntuaciones más altas. Aunque no manejan el mayor volumen de rutas (grado), son los puntos por los que es necesario pasar para conectar eficientemente distintas zonas de la ciudad, funcionando como las articulaciones principales del sistema.
             \end{itemize}
 
+            \begin{figure}[h!]
+                \centering
+                \includegraphics[width=\textwidth]{../../grafos/l_space/grafo_centralidades_betweness.png}
+                \caption{Grafo con centralidades: más grande es mayor grado y más verde significa mayor centralidad de intermediación.}
+                \label{fig:centralidad_b_l_space}
+            \end{figure}
+
         \subsubsection{Centralidad de Cercanía (Closeness Centrality)}
             Mide qué tan cerca está un nodo, en promedio, de todos los demás nodos alcanzables, usando el tiempo de viaje como distancia. Un nodo con alta centralidad de cercanía es aquel desde el cual se puede llegar \textbf{más rápidamente} al resto de la red.
             \begin{itemize}
-                \item \textbf{Hallazgos Clave:} Los resultados son contundentes: los nodos con la mayor centralidad de cercanía se concentran de manera casi exclusiva en el \textbf{hipercentro de la ciudad}. Esto confirma que, en términos de tiempo de viaje, el centro es el punto más accesible y el verdadero "kilómetro cero" de la red de transporte público, desde donde el tiempo promedio para alcanzar cualquier otro destino es el más bajo.
+                \item \textbf{Hallazgos Clave:} Los resultados son contundentes: los nodos con la mayor centralidad de cercanía se concentran de manera casi exclusiva en el \textbf{hipercentro de la ciudad}. Esto confirma que, en términos de tiempo de viaje, el centro es el punto más accesible y el verdadero "kilómetro cero" de la red de transporte público, desde donde el tiempo promedio para alcanzar cualquier otro destino es el más bajo. Algo a destacar es que la diferencia entre los distintos nodos con respecto a esta centralidad no es tan radical como en otras medidas.
             \end{itemize}
 
         \subsubsection{Centralidad de Eigenvector (Eigenvector Centrality)}
@@ -72,12 +79,19 @@
                 \item \textbf{Hallazgos Clave:} De manera sorprendente, esta métrica no destacó al centro ni a los grandes cruceros. En su lugar, reveló la existencia de un \textbf{corredor de alta influencia en Av. Mariano Otero}, al sur de Las Águilas. Los nodos en esta zona obtuvieron las puntuaciones más altas, indicando que no solo son importantes individualmente, sino que juntos forman la "columna vertebral" de un subsistema de nodos muy influyentes, conectando de manera robusta el sur y poniente de la ciudad.
             \- \end{itemize}
 
+            \begin{figure}[h!]
+                \centering
+                \includegraphics[width=\textwidth]{../../grafos/l_space/grafo_centralidades_closeness.png}
+                \caption{Grafo con centralidades: más grande es mayor grado de eigenvenctor y más verde significa mayor centralidad de cercanía.}
+                \label{fig:centralidad_c_l_space}
+            \end{figure}
+
             En síntesis, el análisis de centralidades descompone la "importancia" en roles especializados: el Centro Histórico es el núcleo de la \textbf{accesibilidad y los trasbordos} (Cercanía e Intermediación), las grandes avenidas son los centros de \textbf{volumen} (Grado), y corredores específicos como Mariano Otero funcionan como los \textbf{ejes de influencia} estructural (Eigenvector).
 
         \subsection{Detección de Comunidades en el L-espacio}
             El siguiente paso en el análisis es determinar si la red se agrupa en sub-redes o clústeres. Una comunidad en un grafo es un conjunto de nodos que están más densamente conectados entre sí que con el resto de la red. En el contexto del transporte público, estas comunidades suelen corresponder a zonas geográficas coherentes, corredores de alta frecuencia o subsistemas de rutas.
 
-            Para identificar estas estructuras, se utilizó el \textbf{método de Louvain}, un algoritmo ampliamente reconocido por su eficiencia y precisión en la detección de comunidades en grafos a gran escala. El algoritmo optimiza la \textit{modularidad} de la red, una métrica que cuantifica la calidad de una partición en comunidades. Se aplicó sobre una versión no dirigida del grafo, utilizando el atributo \texttt{original\_edge\_count} como peso para que las comunidades se formaran en torno a los flujos de rutas más significativos. Los resultados se guardaron en el archivo \texttt{transporte\_publico\_grafo\_comunidades.gexf}, asignando a cada nodo un atributo de pertenencia a una comunidad.
+            Para identificar estas estructuras, se utilizó el \textbf{método de Louvain}, un algoritmo ampliamente reconocido por su eficiencia y precisión en la detección de comunidades en grafos a gran escala. El algoritmo optimiza la \textit{modularidad} de la red, una métrica que cuantifica la calidad de una partición en comunidades. Se aplicó sobre una versión no dirigida del grafo, utilizando el atributo \texttt{original\_edge\_count} como peso para que las comunidades se formaran en torno a los flujos de rutas más significativos.
 
         \subsubsection{Resultados de la Detección}
             El análisis arrojó los siguientes resultados clave:
@@ -94,6 +108,13 @@
 
             En conclusión, la detección de comunidades revela la organización interna de la red de transporte. Muestra cómo el sistema se articula en subsistemas geográficos que corresponden en gran medida a la división municipal y a los grandes corredores viales del Área Metropolitana de Guadalajara. Esta granularidad es fundamental para entender los patrones de viaje a una escala intermedia, más allá del nivel de parada individual pero más específico que el de la red completa.
 
+            \begin{figure}[h!]
+                \centering
+                \includegraphics[width=\textwidth]{../../grafos/l_space/grafo.png}
+                \caption{Comunidades detectadas en el grafo L-espacio, coloreadas por modularidad y con el grosor de las aristas proporcional al número de rutas compartidas.}
+                \label{fig:comunidades_l_space}
+            \end{figure}
+
         \subsection{Análisis de Robustez del L-espacio}
             Una vez caracterizada la estructura estática de la red, el siguiente paso es evaluar su resiliencia. Un sistema de transporte robusto es aquel que puede mantener su funcionalidad principal —conectar personas y lugares de manera eficiente— incluso cuando algunas de sus partes fallan. Para medir esta robustez, se simularon ataques dirigidos que eliminan nodos críticos y se observó el impacto en la conectividad y eficiencia de la red.
 
@@ -106,9 +127,9 @@
             El número de nodos a eliminar se fijó en 50 para tener una condición de parada clara y concentrarse en el impacto de los hubs más importantes.
 
         \subsubsection{Resultados del Análisis de Robustez}
-            Los resultados se muestran en la Figura \ref{fig:robustez_l_space}.
+            Los resultados se muestran en la Figura~\ref{fig:robustez_l_space}.
 
-            \begin{figure}[H!]
+            \begin{figure}[h!]
                 \centering
                 \includegraphics[width=\textwidth]{../../grafos/l_space/robustez/grafico_robustez_comparativo.png}
                 \caption{Impacto en el LCC y la Eficiencia Global del L-espacio al eliminar los 50 nodos de mayor grado ponderado.}
@@ -121,6 +142,10 @@
         \subsubsection{Impacto en la Eficiencia Global}
             La eficiencia global cae al \textbf{81.5\%} de su valor original tras la eliminación de esos 50 nodos. Aunque la red sigue conectada, los caminos disponibles son menos directos y los tiempos de viaje promedio se alargan casi un 19\%, lo que evidencia la dependencia operativa de los hubs de alto grado.
 
+	\subsection{Conclusiones sobre el $L$-espacio}
+	    Con el análisis realizado podemos concluir algunas cosas interesantes de la infraestructura que da forma al sistema de transporte público en la Zona Metropolitana de Guadalajara. En primer lugar, tiene una estructura arbórea que nos indica que está en gran medida enfocada en conectar zonas periféricas con otras más centralizadas. En segundo lugar, las zonas con más centralidad de intermediación no necesariamente están en esas zonas céntricas, sino en nodos importantes de intersección como estaciones del tren ligero o centros comerciales. Con todo esto, es una red altamente resiliente a la desaparición de nodos críticos y su eficiencia espacial es casi óptima, lo que nos indica que tiene una distribución espacial muy favorable en la zona de cobertura. 
+	    Ahora bien, este análisis no responde todas las preguntas que pudiéramos hacer respecto a cómo es el servicio desde la perspectiva de un usuario. Por ejemplo, la red antes vista no nos permite decir cuántos transbordos son necesarios en los caminos que evaluamos. Para esto es necesaria la construcción del grafo correspondiente al $P$-espacio, aspecto que cubrimos el capítulo pasado y que analizaremos a continuación.
+
     \section{Análisis del P-espacio: La Red de Servicio}
         A continuación, se presentan los resultados del análisis aplicado al grafo P-espacio. Este modelo, donde los nodos se conectan si comparten una ruta, ofrece una perspectiva complementaria centrada en la experiencia de viaje del usuario sin transbordos.
 
@@ -132,7 +157,7 @@
                 \item \textbf{Clustering:} Coeficiente de clustering global \textbf{0.4085}, lo que evidencia alta redundancia de rutas que comparten paradas.
                 \item \textbf{Eficiencia y caminos:} Diámetro \textbf{6} trasbordos, longitud promedio de camino \textbf{2.41} trasbordos y eficiencia global \textbf{0.4476} en el componente principal.
             \end{itemize}
-            Interpretación: la densidad, casi dos órdenes de magnitud mayor que en el L-espacio, indica que la red de servicio ofrece muchas alternativas de trasbordo entre rutas. El clustering elevado refleja cliques de rutas en las mismas paradas (redundancia operativa), mientras que un diámetro de sólo 6 trasbordos y camino medio de 2.41 muestran que cualquier ruta está a pocos pasos de otra, sugiriendo buena conectividad percibida por el usuario, aunque con riesgo de saturación en nodos altamente conectados.
+	    Podemos ver que la densidad, casi dos órdenes de magnitud mayor que en el L-espacio, indica que la red de servicio ofrece muchas alternativas de trasbordo entre rutas. El clustering elevado refleja cliques de rutas en las mismas paradas (redundancia operativa), mientras que un diámetro de sólo 6 trasbordos y camino medio de 2.41 muestran que cualquier ruta está a pocos pasos de otra, sugiriendo buena conectividad percibida por el usuario, aunque con riesgo de saturación en nodos altamente conectados. Algo interesante a notar es que un díametro de 6 trasbordos implica que nuestra red es de \textit{mundo pequeño}, tal como lo predice la literatura para redes de este tipo.
 
         \subsection{Análisis de Centralidad en el P-espacio}
             Se calcularon y almacenaron las centralidades (grado, intermediación, cercanía y eigenvector) en \texttt{grafos/p\_space/grafo\_p\_space\_correcto.gpickle}. Las rutas con mayor grado son aquellas que comparten numerosas paradas con otras líneas, actuando como conectores de múltiples recorridos.
@@ -146,8 +171,22 @@
             \end{itemize}
             En conjunto, la centralidad revela una red de servicio fuertemente articulada alrededor del centro histórico y varios corredores troncales, con abundante redundancia de rutas que permite mantener alta cercanía y conectividad incluso al remover nodos aislados.
 
+            \begin{figure}[h!]
+                \centering
+                \includegraphics[width=\textwidth]{../../grafos/p_space/grafo_centralidades_closeness.png}
+                \caption{Grafo con centralidades: más grande es mayor grado de eigenvenctor y más verde significa mayor centralidad de cercanía.}
+                \label{fig:centralidad_c_p_space}
+            \end{figure}
+
+            \begin{figure}[h!]
+                \centering
+                \includegraphics[width=\textwidth]{../../grafos/p_space/grafo_centralidades_closeness.png}
+                \caption{Grafo con centralidades: más grande es mayor grado de eigenvenctor y más verde significa mayor centralidad de cercanía.}
+                \label{fig:centralidad_c_p_space}
+            \end{figure}
+
         \subsection{Detección de Comunidades en el P-espacio}
-            Se detectaron \textbf{11 comunidades} de rutas mediante Louvain, agrupando líneas que comparten muchas paradas (modularidad $0.54$). El atributo \texttt{community} en el archivo GEXF permite visualizarlas en Gephi. Las cinco mayores concentran el 67\% de los supernodos del servicio:
+            Se detectaron \textbf{11 comunidades} de rutas mediante Louvain, agrupando líneas que comparten muchas paradas (modularidad $0.54$). Las cinco mayores concentran el 67\% de los supernodos del servicio:
             \begin{itemize}
                 \item \textbf{Comunidad 5} (\textasciitilde\!18.2\%): centroide $(20.5748,-103.3608)$, domina el sur-poniente.
                 \item \textbf{Comunidad 1} (\textasciitilde\!15.2\%): centroide $(20.6887,-103.2992)$, eje nororiente.
@@ -156,6 +195,13 @@
                 \item \textbf{Comunidad 6} (\textasciitilde\!10.3\%): centroide $(20.6573,-103.2995)$, corredor central-oriente.
             \end{itemize}
             El resto incluye clusters poniente (Comunidad 4, 9) y núcleos menores (Communidades 0, 3, 7), mientras que sólo una comunidad es pequeña (\textless=5 nodos), reflejando alta conectividad transversal del servicio.
+
+            \begin{figure}[h!]
+                \centering
+                \includegraphics[width=\textwidth]{../../grafos/p_space/grafo.png}
+                \caption{Comunidades detectadas en el grafo P-espacio, coloreadas por modularidad y con aristas ponderadas por trasbordos.}
+                \label{fig:comunidades_p_space}
+            \end{figure}
 
         \subsection{Análisis de Robustez del P-espacio}
             Se aplicó el mismo esquema de ataque dirigido al P-espacio: eliminación secuencial de las \textbf{50 rutas (nodos) con mayor grado}. Tras cada eliminación se midieron el tamaño relativo del LCC y la eficiencia global no dirigida.
@@ -176,6 +222,9 @@
 
         \subsection{Discusión Comparativa}
             El ataque dirigido por grado es significativamente más dañino en el L-espacio que en el P-espacio. Mientras que en la infraestructura física la eficiencia cae cerca de 19\% al perder 50 hubs, en la red de servicio la pérdida es de apenas 2.6\%. Esto confirma que la conectividad basada en compartir rutas es más resiliente por la existencia de múltiples combinaciones de servicio entre las paradas, aun si la infraestructura depende fuertemente de unos pocos nodos de alta interconexión.
+	
+	\subsection{Conclusiones sobre el $P$-espacio}
+	    Como esperábamos, en este modelo de la red de transporte público tenemos una perspectiva diferente del modelo anterior. En esta ocasión podemos constatar que, en lo general, la red de transporte público es densa y bien conectada, sindo incluso de mundo pequeño. Por otro lado, este modelo nos deja claro que, de cara al usuario, las zonas céntricas son aún más importantes que desde la perspectiva de la pura infraestructura. Asimismo, nos muestra que es una red resiliente a cortes de servicio, algo importante pues indica que dispone de una alta redundancia, permitiendo que los usuarios siempre dispongan de más de una alternativa para llegar a sus destinos.
 
 
     \section{Parámetros, Software y Reproducibilidad}
