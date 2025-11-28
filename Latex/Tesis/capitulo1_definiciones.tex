@@ -109,8 +109,8 @@
             \end{center}
         \end{ejemplo}
 
-        \begin{definicion}[Grafo dirigido (dígrafo)]
-            Un grafo es \textbf{dirigido} (o \emph{dígrafo}) si cada arista tiene una dirección; es decir, $(u, v) \in E$ no implica que $(v, u) \in E$ (aunque puede ocurrir). En este caso, diremos que $u$ se dirige a $v$.
+        \begin{definicion}[Grafo dirigido (grafo dirigido)]
+            Un grafo es \textbf{dirigido} (o \emph{grafo dirigido}) si cada arista tiene una dirección; es decir, $(u, v) \in E$ no implica que $(v, u) \in E$ (aunque puede ocurrir). En este caso, diremos que $u$ se dirige a $v$.
         \end{definicion}
 
         \begin{ejemplo}
@@ -182,7 +182,7 @@
         \end{definicion}
 
         \begin{observacion}
-            Cuando el contexto es dirigido, se habla de \emph{dígrafo simple}: no se permiten lazos y, para cada par ordenado $(u,v)$ con $u\neq v$, hay a lo sumo un arco $(u,v)$.
+            Cuando el contexto es dirigido, se habla de \emph{grafo dirigido simple}: no se permiten lazos y, para cada par ordenado $(u,v)$ con $u\neq v$, hay a lo sumo un arco $(u,v)$.
         \end{observacion}
 
     \section{Propiedades fundamentales de los grafos}
@@ -290,6 +290,24 @@
             Obsérvese que $H$ se obtiene de $G$ al eliminar el nodo $D$ y las aristas asociadas a $D$.
         \end{ejemplo}
 
+        \begin{definicion}[Clique]
+            Sea $G=(V,E)$ un grafo simple no dirigido. Llamamos \textbf{clique} a un conjunto no vacío $S\subseteq V$ tal que todo par de vértices distintos en $S$ es adyacente; equivalentemente, el subgrafo inducido $G[S]$ es un grafo completo $K_{|S|}$. Cuando $|S|=k$, decimos que $S$ es una \emph{$k$-clique}.
+        \end{definicion}
+
+        \begin{definicion}[Maximal y máxima clique; número de clique]
+            Decimos que una clique $S$ es \textbf{maximal} si no está propiamente contenida en ninguna otra clique. Decimos que es \textbf{máxima} si su cardinalidad es la mayor posible entre todas las cliques de $G$. Al tamaño de una clique máxima lo llamamos \textbf{número de clique} de $G$ y lo denotamos por $\omega(G)$.
+        \end{definicion}
+
+        \begin{observacion}[Caso dirigido]
+            Si $G$ es dirigido, por defecto entendemos las cliques respecto del subyacente no dirigido de $G$. Alternativamente pueden usarse dos variantes:
+            \begin{itemize}
+                \item \emph{Clique fuerte (bidirigida):} $S\subseteq V$ tal que, para todo par $u\ne v$ en $S$, se verifican ambos arcos $(u,v)$ y $(v,u)\in E$.
+                \item \emph{Clique débil (orientada):} $S\subseteq V$ tal que, para todo par $u\ne v$ en $S$, existe al menos uno de los arcos $(u,v)$ o $(v,u)$.
+            \end{itemize}
+            En ambos casos podemos definir cliques maximales/máximas y el análogo de $\omega(G)$ restringido a la variante elegida.
+        \end{observacion}
+
+
         La noción de subgrafo es importante en aquellos escenarios en los que no nos interesa, o no nos es posible, estudiar un grafo completo. Es claro que un subgrafo tiene todas las propiedades y tiene todas las propiedades que enunciamos antes para cualquier grafo. Asimismo, hay algunos subgrafos que nos pueden llegar a interesar especialmente por su naturaleza estructural con respecto al resto del grafo al que pertenecen, tal es el caso de los \textit{caminos}, \textit{ciclos} y \textit{árboles}, los cuales definimos a continuación.
 
          \subsubsection{Recorridos, caminos y ciclos}
@@ -302,7 +320,7 @@
                 tal que, para cada $i=1,\dots,k$, el borde $e_i$ une $v_{i-1}$ con $v_i$:
                 \begin{itemize}
                   \item en grafos no dirigidos, $e_i=\{v_{i-1},v_i\}\in E$;
-                  \item en dígrafos, $e_i=(v_{i-1},v_i)\in E$.
+                  \item en grafos dirigidos, $e_i=(v_{i-1},v_i)\in E$.
                 \end{itemize}
                 Permitimos repeticiones de vértices y aristas. La \emph{longitud} de $W$ es $k$ (número de aristas). Si $G$ es ponderado con $\ell:E\to[0,\infty)$, el \emph{peso} de $W$ es $\sum_{i=1}^k \ell(e_i)$. Decimos que $W$ es \emph{cerrado} si $v_0=v_k$ y \emph{abierto} en caso contrario.
             \end{definicion}
@@ -323,7 +341,7 @@
             \end{definicion}
 
             \begin{ejemplo}[Camino como subgrafo]
-                Sea $G$ el siguiente dígrafo (a la izquierda), y sea $P$ el subgrafo resaltado, que constituye un camino de longitud $3$ en $G$.
+                Sea $G$ el siguiente grafo dirigido (a la izquierda), y sea $P$ el subgrafo resaltado, que constituye un camino de longitud $3$ en $G$.
                 A la derecha, se muestra $P$ como subgrafo.
 
                 \begin{center}
@@ -390,7 +408,7 @@
                     \end{tikzpicture}
                 \end{center}
 
-            \captionof{figure}{Un camino dirigido $P = (v_1, v_6, v_3, v_5)$ en el dígrafo $G$ y su representación como subgrafo.}
+            \captionof{figure}{Un camino dirigido $P = (v_1, v_6, v_3, v_5)$ en el grafo dirigido $G$ y su representación como subgrafo.}
             \end{ejemplo}
 
             \begin{definicion}[Ciclo]
@@ -556,8 +574,8 @@
             \end{definicion}
 
             \begin{observacion}[Caso dirigido y arborescencias]
-                En dígrafos se mantiene la definición anterior vía el subyacente no dirigido.
-                Cuando el dígrafo es un árbol enraizado (arborescencia):
+                En grafos dirigidos se mantiene la definición anterior vía el subyacente no dirigido.
+                Cuando el grafo dirigido es un árbol enraizado (arborescencia):
                 \begin{itemize}
                   \item en una arborescencia \emph{de salida} con raíz $r$, se llama hojas a los $v\neq r$ con $\deg^{+}(v)=0$;
                   \item en una arborescencia \emph{de entrada} con raíz $r$, se llama hojas a los $v\neq r$ con $\deg^{-}(v)=0$.
@@ -618,7 +636,7 @@
             \end{definicion}
 
             \begin{observacion}
-                Para dígrafos, el bosque/árbol generador se entiende sobre el \emph{grafo subyacente no dirigido} salvo que se especifique orientación (arborescencias). En el conteo ciclomático y en el espacio de ciclos se usa esta versión no dirigida.
+                Para grafos dirigidos, el bosque/árbol generador se entiende sobre el \emph{grafo subyacente no dirigido} salvo que se especifique orientación (arborescencias). En el conteo ciclomático y en el espacio de ciclos se usa esta versión no dirigida.
             \end{observacion}
 
         \section{Propiedades estructurales}
@@ -704,6 +722,45 @@
 
             \begin{definicion}[Número de ciclos independientes]
                 El \textbf{número de ciclos independientes} de un grafo se define como $\mu = |E| - |V| + p$, donde $|E|$ es el número de aristas, $|V|$ es el número de nodos y $p$ el número de componentes conexas.
+            \end{definicion}
+
+            \begin{definicion}[Coeficiente de agrupamiento local (no dirigido)]
+                Sea $G=(V,E)$ un grafo simple no dirigido y sea $v\in V$ con grado $\deg(v)\ge 2$. Denotamos por $T(v)$ el número de triángulos que contienen a $v$ y por 
+                \[
+                \binom{\deg(v)}{2}=\frac{\deg(v)\,(\deg(v)-1)}{2}
+                \]
+                el número de pares no ordenados de vecinos de $v$. Definimos el \textbf{coeficiente de agrupamiento local} de $v$ como
+                \[
+                C(v)\;=\;\frac{2\,T(v)}{\deg(v)\,(\deg(v)-1)}\;=\;\frac{\#\{\text{aristas entre vecinos de }v\}}{\binom{\deg(v)}{2}}.
+                \]
+                Si $\deg(v)<2$, fijamos $C(v)=0$ por convención.
+            \end{definicion}
+            
+            \begin{definicion}[Coeficiente de agrupamiento global (transitividad)]
+                En un grafo simple no dirigido, llamamos \emph{triple conectado} a una terna $(x,y,z)$ de vértices distintos tal que $x$ y $z$ son vecinos de $y$. Denotamos por $N_\triangle$ el número de triángulos del grafo y por $N_\wedge$ el número de triples conectados. Definimos la \textbf{transitividad} (coeficiente de agrupamiento global) como
+                \[
+                C_{\mathrm{glob}}\;=\;\frac{3\,N_\triangle}{N_\wedge}\,,
+                \]
+                donde el factor $3$ compensa que cada triángulo contiene exactamente tres triples conectados.
+            \end{definicion}
+            
+            \begin{definicion}[Coeficiente de agrupamiento promedio]
+                Definimos el \textbf{coeficiente de agrupamiento promedio} como la media de los coeficientes locales:
+                \[
+                \overline{C}\;=\;\frac{1}{|V|}\sum_{v\in V} C(v).
+                \]
+            \end{definicion}
+            
+            \begin{observacion}[Relación entre $C_{\mathrm{glob}}$ y $\overline{C}$]
+                En general $C_{\mathrm{glob}}\neq \overline{C}$. La primera pondera por el número de triples conectados (da más peso a vértices de alto grado); la segunda es un promedio aritmético uniforme.
+            \end{observacion}
+            
+            \begin{definicion}[Coeficiente de agrupamiento en grafos dirigidos (simetrización de Fagiolo)]
+                Sea $G$ un grafo dirigido simple con matriz de adyacencia $A=(a_{ij})$, grado de entrada $k_i^{\mathrm{in}}=\sum_j a_{ji}$, grado de salida $k_i^{\mathrm{out}}=\sum_j a_{ij}$ y grado recíproco $k_i^{\leftrightarrow}=\sum_j a_{ij}a_{ji}$. Sea $S=A+A^\top$ la adyacencia simetrizada y $k_i=k_i^{\mathrm{in}}+k_i^{\mathrm{out}}=\sum_j s_{ij}$. Definimos el \textbf{coeficiente de agrupamiento dirigido} de $i$ por
+                \[
+                C^{\rightarrow}(i)\;=\;\frac{\big(S^3\big)_{ii}}{2\big(k_i(k_i-1)-2\,k_i^{\leftrightarrow}\big)}\,,
+                \]
+                con la convención $C^{\rightarrow}(i)=0$ si el denominador es nulo. Este coeficiente cuenta todas las triadas cerradas posibles alrededor de $i$ (incluyendo patrones con reciprocidad) y se reduce al caso no dirigido cuando $A$ es simétrica.
             \end{definicion}
 
             % ----------------------------------------------------------
@@ -921,14 +978,14 @@
 
         % --- Operadores y brecha espectral en redes dirigidas ---
         \begin{definicion}[Operador de transición]
-            Sea $G$ un dígrafo finito, sin nodos aislados. Su \emph{operador de transición} es la matriz fila-estocástica $P=(p_{ij})_{i,j\in V}$ dada por
+            Sea $G$ un grafo dirigido finito, sin nodos aislados. Su \emph{operador de transición} es la matriz fila-estocástica $P=(p_{ij})_{i,j\in V}$ dada por
             \[
             p_{ij}=\frac{a_{ij}}{\sum_k a_{ik}},
             \]
             donde $A=(a_{ij})$ es la matriz de adyacencia (o una versión ponderada coherente con $\ell$).
         \end{definicion}
 
-        \begin{definicion}[Brecha espectral para dígrafos]
+        \begin{definicion}[Brecha espectral para grafos dirigidos]
             Si $P$ es irreducible y aperiódica, entonces su radio espectral es $1$ (Perron–Frobenius) y todos los autovalores satisfacen $|\lambda_1|=1>|\lambda_2|\ge\cdots$. Definimos la \textbf{brecha espectral} como
             \[
             \Delta(P)=1-\max_{i\ge 2}|\lambda_i(P)|.
@@ -957,7 +1014,7 @@
             \end{definicion}
 
             \begin{ejemplo}[Centralidad de cercanía de $v=C$]
-                Consideremos el siguiente dígrafo y calculemos $C_c(C)$.
+                Consideremos el siguiente grafo dirigido y calculemos $C_c(C)$.
 
                 \begin{center}
                     \begin{tikzpicture}[scale=1.1]
@@ -1013,7 +1070,7 @@
             \end{definicion}
 
             \begin{ejemplo}[Centralidad de intermediación de $v=B$]
-                Consideremos el siguiente dígrafo y calculemos $C_b(B)$.
+                Consideremos el siguiente grafo dirigido y calculemos $C_b(B)$.
 
                 \begin{center}
                     \begin{tikzpicture}[scale=1.05]
@@ -1077,7 +1134,7 @@
             \end{definicion}
 
             \begin{ejemplo}[Eccentricidad de $v=C$]
-                Consideremos el siguiente dígrafo y calculemos $e(C)=\max_{u\in V} d(u,C)$.
+                Consideremos el siguiente grafo dirigido y calculemos $e(C)=\max_{u\in V} d(u,C)$.
 
                 \begin{center}
                     \begin{tikzpicture}[scale=1.1]
@@ -1126,7 +1183,7 @@
                 \[
                 E(G)\;=\;\frac{1}{N(N-1)}\sum_{\substack{i,j\in V\\ i\neq j}}\frac{1}{d(i,j)},
                 \]
-                con la convención $\frac{1}{+\infty}=0$. En dígrafos la suma es sobre pares \emph{ordenados}.
+                con la convención $\frac{1}{+\infty}=0$. En grafos dirigidos la suma es sobre pares \emph{ordenados}.
             \end{definicion}
 
             \begin{proposicion}[Cotas y caso extremo de $E(G)$]
@@ -1151,7 +1208,7 @@
             \end{proof}
 
             \begin{corolario}[Caracterización estructural del caso extremo]
-                Con la misma hipótesis, $E(G)=1$ si y sólo si el grafo tiene arista directa entre todo par ordenado de vértices (en dígrafos) o entre todo par no ordenado (en no dirigidos). Es decir, el dígrafo es completo (todos los arcos entre pares distintos) o el grafo no dirigido es completo.
+                Con la misma hipótesis, $E(G)=1$ si y sólo si el grafo tiene arista directa entre todo par ordenado de vértices (en grafos dirigidos) o entre todo par no ordenado (en no dirigidos). Es decir, el grafo dirigido es completo (todos los arcos entre pares distintos) o el grafo no dirigido es completo.
             \end{corolario}
 
             \begin{observacion}[Distancias ponderadas arbitrarias]
@@ -1202,7 +1259,7 @@
             \end{definicion}
 
             \begin{ejemplo}[Cálculo ilustrativo mínimo]
-                En $P_4$ no dirigido con vértices $1$–$4$, $E(G)$ se obtiene sumando $1/d(i,j)$ sobre $i\neq j$ y normalizando por $12$. Al eliminar $v=2$ el grafo se parte, varias contribuciones pasan a $0$, y $E(G\setminus\{2\})<E(G)$; así $V_v>0$. El mismo procedimiento se aplica en dígrafos con distancias dirigidas.
+                En $P_4$ no dirigido con vértices $1$–$4$, $E(G)$ se obtiene sumando $1/d(i,j)$ sobre $i\neq j$ y normalizando por $12$. Al eliminar $v=2$ el grafo se parte, varias contribuciones pasan a $0$, y $E(G\setminus\{2\})<E(G)$; así $V_v>0$. El mismo procedimiento se aplica en grafos dirigidos con distancias dirigidas.
             \end{ejemplo}
 
     \section{Algoritmos fundamentales en teoría de grafos}
@@ -1221,7 +1278,7 @@
             \end{definicion}
 
             \begin{observacion}[Hipótesis]
-                Trabajamos con pesos no negativos. En dígrafos, relajamos arcos salientes de cada vértice extraído; en no dirigidos, relajamos aristas incidentes.
+                Trabajamos con pesos no negativos. En grafos dirigidos, relajamos arcos salientes de cada vértice extraído; en no dirigidos, relajamos aristas incidentes.
             \end{observacion}
 
             \paragraph{Algoritmo (Dijkstra).}
@@ -1284,7 +1341,7 @@
             \end{proof}
 
             \begin{ejemplo}[Ejecución de Dijkstra]
-                Consideramos el dígrafo con $V=\{A,B,C,D,E\}$ y arcos ponderados
+                Consideramos el grafo dirigido con $V=\{A,B,C,D,E\}$ y arcos ponderados
                 \[
                 A\to B:2,\quad A\to C:5,\quad B\to C:1,\quad B\to D:2,\quad C\to D:3,\quad D\to E:1,\quad C\to E:5.
                 \]
@@ -1444,7 +1501,7 @@
         \subsection{DBSCAN}
 
             \begin{definicion}[Espacio de trabajo]
-                Fijamos un conjunto finito de nodos $V$ y una función de distancia simétrica $d:V\times V\to[0,\infty)$ que satisface $d(u,u)=0$ y $d(u,v)=d(v,u)$; si $d$ no es métrica (p.\,ej.\ proviene de un dígrafo), trabajaremos con una simetrización $d^{\mathrm{sym}}(u,v):=\max\{d(u,v),d(v,u)\}$ o con la distancia sobre el subyacente no dirigido. Sea $N=|V|$.
+                Fijamos un conjunto finito de nodos $V$ y una función de distancia simétrica $d:V\times V\to[0,\infty)$ que satisface $d(u,u)=0$ y $d(u,v)=d(v,u)$; si $d$ no es métrica (p.\,ej.\ proviene de un grafo dirigido), trabajaremos con una simetrización $d^{\mathrm{sym}}(u,v):=\max\{d(u,v),d(v,u)\}$ o con la distancia sobre el subyacente no dirigido. Sea $N=|V|$.
             \end{definicion}
 
             \begin{definicion}[$\varepsilon$-vecindad y tipos de puntos]
@@ -1517,7 +1574,7 @@
             \end{proposicion}
 
             \begin{observacion}[Elección de $d$ en redes]
-                En redes usaremos una distancia $d$ coherente con la estructura: por defecto la distancia de caminos mínimos $d_\ell$ en el subyacente no dirigido; en dígrafos podemos simetrizar con $d^{\mathrm{sym}}(u,v)=\max\{d(u,v),d(v,u)\}$ o trabajar sobre incrustaciones $\varphi:V\to\mathbb{R}^p$ y una métrica euclidiana en el espacio de representación. La consistencia de los clusters depende de esta elección.
+                En redes usaremos una distancia $d$ coherente con la estructura: por defecto la distancia de caminos mínimos $d_\ell$ en el subyacente no dirigido; en grafos dirigidos podemos simetrizar con $d^{\mathrm{sym}}(u,v)=\max\{d(u,v),d(v,u)\}$ o trabajar sobre incrustaciones $\varphi:V\to\mathbb{R}^p$ y una métrica euclidiana en el espacio de representación. La consistencia de los clusters depende de esta elección.
             \end{observacion}
 
             \begin{ejemplo}[Instancia mínima]
@@ -1527,3 +1584,69 @@
                 \]
                 Tomamos $\varepsilon=1$ y $\text{minPts}=2$. Entonces $1,2,3$ forman un cluster (núcleos: $2$; bordes: $1$ y $3$) y $4,5$ forman otro (ambos núcleos). No hay ruido. Si elevamos $\text{minPts}$ a $3$, $\{1,2,3\}$ persiste (núcleo: $2$), pero $\{4,5\}$ pasa a ruido, ilustrando la monotonía en los parámetros.
             \end{ejemplo}
+
+
+        \subsection{Modularidad y Método de Louvain}
+
+            El objetivo principal de este método es \textit{cuantificar la calidad} de una división de red. La Modularidad ($Q$) actúa como una puntuación: un valor alto significa que las conexiones internas de los grupos son mucho más fuertes de lo que se esperaría si el grafo fuera puramente aleatorio.
+
+            La \textbf{modularidad} ($Q$) es una métrica que evalúa la calidad de una partición $\mathcal{C}$ de un grafo en comunidades. Un valor alto de $Q$ (máx. 1) indica que la densidad de enlaces \emph{dentro} de las comunidades es significativamente mayor que la densidad esperada bajo un modelo nulo que preserva los grados.
+
+            \begin{definicion}[Modularidad, $Q$]
+                Sea $G=(V,E)$ un grafo con pesos $A_{ij}$, grado ponderado $k_i = \sum_j A_{ij}$ y peso total $2m = \sum_i k_i$. Para cada comunidad $X \in \mathcal{C}$:
+                \begin{itemize}
+                    \item $\Sigma_{\mathrm{in}}(X)$: Peso total de las aristas \textbf{internas} de $X$.
+                    \item $\Sigma_{\mathrm{tot}}(X)$: Suma de los grados de todos los nodos en $X$.
+                \end{itemize}
+                La modularidad total se calcula como la suma sobre todas las comunidades:
+                \[
+                Q(\mathcal{C}) = \sum_{X \in \mathcal{C}} \left[ \frac{\Sigma_{\mathrm{in}}(X)}{2m} - \left( \frac{\Sigma_{\mathrm{tot}}(X)}{2m} \right)^2 \right]
+                \]
+            \end{definicion}
+
+            El algoritmo de Louvain es un método \textit{codicioso}, lo que significa que en cada paso toma la mejor decisión local. La clave para que este método sea eficiente es que no necesita recalcular toda la modularidad ($Q$) en cada paso, sino solo el cambio marginal, $\Delta Q$.
+
+            El cambio en la modularidad, $\Delta Q$, que resulta de mover un nodo $i$ de su comunidad actual $R$ a una comunidad vecina $S$, es la base operacional del algoritmo.
+
+            \begin{proposicion}[Cambio de Modularidad $\Delta Q$]
+                El valor $\Delta Q(i: R \to S)$ se calcula \textbf{localmente} y de manera eficiente, $\mathcal{O}(\deg(i))$. Este valor es la diferencia entre la suma de las contribuciones de $R$ y $S$ después del movimiento y la suma de las contribuciones antes del movimiento.
+
+                Si $\Delta Q > 0$, el movimiento aumenta la calidad de la partición y es ejecutado.
+            \end{proposicion}
+
+            El método de Louvain procede en dos fases que se repiten en cascada. Es como si el algoritmo primero "ajustara los grupos" (Fase 1) y luego "encapsulara" esos grupos en bloques más grandes para seguir refinando la estructura (Fase 2).
+
+            \begin{definicion}[Método de Louvain]
+                Es un algoritmo heurístico iterativo de dos fases que busca maximizar $Q$:
+
+                \begin{enumerate}
+                    \item \textbf{Fase 1: Optimización Local (Movimiento de Nodos)}
+                    \begin{itemize}
+                        \item Se inicia con cada nodo como una comunidad individual.
+                        \item Los nodos se iteran: cada nodo $i$ se mueve a la comunidad vecina $S$ que produce la mayor ganancia $\Delta Q$ (solo si $\Delta Q > 0$).
+                        \item La fase concluye al alcanzar una estabilidad donde ningún movimiento de un solo nodo puede aumentar la $Q$ total.
+                    \end{itemize}
+
+                    \item \textbf{Fase 2: Agregación (Construcción de Supernodos)}
+                    \begin{itemize}
+                        \item Las comunidades encontradas en la Fase 1 se colapsan en \textbf{supernodos}.
+                        \item Se crea un nuevo grafo ponderado donde los nodos son las comunidades. El peso entre supernodos y el peso de los auto-bucles encapsulan la conectividad original.
+                    \end{itemize}
+                \end{enumerate}
+                El proceso \textbf{repite ambas fases} sobre el grafo agregado (que es más pequeño) hasta que no se produce ningún incremento en la modularidad, asegurando la convergencia.
+            \end{definicion}
+
+            \begin{proposicion}[Propiedades Operacionales]
+                \begin{itemize}
+                    \item \textbf{Monotonía y Terminación:} El valor de $Q$ nunca decrece. La Fase 1 siempre aumenta $Q$, y la Fase 2 la preserva. Dado que $Q$ está acotada y el espacio de particiones es finito, el proceso converge a un máximo local en un número finito de iteraciones.
+                    \item \textbf{Costo:} La eficiencia es su característica definitoria. El costo computacional por "pasada" completa (Fase 1 + Fase 2) es $\tilde{\mathcal{O}}(|E|)$, lo que lo hace casi lineal en el número de aristas $|E|$ y altamente escalable.
+                \end{itemize}
+            \end{proposicion}
+
+            Finalmente, la modularidad puede extenderse a redes donde las interacciones no son simétricas, requiriendo solo una pequeña adaptación de los términos de grado en la fórmula nula.
+
+            \begin{observacion}[Grafos Dirigidos]
+                El método se puede aplicar a grafos dirigidos mediante la \textbf{simetrización} de pesos ($A^{\mathrm{sym}} = A + A^\top$) o, de manera más precisa, usando la \textbf{Modularidad Dirigida} (Leicht–Newman), que adapta el término nulo utilizando los grados de entrada ($k^{\mathrm{in}}$) y salida ($k^{\mathrm{out}}$) de los nodos.
+            \end{observacion}
+
+

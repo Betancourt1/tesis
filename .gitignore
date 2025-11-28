@@ -8,3 +8,13 @@
 \out
 Código/etapas/análisis/métricas_globales/matriz_distancias_shimbel.json
 /Bibliografía Tesis/
+
+# Ignorar archivos de grafos generados, son muy pesados
+QGIS/transporte_publico_grafo_p_space.gexf
+QGIS/transporte_publico_grafo_p_space_centralidades.gexf
+QGIS/transporte_publico_grafo_p_space_comunidades.gexf
+QGIS/transporte_publico_grafo_consolidado.gexf
+QGIS/transporte_publico_grafo.gexf
+*.gexf
+*.csv
+*.json

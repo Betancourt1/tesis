@@ -1,0 +1,157 @@
+C:\Users\fbetancourt\AppData\Local\anaconda3\envs\Tesis\python.exe "C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\Código\p_space\run_p_space_pipeline.py" 
+=============================================
+=== Starting P-Space Graph Construction ===
+=============================================
+
+--- Construcción del grafo P-espacio (metodología de tesis) ---
+Executing command: C:\Users\fbetancourt\AppData\Local\anaconda3\envs\Tesis\python.exe C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\Código\p_space\construcción\construcción_de_grafo.py
+--- Iniciando la construcción del P-espacio (metodología de tesis) ---
+Cargando grafo consolidado desde C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\grafos/l_space/grafo_consolidado.gpickle...
+Creando mapa de paradas a supernodos...
+Mapa creado con 10622 paradas originales.
+Cargando datos GTFS...
+Agrupando supernodos por ruta...
+Se procesaron 247 rutas.
+Construyendo el grafo P-espacio...
+Grafo P-espacio construido.
+Nodos: 4203
+Aristas: 385225
+Guardando el grafo P-espacio en C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\grafos/p_space/grafo_p_space_correcto.gpickle...
+--- Proceso de construcción de P-espacio finalizado. ---
+SUCCESS: Construcción del grafo P-espacio (metodología de tesis) completed.
+=============================================
+=== P-Space Graph Construction Completed ====
+=============================================
+
+=============================================
+=== Starting P-Space Graph Analysis =======
+=============================================
+
+--- Cálculo de centralidades para el grafo P-espacio ---
+Executing command: C:\Users\fbetancourt\AppData\Local\anaconda3\envs\Tesis\python.exe C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\Código\p_space\análisis\centralidades\calcular_centralidades.py
+SUCCESS: Cálculo de centralidades para el grafo P-espacio completed.
+
+--- Detección de comunidades para el grafo P-espacio ---
+Executing command: C:\Users\fbetancourt\AppData\Local\anaconda3\envs\Tesis\python.exe C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\Código\p_space\análisis\comunidades\detectar_comunidades.py
+Cargando grafo P-space desde C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\grafos/p_space/grafo_p_space_correcto.gpickle...
+Grafo cargado.
+Detectando comunidades de rutas con el método de Louvain...
+Se detectaron 11 comunidades de rutas.
+Asignando ID de comunidad a cada ruta (nodo)...
+Guardando el grafo P-space con atributos de comunidad en C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\grafos/p_space/grafo_p_space_correcto.gpickle (sobrescribiendo)...
+
+¡Proceso completado!
+El nuevo archivo GEXF ahora contiene un atributo 'community' en cada nodo (ruta).
+Puedes usar este atributo en Gephi para colorear las rutas y visualizar las comunidades.
+SUCCESS: Detección de comunidades para el grafo P-espacio completed.
+
+--- Análisis de conectividad del grafo P-espacio ---
+Executing command: C:\Users\fbetancourt\AppData\Local\anaconda3\envs\Tesis\python.exe C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\Código\p_space\análisis\métricas_globales\conectividad.py
+Cargando grafo P-space desde C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\grafos/p_space/grafo_p_space_correcto.gpickle...
+Grafo P-space cargado exitosamente.
+
+--- ANÁLISIS DE CONECTIVIDAD (P-SPACE) ---
+Número de nodos (rutas): 4203
+Número de aristas (trasbordos): 385225
+Densidad del grafo: 0.043624
+¡Atención! La red de rutas está fragmentada en 2 componentes no conectados entre sí.
+Esto significa que hay grupos de rutas que no tienen ninguna parada en común con rutas de otros grupos.
+SUCCESS: Análisis de conectividad del grafo P-espacio completed.
+
+--- Cálculo de la matriz de distancias del grafo P-espacio ---
+Executing command: C:\Users\fbetancourt\AppData\Local\anaconda3\envs\Tesis\python.exe C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\Código\p_space\análisis\métricas_globales\distancias.py
+Cargando grafo P-space desde C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\grafos/p_space/grafo_p_space_correcto.gpickle...
+Grafo P-space cargado exitosamente.
+Calculando la matriz de distancias (número de trasbordos)...
+Esto puede tardar dependiendo del tamaño del grafo.
+Cálculo completado.
+Guardando la matriz de distancias en C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\grafos/p_space\matriz_distancias_p_space.json...
+
+--- ANÁLISIS DE DISTANCIAS (P-SPACE) ---
+La matriz de distancias ha sido calculada y guardada exitosamente.
+El archivo contiene las rutas más cortas (en número de trasbordos) entre todos los pares de rutas alcanzables.
+
+Ejemplo de datos para la ruta '0':
+  -> Para llegar a la ruta '0': 0 trasbordo(s)
+  -> Para llegar a la ruta '782': 1 trasbordo(s)
+  -> Para llegar a la ruta '795': 1 trasbordo(s)
+SUCCESS: Cálculo de la matriz de distancias del grafo P-espacio completed.
+
+--- Análisis de eficiencia del grafo P-espacio ---
+Executing command: C:\Users\fbetancourt\AppData\Local\anaconda3\envs\Tesis\python.exe C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\Código\p_space\análisis\métricas_globales\eficiencia.py
+Cargando grafo P-space desde C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\grafos/p_space/grafo_p_space_correcto.gpickle...
+Grafo P-space cargado.
+Análisis realizado sobre el componente conectado más grande (4198 rutas).
+
+--- ANÁLISIS DE EFICIENCIA DE LA RED (P-SPACE) ---
+Diámetro de la red de rutas (máximo número de trasbordos): 6
+Longitud promedio del camino más corto (trasbordos promedio): 2.41
+Eficiencia global de la red de rutas: 0.4476
+SUCCESS: Análisis de eficiencia del grafo P-espacio completed.
+
+--- Análisis de la estructura local del grafo P-espacio ---
+Executing command: C:\Users\fbetancourt\AppData\Local\anaconda3\envs\Tesis\python.exe C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\Código\p_space\análisis\métricas_globales\estructura_local.py
+Cargando grafo P-space desde C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\grafos/p_space/grafo_p_space_correcto.gpickle...
+Grafo P-space cargado exitosamente.
+
+--- ANÁLISIS DE ESTRUCTURA LOCAL (P-SPACE) ---
+Coeficiente de Clustering Global (Transitividad): 0.408523
+Este valor representa la probabilidad de que dos rutas que comparten paradas con una tercera, también compartan paradas entre sí.
+Un valor más cercano a 1 indica una mayor tendencia a la formación de clústeres de rutas (zonas de alta conectividad).
+SUCCESS: Análisis de la estructura local del grafo P-espacio completed.
+
+
+¡Proceso completado!
+
+--- TOP 10 RUTAS POR CENTRALIDAD ---
+
+--- Top 10 por: degree ---
+  - Supernodo 264 | paradas:7: 1215.0000 | rutas: C05, C06, C111-V1, C111-V3, C118 (+25) | coords: (20.66839, -103.34770)
+  - Supernodo 262 | paradas:15: 1107.0000 | rutas: C05, C111-V1, C111-V3, C118, C125-V2 (+22) | coords: (20.66286, -103.35154)
+  - Supernodo 698 | paradas:5: 1092.0000 | rutas: C05, C06, C111-V1, C111-V3, C118 (+20) | coords: (20.66654, -103.34856)
+  - Supernodo 1138 | paradas:17: 1076.0000 | rutas: C104, C108, C123-V1, C123-V2, C124 (+21) | coords: (20.64599, -103.40669)
+  - Supernodo 2117 | paradas:6: 1024.0000 | rutas: C104, C108, C123-V1, C123-V2, C124 (+19) | coords: (20.64715, -103.40491)
+  - Supernodo 2033 | paradas:3: 988.0000 | rutas: C05, C111-V1, C111-V3, C125-V1, C125-V2 (+22) | coords: (20.66263, -103.34807)
+  - Supernodo 288 | paradas:10: 936.0000 | rutas: C05, C06, C111-V1, C111-V3, C118 (+18) | coords: (20.67083, -103.34711)
+  - Supernodo 151 | paradas:8: 892.0000 | rutas: C105, C106, C17, C29-V2, C38-V1 (+10) | coords: (20.64038, -103.27702)
+  - Supernodo 81 | paradas:17: 875.0000 | rutas: C01, C104, C107, C109, C110-V1 (+13) | coords: (20.67607, -103.35958)
+  - Supernodo 2073 | paradas:4: 855.0000 | rutas: C06, C118, C127-V1, C14-V2, C15 (+7) | coords: (20.66417, -103.35024)
+
+--- Top 10 por: betweenness ---
+  - Supernodo 264 | paradas:7: 0.0239 | rutas: C05, C06, C111-V1, C111-V3, C118 (+25) | coords: (20.66839, -103.34770)
+  - Supernodo 698 | paradas:5: 0.0171 | rutas: C05, C06, C111-V1, C111-V3, C118 (+20) | coords: (20.66654, -103.34856)
+  - Supernodo 262 | paradas:15: 0.0166 | rutas: C05, C111-V1, C111-V3, C118, C125-V2 (+22) | coords: (20.66286, -103.35154)
+  - Supernodo 44 | paradas:28: 0.0160 | rutas: C09, C10, C100, C101, C103 (+33) | coords: (20.60628, -103.40110)
+  - Supernodo 81 | paradas:17: 0.0138 | rutas: C01, C104, C107, C109, C110-V1 (+13) | coords: (20.67607, -103.35958)
+  - Supernodo 219 | paradas:13: 0.0134 | rutas: C06, C102, C105, C106, C19 (+17) | coords: (20.62367, -103.28636)
+  - Supernodo 288 | paradas:10: 0.0128 | rutas: C05, C06, C111-V1, C111-V3, C118 (+18) | coords: (20.67083, -103.34711)
+  - Supernodo 2033 | paradas:3: 0.0123 | rutas: C05, C111-V1, C111-V3, C125-V1, C125-V2 (+22) | coords: (20.66263, -103.34807)
+  - Supernodo 1138 | paradas:17: 0.0102 | rutas: C104, C108, C123-V1, C123-V2, C124 (+21) | coords: (20.64599, -103.40669)
+  - Supernodo 2073 | paradas:4: 0.0094 | rutas: C06, C118, C127-V1, C14-V2, C15 (+7) | coords: (20.66417, -103.35024)
+
+--- Top 10 por: closeness ---
+  - Supernodo 264 | paradas:7: 0.5752 | rutas: C05, C06, C111-V1, C111-V3, C118 (+25) | coords: (20.66839, -103.34770)
+  - Supernodo 262 | paradas:15: 0.5665 | rutas: C05, C111-V1, C111-V3, C118, C125-V2 (+22) | coords: (20.66286, -103.35154)
+  - Supernodo 698 | paradas:5: 0.5653 | rutas: C05, C06, C111-V1, C111-V3, C118 (+20) | coords: (20.66654, -103.34856)
+  - Supernodo 1138 | paradas:17: 0.5552 | rutas: C104, C108, C123-V1, C123-V2, C124 (+21) | coords: (20.64599, -103.40669)
+  - Supernodo 2117 | paradas:6: 0.5514 | rutas: C104, C108, C123-V1, C123-V2, C124 (+19) | coords: (20.64715, -103.40491)
+  - Supernodo 2033 | paradas:3: 0.5475 | rutas: C05, C111-V1, C111-V3, C125-V1, C125-V2 (+22) | coords: (20.66263, -103.34807)
+  - Supernodo 2073 | paradas:4: 0.5433 | rutas: C06, C118, C127-V1, C14-V2, C15 (+7) | coords: (20.66417, -103.35024)
+  - Supernodo 288 | paradas:10: 0.5415 | rutas: C05, C06, C111-V1, C111-V3, C118 (+18) | coords: (20.67083, -103.34711)
+  - Supernodo 219 | paradas:13: 0.5374 | rutas: C06, C102, C105, C106, C19 (+17) | coords: (20.62367, -103.28636)
+  - Supernodo 81 | paradas:17: 0.5360 | rutas: C01, C104, C107, C109, C110-V1 (+13) | coords: (20.67607, -103.35958)
+
+--- Top 10 por: eigenvector ---
+  - Supernodo 264 | paradas:7: 0.0687 | rutas: C05, C06, C111-V1, C111-V3, C118 (+25) | coords: (20.66839, -103.34770)
+  - Supernodo 1138 | paradas:17: 0.0680 | rutas: C104, C108, C123-V1, C123-V2, C124 (+21) | coords: (20.64599, -103.40669)
+  - Supernodo 2117 | paradas:6: 0.0660 | rutas: C104, C108, C123-V1, C123-V2, C124 (+19) | coords: (20.64715, -103.40491)
+  - Supernodo 262 | paradas:15: 0.0643 | rutas: C05, C111-V1, C111-V3, C118, C125-V2 (+22) | coords: (20.66286, -103.35154)
+  - Supernodo 2033 | paradas:3: 0.0641 | rutas: C05, C111-V1, C111-V3, C125-V1, C125-V2 (+22) | coords: (20.66263, -103.34807)
+  - Supernodo 698 | paradas:5: 0.0628 | rutas: C05, C06, C111-V1, C111-V3, C118 (+20) | coords: (20.66654, -103.34856)
+  - Supernodo 151 | paradas:8: 0.0620 | rutas: C105, C106, C17, C29-V2, C38-V1 (+10) | coords: (20.64038, -103.27702)
+  - Supernodo 1292 | paradas:10: 0.0592 | rutas: C108, C120, C123-V1, C18, C26 (+10) | coords: (20.69199, -103.31129)
+  - Supernodo 288 | paradas:10: 0.0582 | rutas: C05, C06, C111-V1, C111-V3, C118 (+18) | coords: (20.67083, -103.34711)
+  - Supernodo 134 | paradas:14: 0.0558 | rutas: C105, C122, C19, C20-V1, C27 (+12) | coords: (20.62914, -103.24552)
+
+Process finished with exit code 0
+
