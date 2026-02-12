@@ -1,5 +1,5 @@
 \chapter{Teoría de grafos}
-    Antes de comenzar con el estudio de las redes de transporte público, y con el fin de partir desde bases bien fundamentadas, vamos a introducir una serie de definiciones en torno a la teoría de grafos. En este caso nos importa fundamentar adecuadamente qué es un \textit{camino} en el contexto de esta teoría, lo que nos ayudará a tener un formalismo de lo que es una ruta de transporte público. Asimismo, nos interesa explorar cómo la noción de camino nos ayuda a entender la estructura de una red. Para esto también estudiaremos el concepto de \textit{centralidad}, que nos ayudará a evaluar la importancia que tiene un determinado nodo en el contexto del resto del grafo. Finalmente, gracias a lo anterior, estudiaremos distintos algoritmos para lograr encontrar caminos óptimos entre cualesquiera dos nodos.
+    Antes de comenzar con el estudio de las redes de transporte público, y con el fin de partir desde bases bien fundamentadas, vamos a introducir una serie de resultados en torno a la teoría de grafos. En este caso nos importa fundamentar adecuadamente qué es un \textit{camino} en el contexto de esta teoría, lo que nos ayudará a tener un formalismo de lo que es una ruta de transporte público. Asimismo, nos interesa explorar cómo la noción de camino nos ayuda a entender la estructura de una red. Para esto también estudiaremos el concepto de \textit{centralidad}, que nos ayudará a evaluar la importancia que tiene un determinado nodo en el contexto del resto del grafo. Finalmente, gracias a lo anterior, estudiaremos distintos algoritmos para lograr encontrar caminos óptimos entre cualesquiera dos nodos.
 
     Los problemas de movilidad urbana requieren modelos que abstraigan la complejidad de la ciudad sin perder los elementos esenciales de conectividad. La \emph{teoría de grafos} provee justamente ese andamiaje formal: reduce las interacciones físicas a nodos y aristas y, a partir de ahí, permite cuantificar eficiencia, robustez y vulnerabilidad de toda la red \cite{rodrigues2020}.
 
@@ -1181,54 +1181,54 @@
             \begin{definicion}[Eficiencia global]
                 Sea $G=(V,E)$ un grafo finito con $N=|V|$ y distancia $d(\cdot,\cdot)$ ya definida. La \textbf{eficiencia global} de $G$ es
                 \[
-                E(G)\;=\;\frac{1}{N(N-1)}\sum_{\substack{i,j\in V\\ i\neq j}}\frac{1}{d(i,j)},
+                Ef(G)\;=\;\frac{1}{N(N-1)}\sum_{\substack{i,j\in V\\ i\neq j}}\frac{1}{d(i,j)},
                 \]
                 con la convención $\frac{1}{+\infty}=0$. En grafos dirigidos la suma es sobre pares \emph{ordenados}.
             \end{definicion}
 
-            \begin{proposicion}[Cotas y caso extremo de $E(G)$]
+            \begin{proposicion}[Cotas y caso extremo de $Ef(G)$]
                 Supongamos que $d(i,j)\in\{1,2,\dots\}\cup\{+\infty\}$ para todo $i\neq j$ (por ejemplo, distancias no ponderadas, o ponderadas con pesos mínimos $\ge 1$). Entonces:
                 \[
-                0 \;\le\; E(G) \;\le\; 1,
+                0 \;\le\; Ef(G) \;\le\; 1,
                 \]
-                y $E(G)=1$ si y sólo si $d(i,j)=1$ para todo $i\neq j$.
+                y $Ef(G)=1$ si y sólo si $d(i,j)=1$ para todo $i\neq j$.
             \end{proposicion}
 
             \begin{proof}
                 Por definición,
                 \[
-                E(G)=\frac{1}{N(N-1)}\sum_{i\neq j}\frac{1}{d(i,j)},
+                Ef(G)=\frac{1}{N(N-1)}\sum_{i\neq j}\frac{1}{d(i,j)},
                 \qquad \text{con } \tfrac{1}{+\infty}=0.
                 \]
-                Cada sumando es no negativo, así que $E(G)\ge 0$. Además, para $i\neq j$ se tiene $d(i,j)\in\{1,2,\dots\}\cup\{+\infty\}$, luego
+                Cada sumando es no negativo, así que $Ef(G)\ge 0$. Además, para $i\neq j$ se tiene $d(i,j)\in\{1,2,\dots\}\cup\{+\infty\}$, luego
                 \[
                 0 \;\le\; \frac{1}{d(i,j)} \;\le\; 1.
                 \]
-                Promediando, $E(G)\le 1$. La igualdad $E(G)=1$ ocurre si y sólo si todos los sumandos valen $1$, es decir, si y sólo si $d(i,j)=1$ para todo $i\neq j$.
+                Promediando, $Ef(G)\le 1$. La igualdad $Ef(G)=1$ ocurre si y sólo si todos los sumandos valen $1$, es decir, si y sólo si $d(i,j)=1$ para todo $i\neq j$.
             \end{proof}
 
             \begin{corolario}[Caracterización estructural del caso extremo]
-                Con la misma hipótesis, $E(G)=1$ si y sólo si el grafo tiene arista directa entre todo par ordenado de vértices (en grafos dirigidos) o entre todo par no ordenado (en no dirigidos). Es decir, el grafo dirigido es completo (todos los arcos entre pares distintos) o el grafo no dirigido es completo.
+                Con la misma hipótesis, $Ef(G)=1$ si y sólo si el grafo tiene arista directa entre todo par ordenado de vértices (en grafos dirigidos) o entre todo par no ordenado (en no dirigidos). Es decir, el grafo dirigido es completo (todos los arcos entre pares distintos) o el grafo no dirigido es completo.
             \end{corolario}
 
             \begin{observacion}[Distancias ponderadas arbitrarias]
                 Si permitimos pesos $<1$, entonces $d(i,j)$ puede ser $<1$ y $1/d(i,j)>1$. En ese caso la cota correcta es
                 \[
-                E(G)\;\le\;\frac{1}{\delta},\qquad \delta:=\min_{i\neq j} d(i,j)\,,
+                Ef(G)\;\le\;\frac{1}{\delta},\qquad \delta:=\min_{i\neq j} d(i,j)\,,
                 \]
-                y recuperamos $E(G)\le 1$ tras reescalar los pesos para que $\delta\ge 1$ (o usando distancias enteras por número de aristas).
+                y recuperamos $Ef(G)\le 1$ tras reescalar los pesos para que $\delta\ge 1$ (o usando distancias enteras por número de aristas).
             \end{observacion}
 
             \begin{definicion}[Eliminación y vulnerabilidad puntual]
                 Sea $H\subseteq V$ (eliminación de vértices) o $H\subseteq E$ (eliminación de aristas). Definimos la \textbf{vulnerabilidad} frente a $H$ por
                 \[
-                V(G;H)\;=\;\frac{E(G)-E(G\setminus H)}{E(G)},
+                V(G;H)\;=\;\frac{Ef(G)-Ef(G\setminus H)}{Ef(G)},
                 \]
-                con la convención $V(G;H)=0$ si $E(G)=0$. Notación abreviada: $V_v:=V(G;\{v\})$ y $V_e:=V(G;\{e\})$.
+                con la convención $V(G;H)=0$ si $Ef(G)=0$. Notación abreviada: $V_v:=V(G;\{v\})$ y $V_e:=V(G;\{e\})$.
             \end{definicion}
 
             \begin{proposicion}[Monotonicidad por eliminación]
-                Para todo $H\subseteq V$ o $H\subseteq E$ se cumple $E(G\setminus H)\le E(G)$.
+                Para todo $H\subseteq V$ o $H\subseteq E$ se cumple $Ef(G\setminus H)\le Ef(G)$.
             \end{proposicion}
 
             \begin{proof}
@@ -1240,7 +1240,7 @@
                 \[
                 \frac{1}{d_{G\setminus H}(i,j)}\;\le\;\frac{1}{d_G(i,j)}\qquad\text{para todo }i\neq j.
                 \]
-                Al promediar sobre todos los pares aparece exactamente $E(G\setminus H)\le E(G)$.
+                Al promediar sobre todos los pares aparece exactamente $E(G\setminus H)\le Ef(G)$.
             \end{proof}
 
             \begin{definicion}[Curvas de vulnerabilidad y resiliencia]
@@ -1259,7 +1259,7 @@
             \end{definicion}
 
             \begin{ejemplo}[Cálculo ilustrativo mínimo]
-                En $P_4$ no dirigido con vértices $1$–$4$, $E(G)$ se obtiene sumando $1/d(i,j)$ sobre $i\neq j$ y normalizando por $12$. Al eliminar $v=2$ el grafo se parte, varias contribuciones pasan a $0$, y $E(G\setminus\{2\})<E(G)$; así $V_v>0$. El mismo procedimiento se aplica en grafos dirigidos con distancias dirigidas.
+                En $P_4$ no dirigido con vértices $1$–$4$, $Ef(G)$ se obtiene sumando $1/d(i,j)$ sobre $i\neq j$ y normalizando por $12$. Al eliminar $v=2$ el grafo se parte, varias contribuciones pasan a $0$, y $Ef(G\setminus\{2\})<Ef(G)$; así $V_v>0$. El mismo procedimiento se aplica en grafos dirigidos con distancias dirigidas.
             \end{ejemplo}
 
     \section{Algoritmos fundamentales en teoría de grafos}

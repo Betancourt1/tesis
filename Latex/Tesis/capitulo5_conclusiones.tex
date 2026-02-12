@@ -1,0 +1,64 @@
+\chapter{Conclusiones}
+
+La presente investigación ha logrado modelar matemáticamente el sistema de transporte de la Zona Metropolitana de Guadalajara (ZMG) mediante una aproximación dual, diferenciando entre la infraestructura física (Espacio $L$) y la red de servicio (Espacio $P$). Este enfoque ha permitido revelar una discrepancia estructural fundamental entre ambas capas, respondiendo a las interrogantes planteadas al inicio de este trabajo y abriendo nuevas vías para la optimización del transporte urbano.
+
+\section{Síntesis de Hallazgos: La dicotomía Infraestructura-Servicio}
+
+El análisis topológico realizado arroja tres conclusiones principales que caracterizan el estado actual del sistema de transporte en la ZMG:
+
+\begin{enumerate}
+    \item \textbf{Topología del Espacio $L$ (Infraestructura):} El análisis confirma que la infraestructura subyacente posee una estructura cuasi-arbórea (con un coeficiente de clustering bajo, $\approx 0.108$) y una conectividad frágil. Matemáticamente, la red depende críticamente de nodos articuladores centrales y corredores específicos. La baja redundancia de ciclos en este espacio implica que la infraestructura física carece de plasticidad ante fallos locales, resultando en una degradación rápida de la eficiencia global ($\sim 19\%$) ante ataques dirigidos a los nodos de mayor centralidad.
+
+    \item \textbf{Topología del Espacio $P$ (Servicio):} En contraste, la proyección al Espacio $P$ revela una red de Mundo Pequeño (con un diámetro $D=6$) y una alta densidad de \textit{cliques} locales. Esta estructura mitiga las deficiencias del Espacio $L$: la superposición de múltiples rutas sobre los mismos tramos físicos genera una redundancia funcional que mantiene la conectividad del componente gigante al 98.7\% incluso tras la remoción de los 50 nodos más importantes.
+
+    \item \textbf{Conclusión General:} Existe una clara desconexión entre la eficiencia topológica de la infraestructura (baja) y la del servicio (alta). El sistema logra ser operativo no por un diseño eficiente de la red vial subyacente, sino por una saturación de rutas que compensan la falta de conectividad física mediante redundancia operativa.
+\end{enumerate}
+
+\section{Respuestas a las Preguntas de Investigación}
+
+Retomando las interrogantes planteadas en el Capítulo 1, los modelos construidos nos permiten ofrecer respuestas cuantitativas:
+
+\begin{description}
+    \item[¿Cómo está tejida la red?]
+    La red presenta una naturaleza dual. En su nivel físico (tejido de infraestructura), es una red dispersa y jerárquica, dependiente de pocas arterias principales. Sin embargo, en su nivel funcional (tejido de servicio), se comporta como una red compleja de mundo pequeño, facilitando el flujo rápido entre nodos distantes gracias a la integración de rutas, aunque a un costo elevado de redundancia.
+
+    \item[¿Existen puntos críticos cuya falla colapsaría el servicio?]
+    Sí. El análisis de robustez demostró que, si bien el servicio (Espacio $P$) es resiliente a fallos aleatorios, la infraestructura (Espacio $L$) es altamente vulnerable a ataques dirigidos. Puntos como el Centro Histórico y corredores como Mariano Otero actúan como articuladores sistémicos; su falla no solo desconecta vecindarios locales, sino que fragmenta la red globalmente, validando la hipótesis de vulnerabilidad estructural.
+
+    \item[¿Se agrupan las rutas en comunidades funcionales?]
+    La detección de comunidades en el Espacio $P$ sugiere que la organización funcional del transporte obedece más a corredores de movilidad y zonas de atracción económica que a divisiones administrativas municipales estrictas. Los \textit{cliques} locales observados indican zonas de alta integración interna, pero conectadas laxamente entre sí por las rutas troncales.
+\end{description}
+
+\section{Limitaciones y Agenda de Investigación Futura}
+
+A pesar de la robustez del análisis topológico estático presentado, la abstracción realizada impone límites que abren líneas prometedoras para futura investigación en matemáticas aplicadas al transporte:
+
+\subsection{De Grafos Estáticos a Grafos Temporales ($G_t$)}
+Este trabajo modeló la red como una instantánea estática basada en la programación GTFS. Una extensión natural es la modelación mediante \textbf{grafos temporales} o redes variantes en el tiempo, donde las aristas $E(t)$ existen solo si hay un servicio activo en el instante $t$.
+\begin{itemize}
+    \item \textbf{Investigación Propuesta:} Analizar la fluctuación de la \textit{Eficiencia Global} $Ef(t)$ a lo largo del día para detectar infartos topológicos en horas valle, donde la redundancia del Espacio $P$ desaparece y la red regresa a la fragilidad inherente del Espacio $L$.
+\end{itemize}
+
+\subsection{Análisis Espectral de Grafos}
+El presente trabajo se basó principalmente en métricas topológicas clásicas (centralidad, coeficiente de clustering, etc.). La Teoría Espectral de Grafos ofrece una perspectiva complementaria para entender la estructura de la red a través de los autovalores y autovectores de sus matrices asociadas (ej. Laplaciana o de adyacencia).
+\begin{itemize}
+    \item \textbf{Investigación Propuesta:} Analizar el espectro de las matrices Laplaciana y de Adyacencia de los grafos L-espacio y P-espacio. Esto permitiría cuantificar propiedades globales como la conectividad algebraica, detectar estructuras de partición de manera algorítmica (cortes óptimos) y caracterizar la difusión de información o congestión a través de la red, ofreciendo una visión más profunda sobre la robustez y la dinámica del flujo de pasajeros.
+\end{itemize}
+
+\subsection{Incorporación de Matrices de Demanda (Grafos Ponderados por Flujo)}
+Nuestro modelo actual asume que todas las aristas tienen igual capacidad o importancia operativa, ignorando la demanda real de pasajeros.
+\begin{itemize}
+    \item \textbf{Investigación Propuesta:} Integrar matrices Origen-Destino (OD) estimadas para ponderar los nodos no solo por su grado ($k$), sino por su \textbf{carga (load centrality)}. Esto permitiría pasar de un análisis de \textit{vulnerabilidad topológica} a uno de \textit{vulnerabilidad operativa}, identificando nodos que, aunque no sean geométricamente centrales, podrían colapsar el sistema por saturación de usuarios.
+\end{itemize}
+
+\subsection{Modelado de Fallos en Cascada (Dinámica No Lineal)}
+El análisis de robustez presentado utilizó la eliminación estática de nodos (percolación inversa). Sin embargo, en redes reales, el fallo de un nodo redistribuye el flujo hacia sus vecinos.
+\begin{itemize}
+    \item \textbf{Investigación Propuesta:} Implementar modelos de \textbf{fallos en cascada} (como el modelo de Motter-Lai) sobre la red de Guadalajara. El objetivo sería determinar la capacidad crítica de los nodos de transbordo necesaria para evitar el colapso sistémico ante perturbaciones locales.
+\end{itemize}
+
+\subsection{Optimización Topológica mediante Recableado}
+Dado que se identificó que la red es ineficiente en términos de desvío (Detour Index) y dependencia del centro, existe una oportunidad clara para la optimización matemática.
+\begin{itemize}
+    \item \textbf{Investigación Propuesta:} Utilizar algoritmos de recableado de aristas (\textit{edge rewiring}) que maximicen la eficiencia global del Espacio $L$ sujeto a restricciones de costo (manteniendo constante la longitud total de aristas). Matemáticamente, esto implica encontrar la topología óptima que minimice el diámetro de la red sin requerir un aumento en la infraestructura física existente.
+\end{itemize}

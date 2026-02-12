@@ -160,7 +160,7 @@
 	    Podemos ver que la densidad, casi dos órdenes de magnitud mayor que en el L-espacio, indica que la red de servicio ofrece muchas alternativas de trasbordo entre rutas. El clustering elevado refleja cliques de rutas en las mismas paradas (redundancia operativa), mientras que un diámetro de sólo 6 trasbordos y camino medio de 2.41 muestran que cualquier ruta está a pocos pasos de otra, sugiriendo buena conectividad percibida por el usuario, aunque con riesgo de saturación en nodos altamente conectados. Algo interesante a notar es que un díametro de 6 trasbordos implica que nuestra red es de \textit{mundo pequeño}, tal como lo predice la literatura para redes de este tipo.
 
         \subsection{Análisis de Centralidad en el P-espacio}
-            Se calcularon y almacenaron las centralidades (grado, intermediación, cercanía y eigenvector) en \texttt{grafos/p\_space/grafo\_p\_space\_correcto.gpickle}. Las rutas con mayor grado son aquellas que comparten numerosas paradas con otras líneas, actuando como conectores de múltiples recorridos.
+            Se calcularon y almacenaron las centralidades (grado, intermediación, cercanía y eigenvector). Las rutas con mayor grado son aquellas que comparten numerosas paradas con otras líneas, actuando como conectores de múltiples recorridos.
 
             Los cuatro indicadores coinciden en ubicar el máximo de centralidad en el hipercentro (Coords aprox. $20.668^{\circ}$ N, $-103.348^{\circ}$ O). Destacan:
             \begin{itemize}
@@ -213,7 +213,7 @@
                 \label{fig:robustez_p_space}
             \end{figure}
 
-            Los resultados (\texttt{grafos/p\_space/robustez/robustez\_p\_space\_ataque\_grado.csv}) muestran que:
+            Los resultados muestran que:
             \begin{itemize}
                 \item El LCC se mantiene en \textbf{98.74\%} de su tamaño original tras eliminar las 50 rutas más conectadas, señal de alta redundancia en la red de servicio.
                 \item La eficiencia global desciende a \textbf{97.36\%}, una caída moderada que sugiere que existen suficientes rutas alternativas para conservar recorridos relativamente cortos aun cuando fallan los hubs principales.
