@@ -18,3 +18,21 @@ QGIS/transporte_publico_grafo.gexf
 *.gexf
 *.csv
 *.json
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Resultados generados por scripts (no versionar)
+**/resultados_robustez/*.png
+**/resultados_robustez/*.csv
+**/métricas_globales/*.json
+grafos/
+grafos_qgis/
+out/
+*.gpickle
+*.gpkg
+
+# Backups temporales de editores
+*.tex~
+.*.tex.un~
