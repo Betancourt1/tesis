@@ -5,6 +5,7 @@ from sklearn.cluster import DBSCAN
 import pickle
 import json
 import os
+import sys
 from dotenv import load_dotenv
 
 # --- CONFIGURACIÓN DE RUTAS ---

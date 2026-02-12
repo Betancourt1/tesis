@@ -4,6 +4,7 @@ import networkx as nx
 import pickle
 from itertools import combinations
 import os
+import sys
 from dotenv import load_dotenv
 
 # Cargar variables de entorno desde el archivo .env en la raíz del proyecto

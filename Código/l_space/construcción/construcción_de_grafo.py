@@ -1,6 +1,7 @@
 import pandas as pd
 import networkx as nx
 import os
+import sys
 from dotenv import load_dotenv
 
 # --- CONFIGURACIÓN DE RUTAS ---
