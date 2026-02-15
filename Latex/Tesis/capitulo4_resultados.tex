@@ -77,12 +77,12 @@
             Esta métrica asigna importancia a un nodo en función de la importancia de sus vecinos. Un nodo es importante si está conectado a otros nodos importantes. Para su cálculo, se ponderó por el \texttt{original\_edge\_count}, premiando las conexiones a través de "autopistas" de múltiples rutas.
             \begin{itemize}
                 \item \textbf{Hallazgos Clave:} De manera sorprendente, esta métrica no destacó al centro ni a los grandes cruceros. En su lugar, reveló la existencia de un \textbf{corredor de alta influencia en Av. Mariano Otero}, al sur de Las Águilas. Los nodos en esta zona obtuvieron las puntuaciones más altas, indicando que no solo son importantes individualmente, sino que juntos forman la "columna vertebral" de un subsistema de nodos muy influyentes, conectando de manera robusta el sur y poniente de la ciudad.
-            \- \end{itemize}
+            \end{itemize}
 
             \begin{figure}[h!]
                 \centering
                 \includegraphics[width=\textwidth]{../../grafos/l_space/grafo_centralidades_closeness.png}
-                \caption{Grafo con centralidades: más grande es mayor grado de eigenvenctor y más verde significa mayor centralidad de cercanía.}
+                \caption{Grafo con centralidades: más grande es mayor grado de eigenvector y más verde significa mayor centralidad de cercanía.}
                 \label{fig:centralidad_c_l_space}
             \end{figure}
 
@@ -143,7 +143,7 @@
             La eficiencia global cae al \textbf{81.5\%} de su valor original tras la eliminación de esos 50 nodos. Aunque la red sigue conectada, los caminos disponibles son menos directos y los tiempos de viaje promedio se alargan casi un 19\%, lo que evidencia la dependencia operativa de los hubs de alto grado.
 
 	\subsection{Conclusiones sobre el $L$-espacio}
-	    Con el análisis realizado podemos concluir algunas cosas interesantes de la infraestructura que da forma al sistema de transporte público en la Zona Metropolitana de Guadalajara. En primer lugar, tiene una estructura arbórea que nos indica que está en gran medida enfocada en conectar zonas periféricas con otras más centralizadas. En segundo lugar, las zonas con más centralidad de intermediación no necesariamente están en esas zonas céntricas, sino en nodos importantes de intersección como estaciones del tren ligero o centros comerciales. Con todo esto, es una red altamente resiliente a la desaparición de nodos críticos y su eficiencia espacial es casi óptima, lo que nos indica que tiene una distribución espacial muy favorable en la zona de cobertura. 
+	    Con el análisis realizado podemos concluir algunas cosas interesantes de la infraestructura que da forma al sistema de transporte público en la Zona Metropolitana de Guadalajara. En primer lugar, tiene una estructura arbórea que nos indica que está en gran medida enfocada en conectar zonas periféricas con otras más centralizadas. En segundo lugar, aunque el hipercentro concentra gran parte de la intermediación, también aparecen nodos de intersección relevantes fuera del centro, como estaciones del tren ligero o cruces comerciales estratégicos. Con todo esto, es una red altamente resiliente a la desaparición de nodos críticos y su eficiencia espacial es casi óptima, lo que nos indica que tiene una distribución espacial muy favorable en la zona de cobertura. 
 	    Ahora bien, este análisis no responde todas las preguntas que pudiéramos hacer respecto a cómo es el servicio desde la perspectiva de un usuario. Por ejemplo, la red antes vista no nos permite decir cuántos transbordos son necesarios en los caminos que evaluamos. Para esto es necesaria la construcción del grafo correspondiente al $P$-espacio, aspecto que cubrimos el capítulo pasado y que analizaremos a continuación.
 
     \section{Análisis del P-espacio: La Red de Servicio}
@@ -152,15 +152,15 @@
         \subsection{Métricas globales del P-espacio}
             El grafo P-espacio es mucho más denso que el L-espacio:
             \begin{itemize}
-                \item \textbf{Tamaño y densidad:} 4,203 nodos (rutas) y 385,225 aristas (trasbordos), con densidad \textbf{0.0436}.
-                \item \textbf{Componentes:} 2 componentes; el principal reúne 4,198 rutas.
+                \item \textbf{Tamaño y densidad:} 4,203 nodos (supernodos) y 385,225 aristas (pares de supernodos que comparten al menos una ruta), con densidad \textbf{0.0436}.
+                \item \textbf{Componentes:} 2 componentes; el principal reúne 4,198 supernodos.
                 \item \textbf{Clustering:} Coeficiente de clustering global \textbf{0.4085}, lo que evidencia alta redundancia de rutas que comparten paradas.
-                \item \textbf{Eficiencia y caminos:} Diámetro \textbf{6} trasbordos, longitud promedio de camino \textbf{2.41} trasbordos y eficiencia global \textbf{0.4476} en el componente principal.
+                \item \textbf{Eficiencia y caminos:} Diámetro topológico \textbf{6} saltos y longitud promedio de camino \textbf{2.41} saltos (equivalentes a \textbf{hasta 5} y \textbf{1.41} trasbordos, respectivamente, bajo la convención aristas$-1$), con eficiencia global \textbf{0.4476} en el componente principal.
             \end{itemize}
-	    Podemos ver que la densidad, casi dos órdenes de magnitud mayor que en el L-espacio, indica que la red de servicio ofrece muchas alternativas de trasbordo entre rutas. El clustering elevado refleja cliques de rutas en las mismas paradas (redundancia operativa), mientras que un diámetro de sólo 6 trasbordos y camino medio de 2.41 muestran que cualquier ruta está a pocos pasos de otra, sugiriendo buena conectividad percibida por el usuario, aunque con riesgo de saturación en nodos altamente conectados. Algo interesante a notar es que un díametro de 6 trasbordos implica que nuestra red es de \textit{mundo pequeño}, tal como lo predice la literatura para redes de este tipo.
+	    Podemos ver que la densidad, casi dos órdenes de magnitud mayor que en el L-espacio, indica que la red de servicio ofrece muchas alternativas de conexión sin bajar de ruta en la adyacencia directa. El clustering elevado refleja cliques de paradas por rutas compartidas (redundancia operativa), mientras que un diámetro topológico de 6 y camino medio de 2.41 muestran que cualquier supernodo está a pocos pasos de otro, sugiriendo buena conectividad percibida por el usuario, aunque con riesgo de saturación en nodos altamente conectados. Algo interesante a notar es que un diámetro topológico de 6 implica que nuestra red es de \textit{mundo pequeño}, tal como lo predice la literatura para redes de este tipo.
 
         \subsection{Análisis de Centralidad en el P-espacio}
-            Se calcularon y almacenaron las centralidades (grado, intermediación, cercanía y eigenvector). Las rutas con mayor grado son aquellas que comparten numerosas paradas con otras líneas, actuando como conectores de múltiples recorridos.
+            Se calcularon y almacenaron las centralidades (grado, intermediación, cercanía y eigenvector). Los supernodos con mayor grado son aquellos que comparten numerosas rutas con otros supernodos, actuando como conectores de múltiples recorridos.
 
             Los cuatro indicadores coinciden en ubicar el máximo de centralidad en el hipercentro (Coords aprox. $20.668^{\circ}$ N, $-103.348^{\circ}$ O). Destacan:
             \begin{itemize}
@@ -173,20 +173,20 @@
 
             \begin{figure}[h!]
                 \centering
-                \includegraphics[width=\textwidth]{../../grafos/p_space/grafo_centralidades_closeness.png}
-                \caption{Grafo con centralidades: más grande es mayor grado de eigenvenctor y más verde significa mayor centralidad de cercanía.}
-                \label{fig:centralidad_c_p_space}
+                \includegraphics[width=\textwidth]{../../grafos/p_space/grafo_centralidades_betweness.png}
+                \caption{Grafo con centralidades: más grande es mayor grado y más verde significa mayor centralidad de intermediación.}
+                \label{fig:centralidad_b_p_space}
             \end{figure}
 
-            \begin{figure}[h!]
+                \begin{figure}[h!]
                 \centering
                 \includegraphics[width=\textwidth]{../../grafos/p_space/grafo_centralidades_closeness.png}
-                \caption{Grafo con centralidades: más grande es mayor grado de eigenvenctor y más verde significa mayor centralidad de cercanía.}
+                \caption{Grafo con centralidades: más grande es mayor grado y más verde significa mayor centralidad de cercanía.}
                 \label{fig:centralidad_c_p_space}
             \end{figure}
 
         \subsection{Detección de Comunidades en el P-espacio}
-            Se detectaron \textbf{11 comunidades} de rutas mediante Louvain, agrupando líneas que comparten muchas paradas (modularidad $0.54$). Las cinco mayores concentran el 67\% de los supernodos del servicio:
+            Se detectaron \textbf{11 comunidades} de supernodos mediante Louvain, agrupando paradas que comparten muchas rutas (modularidad $0.54$). Las cinco mayores concentran el 67\% de los supernodos del servicio:
             \begin{itemize}
                 \item \textbf{Comunidad 5} (\textasciitilde\!18.2\%): centroide $(20.5748,-103.3608)$, domina el sur-poniente.
                 \item \textbf{Comunidad 1} (\textasciitilde\!15.2\%): centroide $(20.6887,-103.2992)$, eje nororiente.
@@ -204,27 +204,27 @@
             \end{figure}
 
         \subsection{Análisis de Robustez del P-espacio}
-            Se aplicó el mismo esquema de ataque dirigido al P-espacio: eliminación secuencial de las \textbf{50 rutas (nodos) con mayor grado}. Tras cada eliminación se midieron el tamaño relativo del LCC y la eficiencia global no dirigida.
+            Se aplicó el mismo esquema de ataque dirigido al P-espacio: eliminación secuencial de los \textbf{50 supernodos (nodos) con mayor grado}. Tras cada eliminación se midieron el tamaño relativo del LCC y la eficiencia global no dirigida.
 
             \begin{figure}[h!]
                 \centering
                 \includegraphics[width=\textwidth]{../../grafos/p_space/robustez/grafico_robustez_p_space_comparativo.png}
-                \caption{Impacto en el LCC y la Eficiencia Global del P-espacio al eliminar las 50 rutas de mayor grado.}
+                \caption{Impacto en el LCC y la Eficiencia Global del P-espacio al eliminar los 50 supernodos de mayor grado.}
                 \label{fig:robustez_p_space}
             \end{figure}
 
             Los resultados muestran que:
             \begin{itemize}
-                \item El LCC se mantiene en \textbf{98.74\%} de su tamaño original tras eliminar las 50 rutas más conectadas, señal de alta redundancia en la red de servicio.
+                \item El LCC se mantiene en \textbf{98.74\%} de su tamaño original tras eliminar los 50 supernodos más conectados, señal de alta redundancia en la red de servicio.
                 \item La eficiencia global desciende a \textbf{97.36\%}, una caída moderada que sugiere que existen suficientes rutas alternativas para conservar recorridos relativamente cortos aun cuando fallan los hubs principales.
             \end{itemize}
-            Comparativamente, el P-espacio es mucho más resiliente que el L-espacio: la pérdida de eficiencia es de apenas 2.6\% frente al 19\% observado en la infraestructura física. Esto se explica porque múltiples rutas comparten paradas y pueden sustituirse entre sí. Operativamente, el resultado sugiere que caídas de rutas troncales se amortiguan si existen líneas paralelas o variantes, pero también que la redundancia descansa en el centro; un rediseño periférico podría mejorar la resistencia fuera del hipercentro.
+            Comparativamente, el P-espacio es mucho más resiliente que el L-espacio: la pérdida de eficiencia es de apenas 2.6\% frente al 19\% observado en la infraestructura física. Esto se explica porque múltiples rutas comparten paradas y pueden sustituirse entre sí. Operativamente, el resultado sugiere que fallas en supernodos troncales se amortiguan si existen líneas paralelas o variantes, pero también que la redundancia descansa en el centro; un rediseño periférico podría mejorar la resistencia fuera del hipercentro.
 
         \subsection{Discusión Comparativa}
             El ataque dirigido por grado es significativamente más dañino en el L-espacio que en el P-espacio. Mientras que en la infraestructura física la eficiencia cae cerca de 19\% al perder 50 hubs, en la red de servicio la pérdida es de apenas 2.6\%. Esto confirma que la conectividad basada en compartir rutas es más resiliente por la existencia de múltiples combinaciones de servicio entre las paradas, aun si la infraestructura depende fuertemente de unos pocos nodos de alta interconexión.
 	
 	\subsection{Conclusiones sobre el $P$-espacio}
-	    Como esperábamos, en este modelo de la red de transporte público tenemos una perspectiva diferente del modelo anterior. En esta ocasión podemos constatar que, en lo general, la red de transporte público es densa y bien conectada, sindo incluso de mundo pequeño. Por otro lado, este modelo nos deja claro que, de cara al usuario, las zonas céntricas son aún más importantes que desde la perspectiva de la pura infraestructura. Asimismo, nos muestra que es una red resiliente a cortes de servicio, algo importante pues indica que dispone de una alta redundancia, permitiendo que los usuarios siempre dispongan de más de una alternativa para llegar a sus destinos.
+	    Como esperábamos, en este modelo de la red de transporte público tenemos una perspectiva diferente del modelo anterior. En esta ocasión podemos constatar que, en lo general, la red de transporte público es densa y bien conectada, siendo incluso de mundo pequeño. Por otro lado, este modelo nos deja claro que, de cara al usuario, las zonas céntricas son aún más importantes que desde la perspectiva de la pura infraestructura. Asimismo, nos muestra que es una red resiliente a cortes de servicio, algo importante pues indica que dispone de una alta redundancia, permitiendo que los usuarios siempre dispongan de más de una alternativa para llegar a sus destinos.
 
 
     \section{Parámetros, Software y Reproducibilidad}
