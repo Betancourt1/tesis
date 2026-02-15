@@ -35,3 +35,53 @@
 ## Security & Configuration Tips
 - Copy `.env.example` to `.env` for local configuration; never commit secrets.
 - Do not add large derived binaries unless they are required reproducible outputs.
+
+## Seguimiento IA - Mejoras de Tesis (Backlog Vivo)
+- Regla de uso:
+- Esta lista contiene solo pendientes. Cuando una mejora se complete, se elimina de esta sección.
+- La evidencia de cierre debe quedar en commit(s) y/o en `Latex/Tesis/*.tex`, `Código/*`, `grafos/*`, `out/*`.
+
+- [ ] 1) Tesis central más fuerte y explícita
+- Objetivo: fijar una proposición principal única y verificable que conecte toda la tesis.
+- Acción mínima: redactar en introducción y conclusión una frase núcleo consistente (infraestructura frágil vs servicio resiliente) y alinear subtítulos/resultados a esa narrativa.
+- Evidencia esperada: ajustes en `Latex/Tesis/capitulo0_introduccion.tex` y `Latex/Tesis/capitulo5_conclusiones.tex`.
+
+- [ ] 2) Matriz de trazabilidad de preguntas de investigación
+- Objetivo: vincular cada pregunta con métrica, resultado, implicación y límite.
+- Acción mínima: agregar una tabla sintética en resultados o conclusiones con ese mapeo.
+- Evidencia esperada: nueva tabla en `Latex/Tesis/capitulo4_resultados.tex` o `Latex/Tesis/capitulo5_conclusiones.tex`.
+
+- [ ] 3) Sensibilidad de supuestos de modelado
+- Objetivo: mostrar qué tan estables son los hallazgos ante cambios razonables en supuestos.
+- Acción mínima: ejecutar variantes de construcción/análisis (p. ej., criterios de consolidación y ataques de robustez) y comparar métricas clave.
+- Evidencia esperada: script(s) en `Código/*` + resultados comparativos en `grafos/*` y texto en cap. 4.
+
+- [ ] 4) Escenarios de intervención topológica
+- Objetivo: pasar de diagnóstico a propuesta cuantificada.
+- Acción mínima: simular 2-3 intervenciones (protección de hubs, refuerzo periférico, recableado) y medir efecto en LCC/eficiencia/diámetro.
+- Evidencia esperada: resultados nuevos en `Código/*` y discusión en `Latex/Tesis/capitulo4_resultados.tex` y/o conclusiones.
+
+- [ ] 5) Rango de resultados (incertidumbre por escenarios)
+- Objetivo: evitar depender de un único valor puntual.
+- Acción mínima: reportar rangos o bandas para métricas principales bajo las variantes del punto 3 y escenarios del punto 4.
+- Evidencia esperada: tablas/figuras comparativas en cap. 4 con redacción de interpretación.
+
+- [ ] 6) Reproducibilidad de cierre "one-click"
+- Objetivo: permitir reconstruir resultados de fin a fin sin pasos manuales ambiguos.
+- Acción mínima: validar pipeline maestro, documentar prerequisitos, flags y outputs esperados.
+- Evidencia esperada: `Código/run_research_pipeline.py` validado + `README.md` y/o `Código/README.md` actualizados.
+
+- [ ] 7) Consistencia editorial total
+- Objetivo: unificar términos y notación en toda la tesis.
+- Acción mínima: estandarizar `supernodo`, `arista`/`arco`, `salto`/`trasbordo`, criterios de redondeo y estilo técnico.
+- Evidencia esperada: correcciones transversales en `Latex/Tesis/capitulo*.tex`.
+
+- [ ] 8) Storytelling de figuras y tablas
+- Objetivo: que cada visual responda una pregunta concreta y sea legible sin ambigüedad.
+- Acción mínima: mejorar captions, referencias en texto y secuencia narrativa; reducir visuales densas sin guía.
+- Evidencia esperada: figuras/captions ajustados en cap. 4 y posibles reemplazos en `grafos/*`.
+
+- [ ] 9) Cierre con recomendaciones accionables
+- Objetivo: traducir resultados de red a decisiones de planeación claras.
+- Acción mínima: incluir recomendaciones priorizadas con impacto esperado, riesgo y dependencia de datos.
+- Evidencia esperada: subsección final en `Latex/Tesis/capitulo5_conclusiones.tex`.
