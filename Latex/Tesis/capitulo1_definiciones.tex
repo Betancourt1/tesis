@@ -13,7 +13,7 @@
             Un \textbf{grafo} $G$ es un par $(V,E)$ que consiste en un conjunto no vacío $V$ de \textbf{nodos} y una colección $E$ de \textbf{aristas}, donde cada arista conecta un par de nodos. La definición formal más restrictiva, la de un \textbf{grafo simple}, exige que las aristas conecten pares de nodos distintos y que no haya más de una arista entre el mismo par de nodos. A lo largo de este capítulo, se presentarán variantes como grafos dirigidos, multígrafos o grafos con lazos, que relajan estas condiciones.
         \end{definicion}
 
-        A un grafo $G$ con conjunto de aristas $V$ también lo podemos definir como un grafo \textit{en} $V$ o simplemente $G(V)$.
+        A un grafo $G$ con conjunto de nodos $V$ también lo podemos definir como un grafo \textit{en} $V$ o simplemente $G(V)$.
 
         \begin{definicion}[Lazo]
             Un \textbf{lazo} es una arista/arco cuyos extremos coinciden: $\{v,v\}$ en el caso no dirigido, o $(v,v)$ en el caso dirigido.
@@ -85,7 +85,7 @@
         Estas propiedades dan lugar a un espectro de categorías de grafos, cada una con implicaciones estructurales y algorítmicas particulares. Por consiguiente, a continuación se presentan las definiciones formales:
 
         \begin{definicion}[Grafo no dirigido]
-            Un grafo es \textbf{no dirigido} si sus aristas no tienen una orientación específica; es decir, $(u, v) \in E$ implica que $(v, u) \in E$.
+            Un grafo es \textbf{no dirigido} si sus aristas no tienen orientación; esto es, cada arista es un par no ordenado $\{u,v\}$ con $u,v\in V$. En particular, $\{u,v\}=\{v,u\}$.
         \end{definicion}
 
         \begin{ejemplo}
@@ -109,7 +109,7 @@
             \end{center}
         \end{ejemplo}
 
-        \begin{definicion}[Grafo dirigido (grafo dirigido)]
+        \begin{definicion}[Grafo dirigido]
             Un grafo es \textbf{dirigido} (o \emph{grafo dirigido}) si cada arista tiene una dirección; es decir, $(u, v) \in E$ no implica que $(v, u) \in E$ (aunque puede ocurrir). En este caso, diremos que $u$ se dirige a $v$.
         \end{definicion}
 
@@ -308,7 +308,7 @@
         \end{observacion}
 
 
-        La noción de subgrafo es importante en aquellos escenarios en los que no nos interesa, o no nos es posible, estudiar un grafo completo. Es claro que un subgrafo tiene todas las propiedades y tiene todas las propiedades que enunciamos antes para cualquier grafo. Asimismo, hay algunos subgrafos que nos pueden llegar a interesar especialmente por su naturaleza estructural con respecto al resto del grafo al que pertenecen, tal es el caso de los \textit{caminos}, \textit{ciclos} y \textit{árboles}, los cuales definimos a continuación.
+        La noción de subgrafo es importante en aquellos escenarios en los que no nos interesa, o no nos es posible, estudiar un grafo completo. Un subgrafo hereda de forma natural las nociones y propiedades ya enunciadas para grafos. Asimismo, hay algunos subgrafos que nos pueden llegar a interesar especialmente por su naturaleza estructural con respecto al resto del grafo al que pertenecen, tal es el caso de los \textit{caminos}, \textit{ciclos} y \textit{árboles}, los cuales definimos a continuación.
 
          \subsubsection{Recorridos, caminos y ciclos}
 
@@ -537,7 +537,7 @@
         \subsubsection{Árboles}
 
             \begin{definicion}[Árbol]
-                Un \textbf{árbol} es un grafo conexo y acíclico en el que, fijado un nodo raíz $r$, existe exactamente un camino dirigido de $r$ a cualquier otro nodo del grafo.
+                Un \textbf{árbol} es un grafo no dirigido, conexo y acíclico. Equivalentemente, para cualesquiera dos nodos distintos existe exactamente un camino simple que los une.
             \end{definicion}
 
             \begin{ejemplo}[Árbol]
@@ -562,7 +562,7 @@
                 \end{tikzpicture}
                 \end{center}
 
-                Desde la raíz $v_1$, existe exactamente un camino dirigido a cada nodo del árbol.
+                Tomando $v_1$ como raíz, en el subyacente no dirigido existe exactamente un camino simple desde $v_1$ hasta cualquier otro nodo.
             \end{ejemplo}
 
             \begin{definicion}[Hoja]
@@ -1261,6 +1261,15 @@
             \begin{ejemplo}[Cálculo ilustrativo mínimo]
                 En $P_4$ no dirigido con vértices $1$–$4$, $Ef(G)$ se obtiene sumando $1/d(i,j)$ sobre $i\neq j$ y normalizando por $12$. Al eliminar $v=2$ el grafo se parte, varias contribuciones pasan a $0$, y $Ef(G\setminus\{2\})<Ef(G)$; así $V_v>0$. El mismo procedimiento se aplica en grafos dirigidos con distancias dirigidas.
             \end{ejemplo}
+
+    \section{Convenciones para esta tesis}
+        Para vincular las definiciones anteriores con los cálculos empíricos de esta investigación, fijamos las siguientes convenciones de modelado:
+        \begin{itemize}
+            \item \textbf{L-space.} Se trabaja con un grafo dirigido y ponderado. Para distancias, cercanía e intermediación se usa como costo el tiempo de viaje; para grado ponderado y detección de comunidades se usa el número de servicios compartidos por arista.
+            \item \textbf{P-space.} Se trabaja con un grafo no dirigido en el que las centralidades principales se calculan sobre la topología de conectividad (sin ponderación de tiempo de viaje).
+            \item \textbf{Comunidades.} Para aplicar Louvain sobre L-space, se utiliza la proyección no dirigida del grafo, preservando los pesos de conectividad entre nodos.
+        \end{itemize}
+        Estas decisiones aseguran consistencia entre el marco teórico (distancias, centralidades y modularidad) y la implementación computacional reportada en los capítulos de construcción y resultados.
 
     \section{Algoritmos fundamentales en teoría de grafos}
         Al estudiar distancias y caminos mínimos en grafos finitos, necesitamos procedimientos efectivos que, a partir de especificaciones bien definidas, produzcan soluciones correctas en tiempo finito y con garantías de optimalidad. En esta línea situamos dos hitos clásicos: el algoritmo de Dijkstra (formulado en 1956 y publicado en 1959), que resuelve caminos mínimos desde una fuente única con pesos no negativos mediante relajación y selección iterativa del vértice con etiqueta mínima, y el algoritmo de Floyd–Warshall (1962), que computa todas las distancias par–a–par por programación dinámica incorporando vértices intermedios; este último unifica ideas de Floyd para costos mínimos y de Warshall para cierre transitivo, con antecedentes en la aritmética de caminos de Kleene. En lo que sigue fijamos hipótesis, enunciamos invariantes y recurrencias, demostramos corrección y acotamos la complejidad temporal y espacial de ambos métodos.

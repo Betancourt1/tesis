@@ -118,16 +118,26 @@ class GTFSValidator:
         """Validar estructura de archivos GTFS"""
         self.print_section("2. CHECKS DE ESTRUCTURA")
 
+        def resolve_table_path(table: str) -> Path | None:
+            if table == 'stop_times':
+                cleaned_csv = self.gtfs_path / "stop_times_cleaned.csv"
+                if cleaned_csv.exists():
+                    return cleaned_csv
+            csv_path = self.gtfs_path / f"{table}.csv"
+            txt_path = self.gtfs_path / f"{table}.txt"
+            if csv_path.exists():
+                return csv_path
+            if txt_path.exists():
+                return txt_path
+            return None
+
         # Test 1: Archivos obligatorios
         required_files = ['agency', 'stops', 'routes', 'trips', 'stop_times']
         calendar_files = ['calendar', 'calendar_dates']
 
         missing_files = []
         for file in required_files:
-            csv_path = self.gtfs_path / f"{file}.csv"
-            txt_path = self.gtfs_path / f"{file}.txt"
-
-            if not csv_path.exists() and not txt_path.exists():
+            if resolve_table_path(file) is None:
                 missing_files.append(file)
 
         has_calendar = any(
@@ -153,11 +163,9 @@ class GTFSValidator:
         bom_issues = []
 
         for file in required_files + calendar_files:
-            csv_path = self.gtfs_path / f"{file}.csv"
-            txt_path = self.gtfs_path / f"{file}.txt"
-            path = csv_path if csv_path.exists() else txt_path
+            path = resolve_table_path(file)
 
-            if not path.exists():
+            if path is None or not path.exists():
                 continue
 
             # Check BOM (solo informativo, no bloqueante)
@@ -689,12 +697,22 @@ class GTFSValidator:
 # ============================================================================
 
 def main():
+    import os
     import sys
 
     if len(sys.argv) > 1:
         gtfs_path = sys.argv[1]
     else:
-        gtfs_path = r"C:\Users\fbetancourt\OneDrive - VINOS AMERICA SA DE CV\Documentos\GitHub\Tesis\Datasets\gtfs_amg_20240312\Datos"
+        repo_root = Path(__file__).resolve().parents[3]
+        dotenv_path = repo_root / ".env"
+        if dotenv_path.exists():
+            from dotenv import load_dotenv
+
+            load_dotenv(dotenv_path=dotenv_path)
+        gtfs_rel = os.getenv("GTFS_DIR")
+        if not gtfs_rel:
+            raise SystemExit("GTFS_DIR no esta definido en .env")
+        gtfs_path = str((repo_root / gtfs_rel).resolve())
 
     validator = GTFSValidator(gtfs_path)
     passed = validator.run()
