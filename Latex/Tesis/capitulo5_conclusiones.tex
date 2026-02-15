@@ -29,6 +29,41 @@ Retomando las interrogantes planteadas en el Capítulo 1, los modelos construido
     La detección de comunidades en el Espacio $P$ sugiere que la organización funcional del transporte obedece más a corredores de movilidad y zonas de atracción económica que a divisiones administrativas municipales estrictas. Los \textit{cliques} locales observados indican zonas de alta integración interna, pero conectadas laxamente entre sí por las rutas troncales.
 \end{description}
 
+\section{Matriz de Trazabilidad de Preguntas de Investigación}
+
+La Tabla~\ref{tab:trazabilidad_preguntas} resume la trazabilidad entre preguntas, métricas observadas, resultados, implicaciones y límites del estudio.
+
+\begin{table}[h!]
+    \centering
+    \scriptsize
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{p{0.17\textwidth} p{0.22\textwidth} p{0.20\textwidth} p{0.20\textwidth} p{0.17\textwidth}}
+        \toprule
+        \textbf{Pregunta} & \textbf{Métrica / evidencia} & \textbf{Resultado clave} & \textbf{Implicación} & \textbf{Límite} \\
+        \midrule
+        ¿Cómo está tejida la red? &
+        L-espacio: densidad $0.000486$, clustering $0.1088$, diámetro $77$. P-espacio: densidad $0.0436$, clustering $0.4085$, diámetro $6$, camino medio $2.41$. &
+        Estructura dual: infraestructura dispersa y frágil frente a servicio denso y de mundo pequeño. &
+        La experiencia de conectividad del usuario depende de la superposición de rutas más que de la malla física. &
+        El modelo es estático (GTFS programado) y no incorpora variación temporal intradía de la oferta. \\
+        \midrule
+        ¿Existen puntos críticos cuya falla colapsaría el servicio? &
+        Ataque dirigido (50 nodos/supernodos de mayor grado). L-espacio: LCC $97.45\%$, eficiencia $81.5\%$ ($\sim 19\%$ de caída). P-espacio: LCC $98.74\%$, eficiencia $97.36\%$ ($\sim 2.6\%$ de caída). &
+        La criticidad es alta en infraestructura y moderada en servicio; el sistema no colapsa globalmente en $P$, pero sí se degrada en $L$. &
+        Conviene priorizar protección y refuerzo de hubs estructurales (p. ej., centro y corredores articuladores). &
+        No se modelan fallos en cascada ni redistribución dinámica de flujo ante interrupciones. \\
+        \midrule
+        ¿Se agrupan los supernodos en comunidades funcionales? &
+        Louvain: 40 comunidades en L-espacio; 11 en P-espacio (modularidad $0.54$), con 67\% de supernodos en las cinco mayores. &
+        Sí, existen comunidades funcionales policéntricas asociadas a corredores y zonas de actividad, no estrictamente a límites administrativos. &
+        El diseño y gestión puede abordarse por subsistemas funcionales, no sólo por municipio. &
+        La partición depende del algoritmo y de los pesos elegidos; otras configuraciones pueden variar los cortes. \\
+        \bottomrule
+    \end{tabular}
+    \caption{Matriz de trazabilidad entre preguntas de investigación, evidencia cuantitativa, hallazgos e implicaciones.}
+    \label{tab:trazabilidad_preguntas}
+\end{table}
+
 \section{Limitaciones y Agenda de Investigación Futura}
 
 A pesar de la robustez del análisis topológico estático presentado, la abstracción realizada impone límites que abren líneas prometedoras para futura investigación en matemáticas aplicadas al transporte:

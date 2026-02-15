@@ -41,11 +41,6 @@
 - Esta lista contiene solo pendientes. Cuando una mejora se complete, se elimina de esta sección.
 - La evidencia de cierre debe quedar en commit(s) y/o en `Latex/Tesis/*.tex`, `Código/*`, `grafos/*`, `out/*`.
 
-- [ ] 2) Matriz de trazabilidad de preguntas de investigación
-- Objetivo: vincular cada pregunta con métrica, resultado, implicación y límite.
-- Acción mínima: agregar una tabla sintética en resultados o conclusiones con ese mapeo.
-- Evidencia esperada: nueva tabla en `Latex/Tesis/capitulo4_resultados.tex` o `Latex/Tesis/capitulo5_conclusiones.tex`.
-
 - [ ] 3) Sensibilidad de supuestos de modelado
 - Objetivo: mostrar qué tan estables son los hallazgos ante cambios razonables en supuestos.
 - Acción mínima: ejecutar variantes de construcción/análisis (p. ej., criterios de consolidación y ataques de robustez) y comparar métricas clave.
