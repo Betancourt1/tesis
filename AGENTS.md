@@ -41,11 +41,6 @@
 - Esta lista contiene solo pendientes. Cuando una mejora se complete, se elimina de esta sección.
 - La evidencia de cierre debe quedar en commit(s) y/o en `Latex/Tesis/*.tex`, `Código/*`, `grafos/*`, `out/*`.
 
-- [ ] 1) Tesis central más fuerte y explícita
-- Objetivo: fijar una proposición principal única y verificable que conecte toda la tesis.
-- Acción mínima: redactar en introducción y conclusión una frase núcleo consistente (infraestructura frágil vs servicio resiliente) y alinear subtítulos/resultados a esa narrativa.
-- Evidencia esperada: ajustes en `Latex/Tesis/capitulo0_introduccion.tex` y `Latex/Tesis/capitulo5_conclusiones.tex`.
-
 - [ ] 2) Matriz de trazabilidad de preguntas de investigación
 - Objetivo: vincular cada pregunta con métrica, resultado, implicación y límite.
 - Acción mínima: agregar una tabla sintética en resultados o conclusiones con ese mapeo.
