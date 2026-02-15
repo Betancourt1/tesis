@@ -9,9 +9,9 @@ El análisis topológico realizado arroja tres conclusiones principales que cara
 \begin{enumerate}
     \item \textbf{Topología del Espacio $L$ (Infraestructura):} El análisis confirma que la infraestructura subyacente posee una estructura cuasi-arbórea (con un coeficiente de clustering bajo, $\approx 0.108$) y una conectividad frágil. Matemáticamente, la red depende críticamente de nodos articuladores centrales y corredores específicos. La baja redundancia de ciclos en este espacio implica que la infraestructura física carece de plasticidad ante fallos locales, resultando en una degradación rápida de la eficiencia global ($\sim 19\%$) ante ataques dirigidos a los nodos de mayor centralidad.
 
-    \item \textbf{Topología del Espacio $P$ (Servicio):} En contraste, la proyección al Espacio $P$ revela una red de Mundo Pequeño (con un diámetro $D=6$) y una alta densidad de \textit{cliques} locales. Esta estructura mitiga las deficiencias del Espacio $L$: la superposición de múltiples rutas sobre los mismos tramos físicos genera una redundancia funcional que mantiene la conectividad del componente gigante al 98.7\% incluso tras la remoción de los 50 nodos más importantes.
+    \item \textbf{Topología del Espacio $P$ (Servicio):} En contraste, la proyección al Espacio $P$ revela una red de Mundo Pequeño (con un diámetro $D=6$) y una alta densidad de \textit{cliques} locales. Esta estructura mitiga las deficiencias del Espacio $L$: la superposición de múltiples rutas sobre los mismos tramos físicos genera una redundancia funcional que mantiene la conectividad del componente gigante al 98.74\% incluso tras la remoción de los 50 supernodos más importantes.
 
-    \item \textbf{Conclusión General:} Existe una clara desconexión entre la eficiencia topológica de la infraestructura (baja) y la del servicio (alta). El sistema logra ser operativo no por un diseño eficiente de la red vial subyacente, sino por una saturación de rutas que compensan la falta de conectividad física mediante redundancia operativa.
+    \item \textbf{Conclusión General:} Existe una clara desconexión entre la eficiencia topológica de la infraestructura (baja) y la del servicio (alta). El sistema logra ser operativo no por un diseño eficiente de la red vial subyacente, sino por la superposición de rutas que compensa la falta de conectividad física mediante redundancia operativa.
 \end{enumerate}
 
 \section{Respuestas a las Preguntas de Investigación}
@@ -25,7 +25,7 @@ Retomando las interrogantes planteadas en el Capítulo 1, los modelos construido
     \item[¿Existen puntos críticos cuya falla colapsaría el servicio?]
     Sí. El análisis de robustez demostró que, si bien el servicio (Espacio $P$) es resiliente a fallos aleatorios, la infraestructura (Espacio $L$) es altamente vulnerable a ataques dirigidos. Puntos como el Centro Histórico y corredores como Mariano Otero actúan como articuladores sistémicos; su falla no solo desconecta vecindarios locales, sino que fragmenta la red globalmente, validando la hipótesis de vulnerabilidad estructural.
 
-    \item[¿Se agrupan las rutas en comunidades funcionales?]
+    \item[¿Se agrupan los supernodos en comunidades funcionales?]
     La detección de comunidades en el Espacio $P$ sugiere que la organización funcional del transporte obedece más a corredores de movilidad y zonas de atracción económica que a divisiones administrativas municipales estrictas. Los \textit{cliques} locales observados indican zonas de alta integración interna, pero conectadas laxamente entre sí por las rutas troncales.
 \end{description}
 
