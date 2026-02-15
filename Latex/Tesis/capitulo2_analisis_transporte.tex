@@ -107,7 +107,7 @@
                 $$
                 donde $V_p$ representa el conjunto de paradas y $V_i$ el de intersecciones. En este caso, dos tipos de aristas pueden definirse: las que conectan paradas consecutivas dentro de una misma ruta y las que vinculan intersecciones adyacentes, enriqueciendo el análisis de continuidad espacial del sistema y su integración con la red vial.
 
-                El $L\text{-espacio}$, en este último caso, se corresponde con un \textit{grafo planar}, es decir, un grafo que puede representarse en el plano sin que sus aristas se crucen. Esta propiedad es especialmente relevante para redes de transporte urbano, donde la estructura topológica se encuentra restringida por la disposición física del territorio y la infraestructura \cite{rodrigues2020}. En contextos metropolitanos complejos, como el de Guadalajara, dicha representación permite relacionar directamente la geometría de las rutas con la accesibilidad territorial y con los patrones de concentración de la demanda \cite{barraza2021}.
+                El $L\text{-espacio}$, en este último caso, puede aproximarse mediante un \textit{grafo planar}, es decir, un grafo que puede representarse en el plano sin que sus aristas se crucen. Esta propiedad es especialmente relevante para redes de transporte urbano, donde la estructura topológica se encuentra restringida por la disposición física del territorio y la infraestructura \cite{rodrigues2020}. En contextos metropolitanos complejos, como el de Guadalajara, dicha representación permite relacionar directamente la geometría de las rutas con la accesibilidad territorial y con los patrones de concentración de la demanda \cite{barraza2021}.
 
                 Formalmente, el $L\text{-espacio}$ puede considerarse una proyección de la red bipartita general $G_B=(V \cup R,E_B)$ sobre el conjunto $V$ de paradas, donde dos vértices se conectan si existe una ruta $r \in R$ que las enlaza consecutivamente. Esta proyección conserva la estructura local de conectividad y sirve como base para definir métricas estructurales como:
                 $$
@@ -227,12 +227,12 @@
 
             \subsubsection{El $B$-espacio}
 
-                Una última forma de modelar los sistemas de transporte público, son los $B\text{-espacios}$, pero antes de definirlos, debemos definir lo que es un grafo bipartito.
+                Una última forma de modelar los sistemas de transporte público son los $B\text{-espacios}$, pero antes de definirlos, debemos definir lo que es un grafo bipartito.
 
                 \begin{definicion}[Grafo bipartito]
-                    Sea $G=(V,E)$ un grafo simple. Diremos que $G$ es \textit{bipartito} si existe una partición de su conjunto de vértices $V=V_1\cup V_2$, con $V_1\cap V_2=\emptyset$, tal que toda arista de $E$ une un vértice de $V_1$ con uno de $V_2$; es decir,
+                    Sea $G=(V,E)$ un grafo simple no dirigido. Diremos que $G$ es \textit{bipartito} si existe una partición de su conjunto de vértices $V=V_1\cup V_2$, con $V_1\cap V_2=\emptyset$, tal que toda arista de $E$ une un vértice de $V_1$ con uno de $V_2$; es decir,
                     \[
-                        E \subseteq \{(u,v)\mid u\in V_1,\, v\in V_2\}.
+                        E \subseteq \{\{u,v\}\mid u\in V_1,\, v\in V_2\}.
                     \]
                 \end{definicion}
 
@@ -393,7 +393,7 @@
                 \begin{itemize}
                     \item \textbf{Conectividad ideal}: En un buen sistema de transporte público integrado, el grafo $P\text{-espacio}$ idealmente será conexo, reflejando que desde cualquier parada se puede llegar a cualquier otra usando alguna combinación de líneas (aunque impliquen transbordos). En cambio, si en $P\text{-espacio}$ aparecieran múltiples componentes, significaría que existen subconjuntos de paradas aislados en términos de servicio – es decir, ciertas rutas o grupos de rutas que no comparten ninguna parada con el resto del sistema, imposibilitando viajar de ese subgrafo a otro sin cambiar fuera del sistema. En la práctica urbana, la conectividad global de $G_P$ suele ser alta; incluso si la red física es desconexa (por ejemplo dos tranvías sin unión), mientras haya un punto de intercambio (parada en común o estación de transferencia) entre modos o líneas, el $P$-grafo unirá esos subgrupos.
 
-                    \item \textbf{Diámetro e integración sin transbordos}: Métricas globales como el diámetro y la densidad de $G_P$ cuantifican la \textit{integración sin transbordos}: un diámetro pequeño en $P$ (pocos pasos para conectar cualquier par de nodos) indica que se requieren pocos transbordos máximos para cubrir toda la ciudad, lo cual es deseable en términos operativos.
+                    \item \textbf{Diámetro e integración con pocos transbordos}: Métricas globales como el diámetro y la densidad de $G_P$ cuantifican la \textit{integración operacional}: un diámetro pequeño en $P$ (pocos pasos para conectar cualquier par de nodos) indica que se requieren pocos transbordos máximos para cubrir toda la ciudad, lo cual es deseable en términos operativos.
 
                     \item \textbf{Densidad elevada por estructura de cliques}: La densidad (proporción de aristas existentes de entre las posibles) tiende a ser elevada en $P\text{-espacio}$ justamente por la formación de cliques por ruta – por ejemplo, en una ciudad con $N$ paradas y rutas que cubren muchas de ellas, $G_P$ puede acercarse a un grafo casi completo. Esto contrasta con el $L\text{-espacio}$ mucho menos denso en términos de aristas.
 
