@@ -6,14 +6,14 @@
     
     \section{GTFS de la Zona Metropolitana de Guadalajara}
     
-        La base de este estudio son los datos de la red de transporte público de la Zona Metropolitana de Guadalajara, obtenidos de una fuente pública en formato \textit{General Transit Feed Specification} (GTFS). La versión que usaremos corresponde a la publicada en Marzo del 2024.
+        La base de este estudio son los datos de la red de transporte público de la Zona Metropolitana de Guadalajara, obtenidos de una fuente pública en formato \textit{General Transit Feed Specification} (GTFS). La versión que usaremos corresponde a la publicada en marzo de 2024.
         
         El estándar GTFS organiza la información del transporte en una serie de archivos de texto plano (.csv) interrelacionados. Aunque el estándar completo es exhaustivo (ver Apéndice \ref{ap:gtfs_files}), para la construcción de nuestros modelos de red, los siguientes archivos son de importancia crítica:
         \begin{itemize}
             \item \texttt{stops.csv}: Contiene las coordenadas geográficas de cada parada. Es la base para crear los nodos de nuestros grafos.
             \item \texttt{routes.csv}: Define las distintas rutas o líneas de transporte.
             \item \texttt{trips.csv}: Enumera los viajes específicos que se realizan para cada ruta.
-            \item \texttt{stop_times.csv}: Es el archivo más importante, ya que vincula los viajes con las paradas, especificando la secuencia y los horarios de llegada y salida. Es la fuente principal para construir las aristas. En la implementación se usa su versión ya depurada \texttt{stop\_times\_cleaned.csv}, resultado del procedimiento de validación y limpieza descrito abajo.
+            \item \texttt{stop_times.csv}: Es el archivo más importante, ya que vincula los viajes con las paradas, especificando la secuencia y los horarios de llegada y salida. Es la fuente principal para construir las aristas. En la implementación se usa su versión ya depurada \texttt{stop\_times\_cleaned.csv}, resultado del procedimiento de validación y limpieza descrita abajo.
         \end{itemize}
         
         La riqueza de este estándar permite una modelación detallada, pero su naturaleza compleja y la posibilidad de inconsistencias en los datos hacen que un preprocesamiento riguroso sea un requisito indispensable antes de cualquier análisis.
@@ -102,7 +102,7 @@
             \end{itemize}
 
         \subsection{Grafo P-espacio: Modelo de Servicio}
-            El proceso, implementado en python, resulta en un grafo con las siguientes propiedades:
+            El proceso, implementado en Python, resulta en un grafo con las siguientes propiedades:
             \begin{itemize}
                 \item \textbf{Nodos (V):} Los mismos 4,203 "supernodos" del L-espacio.
                 \item \textbf{Aristas (E):} 385,225 aristas \textbf{no dirigidas}. Una arista (u, v) existe si al menos una ruta de autobús pasa por ambos nodos u y v. El número de aristas es significativamente mayor que en el L-espacio, reflejando una red funcionalmente muy densa.
@@ -119,6 +119,6 @@
         
         \paragraph{Abstracción del componente temporal.} Aunque el L-espacio usa el tiempo de viaje como peso, los grafos son una representación estática. No se modela la frecuencia de los autobuses ni los tiempos de espera en las paradas.
         
-        \paragraph{Modelado de transbordos.} El proceso de consolidación modela implícitamente los transbordos peatonales de corta distancia (<100m). Sin embargo, no se contemplan explícitamente las caminatas de mayor distancia que un usuario podría realizar para conectar dos rutas.
+        \paragraph{Modelado de transbordos.} El proceso de consolidación modela implícitamente los transbordos peatonales de corta distancia ($<100\,\text{m}$). Sin embargo, no se contemplan explícitamente las caminatas de mayor distancia que un usuario podría realizar para conectar dos rutas.
         
         A pesar de estas limitaciones, los grafos resultantes son representaciones fieles de la estructura y el servicio programado de la red. Son herramientas poderosas para el análisis de la conectividad, la centralidad y la accesibilidad estructural, que son los objetivos centrales de esta investigación.
