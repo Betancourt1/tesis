@@ -12,8 +12,14 @@ Tesis de modelacion matematica para obtener el grado de licenciado en matematica
 Para reconstruir la parte computacional completa:
 
 ```bash
-python Código/run_research_pipeline.py
+python "Código/run_research_pipeline.py"
 ```
 
+Para validar prerequisitos y plan sin ejecutar pasos:
+
+```bash
+python "Código/run_research_pipeline.py" --dry-run
+```
+
+El pipeline soporta reanudacion con checkpoints en `out/pipeline_state/` y genera reporte de ejecucion en `out/pipeline_state/research_last_run.json`.
 Guia detallada y opciones en `Código/README.md`.
-El pipeline soporta reanudacion con checkpoints en `out/pipeline_state/`.

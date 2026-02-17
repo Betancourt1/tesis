@@ -13,13 +13,14 @@ pip install -r requirements.txt
 ```
 
 2. Crear `.env` desde `.env.example` y ajustar rutas.
+3. Usar Python 3.10+ (validado en 3.12).
 
 ## Pipeline reproducible (un solo comando)
 
 Desde la raiz del repo:
 
 ```bash
-python Código/run_research_pipeline.py
+python "Código/run_research_pipeline.py"
 ```
 
 El pipeline hace, en orden:
@@ -29,37 +30,50 @@ El pipeline hace, en orden:
 4. Ejecuta construccion + analisis de `P-space`.
 
 El pipeline guarda checkpoints en `out/pipeline_state/`. Si falla en un paso avanzado, al relanzar continua desde donde se quedo.
+Cada ejecucion deja un reporte JSON en `out/pipeline_state/research_last_run.json`.
 
 ## Opciones utiles
 
 - Continuar aunque falle validacion GTFS:
 
 ```bash
-python Código/run_research_pipeline.py --continue-on-validation-fail
+python "Código/run_research_pipeline.py" --continue-on-validation-fail
 ```
 
 - Omitir pasos especificos:
 
 ```bash
-python Código/run_research_pipeline.py --skip-validation --skip-clean-stop-times
+python "Código/run_research_pipeline.py" --skip-validation --skip-clean-stop-times
 ```
 
 - Exportar resultados para Gephi/QGIS al final:
 
 ```bash
-python Código/run_research_pipeline.py --export both
+python "Código/run_research_pipeline.py" --export both
 ```
 
 - Forzar recalculo completo sin usar checkpoints:
 
 ```bash
-python Código/run_research_pipeline.py --force
+python "Código/run_research_pipeline.py" --force
 ```
 
 - Re-ejecutar ignorando estado guardado (sin borrar archivos):
 
 ```bash
-python Código/run_research_pipeline.py --no-resume
+python "Código/run_research_pipeline.py" --no-resume
+```
+
+- Validar prerequisitos y plan sin ejecutar pasos:
+
+```bash
+python "Código/run_research_pipeline.py" --dry-run
+```
+
+- Definir rutas personalizadas para checkpoints y reporte:
+
+```bash
+python "Código/run_research_pipeline.py" --state-file out/pipeline_state/custom_research.json --report-file out/pipeline_state/custom_last_run.json
 ```
 
 ## Sensibilidad de supuestos de modelado (Punto 3)
@@ -82,9 +96,9 @@ Salidas:
 - `out/sensibilidad/punto3_modelado/sensibilidad_p_route_vs_trip.csv`
 - `out/sensibilidad/punto3_modelado/resumen_sensibilidad.json`
 
-## Escenarios de intervención topológica (Punto 4)
+## Escenarios de intervencion topologica (Punto 4)
 
-Para cuantificar propuestas de mejora sobre el L-space (protección de hubs, refuerzo periférico y recableado con bypass):
+Para cuantificar propuestas de mejora sobre el L-space (proteccion de hubs, refuerzo periferico y recableado con bypass):
 
 ```bash
 python "Código/analisis_comparativo/intervenciones/analisis_intervenciones_topologicas.py"
@@ -114,10 +128,25 @@ Salidas:
 - `out/incertidumbre/punto5_rangos/rangos_intervenciones_punto4.png`
 - `out/incertidumbre/punto5_rangos/resumen_rangos_resultados.json`
 
+## Reproducibilidad de cierre one-click (Punto 6)
+
+Validacion rapida sin recomputar toda la investigacion:
+
+```bash
+python "Código/run_research_pipeline.py" --dry-run
+python "Código/run_research_pipeline.py" --skip-clean-stop-times --skip-validation --skip-l-space --skip-p-space
+```
+
+Checklist de validacion en `out/pipeline_state/research_last_run.json`:
+- `prerequisites.ok` en `true`.
+- `steps[*].status` consistente con el modo ejecutado (`planned`, `skipped_by_flag`, `completed`, `skipped_checkpoint`).
+- `critical_outputs` con existencia de archivos clave (`stop_times_cleaned`, `l_space_consolidated_graph_path`, `p_space_graph_path`).
+
 ## Salidas esperadas
 
 - Grafos y metricas: `grafos/`
 - Exportes QGIS: `grafos_qgis/`
 - Reporte de duplicados GTFS: `out/validacion_gtfs/`
+- Estado y reportes de pipeline: `out/pipeline_state/`
 
 Estos directorios estan ignorados en Git para no versionar artefactos generados.

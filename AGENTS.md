@@ -42,11 +42,6 @@
 - La evidencia de cierre debe quedar en commit(s) y/o en `Latex/Tesis/*.tex`, `Código/*`, `grafos/*`, `out/*`.
 
 
-- [ ] 6) Reproducibilidad de cierre "one-click"
-- Objetivo: permitir reconstruir resultados de fin a fin sin pasos manuales ambiguos.
-- Acción mínima: validar pipeline maestro, documentar prerequisitos, flags y outputs esperados.
-- Evidencia esperada: `Código/run_research_pipeline.py` validado + `README.md` y/o `Código/README.md` actualizados.
-
 - [ ] 7) Consistencia editorial total
 - Objetivo: unificar términos y notación en toda la tesis.
 - Acción mínima: estandarizar `supernodo`, `arista`/`arco`, `salto`/`trasbordo`, criterios de redondeo y estilo técnico.
