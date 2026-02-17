@@ -42,11 +42,6 @@
 - La evidencia de cierre debe quedar en commit(s) y/o en `Latex/Tesis/*.tex`, `Código/*`, `grafos/*`, `out/*`.
 
 
-- [ ] 7) Consistencia editorial total
-- Objetivo: unificar términos y notación en toda la tesis.
-- Acción mínima: estandarizar `supernodo`, `arista`/`arco`, `salto`/`trasbordo`, criterios de redondeo y estilo técnico.
-- Evidencia esperada: correcciones transversales en `Latex/Tesis/capitulo*.tex`.
-
 - [ ] 8) Storytelling de figuras y tablas
 - Objetivo: que cada visual responda una pregunta concreta y sea legible sin ambigüedad.
 - Acción mínima: mejorar captions, referencias en texto y secuencia narrativa; reducir visuales densas sin guía.

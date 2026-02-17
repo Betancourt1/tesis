@@ -7,7 +7,7 @@ La presente investigación ha logrado modelar matemáticamente el sistema de tra
 El análisis topológico realizado arroja tres conclusiones principales que caracterizan el estado actual del sistema de transporte en la ZMG:
 
 \begin{enumerate}
-    \item \textbf{Topología del Espacio $L$ (Infraestructura):} El análisis confirma que la infraestructura subyacente posee una estructura cuasi-arbórea (con un coeficiente de clustering bajo, $\approx 0.108$) y una conectividad frágil. Matemáticamente, la red depende críticamente de nodos articuladores centrales y corredores específicos. La baja redundancia de ciclos en este espacio implica que la infraestructura física carece de plasticidad ante fallos locales, resultando en una degradación rápida de la eficiencia global ($\sim 19\%$) ante ataques dirigidos a los nodos de mayor centralidad.
+    \item \textbf{Topología del Espacio $L$ (Infraestructura):} El análisis confirma que la infraestructura subyacente posee una estructura cuasi-arbórea (con un coeficiente de clustering bajo, $\approx 0.1088$) y una conectividad frágil. Matemáticamente, la red depende críticamente de nodos articuladores centrales y corredores específicos. La baja redundancia de ciclos en este espacio implica que la infraestructura física carece de plasticidad ante fallos locales, resultando en una degradación rápida de la eficiencia global (\textasciitilde\!18.50\%) ante ataques dirigidos a los nodos de mayor centralidad.
 
     \item \textbf{Topología del Espacio $P$ (Servicio):} En contraste, la proyección al Espacio $P$ revela una red de Mundo Pequeño (con un diámetro $D=6$) y una alta densidad de \textit{cliques} locales. Esta estructura mitiga las deficiencias del Espacio $L$: la superposición de múltiples rutas sobre los mismos tramos físicos genera una redundancia funcional que mantiene la conectividad del componente gigante al 98.74\% incluso tras la remoción de los 50 supernodos más importantes.
 
@@ -48,7 +48,7 @@ La Tabla~\ref{tab:trazabilidad_preguntas} resume la trazabilidad entre preguntas
         El modelo es estático (GTFS programado) y no incorpora variación temporal intradía de la oferta. \\
         \midrule
         ¿Existen puntos críticos cuya falla colapsaría el servicio? &
-        Ataque dirigido (50 nodos/supernodos de mayor grado). L-espacio: LCC $97.45\%$, eficiencia $81.5\%$ ($\sim 19\%$ de caída). P-espacio: LCC $98.74\%$, eficiencia $97.36\%$ ($\sim 2.6\%$ de caída). &
+        Ataque dirigido (50 supernodos de mayor grado). L-espacio: LCC $97.45\%$, eficiencia $81.50\%$ (\textasciitilde\!18.50\% de caída). P-espacio: LCC $98.74\%$, eficiencia $97.36\%$ (\textasciitilde\!2.64\% de caída). &
         La criticidad es alta en infraestructura y moderada en servicio; el sistema no colapsa globalmente en $P$, pero sí se degrada en $L$. &
         Conviene priorizar protección y refuerzo de hubs estructurales (p. ej., centro y corredores articuladores). &
         No se modelan fallos en cascada ni redistribución dinámica de flujo ante interrupciones. \\

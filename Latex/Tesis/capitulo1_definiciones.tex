@@ -9,6 +9,8 @@
 
         A lo largo de este capítulo, se asumirá que todos los grafos son \textbf{finitos}, a menos que se especifique lo contrario. Las definiciones se presentarán especificando si aplican a grafos \textbf{dirigidos}, \textbf{no dirigidos} o ambos, pues las propiedades y métricas pueden cambiar significativamente según el tipo de grafo.
 
+        Convención terminológica: en la tesis se usa \textbf{arista} como término general; cuando la orientación sea relevante en un grafo dirigido, se utilizará \textbf{arco} para referirse explícitamente al par ordenado \((u,v)\).
+
         \begin{definicion}[Grafo]
             Un \textbf{grafo} $G$ es un par $(V,E)$ que consiste en un conjunto no vacío $V$ de \textbf{nodos} y una colección $E$ de \textbf{aristas}, donde cada arista conecta un par de nodos. La definición formal más restrictiva, la de un \textbf{grafo simple}, exige que las aristas conecten pares de nodos distintos y que no haya más de una arista entre el mismo par de nodos. A lo largo de este capítulo, se presentarán variantes como grafos dirigidos, multígrafos o grafos con lazos, que relajan estas condiciones.
         \end{definicion}
@@ -16,7 +18,7 @@
         A un grafo $G$ con conjunto de nodos $V$ también lo podemos definir como un grafo \textit{en} $V$ o simplemente $G(V)$.
 
         \begin{definicion}[Lazo]
-            Un \textbf{lazo} es una arista/arco cuyos extremos coinciden: $\{v,v\}$ en el caso no dirigido, o $(v,v)$ en el caso dirigido.
+            Un \textbf{lazo} es una conexión cuyos extremos coinciden: \(\{v,v\}\) en el caso no dirigido (arista), o \((v,v)\) en el caso dirigido (arco).
         \end{definicion}
 
         \begin{definicion}[Adyacencia de nodos]
