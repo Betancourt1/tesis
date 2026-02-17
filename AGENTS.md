@@ -42,11 +42,6 @@
 - La evidencia de cierre debe quedar en commit(s) y/o en `Latex/Tesis/*.tex`, `Código/*`, `grafos/*`, `out/*`.
 
 
-- [ ] 8) Storytelling de figuras y tablas
-- Objetivo: que cada visual responda una pregunta concreta y sea legible sin ambigüedad.
-- Acción mínima: mejorar captions, referencias en texto y secuencia narrativa; reducir visuales densas sin guía.
-- Evidencia esperada: figuras/captions ajustados en cap. 4 y posibles reemplazos en `grafos/*`.
-
 - [ ] 9) Cierre con recomendaciones accionables
 - Objetivo: traducir resultados de red a decisiones de planeación claras.
 - Acción mínima: incluir recomendaciones priorizadas con impacto esperado, riesgo y dependencia de datos.

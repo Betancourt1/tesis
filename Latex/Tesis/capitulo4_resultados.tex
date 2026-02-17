@@ -60,10 +60,11 @@
                 \item \textbf{Hallazgos Clave:} El \textbf{Centro Histórico} emerge como el corazón neurálgico para los transbordos. Nodos situados en Av. 16 de Septiembre y sus alrededores obtuvieron las puntuaciones más altas. Aunque no manejan el mayor volumen de rutas (grado), son los puntos por los que es necesario pasar para conectar eficientemente distintas zonas de la ciudad, funcionando como las articulaciones principales del sistema.
             \end{itemize}
 
+            La pregunta en este punto es: ¿qué supernodos concentran simultáneamente volumen de rutas e intermediación para sostener los transbordos del sistema? La Figura~\ref{fig:centralidad_b_l_space} responde esa pregunta al escalar por grado ponderado y colorear por centralidad de intermediación; esta lectura habilita priorizar supernodos para protección operativa y mantenimiento preventivo.
             \begin{figure}[h!]
                 \centering
                 \includegraphics[width=\textwidth]{../../grafos/l_space/grafo_centralidades_betweness.png}
-                \caption{Grafo con centralidades: más grande es mayor grado y más verde significa mayor centralidad de intermediación.}
+                \caption{L-espacio: tamaño del supernodo proporcional al grado ponderado y color verde proporcional a la centralidad de intermediación. La lectura conjunta permite ubicar supernodos puente cuya falla puede incrementar transbordos y debilitar la conectividad entre corredores.}
                 \label{fig:centralidad_b_l_space}
             \end{figure}
 
@@ -79,10 +80,11 @@
                 \item \textbf{Hallazgos Clave:} De manera sorprendente, esta métrica no destacó al centro ni a los grandes cruceros. En su lugar, reveló la existencia de un \textbf{corredor de alta influencia en Av. Mariano Otero}, al sur de Las Águilas. Los nodos en esta zona obtuvieron las puntuaciones más altas, indicando que no solo son importantes individualmente, sino que juntos forman la "columna vertebral" de un subsistema de nodos muy influyentes, conectando de manera robusta el sur y poniente de la ciudad.
             \end{itemize}
 
+            La pregunta comparativa aquí es: ¿en qué corredores coinciden accesibilidad temporal e influencia estructural? La Figura~\ref{fig:centralidad_c_l_space} responde al colorear supernodos por cercanía y escalarlos por eigenvector; esta lectura habilita decidir dónde concentrar acciones para reducir tiempos de viaje sin debilitar enlaces críticos.
             \begin{figure}[h!]
                 \centering
                 \includegraphics[width=\textwidth]{../../grafos/l_space/grafo_centralidades_closeness.png}
-                \caption{Grafo con centralidades: más grande es mayor grado de eigenvector y más verde significa mayor centralidad de cercanía.}
+                \caption{L-espacio: color verde según centralidad de cercanía y tamaño del supernodo según centralidad de eigenvector. La figura permite distinguir corredores desde los que conviene mejorar accesibilidad temporal y, al mismo tiempo, preservar influencia estructural.}
                 \label{fig:centralidad_c_l_space}
             \end{figure}
 
@@ -108,10 +110,12 @@
 
             En conclusión, la detección de comunidades revela la organización interna de la red de transporte. Muestra cómo el sistema se articula en subsistemas geográficos que corresponden en gran medida a la división municipal y a los grandes corredores viales del Área Metropolitana de Guadalajara. Esta granularidad es fundamental para entender los patrones de viaje a una escala intermedia, más allá del nivel de parada individual pero más específico que el de la red completa.
 
+            La pregunta territorial es: ¿qué bloques de supernodos están más cohesionados por rutas compartidas y dónde conviene focalizar seguimiento? La Figura~\ref{fig:comunidades_l_space} lo muestra con comunidades por modularidad y grosor de arista según rutas compartidas, habilitando decisiones de monitoreo e intervención por subsistemas.
+
             \begin{figure}[h!]
                 \centering
                 \includegraphics[width=\textwidth]{../../grafos/l_space/grafo.png}
-                \caption{Comunidades detectadas en el grafo L-espacio, coloreadas por modularidad y con el grosor de las aristas proporcional al número de rutas compartidas.}
+                \caption{Comunidades del L-espacio detectadas con Louvain: color por comunidad y grosor de arista según número de rutas compartidas. La visualización facilita delimitar subsistemas territoriales para seguimiento diferenciado de conectividad y operación.}
                 \label{fig:comunidades_l_space}
             \end{figure}
 
@@ -127,12 +131,12 @@
             El número de nodos a eliminar se fijó en 50 para tener una condición de parada clara y concentrarse en el impacto de los hubs más importantes.
 
         \subsubsection{Resultados del Análisis de Robustez}
-            Los resultados se muestran en la Figura~\ref{fig:robustez_l_space}.
+            La pregunta operativa es: ¿al fallar supernodos de alto grado se deteriora primero la cobertura (LCC) o la eficiencia temporal? La Figura~\ref{fig:robustez_l_space} responde al comparar ambas trayectorias bajo el mismo ataque dirigido, habilitando priorizar decisiones entre resiliencia estructural y tiempos de viaje.
 
             \begin{figure}[h!]
                 \centering
                 \includegraphics[width=\textwidth]{../../grafos/l_space/robustez/grafico_robustez_comparativo.png}
-                \caption{Impacto en el LCC y la Eficiencia Global del L-espacio al eliminar los 50 nodos de mayor grado ponderado.}
+                \caption{Trayectorias del LCC relativo y de la eficiencia global del L-espacio durante la eliminación secuencial de 50 supernodos de mayor grado ponderado. Permite interpretar si el ataque dirigido compromete primero la cobertura de red o la calidad temporal de los recorridos.}
                 \label{fig:robustez_l_space}
             \end{figure}
 
@@ -171,17 +175,21 @@
             \end{itemize}
             En conjunto, la centralidad revela una red de servicio fuertemente articulada alrededor del centro histórico y varios corredores troncales, con abundante redundancia de rutas que permite mantener alta cercanía y conectividad incluso al remover nodos aislados.
 
+            La pregunta para el servicio es: ¿qué supernodos concentran los transbordos más críticos y, por tanto, deben mantener prioridad operativa? La Figura~\ref{fig:centralidad_b_p_space} responde al escalar por grado y colorear por intermediación en el P-espacio, habilitando la priorización de puntos de transferencia.
+
             \begin{figure}[h!]
                 \centering
                 \includegraphics[width=\textwidth]{../../grafos/p_space/grafo_centralidades_betweness.png}
-                \caption{Grafo con centralidades: más grande es mayor grado y más verde significa mayor centralidad de intermediación.}
+                \caption{P-espacio: tamaño del supernodo según grado y color verde según centralidad de intermediación. La combinación identifica supernodos de servicio que concentran rutas de transferencia y requieren prioridad operativa.}
                 \label{fig:centralidad_b_p_space}
             \end{figure}
 
-                \begin{figure}[h!]
+            La pregunta complementaria es: ¿desde qué supernodos se alcanza más rápido el resto del servicio y cuáles, además, se insertan en ejes influyentes? La Figura~\ref{fig:centralidad_c_p_space} responde al combinar cercanía y eigenvector, habilitando decidir dónde enfocar mejoras para acortar tiempos de viaje.
+
+            \begin{figure}[h!]
                 \centering
                 \includegraphics[width=\textwidth]{../../grafos/p_space/grafo_centralidades_closeness.png}
-                \caption{Grafo con centralidades: más grande es mayor grado y más verde significa mayor centralidad de cercanía.}
+                \caption{P-espacio: color verde según centralidad de cercanía y tamaño del supernodo según centralidad de eigenvector. La lectura permite localizar ejes desde los cuales mejorar accesibilidad temporal con menor riesgo de afectar conectividad estructural.}
                 \label{fig:centralidad_c_p_space}
             \end{figure}
 
@@ -196,20 +204,24 @@
             \end{itemize}
             El resto incluye clusters poniente (Comunidad 4, 9) y núcleos menores (Communidades 0, 3, 7), mientras que sólo una comunidad es pequeña (\textless=5 nodos), reflejando alta conectividad transversal del servicio.
 
+            La pregunta territorial en servicio es: ¿qué zonas comparten suficientes rutas para planear acciones coordinadas por comunidad? La Figura~\ref{fig:comunidades_p_space} responde al mostrar modularidad y aristas ponderadas por transbordos, habilitando decisiones de coordinación interzonal.
+
             \begin{figure}[h!]
                 \centering
                 \includegraphics[width=\textwidth]{../../grafos/p_space/grafo.png}
-                \caption{Comunidades detectadas en el grafo P-espacio, coloreadas por modularidad y con aristas ponderadas por transbordos.}
+                \caption{Comunidades del P-espacio detectadas con Louvain: color por comunidad y grosor de arista proporcional a la intensidad de transbordo entre supernodos. La figura apoya la priorización de estrategias coordinadas entre zonas funcionalmente conectadas.}
                 \label{fig:comunidades_p_space}
             \end{figure}
 
         \subsection{Análisis de Robustez del P-espacio}
             Se aplicó el mismo esquema de ataque dirigido al P-espacio: eliminación secuencial de los \textbf{50 supernodos con mayor grado}. Tras cada eliminación se midieron el tamaño relativo del LCC y la eficiencia global no dirigida.
 
+            La pregunta de resiliencia del servicio es: ¿la red pierde antes cobertura o eficiencia cuando fallan los supernodos de mayor grado? La Figura~\ref{fig:robustez_p_space} responde al comparar ambas trayectorias bajo el ataque dirigido, habilitando priorizar medidas de continuidad operativa.
+
             \begin{figure}[h!]
                 \centering
                 \includegraphics[width=\textwidth]{../../grafos/p_space/robustez/grafico_robustez_p_space_comparativo.png}
-                \caption{Impacto en el LCC y la Eficiencia Global del P-espacio al eliminar los 50 supernodos de mayor grado.}
+                \caption{Trayectorias del LCC relativo y de la eficiencia global del P-espacio durante la eliminación secuencial de 50 supernodos de mayor grado. Permite evaluar si la redundancia de servicio sostiene cobertura y/o rapidez ante fallas en nodos troncales.}
                 \label{fig:robustez_p_space}
             \end{figure}
 
@@ -228,9 +240,11 @@
 
             En el \(L\)-espacio, al variar el umbral de consolidación cambia de forma importante el tamaño de la red, pero no su conectividad global: en todos los escenarios el componente gigante concentra más del \(99.8\%\) de los supernodos y no se observaron aristas con tiempo imputado.
 
+            La pregunta metodológica es: ¿qué umbral de consolidación preserva la conectividad del L-espacio sin inducir fragmentación adicional? La Tabla~\ref{tab:sensibilidad_l_space} responde al comparar estructura y LCC por umbral, habilitando la decisión del rango de consolidación.
+
             \begin{table}[h!]
                 \centering
-                \caption{Sensibilidad del \(L\)-espacio ante el umbral de consolidación espacial.}
+                \caption{Sensibilidad del \(L\)-espacio ante el umbral de consolidación espacial (75--150 m): nodos, aristas, densidad, componentes y proporción del LCC. Sirve para seleccionar umbrales que preserven el componente gigante sin introducir fragmentación adicional.}
                 \label{tab:sensibilidad_l_space}
                 \begin{tabular}{lrrrrr}
                     \toprule
@@ -246,9 +260,11 @@
 
             En el \(P\)-espacio, la diferencia entre construir por \texttt{route\_id} y por \texttt{trip\_id} se mantiene en todos los umbrales: el enfoque por ruta produce más aristas, y entre \(8.73\%\) y \(20.86\%\) de ellas no aparecen en la variante por viaje.
 
+            La pregunta de modelado es: ¿cuánto sesgo introduce construir el \(P\)-espacio por \texttt{route\_id} frente a \texttt{trip\_id} en cada umbral? La Tabla~\ref{tab:sensibilidad_p_space_route_trip} responde con el diferencial de aristas route-only, habilitando decidir el criterio de construcción más consistente con el objetivo analítico.
+
             \begin{table}[h!]
                 \centering
-                \caption{Diferencia estructural en \(P\)-espacio: clique por ruta vs. clique por viaje.}
+                \caption{Comparación estructural del \(P\)-espacio construido por clique de \texttt{route\_id} frente a clique de \texttt{trip\_id}, con conteo de aristas route-only por umbral. Permite estimar el sesgo de sobreconectividad asociado al supuesto route-only del modelo principal.}
                 \label{tab:sensibilidad_p_space_route_trip}
                 \begin{tabular}{lrrrr}
                     \toprule
@@ -273,9 +289,11 @@
             \end{itemize}
             En todos los casos se midió el impacto tras remover 50 nodos por grado ponderado usando: porcentaje de \(LCC\), eficiencia global dirigida (ponderada por \texttt{travel\_time\_minutes}) y diámetro topológico del componente gigante.
 
+            La pregunta de decisión es: ¿qué intervención topológica ofrece mejor balance entre conectividad, eficiencia y diámetro tras el ataque dirigido? La Tabla~\ref{tab:intervenciones_topologicas_l_space} responde al comparar métricas post-ataque por escenario, habilitando priorizar intervenciones con mayor beneficio operativo.
+
             \begin{table}[h!]
                 \centering
-                \caption{Comparativo de escenarios de intervención topológica en \(L\)-espacio (post-ataque dirigido de 50 nodos).}
+                \caption{Escenarios de intervención topológica en \(L\)-espacio después de un ataque dirigido de 50 supernodos: aristas agregadas, LCC post-ataque, retención de eficiencia y diámetro. La tabla permite comparar el balance entre resiliencia estructural y desempeño temporal de cada estrategia.}
                 \label{tab:intervenciones_topologicas_l_space}
                 \begin{tabular}{lrrrrr}
                     \toprule
@@ -300,10 +318,12 @@
         \subsection{Bandas de Incertidumbre de Resultados}
             Para evitar depender de un único valor puntual, se consolidaron los resultados de los puntos 3 y 4 en términos de bandas mínimo--máximo. Esto permite separar dos efectos: (i) la variación por supuestos de modelado (umbral de consolidación y criterio \texttt{route\_id}/\texttt{trip\_id}); y (ii) la variación por decisiones de intervención bajo un mismo ataque dirigido.
 
+            La pregunta de incertidumbre es: ¿qué métricas permanecen estables y cuáles varían materialmente según supuestos e intervenciones? La Tabla~\ref{tab:rangos_consolidados_p3_p4} responde al sintetizar mínimos, máximos y amplitudes, habilitando decidir qué indicadores requieren monitoreo prioritario.
+
             \begin{table}[h!]
                 \centering
                 \small
-                \caption{Rangos consolidados de métricas principales (puntos 3 y 4).}
+                \caption{Rangos mínimo--máximo de métricas clave en los puntos 3 (modelado) y 4 (intervenciones), con amplitud por indicador. La síntesis permite identificar qué resultados son robustos y cuáles dependen del supuesto de modelado o de la intervención.}
                 \label{tab:rangos_consolidados_p3_p4}
                 \begin{tabular}{llrrr}
                     \toprule
@@ -322,6 +342,8 @@
 
             Los rangos muestran que la \textbf{conectividad global} de la red física es estable frente a los supuestos de consolidación (\(LCC\) de \(99.81\%\) a \(99.88\%\)); en cambio, la magnitud de \textbf{sobrerepresentación potencial} en \(P\)-espacio (aristas route-only) cambia de manera importante (\(8.73\%\) a \(20.86\%\)). Bajo ataque dirigido, las intervenciones producen diferencias operativas relevantes: la retención de eficiencia varía entre \(79.68\%\) y \(88.52\%\), y el diámetro post-ataque entre 53 y 97 saltos.
 
+            La pregunta final es: ¿la amplitud de las bandas altera o confirma la priorización entre escenarios de intervención? La Figura~\ref{fig:rangos_intervenciones_punto4} responde al comparar visualmente los rangos por escenario, habilitando sustentar decisiones aun bajo incertidumbre estructural.
+
             \begin{figure}[h!]
                 \centering
                 \IfFileExists{../../out/incertidumbre/punto5_rangos/rangos_intervenciones_punto4.png}{
@@ -329,7 +351,7 @@
                 }{
                     \fbox{\parbox{0.92\textwidth}{Generar figura con: \texttt{python "Código/analisis\_comparativo/rangos/analisis\_rangos\_resultados.py"}}}
                 }
-                \caption{Bandas min--max por escenario de intervención topológica en \(L\)-espacio (punto 4).}
+                \caption{Bandas mínimo--máximo por escenario de intervención topológica en \(L\)-espacio (punto 4). La figura permite evaluar si la incertidumbre entre escenarios altera la priorización de decisiones de intervención.}
                 \label{fig:rangos_intervenciones_punto4}
             \end{figure}
 
