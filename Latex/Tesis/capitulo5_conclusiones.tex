@@ -97,3 +97,32 @@ Dado que se identificó que la red es ineficiente en términos de desvío (Detou
 \begin{itemize}
     \item \textbf{Investigación Propuesta:} Utilizar algoritmos de recableado de aristas (\textit{edge rewiring}) que maximicen la eficiencia global del Espacio $L$ sujeto a restricciones de costo (manteniendo constante la longitud total de aristas). Matemáticamente, esto implica encontrar la topología óptima que minimice el diámetro de la red sin requerir un aumento en la infraestructura física existente.
 \end{itemize}
+
+\subsection{Recomendaciones accionables para la planeaci\'on}
+Con base en los resultados estructurales y de robustez del Cap\'itulo 4 (Figuras~\ref{fig:centralidad_b_l_space}, \ref{fig:centralidad_b_p_space}, \ref{fig:comunidades_p_space}, \ref{fig:robustez_l_space}, \ref{fig:robustez_p_space}; Tablas~\ref{tab:intervenciones_topologicas_l_space}, \ref{tab:sensibilidad_l_space} y \ref{tab:rangos_consolidados_p3_p4}) y en las decisiones de construcci\'on de datos del Cap\'itulo 3 (Tablas~\ref{tab:construccion_grafo} y \ref{tab:consolidacion_grafo_lspace}), se proponen tres l\'ineas de acci\'on priorizadas:
+
+\begin{enumerate}
+    \item \textbf{Prioridad 1: implementar primero refuerzo perif\'erico y protecci\'on de hubs estructurales en el Espacio $L$.}
+
+    \textit{Impacto esperado:} elevar la resiliencia operativa donde hoy se observa la mayor fragilidad, aprovechando que el escenario de refuerzo perif\'erico reporta mejor retenci\'on de eficiencia bajo ataque (88.52\% frente a 82.50\% en el escenario base) y menor di\'ametro post-ataque (53 frente a 84), mientras que la protecci\'on de hubs mejora el LCC residual (+0.79 pp) seg\'un la Tabla~\ref{tab:intervenciones_topologicas_l_space}.
+
+    \textit{Riesgo principal:} sobreinvertir en enlaces nuevos con baja utilizaci\'on efectiva o transferir cuellos de botella hacia nodos no intervenidos.
+
+    \textit{Dependencia de datos:} actualizaci\'on peri\'odica de \texttt{stop\_times\_cleaned.csv} y validaci\'on de conectividad del grafo (Cap\'itulo 3, Tablas~\ref{tab:construccion_grafo} y \ref{tab:consolidacion_grafo_lspace}), complementada con observaciones operativas de tiempos de recorrido para verificar que la mejora topol\'ogica se traduzca en mejora temporal.
+
+    \item \textbf{Prioridad 2: establecer un programa de continuidad operativa para supernodos de transferencia cr\'itica.}
+
+    \textit{Impacto esperado:} reducir la p\'erdida de desempe\~no cuando fallan nodos de alta centralidad, focalizando mantenimiento, gesti\'on de incidencias y protocolos de contingencia en los supernodos que concentran simult\'aneamente grado e intermediaci\'on (Figuras~\ref{fig:centralidad_b_l_space} y \ref{fig:centralidad_b_p_space}), en coherencia con la brecha observada entre la ca\'ida de eficiencia del Espacio $L$ y del Espacio $P$ (Figuras~\ref{fig:robustez_l_space} y \ref{fig:robustez_p_space}).
+
+    \textit{Riesgo principal:} profundizar la dependencia del hipercentro si la continuidad operativa se dise\~na solo para nodos centrales y no incorpora nodos articuladores perif\'ericos.
+
+    \textit{Dependencia de datos:} monitoreo continuo de incidentes y cumplimiento de servicio por supernodo, junto con recalculo peri\'odico de centralidades para mantener vigente la jerarqu\'ia de criticidad.
+
+    \item \textbf{Prioridad 3: institucionalizar la planeaci\'on por comunidades funcionales, no solo por l\'imites administrativos.}
+
+    \textit{Impacto esperado:} mejorar la coordinaci\'on interzonal de oferta y seguimiento operativo en subsistemas de movilidad, aprovechando la evidencia de 11 comunidades funcionales en el Espacio $P$ (modularidad 0.54; Figura~\ref{fig:comunidades_p_space}) y la concentraci\'on del 67\% de supernodos en cinco macrocomunidades.
+
+    \textit{Riesgo principal:} rigidez de dise\~no institucional si la partici\'on comunitaria se toma como fija, pese a que su configuraci\'on depende del algoritmo y de los pesos utilizados.
+
+    \textit{Dependencia de datos:} rec\'alculo programado de comunidades y verificaci\'on de estabilidad con an\'alisis de sensibilidad (Tablas~\ref{tab:sensibilidad_l_space} y \ref{tab:rangos_consolidados_p3_p4}), adem\'as de integrar informaci\'on OD para validar que la delimitaci\'on funcional coincide con la demanda real.
+\end{enumerate}

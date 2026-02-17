@@ -42,7 +42,3 @@
 - La evidencia de cierre debe quedar en commit(s) y/o en `Latex/Tesis/*.tex`, `Código/*`, `grafos/*`, `out/*`.
 
 
-- [ ] 9) Cierre con recomendaciones accionables
-- Objetivo: traducir resultados de red a decisiones de planeación claras.
-- Acción mínima: incluir recomendaciones priorizadas con impacto esperado, riesgo y dependencia de datos.
-- Evidencia esperada: subsección final en `Latex/Tesis/capitulo5_conclusiones.tex`.
