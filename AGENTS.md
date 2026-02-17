@@ -41,10 +41,6 @@
 - Esta lista contiene solo pendientes. Cuando una mejora se complete, se elimina de esta sección.
 - La evidencia de cierre debe quedar en commit(s) y/o en `Latex/Tesis/*.tex`, `Código/*`, `grafos/*`, `out/*`.
 
-- [ ] 4) Escenarios de intervención topológica
-- Objetivo: pasar de diagnóstico a propuesta cuantificada.
-- Acción mínima: simular 2-3 intervenciones (protección de hubs, refuerzo periférico, recableado) y medir efecto en LCC/eficiencia/diámetro.
-- Evidencia esperada: resultados nuevos en `Código/*` y discusión en `Latex/Tesis/capitulo4_resultados.tex` y/o conclusiones.
 
 - [ ] 5) Rango de resultados (incertidumbre por escenarios)
 - Objetivo: evitar depender de un único valor puntual.

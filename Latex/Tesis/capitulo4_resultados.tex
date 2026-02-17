@@ -264,6 +264,39 @@
 
             En conjunto, el análisis muestra dos cosas: (i) las conclusiones cualitativas principales (presencia de un componente gigante y alta conectividad de servicio) son robustas al rango de umbrales evaluado; (ii) las magnitudes de densidad y cantidad de aristas sí son sensibles al supuesto de consolidación y al criterio route/trip en \(P\)-espacio, por lo que en adelante se reportan como rangos y no como un único valor puntual.
 
+        \subsection{Escenarios de Intervención Topológica}
+            Para pasar del diagnóstico a propuestas cuantificadas, se evaluaron tres intervenciones sobre el \(L\)-espacio, comparadas contra un escenario base sin cambios estructurales:
+            \begin{itemize}
+                \item \textbf{Protección de hubs:} se inmunizan los 10 supernodos de mayor grado ponderado y se aplica el mismo ataque dirigido de 50 nodos sobre el resto.
+                \item \textbf{Refuerzo periférico:} se agregan 120 aristas dirigidas (60 pares bidireccionales) entre nodos de baja cercanía para crear atajos periféricos.
+                \item \textbf{Recableado con bypass:} se agregan 200 aristas de bypass alrededor de hubs para introducir rutas alternativas entre vecinos de nodos troncales.
+            \end{itemize}
+            En todos los casos se midió el impacto tras remover 50 nodos por grado ponderado usando: porcentaje de \(LCC\), eficiencia global dirigida (ponderada por \texttt{travel\_time\_minutes}) y diámetro topológico del componente gigante.
+
+            \begin{table}[h!]
+                \centering
+                \caption{Comparativo de escenarios de intervención topológica en \(L\)-espacio (post-ataque dirigido de 50 nodos).}
+                \label{tab:intervenciones_topologicas_l_space}
+                \begin{tabular}{lrrrrr}
+                    \toprule
+                    Escenario & Aristas nuevas & LCC post (\%) & Retención de eficiencia (\%) & Diámetro post & \(\Delta\)LCC vs base (pp) \\
+                    \midrule
+                    Base (sin intervención) & 0   & 98.51 & 82.50 & 84 & 0.00 \\
+                    Protección de hubs      & 0   & 99.30 & 85.58 & 97 & +0.79 \\
+                    Refuerzo periférico     & 120 & 98.51 & 88.52 & 53 & +0.00 \\
+                    Recableado con bypass   & 200 & 98.82 & 79.68 & 84 & +0.31 \\
+                    \bottomrule
+                \end{tabular}
+            \end{table}
+
+            Los resultados muestran que no todas las intervenciones mejoran de la misma forma:
+            \begin{itemize}
+                \item \textbf{Protección de hubs} mejora la conectividad residual del sistema (\(+0.79\) pp en \(LCC\) post frente al base), aunque no reduce el diámetro.
+                \item \textbf{Refuerzo periférico} es el escenario con mejor desempeño global en eficiencia bajo ataque (retención de \(88.52\%\) vs \(82.50\%\) base) y reduce el diámetro de 84 a 53.
+                \item \textbf{Recableado con bypass} mejora ligeramente la conectividad (\(+0.31\) pp en \(LCC\)), pero pierde eficiencia relativa, por lo que requiere optimización adicional antes de considerarse una recomendación operativa.
+            \end{itemize}
+            En conjunto, la evidencia sugiere priorizar estrategias de \textbf{refuerzo periférico} y \textbf{protección de hubs} como primeras líneas de intervención cuantificable para incrementar resiliencia sin depender exclusivamente del hipercentro.
+
 	\subsection{Conclusiones sobre el $P$-espacio}
 	    Como esperábamos, en este modelo de la red de transporte público tenemos una perspectiva diferente del modelo anterior. En esta ocasión podemos constatar que, en lo general, la red de transporte público es densa y bien conectada, siendo incluso de mundo pequeño. Por otro lado, este modelo nos deja claro que, de cara al usuario, las zonas céntricas son aún más importantes que desde la perspectiva de la pura infraestructura. Asimismo, nos muestra que es una red resiliente a cortes de servicio, algo importante pues indica que dispone de una alta redundancia, permitiendo que los usuarios siempre dispongan de más de una alternativa para llegar a sus destinos.
 

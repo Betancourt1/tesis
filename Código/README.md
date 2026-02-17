@@ -82,6 +82,24 @@ Salidas:
 - `out/sensibilidad/punto3_modelado/sensibilidad_p_route_vs_trip.csv`
 - `out/sensibilidad/punto3_modelado/resumen_sensibilidad.json`
 
+## Escenarios de intervención topológica (Punto 4)
+
+Para cuantificar propuestas de mejora sobre el L-space (protección de hubs, refuerzo periférico y recableado con bypass):
+
+```bash
+python "Código/analisis_comparativo/intervenciones/analisis_intervenciones_topologicas.py"
+```
+
+Opcional: conservar presupuesto de aristas en recableado (cada bypass agregado remueve una arista de baja criticidad):
+
+```bash
+python "Código/analisis_comparativo/intervenciones/analisis_intervenciones_topologicas.py" --preserve-edge-budget
+```
+
+Salidas:
+- `out/intervenciones/punto4_topologia/intervenciones_topologicas_l_space.csv`
+- `out/intervenciones/punto4_topologia/resumen_intervenciones_topologicas.json`
+
 ## Salidas esperadas
 
 - Grafos y metricas: `grafos/`
