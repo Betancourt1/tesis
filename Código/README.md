@@ -62,6 +62,26 @@ python Código/run_research_pipeline.py --force
 python Código/run_research_pipeline.py --no-resume
 ```
 
+## Sensibilidad de supuestos de modelado (Punto 3)
+
+Para evaluar estabilidad de resultados ante cambios de umbral de consolidacion y criterio de clique en P-space:
+
+```bash
+python "Código/analisis_comparativo/sensibilidad/analisis_sensibilidad_modelado.py"
+```
+
+Opcionalmente puedes definir umbrales concretos:
+
+```bash
+python "Código/analisis_comparativo/sensibilidad/analisis_sensibilidad_modelado.py" --thresholds 75 100 125 150
+```
+
+Salidas:
+- `out/sensibilidad/punto3_modelado/sensibilidad_l_space.csv`
+- `out/sensibilidad/punto3_modelado/sensibilidad_p_space.csv`
+- `out/sensibilidad/punto3_modelado/sensibilidad_p_route_vs_trip.csv`
+- `out/sensibilidad/punto3_modelado/resumen_sensibilidad.json`
+
 ## Salidas esperadas
 
 - Grafos y metricas: `grafos/`

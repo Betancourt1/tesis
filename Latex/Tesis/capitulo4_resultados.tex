@@ -223,6 +223,47 @@
         \subsection{Discusión Comparativa}
             El ataque dirigido por grado es significativamente más dañino en el L-espacio que en el P-espacio. Mientras que en la infraestructura física la eficiencia cae cerca de 19\% al perder 50 hubs, en la red de servicio la pérdida es de apenas 2.6\%. Esto confirma que la conectividad basada en compartir rutas es más resiliente por la existencia de múltiples combinaciones de servicio entre las paradas, aun si la infraestructura depende fuertemente de unos pocos nodos de alta interconexión.
 	
+        \subsection{Sensibilidad de Supuestos de Modelado}
+            Para evaluar la estabilidad de los resultados, se ejecutó un análisis de sensibilidad con cuatro umbrales de consolidación espacial (\(75\), \(100\), \(125\) y \(150\) metros) y dos variantes para construir el \(P\)-espacio: clique por \texttt{route\_id} (modelo principal de la tesis) y clique por \texttt{trip\_id} (escenario conservador).
+
+            En el \(L\)-espacio, al variar el umbral de consolidación cambia de forma importante el tamaño de la red, pero no su conectividad global: en todos los escenarios el componente gigante concentra más del \(99.8\%\) de los supernodos y no se observaron aristas con tiempo imputado.
+
+            \begin{table}[h!]
+                \centering
+                \caption{Sensibilidad del \(L\)-espacio ante el umbral de consolidación espacial.}
+                \label{tab:sensibilidad_l_space}
+                \begin{tabular}{lrrrrr}
+                    \toprule
+                    Umbral (m) & Nodos & Aristas & Densidad & Componentes & LCC (\%) \\
+                    \midrule
+                    75  & 5,084 & 9,550 & 0.000370 & 3 & 99.86 \\
+                    100 & 4,203 & 8,591 & 0.000486 & 2 & 99.88 \\
+                    125 & 3,360 & 7,442 & 0.000659 & 2 & 99.85 \\
+                    150 & 2,676 & 6,280 & 0.000877 & 2 & 99.81 \\
+                    \bottomrule
+                \end{tabular}
+            \end{table}
+
+            En el \(P\)-espacio, la diferencia entre construir por \texttt{route\_id} y por \texttt{trip\_id} se mantiene en todos los umbrales: el enfoque por ruta produce más aristas, y entre \(8.73\%\) y \(20.86\%\) de ellas no aparecen en la variante por viaje.
+
+            \begin{table}[h!]
+                \centering
+                \caption{Diferencia estructural en \(P\)-espacio: clique por ruta vs. clique por viaje.}
+                \label{tab:sensibilidad_p_space_route_trip}
+                \begin{tabular}{lrrrr}
+                    \toprule
+                    Umbral (m) & Aristas route\_id & Aristas trip\_id & Route-only & Route-only (\%) \\
+                    \midrule
+                    75  & 517,964 & 409,923 & 108,041 & 20.86 \\
+                    100 & 385,225 & 325,855 & 59,370  & 15.41 \\
+                    125 & 269,642 & 239,093 & 30,549  & 11.33 \\
+                    150 & 182,926 & 166,955 & 15,971  & 8.73 \\
+                    \bottomrule
+                \end{tabular}
+            \end{table}
+
+            En conjunto, el análisis muestra dos cosas: (i) las conclusiones cualitativas principales (presencia de un componente gigante y alta conectividad de servicio) son robustas al rango de umbrales evaluado; (ii) las magnitudes de densidad y cantidad de aristas sí son sensibles al supuesto de consolidación y al criterio route/trip en \(P\)-espacio, por lo que en adelante se reportan como rangos y no como un único valor puntual.
+
 	\subsection{Conclusiones sobre el $P$-espacio}
 	    Como esperábamos, en este modelo de la red de transporte público tenemos una perspectiva diferente del modelo anterior. En esta ocasión podemos constatar que, en lo general, la red de transporte público es densa y bien conectada, siendo incluso de mundo pequeño. Por otro lado, este modelo nos deja claro que, de cara al usuario, las zonas céntricas son aún más importantes que desde la perspectiva de la pura infraestructura. Asimismo, nos muestra que es una red resiliente a cortes de servicio, algo importante pues indica que dispone de una alta redundancia, permitiendo que los usuarios siempre dispongan de más de una alternativa para llegar a sus destinos.
 

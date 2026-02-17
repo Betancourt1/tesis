@@ -41,11 +41,6 @@
 - Esta lista contiene solo pendientes. Cuando una mejora se complete, se elimina de esta sección.
 - La evidencia de cierre debe quedar en commit(s) y/o en `Latex/Tesis/*.tex`, `Código/*`, `grafos/*`, `out/*`.
 
-- [ ] 3) Sensibilidad de supuestos de modelado
-- Objetivo: mostrar qué tan estables son los hallazgos ante cambios razonables en supuestos.
-- Acción mínima: ejecutar variantes de construcción/análisis (p. ej., criterios de consolidación y ataques de robustez) y comparar métricas clave.
-- Evidencia esperada: script(s) en `Código/*` + resultados comparativos en `grafos/*` y texto en cap. 4.
-
 - [ ] 4) Escenarios de intervención topológica
 - Objetivo: pasar de diagnóstico a propuesta cuantificada.
 - Acción mínima: simular 2-3 intervenciones (protección de hubs, refuerzo periférico, recableado) y medir efecto en LCC/eficiencia/diámetro.
