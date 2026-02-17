@@ -42,11 +42,6 @@
 - La evidencia de cierre debe quedar en commit(s) y/o en `Latex/Tesis/*.tex`, `Código/*`, `grafos/*`, `out/*`.
 
 
-- [ ] 5) Rango de resultados (incertidumbre por escenarios)
-- Objetivo: evitar depender de un único valor puntual.
-- Acción mínima: reportar rangos o bandas para métricas principales bajo las variantes del punto 3 y escenarios del punto 4.
-- Evidencia esperada: tablas/figuras comparativas en cap. 4 con redacción de interpretación.
-
 - [ ] 6) Reproducibilidad de cierre "one-click"
 - Objetivo: permitir reconstruir resultados de fin a fin sin pasos manuales ambiguos.
 - Acción mínima: validar pipeline maestro, documentar prerequisitos, flags y outputs esperados.

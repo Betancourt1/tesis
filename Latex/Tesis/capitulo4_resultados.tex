@@ -297,6 +297,44 @@
             \end{itemize}
             En conjunto, la evidencia sugiere priorizar estrategias de \textbf{refuerzo periférico} y \textbf{protección de hubs} como primeras líneas de intervención cuantificable para incrementar resiliencia sin depender exclusivamente del hipercentro.
 
+        \subsection{Bandas de Incertidumbre de Resultados}
+            Para evitar depender de un único valor puntual, se consolidaron los resultados de los puntos 3 y 4 en términos de bandas mínimo--máximo. Esto permite separar dos efectos: (i) la variación por supuestos de modelado (umbral de consolidación y criterio \texttt{route\_id}/\texttt{trip\_id}); y (ii) la variación por decisiones de intervención bajo un mismo ataque dirigido.
+
+            \begin{table}[h!]
+                \centering
+                \small
+                \caption{Rangos consolidados de métricas principales (puntos 3 y 4).}
+                \label{tab:rangos_consolidados_p3_p4}
+                \begin{tabular}{llrrr}
+                    \toprule
+                    Bloque & Métrica & Mín & Máx & Amplitud \\
+                    \midrule
+                    P3 (modelado) & L-space nodos & 2,676 & 5,084 & 2,408 \\
+                    P3 (modelado) & L-space aristas & 6,280 & 9,550 & 3,270 \\
+                    P3 (modelado) & LCC L-space (\%) & 99.81 & 99.88 & 0.07 \\
+                    P3 (modelado) & Route-only en P-space (\%) & 8.73 & 20.86 & 12.13 \\
+                    P4 (intervenciones) & LCC post-ataque (\%) & 98.51 & 99.30 & 0.79 \\
+                    P4 (intervenciones) & Retención de eficiencia (\%) & 79.68 & 88.52 & 8.85 \\
+                    P4 (intervenciones) & Diámetro post-ataque (saltos) & 53 & 97 & 44 \\
+                    \bottomrule
+                \end{tabular}
+            \end{table}
+
+            Los rangos muestran que la \textbf{conectividad global} de la red física es estable frente a los supuestos de consolidación (\(LCC\) de \(99.81\%\) a \(99.88\%\)); en cambio, la magnitud de \textbf{sobrerepresentación potencial} en \(P\)-espacio (aristas route-only) cambia de manera importante (\(8.73\%\) a \(20.86\%\)). Bajo ataque dirigido, las intervenciones producen diferencias operativas relevantes: la retención de eficiencia varía entre \(79.68\%\) y \(88.52\%\), y el diámetro post-ataque entre 53 y 97 saltos.
+
+            \begin{figure}[h!]
+                \centering
+                \IfFileExists{../../out/incertidumbre/punto5_rangos/rangos_intervenciones_punto4.png}{
+                    \includegraphics[width=\textwidth]{../../out/incertidumbre/punto5_rangos/rangos_intervenciones_punto4.png}
+                }{
+                    \fbox{\parbox{0.92\textwidth}{Generar figura con: \texttt{python "Código/analisis\_comparativo/rangos/analisis\_rangos\_resultados.py"}}}
+                }
+                \caption{Bandas min--max por escenario de intervención topológica en \(L\)-espacio (punto 4).}
+                \label{fig:rangos_intervenciones_punto4}
+            \end{figure}
+
+            En síntesis, la tesis mantiene sus conclusiones cualitativas centrales, pero las magnitudes clave se reportan en adelante como rangos para reflejar explícitamente la incertidumbre estructural del modelado.
+
 	\subsection{Conclusiones sobre el $P$-espacio}
 	    Como esperábamos, en este modelo de la red de transporte público tenemos una perspectiva diferente del modelo anterior. En esta ocasión podemos constatar que, en lo general, la red de transporte público es densa y bien conectada, siendo incluso de mundo pequeño. Por otro lado, este modelo nos deja claro que, de cara al usuario, las zonas céntricas son aún más importantes que desde la perspectiva de la pura infraestructura. Asimismo, nos muestra que es una red resiliente a cortes de servicio, algo importante pues indica que dispone de una alta redundancia, permitiendo que los usuarios siempre dispongan de más de una alternativa para llegar a sus destinos.
 

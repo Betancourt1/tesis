@@ -100,6 +100,20 @@ Salidas:
 - `out/intervenciones/punto4_topologia/intervenciones_topologicas_l_space.csv`
 - `out/intervenciones/punto4_topologia/resumen_intervenciones_topologicas.json`
 
+## Rangos de resultados e incertidumbre (Punto 5)
+
+Para consolidar bandas de resultados a partir de los puntos 3 y 4:
+
+```bash
+python "Código/analisis_comparativo/rangos/analisis_rangos_resultados.py"
+```
+
+Salidas:
+- `out/incertidumbre/punto5_rangos/rangos_resultados.csv`
+- `out/incertidumbre/punto5_rangos/rangos_modelado_punto3.png`
+- `out/incertidumbre/punto5_rangos/rangos_intervenciones_punto4.png`
+- `out/incertidumbre/punto5_rangos/resumen_rangos_resultados.json`
+
 ## Salidas esperadas
 
 - Grafos y metricas: `grafos/`
