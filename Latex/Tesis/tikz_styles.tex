@@ -17,6 +17,10 @@
     font=\small,
     text=black
   },
+  % Alias de compatibilidad para figuras antiguas.
+  etiqueta/.style = {
+    etiqueta_nodo
+  },
   % --- ESTILOS PARA ARISTAS ---
   % Arista base: línea negra y gruesa.
   arista/.style = {
@@ -54,6 +58,11 @@
   flecha_tenue/.style = {
     flecha,
     draw=gray!50
+  },
+  % Flecha alternativa: usada para rutas opcionales en ejemplos.
+  flecha_alternativa/.style = {
+    flecha_tenue,
+    dashed
   },
   % --- ESTILO PARA ETIQUETAS DE PESO ---
   etiqueta_peso/.style = {

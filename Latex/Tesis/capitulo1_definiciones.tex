@@ -422,7 +422,7 @@
 
             \begin{definicion}
                 Decimos que un grafo $G$ es \textit{acíclico} si ninguno de sus subgrafos es un ciclo.
-            \end{observacion}
+            \end{definicion}
 
             \begin{ejemplo}[Ciclo como subgrafo]
                 Sea $G$ el siguiente grafo:
@@ -596,7 +596,7 @@
             \begin{proof}
                 Por inducción en $n=|V(T)|$.
                 Caso base $n=1$: $|E|=0=n-1$.
-                Paso inductivo: sea $n\ge 2$ y supongamos cierto para todo árbol con $<n$ nodos. Por el lema, $T$ tiene una hoja $x$ con vecino $y$. Consideremos $T'=T-\{x\}$: sigue siendo un árbol (conexo y acíclico) con $n-1$ nodos. Por hipótesis inductiva, $|E(T')|=(n-1)-1=n-2$. Como E(T)=E(T')\cup\{xy\}, se tiene $|E(T)|=(n-2)+1=n-1$.
+                Paso inductivo: sea $n\ge 2$ y supongamos cierto para todo árbol con $<n$ nodos. Por el lema, $T$ tiene una hoja $x$ con vecino $y$. Consideremos $T'=T-\{x\}$: sigue siendo un árbol (conexo y acíclico) con $n-1$ nodos. Por hipótesis inductiva, $|E(T')|=(n-1)-1=n-2$. Como $E(T)=E(T')\cup\{xy\}$, se tiene $|E(T)|=(n-2)+1=n-1$.
             \end{proof}
 
             \begin{lema}[Frontera de cara acotada contiene un ciclo]
@@ -831,13 +831,13 @@
                 f = 2 + |E| - |V|,
                 \]
                 y sustituyendo en la desigualdad:
-                \[
-                3(2 + |E| - |V|) \leq 2|E| \\
-                6 + 3|E| - 3|V| \leq 2|E| \\
-                6 + 3|E| - 3|V| - 2|E| \leq 0 \\
-                6 + |E| - 3|V| \leq 0 \\
-                |E| \leq 3|V| - 6.
-                \]
+                \begin{align*}
+                3(2 + |E| - |V|) &\leq 2|E| \\
+                6 + 3|E| - 3|V| &\leq 2|E| \\
+                6 + 3|E| - 3|V| - 2|E| &\leq 0 \\
+                6 + |E| - 3|V| &\leq 0 \\
+                |E| &\leq 3|V| - 6.
+                \end{align*}
             \end{proof}
 
             \begin{corolario}

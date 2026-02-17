@@ -13,7 +13,7 @@
             \item \texttt{stops.csv}: Contiene las coordenadas geográficas de cada parada. Es la base para crear los nodos de nuestros grafos.
             \item \texttt{routes.csv}: Define las distintas rutas o líneas de transporte.
             \item \texttt{trips.csv}: Enumera los viajes específicos que se realizan para cada ruta.
-            \item \texttt{stop_times.csv}: Es el archivo más importante, ya que vincula los viajes con las paradas, especificando la secuencia y los horarios de llegada y salida. Es la fuente principal para construir las aristas. En la implementación se usa su versión ya depurada \texttt{stop\_times\_cleaned.csv}, resultado del procedimiento de validación y limpieza descrita abajo.
+            \item \texttt{stop\_times.csv}: Es el archivo más importante, ya que vincula los viajes con las paradas, especificando la secuencia y los horarios de llegada y salida. Es la fuente principal para construir las aristas. En la implementación se usa su versión ya depurada \texttt{stop\_times\_cleaned.csv}, resultado del procedimiento de validación y limpieza descrita abajo.
         \end{itemize}
         
         La riqueza de este estándar permite una modelación detallada, pero su naturaleza compleja y la posibilidad de inconsistencias en los datos hacen que un preprocesamiento riguroso sea un requisito indispensable antes de cualquier análisis.
@@ -29,7 +29,7 @@
             \paragraph{Fase 1: Limpieza y Grafo Inicial.}
             El primer paso consiste en traducir los datos GTFS a un grafo preliminar. Sin embargo, los datos crudos a menudo contienen "ruido" que puede distorsionar el análisis, como paradas inactivas o errores en los registros de viaje. Por ello, se realiza un proceso de validación y limpieza:
             \begin{enumerate}
-                \item \textbf{Validación estructural y referencial:} Se verifica la presencia de los archivos clave y la integridad de las relaciones entre ellos (e.g., que cada viaje en \texttt{stop_times} corresponda a una ruta válida).
+                \item \textbf{Validación estructural y referencial:} Se verifica la presencia de los archivos clave y la integridad de las relaciones entre ellos (e.g., que cada viaje en \texttt{stop\_times} corresponda a una ruta válida).
                 \item \textbf{Validación espacial y temporal:} Se comprueba que las coordenadas de las paradas sean válidas y que las secuencias de tiempo y paradas en los viajes sean lógicas.
                 \item \textbf{Eliminación de nodos aislados:} Se identifican y eliminan las paradas que no forman parte de ninguna ruta activa (nodos de grado cero).
             \end{enumerate}
