@@ -1,0 +1,215 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage[a4paper,margin=2.4cm]{geometry}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\setlist[itemize]{leftmargin=*,nosep}
+\setlist[enumerate]{leftmargin=*}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.45em}
+\renewcommand{\arraystretch}{1.1}
+
+\title{\textbf{Reporte de avance por commits}}
+\author{Tesis: modelado topol\'ogico del transporte p\'ublico en la ZMG}
+\date{Corte: 17-02-2026}
+
+\begin{document}
+\maketitle
+
+\section{Alcance del reporte}
+\textbf{Fecha de corte:} 17-02-2026.\\
+\textbf{Alcance temporal:} del 15-02-2026 al 17-02-2026.\\
+\textbf{Rama analizada:} \texttt{main}.\\
+\textbf{Universo analizado:} 10 commits espec\'ificos:
+\texttt{fea2aea}, \texttt{23036a9}, \texttt{77265aa}, \texttt{4a865c6}, \texttt{c799021}, \texttt{82c8e5c}, \texttt{51cfe87}, \texttt{a12ec66}, \texttt{c407420}, \texttt{e9f15ae}.
+
+\section{Resumen ejecutivo}
+Se revisaron 10 commits consecutivos en la rama \texttt{main}, con foco en cierre de backlog, robustez metodol\'ogica, reproducibilidad y redacci\'on final de tesis.
+
+\textbf{Volumen total consolidado (10 commits):}
+\begin{itemize}
+  \item \texttt{35 files changed}
+  \item \texttt{1939 insertions(+)}
+  \item \texttt{219 deletions(-)}
+\end{itemize}
+
+El periodo cierra la secuencia de mejoras 1 a 9 del backlog en \texttt{AGENTS.md} y deja como salida textual principal la consolidaci\'on de resultados en \texttt{Latex/Tesis/capitulo4\_resultados.tex} y \texttt{Latex/Tesis/capitulo5\_conclusiones.tex}, junto con nuevos scripts comparativos en \texttt{C\'odigo/analisis\_comparativo/}.
+
+\section{Tabla cronologica de commits (ascendente)}
+\small
+\begin{longtable}{L{1.8cm}L{1.5cm}L{3.8cm}L{5.6cm}L{2.8cm}}
+\toprule
+\textbf{Fecha} & \textbf{Hash} & \textbf{Mensaje} & \textbf{Archivos tocados} & \textbf{Shortstat} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Fecha} & \textbf{Hash} & \textbf{Mensaje} & \textbf{Archivos tocados} & \textbf{Shortstat} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+2026-02-15 & fea2aea & Fortalece tesis central y cierra mejora 1 &
+\texttt{AGENTS.md}; \texttt{Latex/Tesis/capitulo0\_introduccion.tex}; \texttt{Latex/Tesis/capitulo5\_conclusiones.tex} &
+3 files changed, 10 insertions(+), 11 deletions(-) \\
+
+2026-02-15 & 23036a9 & Agrega matriz de trazabilidad y cierra mejora 2 &
+\texttt{AGENTS.md}; \texttt{Latex/Tesis/capitulo5\_conclusiones.tex} &
+2 files changed, 35 insertions(+), 5 deletions(-) \\
+
+2026-02-16 & 77265aa & Corrige errores fatales de compilacion en tesis &
+\texttt{Latex/Tesis/apendices.tex}; \texttt{Latex/Tesis/bibliografia.tex}; \texttt{Latex/Tesis/capitulo1\_definiciones.tex}; \texttt{Latex/Tesis/capitulo3\_datos\_construccion.tex}; \texttt{Latex/Tesis/tikz\_styles.tex} &
+5 files changed, 29 insertions(+), 20 deletions(-) \\
+
+2026-02-16 & 4a865c6 & Completa punto 3 de sensibilidad de modelado &
+\texttt{AGENTS.md}; \texttt{C\'odigo/README.md}; \texttt{C\'odigo/analisis\_comparativo/sensibilidad/analisis\_sensibilidad\_modelado.py}; \texttt{Latex/Tesis/capitulo4\_resultados.tex} &
+4 files changed, 425 insertions(+), 5 deletions(-) \\
+
+2026-02-17 & c799021 & Completa punto 4 con intervenciones topologicas &
+\texttt{AGENTS.md}; \texttt{C\'odigo/README.md}; \texttt{C\'odigo/analisis\_comparativo/intervenciones/analisis\_intervenciones\_topologicas.py}; \texttt{Latex/Tesis/capitulo4\_resultados.tex} &
+4 files changed, 649 insertions(+), 4 deletions(-) \\
+
+2026-02-17 & 82c8e5c & Completa punto 5 con rangos de incertidumbre &
+\texttt{AGENTS.md}; \texttt{C\'odigo/README.md}; \texttt{C\'odigo/analisis\_comparativo/rangos/analisis\_rangos\_resultados.py}; \texttt{Latex/Tesis/capitulo4\_resultados.tex} &
+4 files changed, 284 insertions(+), 5 deletions(-) \\
+
+2026-02-17 & 51cfe87 & Completa punto 6 con pipeline one-click validado &
+\texttt{AGENTS.md}; \texttt{C\'odigo/README.md}; \texttt{C\'odigo/run\_research\_pipeline.py}; \texttt{README.md} &
+4 files changed, 415 insertions(+), 125 deletions(-) \\
+
+2026-02-17 & a12ec66 & Completa punto 7 con consistencia editorial &
+\texttt{AGENTS.md}; \texttt{Latex/Tesis/capitulo1\_definiciones.tex}; \texttt{Latex/Tesis/capitulo3\_datos\_construccion.tex}; \texttt{Latex/Tesis/capitulo4\_resultados.tex}; \texttt{Latex/Tesis/capitulo5\_conclusiones.tex} &
+5 files changed, 26 insertions(+), 20 deletions(-) \\
+
+2026-02-17 & c407420 & Completa punto 8 con storytelling de visuales en capitulo 4 &
+\texttt{AGENTS.md}; \texttt{Latex/Tesis/capitulo4\_resultados.tex} &
+2 files changed, 37 insertions(+), 20 deletions(-) \\
+
+2026-02-17 & e9f15ae & Completa punto 9 con recomendaciones accionables en conclusiones &
+\texttt{AGENTS.md}; \texttt{Latex/Tesis/capitulo5\_conclusiones.tex} &
+2 files changed, 29 insertions(+), 4 deletions(-) \\
+\end{longtable}
+\normalsize
+
+\section{Detalle tecnico por commit}
+
+\subsection{fea2aea -- Fortalece tesis central y cierra mejora 1}
+\begin{itemize}
+  \item \textbf{Objetivo:} fijar una tesis central unica y verificable entre introduccion y conclusiones.
+  \item \textbf{Archivos modificados:} \texttt{AGENTS.md}; \texttt{Latex/Tesis/capitulo0\_introduccion.tex}; \texttt{Latex/Tesis/capitulo5\_conclusiones.tex}.
+  \item \textbf{Cambios implementados:} se agrega el parrafo ``Tesis Central'' con la proposicion ``infraestructura fragil vs servicio resiliente''; se ajusta la descripcion de capitulos 4 y 5 para alinear narrativa; en conclusiones se renombra la seccion de sintesis y se cambia la tercera conclusion a ``Verificacion de la Tesis Central''.
+  \item \textbf{Validacion/ejecucion (si aplica):} cambio editorial en \LaTeX; no se agrega comando nuevo de ejecucion.
+  \item \textbf{Efecto en backlog AGENTS:} se elimina el pendiente 1.
+\end{itemize}
+
+\subsection{23036a9 -- Agrega matriz de trazabilidad y cierra mejora 2}
+\begin{itemize}
+  \item \textbf{Objetivo:} conectar preguntas de investigacion con metricas, resultados, implicaciones y limites.
+  \item \textbf{Archivos modificados:} \texttt{AGENTS.md}; \texttt{Latex/Tesis/capitulo5\_conclusiones.tex}.
+  \item \textbf{Cambios implementados:} se inserta la seccion ``Matriz de Trazabilidad de Preguntas de Investigacion'' con tabla formal (pregunta, evidencia, resultado, implicacion, limite) y etiqueta \texttt{tab:trazabilidad\_preguntas}.
+  \item \textbf{Validacion/ejecucion (si aplica):} cambio documental en \LaTeX; sin evidencia de nueva corrida de scripts.
+  \item \textbf{Efecto en backlog AGENTS:} se elimina el pendiente 2.
+\end{itemize}
+
+\subsection{77265aa -- Corrige errores fatales de compilacion en tesis}
+\begin{itemize}
+  \item \textbf{Objetivo:} remover errores de compilacion \LaTeX{} bloqueantes.
+  \item \textbf{Archivos modificados:} \texttt{Latex/Tesis/apendices.tex}; \texttt{Latex/Tesis/bibliografia.tex}; \texttt{Latex/Tesis/capitulo1\_definiciones.tex}; \texttt{Latex/Tesis/capitulo3\_datos\_construccion.tex}; \texttt{Latex/Tesis/tikz\_styles.tex}.
+  \item \textbf{Cambios implementados:} se escapan guiones bajos en nombres GTFS (\texttt{stop\_times}, \texttt{calendar\_dates}, etc.); se corrige cierre de entorno (\texttt{\textbackslash end\{definicion\}}); se encapsula expresion de conjuntos en modo matematico (\texttt{\$E(T)=...\$}); se reemplaza bloque multilinea por \texttt{align*}; se escapan ampersands bibliograficos (\texttt{\textbackslash\&}); se agregan estilos TikZ de compatibilidad (\texttt{etiqueta}, \texttt{flecha\_alternativa}).
+  \item \textbf{Validacion/ejecucion (si aplica):} el commit esta orientado a compilacion; no contiene comando de ejecucion adicional.
+  \item \textbf{Efecto en backlog AGENTS:} sin cambio directo en pendientes.
+\end{itemize}
+
+\subsection{4a865c6 -- Completa punto 3 de sensibilidad de modelado}
+\begin{itemize}
+  \item \textbf{Objetivo:} cuantificar sensibilidad ante umbral de consolidacion y criterio de construccion del P-espacio.
+  \item \textbf{Archivos modificados:} \texttt{AGENTS.md}; \texttt{C\'odigo/README.md}; \texttt{C\'odigo/analisis\_comparativo/sensibilidad/analisis\_sensibilidad\_modelado.py}; \texttt{Latex/Tesis/capitulo4\_resultados.tex}.
+  \item \textbf{Cambios implementados:} se crea script con DBSCAN multi-umbral (75/100/125/150 m), reconstruccion de L-space y P-space por \texttt{route\_id} y \texttt{trip\_id}, calculo de densidad/componentes/LCC y diferencial \texttt{route-only}; exporta tres CSV y un resumen JSON; el capitulo 4 incorpora dos tablas y lectura metodologica de robustez cualitativa vs sensibilidad cuantitativa.
+  \item \textbf{Validacion/ejecucion (si aplica):} se documenta ejecucion en \texttt{C\'odigo/README.md} con \texttt{python C\'odigo/analisis\_comparativo/sensibilidad/analisis\_sensibilidad\_modelado.py}.
+  \item \textbf{Efecto en backlog AGENTS:} se elimina el pendiente 3.
+\end{itemize}
+
+\subsection{c799021 -- Completa punto 4 con intervenciones topologicas}
+\begin{itemize}
+  \item \textbf{Objetivo:} pasar de diagnostico a simulacion de intervenciones cuantificadas.
+  \item \textbf{Archivos modificados:} \texttt{AGENTS.md}; \texttt{C\'odigo/README.md}; \texttt{C\'odigo/analisis\_comparativo/intervenciones/analisis\_intervenciones\_topologicas.py}; \texttt{Latex/Tesis/capitulo4\_resultados.tex}.
+  \item \textbf{Cambios implementados:} se agrega script con cuatro escenarios (\texttt{baseline}, \texttt{proteccion\_hubs}, \texttt{refuerzo\_periferico}, \texttt{recableado\_bypass}), ataque dirigido por grado ponderado, metricas post-ataque (LCC, eficiencia global dirigida, diametro), opcion \texttt{--preserve-edge-budget}, y salidas CSV/JSON; capitulo 4 integra tabla comparativa e interpretacion de trade-offs.
+  \item \textbf{Validacion/ejecucion (si aplica):} README incluye comandos base y variante con \texttt{--preserve-edge-budget}.
+  \item \textbf{Efecto en backlog AGENTS:} se elimina el pendiente 4.
+\end{itemize}
+
+\subsection{82c8e5c -- Completa punto 5 con rangos de incertidumbre}
+\begin{itemize}
+  \item \textbf{Objetivo:} reportar bandas de resultados y no solo valores puntuales.
+  \item \textbf{Archivos modificados:} \texttt{AGENTS.md}; \texttt{C\'odigo/README.md}; \texttt{C\'odigo/analisis\_comparativo/rangos/analisis\_rangos\_resultados.py}; \texttt{Latex/Tesis/capitulo4\_resultados.tex}.
+  \item \textbf{Cambios implementados:} se crea script que consolida CSV de puntos 3 y 4, calcula min/max/amplitud por metrica, genera \texttt{rangos\_resultados.csv}, dos figuras PNG y \texttt{resumen\_rangos\_resultados.json}; capitulo 4 agrega tabla de rangos consolidados y figura condicional con \texttt{\textbackslash IfFileExists}.
+  \item \textbf{Validacion/ejecucion (si aplica):} se documenta comando \texttt{python C\'odigo/analisis\_comparativo/rangos/analisis\_rangos\_resultados.py} y rutas de salida.
+  \item \textbf{Efecto en backlog AGENTS:} se elimina el pendiente 5.
+\end{itemize}
+
+\subsection{51cfe87 -- Completa punto 6 con pipeline one-click validado}
+\begin{itemize}
+  \item \textbf{Objetivo:} fortalecer reproducibilidad de cierre con una sola entrada y trazabilidad de corrida.
+  \item \textbf{Archivos modificados:} \texttt{AGENTS.md}; \texttt{C\'odigo/README.md}; \texttt{C\'odigo/run\_research\_pipeline.py}; \texttt{README.md}.
+  \item \textbf{Cambios implementados:} refactor mayor del pipeline maestro: prechequeos GTFS obligatorios, firmas compuestas por paso, verificacion de outputs esperados, nuevos flags \texttt{--report-file} y \texttt{--dry-run}, estados detallados por paso (\texttt{planned}, \texttt{skipped\_checkpoint}, \texttt{completed\_with\_warnings}, etc.), reporte JSON de ultima corrida, y separacion de estado para subpipelines L/P.
+  \item \textbf{Validacion/ejecucion (si aplica):} se incorpora flujo de validacion reproducible en README con \texttt{--dry-run} y checklist sobre \texttt{out/pipeline\_state/research\_last\_run.json}.
+  \item \textbf{Efecto en backlog AGENTS:} se elimina el pendiente 6.
+\end{itemize}
+
+\subsection{a12ec66 -- Completa punto 7 con consistencia editorial}
+\begin{itemize}
+  \item \textbf{Objetivo:} normalizar terminologia y reglas de redondeo en capitulos nucleares.
+  \item \textbf{Archivos modificados:} \texttt{AGENTS.md}; \texttt{Latex/Tesis/capitulo1\_definiciones.tex}; \texttt{Latex/Tesis/capitulo3\_datos\_construccion.tex}; \texttt{Latex/Tesis/capitulo4\_resultados.tex}; \texttt{Latex/Tesis/capitulo5\_conclusiones.tex}.
+  \item \textbf{Cambios implementados:} se explicita convencion \texttt{arista}/\texttt{arco}; se unifica uso de ``supernodo'' sin comillas; se normaliza ``transbordo'' y precision numerica (porcentajes a dos decimales); se ajustan cifras de caida de eficiencia (18.50\% y 2.64\%); se agrega subseccion formal de notacion y redondeo en capitulo 4.
+  \item \textbf{Validacion/ejecucion (si aplica):} ajuste transversal editorial \LaTeX; no aplica ejecucion de scripts.
+  \item \textbf{Efecto en backlog AGENTS:} se elimina el pendiente 7.
+\end{itemize}
+
+\subsection{c407420 -- Completa punto 8 con storytelling de visuales en capitulo 4}
+\begin{itemize}
+  \item \textbf{Objetivo:} mejorar legibilidad analitica de figuras y tablas.
+  \item \textbf{Archivos modificados:} \texttt{AGENTS.md}; \texttt{Latex/Tesis/capitulo4\_resultados.tex}.
+  \item \textbf{Cambios implementados:} se inserta narrativa de pregunta-respuesta antes de visuales (centralidades, comunidades, robustez, sensibilidad, intervenciones, rangos); se reescriben captions para explicitar variable codificada y decision habilitada por cada visual.
+  \item \textbf{Validacion/ejecucion (si aplica):} cambio de redaccion y captioning; no requiere corrida de scripts.
+  \item \textbf{Efecto en backlog AGENTS:} se elimina el pendiente 8.
+\end{itemize}
+
+\subsection{e9f15ae -- Completa punto 9 con recomendaciones accionables en conclusiones}
+\begin{itemize}
+  \item \textbf{Objetivo:} traducir hallazgos de red en recomendaciones de planeacion priorizadas.
+  \item \textbf{Archivos modificados:} \texttt{AGENTS.md}; \texttt{Latex/Tesis/capitulo5\_conclusiones.tex}.
+  \item \textbf{Cambios implementados:} se agrega subseccion ``Recomendaciones accionables para la planeacion'' con tres prioridades, cada una con \textit{impacto esperado}, \textit{riesgo principal} y \textit{dependencia de datos}; se anclan las recomendaciones a figuras y tablas de capitulos 3 y 4.
+  \item \textbf{Validacion/ejecucion (si aplica):} ajuste de contenido final en conclusiones; no aplica ejecucion de codigo.
+  \item \textbf{Efecto en backlog AGENTS:} se elimina el pendiente 9 y la lista de mejoras queda sin pendientes activos.
+\end{itemize}
+
+\section{Estado actual del repositorio}
+Con base en \texttt{git status --short} al corte:
+\begin{itemize}
+  \item Rama activa: \texttt{main}.
+  \item Archivo sin seguimiento confirmado: \texttt{Latex/Tesis/main.pdf}.
+  \item Tambien aparece sin seguimiento \texttt{Latex/Tesis/reportes/} (directorio de reportes locales).
+\end{itemize}
+
+\section{Riesgos y notas}
+\begin{itemize}
+  \item El commit \texttt{77265aa} corrige errores fatales de compilacion; aun asi, en una compilacion completa de \texttt{Latex/Tesis/main.tex} pueden persistir warnings no fatales (por ejemplo, overfull boxes o referencias cruzadas) que conviene revisar en el log.
+  \item \texttt{Latex/Tesis/main.pdf} fuera de seguimiento puede introducir ruido operativo; queda pendiente decidir politica de versionado o exclusion.
+  \item Los scripts de puntos 3, 4 y 5 dependen de rutas y variables de \texttt{.env}; resultados reproducibles requieren que esas rutas sigan vigentes.
+\end{itemize}
+
+\section{Siguiente accion recomendada}
+\begin{enumerate}
+  \item Ejecutar compilacion integral de tesis (\texttt{pdflatex Latex/Tesis/main.tex}) y registrar warnings no fatales pendientes de limpieza editorial.
+  \item Correr validacion reproducible del pipeline maestro con \texttt{python C\'odigo/run\_research\_pipeline.py --dry-run} y verificar el reporte \texttt{out/pipeline\_state/research\_last\_run.json}.
+  \item Definir criterio de manejo para artefactos binarios locales (incluyendo \texttt{Latex/Tesis/main.pdf}) para mantener limpio el arbol de trabajo.
+\end{enumerate}
+
+\end{document}
