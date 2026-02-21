@@ -37,7 +37,8 @@ La Tabla~\ref{tab:trazabilidad_preguntas} resume la trazabilidad entre preguntas
     \centering
     \scriptsize
     \renewcommand{\arraystretch}{1.2}
-    \begin{tabular}{p{0.17\textwidth} p{0.22\textwidth} p{0.20\textwidth} p{0.20\textwidth} p{0.17\textwidth}}
+    \setlength{\tabcolsep}{3pt}
+    \begin{tabular}{@{}p{0.15\textwidth} p{0.20\textwidth} p{0.18\textwidth} p{0.18\textwidth} p{0.15\textwidth}@{}}
         \toprule
         \textbf{Pregunta} & \textbf{Métrica / evidencia} & \textbf{Resultado clave} & \textbf{Implicación} & \textbf{Límite} \\
         \midrule
@@ -80,7 +81,7 @@ El presente trabajo se basó principalmente en métricas topológicas clásicas 
     \item \textbf{Investigación Propuesta:} Analizar el espectro de las matrices Laplaciana y de Adyacencia de los grafos L-espacio y P-espacio. Esto permitiría cuantificar propiedades globales como la conectividad algebraica, detectar estructuras de partición de manera algorítmica (cortes óptimos) y caracterizar la difusión de información o congestión a través de la red, ofreciendo una visión más profunda sobre la robustez y la dinámica del flujo de pasajeros.
 \end{itemize}
 
-\subsection{Incorporación de Matrices de Demanda (Grafos Ponderados por Flujo)}
+\subsection{Matrices de Demanda (Grafos Ponderados por Flujo)}
 Nuestro modelo actual asume que todas las aristas tienen igual capacidad o importancia operativa, ignorando la demanda real de pasajeros.
 \begin{itemize}
     \item \textbf{Investigación Propuesta:} Integrar matrices Origen-Destino (OD) estimadas para ponderar los nodos no solo por su grado ($k$), sino por su \textbf{carga (load centrality)}. Esto permitiría pasar de un análisis de \textit{vulnerabilidad topológica} a uno de \textit{vulnerabilidad operativa}, identificando nodos que, aunque no sean geométricamente centrales, podrían colapsar el sistema por saturación de usuarios.

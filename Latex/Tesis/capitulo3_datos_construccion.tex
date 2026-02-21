@@ -6,17 +6,17 @@
     
     \section{GTFS de la Zona Metropolitana de Guadalajara}
     
-        La base de este estudio son los datos de la red de transporte público de la Zona Metropolitana de Guadalajara, obtenidos de una fuente pública en formato \textit{General Transit Feed Specification} (GTFS). La versión que usaremos corresponde a la publicada en marzo de 2024.
+        La base de este estudio es la red de transporte público de la Zona Metropolitana de Guadalajara, representada mediante datos en formato \textit{General Transit Feed Specification} (GTFS) obtenidos de una fuente pública. La versión utilizada corresponde a la publicada en marzo de 2024.
         
         El estándar GTFS organiza la información del transporte en una serie de archivos de texto plano (.csv) interrelacionados. Aunque el estándar completo es exhaustivo (ver Apéndice \ref{ap:gtfs_files}), para la construcción de nuestros modelos de red, los siguientes archivos son de importancia crítica:
         \begin{itemize}
             \item \texttt{stops.csv}: Contiene las coordenadas geográficas de cada parada. Es la base para crear los nodos de nuestros grafos.
             \item \texttt{routes.csv}: Define las distintas rutas o líneas de transporte.
             \item \texttt{trips.csv}: Enumera los viajes específicos que se realizan para cada ruta.
-            \item \texttt{stop\_times.csv}: Es el archivo más importante, ya que vincula los viajes con las paradas, especificando la secuencia y los horarios de llegada y salida. Es la fuente principal para construir las aristas. En la implementación se usa su versión ya depurada \texttt{stop\_times\_cleaned.csv}, resultado del procedimiento de validación y limpieza descrita abajo.
+            \item \texttt{stop\_times.csv}: Es el archivo más importante, ya que vincula los viajes con las paradas, especificando la secuencia y los horarios de llegada y salida. Es la fuente principal para construir las aristas. En la implementación se usa su versión ya depurada \texttt{stop\_times\_cleaned.csv}, resultado del procedimiento de validación y limpieza descrito más adelante.
         \end{itemize}
         
-        La riqueza de este estándar permite una modelación detallada, pero su naturaleza compleja y la posibilidad de inconsistencias en los datos hacen que un preprocesamiento riguroso sea un requisito indispensable antes de cualquier análisis.
+        La riqueza de este estándar permite una modelación detallada, pero su naturaleza compleja y la posibilidad de inconsistencias en los datos hacen que un preprocesamiento riguroso sea un requisito indispensable antes de cualquier análisis. Con esta base definida, en la siguiente sección se describe cómo se construyen los modelos L-espacio y P-espacio.
         
     \section{Construcción de los Modelos de Red}
     
@@ -35,7 +35,7 @@
             \end{enumerate}
             Este proceso de depuración da como resultado un grafo inicial más limpio, pero aún muy granular.
 
-            En la práctica, estas validaciones se ejecutan previamente para producir los archivos limpios (por ejemplo, \texttt{stop\_times\_cleaned.csv}) y luego el pipeline de construcción trabaja directamente sobre esos insumos ya verificados.
+            En la práctica, estas validaciones se ejecutan previamente para producir los archivos limpios (por ejemplo, \texttt{stop\_times\_cleaned.csv}) y luego el flujo de construcción trabaja directamente sobre esos insumos ya verificados.
 
             \begin{table}[H]
                 \centering
@@ -58,7 +58,7 @@
             \paragraph{Fase 2: Consolidación Espacial.}
             Un análisis a nivel de más de 10,000 paradas individuales es computacionalmente intensivo y, más importante, no refleja cómo un usuario percibe la red. Un pasajero no distingue entre dos postes de parada ubicados en la misma esquina; los percibe como un único punto de acceso al sistema.
 
-            Para modelar esta realidad y analizar la red a una escala de zonas de servicio, se implementa un proceso de consolidación espacial usando el algoritmo \textbf{DBSCAN}. Se agrupan todas las paradas que se encuentren en un radio de 100 metros. Cada grupo o clúster se convierte en un único supernodo en el grafo final del L-espacio. Se eligió DBSCAN por su capacidad para identificar clústeres de forma densa sin requerir un número predefinido de grupos.
+            Para modelar esta realidad y analizar la red a una escala de zonas de servicio, se implementa un proceso de consolidación espacial usando el algoritmo \textbf{DBSCAN}. Se agrupan todas las paradas que se encuentren en un radio de 100 metros. Cada grupo o clúster se convierte en un único supernodo en el grafo final del L-espacio. Esta consolidación aproxima los transbordos peatonales de corta distancia; sin embargo, al colapsar paradas en un supernodo no conserva el detalle espacial ni el costo interno de caminata dentro del clúster. Se eligió DBSCAN por su capacidad para identificar clústeres de forma densa sin requerir un número predefinido de grupos.
 
             Este paso reduce drásticamente la complejidad de la red, como se muestra en la Tabla \ref{tab:consolidacion_grafo_lspace}, resultando en un modelo más abstracto y manejable, ideal para los análisis de centralidad y accesibilidad.
 
@@ -78,7 +78,7 @@
 
         \subsection{Construcción del P-espacio (Red de Servicio)}
         
-            Mientras que el L-espacio modela la infraestructura, el P-espacio modela la experiencia del viaje sin transbordos. El objetivo es construir un grafo donde una arista signifique "puedo llegar de A a B sin cambiar de autobús".
+            Mientras que el L-espacio modela la infraestructura, el P-espacio modela la experiencia del viaje sin transbordos. A partir de los mismos supernodos consolidados, se pasa de una visión física a una visión funcional comparable entre ambos modelos. El objetivo es construir un grafo donde una arista signifique "puedo llegar de A a B sin cambiar de autobús".
 
             \paragraph{Algoritmo de Construcción.}
             La construcción del P-espacio parte de los mismos 4,203 nodos consolidados del L-espacio, asegurando que ambos modelos sean comparables. Sin embargo, la definición de las aristas es radicalmente diferente:
@@ -92,13 +92,13 @@
 
     \section{Definición de los Grafos Finales}
     
-        Como resultado de los procesos anteriores, obtenemos dos modelos de red distintos, cuyas propiedades formales se resumen a continuación.
+        Como resultado de los procesos anteriores, obtenemos dos modelos de red distintos. Sus propiedades formales se resumen a continuación para dejar explícitos los supuestos que se usarán en el análisis posterior.
         
         \subsection{Grafo L-espacio: Modelo de Infraestructura}
             \begin{itemize}
                 \item \textbf{Nodos (V):} 4,203 supernodos que representan zonas de servicio consolidadas. Cada nodo conoce su centroide geográfico y las paradas originales que lo componen.
                 \item \textbf{Aristas (E):} 8,591 aristas \textbf{dirigidas}. Una arista (u, v) existe si un autobús viaja de una parada en el clúster u a una en el clúster v.
-                \item \textbf{Pesos:} Cada arista está ponderada por el tiempo de viaje \emph{mínimo} observado en minutos entre las paradas originales asociadas a los supernodos, calculado a partir de \texttt{stop\_times\_cleaned.csv}. Este valor se usa como aproximación conservadora cuando hay varias observaciones; si no hay dato de tiempo válido, se asigna cero.
+                \item \textbf{Pesos:} Cada arista está ponderada por el tiempo de viaje \emph{mínimo} observado en minutos entre las paradas originales asociadas a los supernodos, calculado con el archivo depurado de tiempos de parada. Este valor se usa como aproximación conservadora cuando hay varias observaciones; cuando una arista consolidada no tiene tiempos válidos, se imputa un valor de respaldo igual a la mediana global de tiempos válidos y se marca con el atributo \texttt{travel\_time\_imputed}.
             \end{itemize}
 
         \subsection{Grafo P-espacio: Modelo de Servicio}
@@ -113,12 +113,12 @@
     
         Es fundamental reconocer que los modelos construidos, a pesar de su robustez, se basan en supuestos que introducen limitaciones. La interpretación de los resultados debe considerar lo siguiente:
         
-        \paragraph{Naturaleza estática de los datos.} El modelo se construye a partir de una instantánea de los datos GTFS. No captura la dinámica operativa de la red, como variaciones estacionales, modificaciones de rutas o disrupciones del servicio en tiempo real.
+        \paragraph{Naturaleza estática de los datos.} Ambos grafos se construyen a partir de una instantánea de los datos GTFS. Por ello, no capturan la dinámica operativa de la red, como variaciones estacionales, modificaciones de rutas o disrupciones del servicio en tiempo real.
         
         \paragraph{Abstracción de la operación y la demanda.} Los modelos se enfocan en la topología y el servicio programado. No se considera la capacidad de los vehículos, el tipo de unidad, ni la demanda real de pasajeros. Una arista indica que un servicio existe, no cuántas personas lo utilizan.
         
-        \paragraph{Abstracción del componente temporal.} Aunque el L-espacio usa el tiempo de viaje como peso, los grafos son una representación estática. No se modela la frecuencia de los autobuses ni los tiempos de espera en las paradas.
+        \paragraph{Abstracción del componente temporal.} Aunque el L-espacio usa el tiempo de viaje como peso, ambos grafos son representaciones estáticas. No se modela la frecuencia de los autobuses ni los tiempos de espera en las paradas.
         
-        \paragraph{Modelado de transbordos.} El proceso de consolidación modela implícitamente los transbordos peatonales de corta distancia ($<100\,\text{m}$). Sin embargo, no se contemplan explícitamente las caminatas de mayor distancia que un usuario podría realizar para conectar dos rutas.
+        \paragraph{Modelado de transbordos.} El proceso de consolidación aproxima transbordos peatonales de corta distancia ($<100\,\text{m}$) al agrupar paradas cercanas en un mismo supernodo. Como consecuencia, no se modela explícitamente el costo de caminata dentro del clúster ni las caminatas de mayor distancia que un usuario podría realizar para conectar dos rutas.
         
         A pesar de estas limitaciones, los grafos resultantes son representaciones fieles de la estructura y el servicio programado de la red. Son herramientas poderosas para el análisis de la conectividad, la centralidad y la accesibilidad estructural, que son los objetivos centrales de esta investigación.

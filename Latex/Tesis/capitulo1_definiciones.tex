@@ -1,5 +1,5 @@
 \chapter{Teoría de grafos}
-    Antes de comenzar con el estudio de las redes de transporte público, y con el fin de partir desde bases bien fundamentadas, vamos a introducir una serie de resultados en torno a la teoría de grafos. En este caso nos importa fundamentar adecuadamente qué es un \textit{camino} en el contexto de esta teoría, lo que nos ayudará a tener un formalismo de lo que es una ruta de transporte público. Asimismo, nos interesa explorar cómo la noción de camino nos ayuda a entender la estructura de una red. Para esto también estudiaremos el concepto de \textit{centralidad}, que nos ayudará a evaluar la importancia que tiene un determinado nodo en el contexto del resto del grafo. Finalmente, gracias a lo anterior, estudiaremos distintos algoritmos para lograr encontrar caminos óptimos entre cualesquiera dos nodos.
+    Antes de iniciar el estudio de las redes de transporte público, conviene establecer una base conceptual sólida desde la teoría de grafos. En particular, este capítulo formaliza la noción de \textit{camino}, indispensable para representar matemáticamente lo que en transporte interpretamos como ruta. A partir de esta idea se analiza también cómo la estructura de caminos revela propiedades globales de la red. Con ese marco se introducen medidas de \textit{centralidad} para evaluar la relevancia de cada nodo dentro del grafo y, finalmente, se presentan algoritmos para determinar caminos óptimos entre pares de nodos.
 
     Los problemas de movilidad urbana requieren modelos que abstraigan la complejidad de la ciudad sin perder los elementos esenciales de conectividad. La \emph{teoría de grafos} provee justamente ese andamiaje formal: reduce las interacciones físicas a nodos y aristas y, a partir de ahí, permite cuantificar eficiencia, robustez y vulnerabilidad de toda la red \cite{rodrigues2020}.
 
@@ -335,9 +335,16 @@
                 Sea $G = (V, E)$ un grafo.
                 Un \textbf{camino de longitud $k$} es un subgrafo $P = (V_P, E_P)$ de $G$ tal que existen nodos distintos $v_1, v_2, \dots, v_{k+1} \in V$ para los cuales:
                 \begin{align*}
-                    V_P &= \{v_1, v_2, \dots, v_{k+1}\}, \\
-                    E_P &= \left\{ (v_i, v_{i+1}) : i = 1, \dots, k \right\},
+                    V_P &= \{v_1, v_2, \dots, v_{k+1}\},
                 \end{align*}
+                y las aristas (o arcos) de $P$ conectan vértices consecutivos:
+                \[
+                    E_P =
+                    \begin{cases}
+                        \left\{ \{v_i, v_{i+1}\} : i = 1, \dots, k \right\}, & \text{si } G \text{ es no dirigido},\\
+                        \left\{ (v_i, v_{i+1}) : i = 1, \dots, k \right\}, & \text{si } G \text{ es dirigido}.
+                    \end{cases}
+                \]
                 y $v_i \neq v_j$ para todo $i \neq j$.
                 Decimos que $P$ es un camino de $v_1$ a $v_{k+1}$ en $G$.
             \end{definicion}
@@ -416,9 +423,16 @@
             \begin{definicion}[Ciclo]
                 Un \textbf{ciclo de longitud $k$} es un camino $C = (V_C, E_C)$ tal que existen nodos distintos $v_1, v_2, \dots, v_k$ para los cuales:
                 \begin{align*}
-                    V_C &= \{v_1, v_2, \dots, v_k\}, \\
-                    E_C &= \{ (v_1, v_2),\ (v_2, v_3),\ \dots,\ (v_{k-1}, v_k),\ (v_k, v_1) \},
+                    V_C &= \{v_1, v_2, \dots, v_k\},
                 \end{align*}
+                y
+                \[
+                    E_C =
+                    \begin{cases}
+                        \left\{ \{v_1, v_2\},\ \{v_2, v_3\},\ \dots,\ \{v_{k-1}, v_k\},\ \{v_k, v_1\} \right\}, & \text{si } G \text{ es no dirigido},\\
+                        \left\{ (v_1, v_2),\ (v_2, v_3),\ \dots,\ (v_{k-1}, v_k),\ (v_k, v_1) \right\}, & \text{si } G \text{ es dirigido}.
+                    \end{cases}
+                \]
                 y $v_i \neq v_j$ para $i \neq j$.
             \end{definicion}
 
@@ -468,8 +482,6 @@
 
                 El subgrafo resaltado constituye un ciclo de longitud $4$, dado por la sucesión $v_1 \to v_2 \to v_3 \to v_4 \to v_1$.
             \end{ejemplo}
-
-            Aunque la teoría de espacios vectoriales se escapa de lo que abarca este trabajo, utilizaremos algunos conceptos de esta teoría para justificar algunos resultados importantes. Todos los resultados utilizados se justificarán en un apéndice al final del documento.
 
             \begin{definicion}[Espacio de ciclos]
                 Sea $G=(V,E)$ un grafo finito (posiblemente con $p$ componentes). El \emph{espacio de ciclos} $\mathcal{C}(G)$ es el subespacio de $\mathbb{F}_2^{E}$ generado por los vectores característicos de todos los ciclos simples de $G$. La suma es módulo $2$.
@@ -854,12 +866,12 @@
                 \]
             \end{proof}
 
-            \begin{definicion}[Índice $\alpha$ (redundancia)]
-                El \textbf{índice $\alpha$} cuantifica la proporción de ciclos presentes frente al máximo posible en un grafo planar:
+            \begin{definicion}[Índice $\alpha$ (redundancia planar)]
+                En un grafo planar simple y conexo, el \textbf{índice $\alpha$} cuantifica la proporción de ciclos presentes frente al máximo posible:
                 \[
-                \alpha = \frac{|E| - |V| + p}{2|V| - 5}
+                \alpha = \frac{|E| - |V| + 1}{2|V| - 5}
                 \]
-                Valores altos sugieren mayor redundancia y resiliencia. El parámetro $p$ representa el número de componentes conexas (en redes totalmente conectadas, $p=1$).
+                Valores altos sugieren mayor redundancia y resiliencia. En esta tesis usamos esta forma para el caso conexo ($p=1$).
             \end{definicion}
 
             \begin{ejemplo}
@@ -878,7 +890,16 @@
                 Un valor cercano a $1$ denota que la red se aproxima a la máxima densidad planar.
             \end{definicion}
 
-            Como vimos, los resultados anteriores funcionan únicamente para grafos planares. Aunque esta clase de grafos es abundante y su estudio es muy útil, durante este trabajo nos interesaremos por grafos que no necesariamente son planares. Para estos casos usaremos los siguientes resultados.
+            \begin{ejemplo}
+                Si $|V| = 8$, $|E| = 14$, entonces:
+                \[
+                \gamma = \frac{14}{3 \times 8 - 6} = \frac{14}{18} \approx 0.778
+                \]
+                Lo que sugiere alta densidad planar, indicando que la red está utilizando más del 77% de las conexiones posibles para un grafo planar de su tamaño.
+            \end{ejemplo}
+
+            \paragraph{Del caso planar al caso general.}
+            Como vimos, los resultados anteriores funcionan únicamente para grafos planares. Aunque esta clase de grafos es abundante y su estudio es muy útil, durante este trabajo nos interesaremos por grafos que no necesariamente son planares. Para esos casos usaremos los siguientes resultados.
 
             \begin{teorema}[Fórmula del número ciclomático]
                 Para todo grafo finito $G$ con $|V|=n$, $|E|=m$ y $p$ componentes conexas, se cumple
@@ -915,15 +936,7 @@
                 lo que coincide con la dimensión del espacio de ciclos.
             \end{observacion}
 
-            \begin{ejemplo}
-                Si $|V| = 8$, $|E| = 14$, entonces:
-                \[
-                \gamma = \frac{14}{3 \times 8 - 6} = \frac{14}{18} \approx 0.778
-                \]
-                Lo que sugiere alta densidad planar, indicando que la red está utilizando más del 77% de las conexiones posibles para un grafo planar de su tamaño.
-            \end{ejemplo}
-
-        Las propiedades que estudiamos hasta ahora son ciertas independientemente del espacio en el que esté embebido nuestra red, si es que está embebido en alguno. A veces también nos interesaría estudiar redes que estén dentro de un espacio. Esto nos proporciona información diferente pues cada nodo tendrá una posición dentro de ese espacio y, de ser métrico, cada arista tendrá una longitud. A continuación vamos a formalizar esta idea de analizar grafos dentro de un espacio.
+        Las propiedades estudiadas hasta aquí son válidas independientemente del espacio en el que esté embebida la red, si existe tal embebimiento. En aplicaciones de transporte también interesa analizar grafos realizados en un espacio geométrico: cada nodo adquiere una posición y, si el espacio es métrico, cada arista una longitud. A continuación formalizamos esta perspectiva.
 
         \begin{definicion}[Realización geométrica]
             Una \emph{realización geométrica} de $G$ en $\mathbb{R}^d$ es una aplicación inyectiva $\varphi:V\to \mathbb{R}^d$.
@@ -1242,7 +1255,7 @@
                 \[
                 \frac{1}{d_{G\setminus H}(i,j)}\;\le\;\frac{1}{d_G(i,j)}\qquad\text{para todo }i\neq j.
                 \]
-                Al promediar sobre todos los pares aparece exactamente $E(G\setminus H)\le Ef(G)$.
+                Al promediar sobre todos los pares aparece exactamente $Ef(G\setminus H)\le Ef(G)$.
             \end{proof}
 
             \begin{definicion}[Curvas de vulnerabilidad y resiliencia]
@@ -1273,10 +1286,8 @@
         \end{itemize}
         Estas decisiones aseguran consistencia entre el marco teórico (distancias, centralidades y modularidad) y la implementación computacional reportada en los capítulos de construcción y resultados.
 
-    \section{Algoritmos fundamentales en teoría de grafos}
+    \section{Algoritmos de caminos mínimos}
         Al estudiar distancias y caminos mínimos en grafos finitos, necesitamos procedimientos efectivos que, a partir de especificaciones bien definidas, produzcan soluciones correctas en tiempo finito y con garantías de optimalidad. En esta línea situamos dos hitos clásicos: el algoritmo de Dijkstra (formulado en 1956 y publicado en 1959), que resuelve caminos mínimos desde una fuente única con pesos no negativos mediante relajación y selección iterativa del vértice con etiqueta mínima, y el algoritmo de Floyd–Warshall (1962), que computa todas las distancias par–a–par por programación dinámica incorporando vértices intermedios; este último unifica ideas de Floyd para costos mínimos y de Warshall para cierre transitivo, con antecedentes en la aritmética de caminos de Kleene. En lo que sigue fijamos hipótesis, enunciamos invariantes y recurrencias, demostramos corrección y acotamos la complejidad temporal y espacial de ambos métodos.
-
-        Junto a estos algoritmos de distancia, utilizaremos DBSCAN (Ester, Kriegel, Sander y Xu, 1996) para la detección de comunidades a partir de una métrica sobre vértices o sus representaciones: definiremos los parámetros \(\varepsilon\) y \(\mathrm{minPts}\), caracterizaremos puntos núcleo, de borde y ruido, y mostraremos cómo induce particiones sin fijar a priori el número de grupos, preservando la conectividad por densidad. Justificaremos la compatibilidad entre la métrica elegida y la geometría de la red o de sus incrustaciones, y discutiremos las condiciones bajo las cuales DBSCAN resulta estable, de modo que el conjunto de herramientas quede cohesionado: distancias fiables (Dijkstra/Floyd–Warshall) que sustentan una noción de proximidad, y un criterio de agrupamiento (DBSCAN) consistente con dicha proximidad.
 
         \subsection{Algoritmo de Dijkstra}
 
@@ -1301,9 +1312,8 @@
                 \end{enumerate}
 
             \begin{proposicion}[Correctitud]
-                    \end{proposicion}
-
-            La correctitud del algoritmo de Dijkstra se basa en una idea "codiciosa" (greedy): en cada paso, se confirma la distancia al nodo no visitado más cercano a la fuente. Dado que los pesos de las aristas no son negativos, cualquier otra ruta alternativa para llegar a ese mismo nodo tendría que pasar forzosamente por otro nodo no visitado, que por definición está más lejos. Por lo tanto, esa ruta alternativa sería siempre más larga, lo que garantiza que la primera vez que llegamos a un nodo y lo marcamos como "visitado", lo hemos hecho por el camino más corto posible.
+                La correctitud del algoritmo de Dijkstra se basa en una idea "codiciosa" (greedy): en cada paso, se confirma la distancia al nodo no visitado más cercano a la fuente. Dado que los pesos de las aristas no son negativos, cualquier otra ruta alternativa para llegar a ese mismo nodo tendría que pasar forzosamente por otro nodo no visitado, que por definición está más lejos. Por lo tanto, esa ruta alternativa sería siempre más larga, lo que garantiza que la primera vez que llegamos a un nodo y lo marcamos como "visitado", lo hemos hecho por el camino más corto posible.
+            \end{proposicion}
 
             \begin{proof}
                 Demostramos por inducción sobre el número de extracciones. Sea $u$ el primer vértice que viola la propiedad. Como $s$ se extrae con $D[s]=0=d_\ell(s,s)$, existe alguno posterior. Sea $P$ un camino mínimo de $s$ a $u$, y sea $x$ el primer vértice de $P$ que aún no había sido extraído inmediatamente antes de extraer $u$; su predecesor $y$ en $P$ ya fue extraído. En ese momento, al relajar $y\to x$ establecemos $D[x]\le D[y]+\ell(y,x)=d_\ell(s,y)+\ell(y,x)=d_\ell(s,x)$, y por optimalidad $D[x]\ge d_\ell(s,x)$, luego $D[x]=d_\ell(s,x)$. Como $D[u]\le D[x]$ por elección de $u$ (clave mínima), obtenemos $D[u]\le d_\ell(s,x)\le d_\ell(s,u)$; pero siempre $D[u]\ge d_\ell(s,u)$, contradicción. La inducción cierra.
@@ -1509,10 +1519,17 @@
                 sin entradas diagonales negativas, luego no hay ciclos de peso negativo. Por ejemplo, el camino mínimo $1\to 4$ es $1\to 2\to 3\to 4$ con costo $3+(-2)+1=2$.
             \end{ejemplo}
 
+    \section{Algoritmos de detección de comunidades}
+        Con las distancias y la noción de proximidad ya establecidas, introducimos ahora métodos para identificar estructura mesoscópica en la red. Presentamos primero DBSCAN, que agrupa por densidad sin fijar de antemano el número de comunidades, y luego la modularidad junto con el método de Louvain, orientado a maximizar la calidad de una partición.
+
         \subsection{DBSCAN}
 
             \begin{definicion}[Espacio de trabajo]
-                Fijamos un conjunto finito de nodos $V$ y una función de distancia simétrica $d:V\times V\to[0,\infty)$ que satisface $d(u,u)=0$ y $d(u,v)=d(v,u)$; si $d$ no es métrica (p.\,ej.\ proviene de un grafo dirigido), trabajaremos con una simetrización $d^{\mathrm{sym}}(u,v):=\max\{d(u,v),d(v,u)\}$ o con la distancia sobre el subyacente no dirigido. Sea $N=|V|$.
+                Fijamos un conjunto finito de nodos $V$ y una función de distancia simétrica $d:V\times V\to[0,\infty)$ que satisface $d(u,u)=0$ y $d(u,v)=d(v,u)$. Si $d$ no es métrica (p.\,ej.\ proviene de un grafo dirigido), trabajaremos con una simetrización
+                \[
+                d^{\mathrm{sym}}(u,v):=\max\{d(u,v),d(v,u)\}
+                \]
+                o con la distancia sobre el subyacente no dirigido. Sea $N=|V|$.
             \end{definicion}
 
             \begin{definicion}[$\varepsilon$-vecindad y tipos de puntos]
@@ -1593,7 +1610,7 @@
                 \[
                 d(1,2)=d(2,3)=0.9,\quad d(1,3)=1.6,\quad d(4,5)=0.8,\quad d(x,y)=2.5\ \text{en otro caso}.
                 \]
-                Tomamos $\varepsilon=1$ y $\text{minPts}=2$. Entonces $1,2,3$ forman un cluster (núcleos: $2$; bordes: $1$ y $3$) y $4,5$ forman otro (ambos núcleos). No hay ruido. Si elevamos $\text{minPts}$ a $3$, $\{1,2,3\}$ persiste (núcleo: $2$), pero $\{4,5\}$ pasa a ruido, ilustrando la monotonía en los parámetros.
+                Tomamos $\varepsilon=1$ y $\text{minPts}=3$. Entonces $1,2,3$ forman un cluster (núcleo: $2$; bordes: $1$ y $3$) y $4,5$ quedan como ruido. Si reducimos $\text{minPts}$ a $2$, $\{4,5\}$ pasa a formar un segundo cluster, ilustrando la monotonía en los parámetros.
             \end{ejemplo}
 
 

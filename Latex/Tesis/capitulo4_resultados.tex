@@ -9,7 +9,7 @@
         En esta sección se presentan los resultados del análisis aplicado al grafo L-espacio, que modela la contigüidad física de la red de paradas y rutas.
 
         \subsection{Métricas globales del L-espacio}
-        El primer objeto de nuestro análisis son las paradas y estaciones del sistema de transporte público. En concreto, nos interesa saber cómo de bien conectadas están con el resto de la infraestructura, cómo de accesibles son en términos de distancia y cómo se distribuye la infraestructura en el espacio.
+        El primer objeto de nuestro análisis es el conjunto de paradas y estaciones del sistema de transporte público. En concreto, nos interesa saber qué tan bien conectadas están con el resto de la infraestructura, qué tan accesibles son en términos de distancia y cómo se distribuye la infraestructura en el espacio.
 
         \subsubsection{Conectividad y Estructura General}
             Las métricas iniciales revelan una visión panorámica de la red:
@@ -43,7 +43,9 @@
                 \item \textbf{El Viaje más Largo:} El trayecto más largo posible dentro de la red toma \textbf{244 minutos (más de 4 horas)}, conectando una zona relativamente céntrica con la periferia norponiente. Este caso extremo subraya la enorme escala de tiempo que implica atravesar la ciudad y la ineficiencia de ciertas conexiones específicas.
             \end{itemize}
 
-	    En resumen, los indicadores nos dicen que el sistema de transporte público es extenso, bien distribuido en el espacio, aunque también desigual. La alta arboricidad con la que cuenta nos indica que las rutas están pensadas principalmente para conectar las zonas céntricas de los distintos municipios con sus respectivas periferias. Una consecuencia de esto es que muchos caminos tienen que pasar por estas zonas céntricas para poder acceder al resto de la red, algo que nos puede alertar de posibles cuellos de botella en el servicio, aglomeraciones y sobredemanda. Algo que conecta directamente con esto es el concepto de \textit{centralidad} introducido en el capítulo 1, este concepto es uno del que echaremos mano a continuación para evaluar si estos cuellos de botella existen y, de existir, dónde se encuentran.
+	    En resumen, los indicadores muestran que el sistema de transporte público es extenso y está bien distribuido en el espacio, aunque también es desigual. La alta arboricidad de la red sugiere que las rutas están pensadas principalmente para conectar las zonas céntricas de los distintos municipios con sus respectivas periferias. Una consecuencia de esto es que muchos caminos deben pasar por esas zonas céntricas para acceder al resto de la red, lo que alerta sobre posibles cuellos de botella, aglomeraciones y sobredemanda.
+
+            Este diagnóstico conecta directamente con el concepto de \textit{centralidad} introducido en el capítulo 1. De ese concepto se echará mano a continuación para evaluar si estos cuellos de botella existen y, de existir, dónde se concentran.
 
         \subsection{Análisis de Centralidad en el L-espacio}
             A diferencia de las métricas globales, el análisis de centralidad se enfoca en la importancia relativa de cada nodo dentro de la red. Un nodo puede ser "importante" por distintas razones: por ser un punto de alto tráfico, por actuar como un puente crítico, por su cercanía al resto del sistema o por su influencia en corredores clave. A continuación, se analizan cuatro tipos de centralidad, cada una revelando una faceta distinta de la estructura de la red. Los resultados fueron calculados para cada uno de los 4,203 nodos.
@@ -75,7 +77,7 @@
             \end{itemize}
 
         \subsubsection{Centralidad de Eigenvector (Eigenvector Centrality)}
-            Esta métrica asigna importancia a un nodo en función de la importancia de sus vecinos. Un nodo es importante si está conectado a otros nodos importantes. Para su cálculo, se ponderó por el \texttt{original\_edge\_count}, premiando las conexiones a través de "autopistas" de múltiples rutas.
+            Esta métrica asigna importancia a un nodo en función de la importancia de sus vecinos. Un nodo es importante si está conectado a otros nodos importantes. Para su cálculo se ponderó por el número de rutas agregadas en cada arista consolidada. Con ello se privilegian las conexiones multirruta.
             \begin{itemize}
                 \item \textbf{Hallazgos Clave:} De manera sorprendente, esta métrica no destacó al centro ni a los grandes cruceros. En su lugar, reveló la existencia de un \textbf{corredor de alta influencia en Av. Mariano Otero}, al sur de Las Águilas. Los nodos en esta zona obtuvieron las puntuaciones más altas, indicando que no solo son importantes individualmente, sino que juntos forman la "columna vertebral" de un subsistema de nodos muy influyentes, conectando de manera robusta el sur y poniente de la ciudad.
             \end{itemize}
@@ -141,14 +143,19 @@
             \end{figure}
 
         \subsubsection{Impacto en la Conectividad (LCC)}
-            Después de eliminar los 50 nodos de mayor grado, el LCC conserva el \textbf{97.45\%} de sus nodos. Esto indica que la red física mantiene la mayoría de su conectividad, aunque se generan pequeñas pérdidas de cobertura periférica.
+            En el escenario base de robustez (sin intervención), después de eliminar los 50 nodos de mayor grado ponderado, el LCC relativo conserva el \textbf{97.45\%} de su tamaño inicial. Esto indica que la red física mantiene la mayor parte de su cobertura estructural, aunque se generan pérdidas periféricas.
+
+            Para mantener consistencia de lectura con la sección de intervenciones, conviene notar que allí se reporta el \(LCC\) post como porcentaje sobre nodos remanentes (\(98.51\%\) en la base), mientras que aquí se reporta la razón respecto al estado inicial (\(97.45\%\)).
 
         \subsubsection{Impacto en la Eficiencia Global}
             La eficiencia global cae al \textbf{81.50\%} de su valor original tras la eliminación de esos 50 nodos. Aunque la red sigue conectada, los caminos disponibles son menos directos y los tiempos de viaje promedio se alargan cerca de 18.50\%, lo que evidencia la dependencia operativa de los hubs de alto grado.
 
 	\subsection{Conclusiones sobre el $L$-espacio}
-	    Con el análisis realizado podemos concluir algunas cosas interesantes de la infraestructura que da forma al sistema de transporte público en la Zona Metropolitana de Guadalajara. En primer lugar, tiene una estructura arbórea que nos indica que está en gran medida enfocada en conectar zonas periféricas con otras más centralizadas. En segundo lugar, aunque el hipercentro concentra gran parte de la intermediación, también aparecen nodos de intersección relevantes fuera del centro, como estaciones del tren ligero o cruces comerciales estratégicos. Con todo esto, es una red altamente resiliente a la desaparición de nodos críticos y su eficiencia espacial es casi óptima, lo que nos indica que tiene una distribución espacial muy favorable en la zona de cobertura. 
-	    Ahora bien, este análisis no responde todas las preguntas que pudiéramos hacer respecto a cómo es el servicio desde la perspectiva de un usuario. Por ejemplo, la red antes vista no nos permite decir cuántos transbordos son necesarios en los caminos que evaluamos. Para esto es necesaria la construcción del grafo correspondiente al $P$-espacio, aspecto que cubrimos el capítulo pasado y que analizaremos a continuación.
+	    El análisis permite concluir que la infraestructura del sistema en la Zona Metropolitana de Guadalajara tiene una estructura marcadamente arbórea, enfocada en conectar periferias con zonas centrales. Aunque el hipercentro concentra gran parte de la intermediación, también aparecen nodos de intersección relevantes fuera del centro, como estaciones del tren ligero y cruces comerciales estratégicos.
+
+            En términos de robustez, la red conserva buena cobertura estructural bajo ataque dirigido, pero muestra una fragilidad temporal relevante: la eficiencia cae alrededor de \(18.50\%\) al remover 50 hubs. En otras palabras, la conectividad persiste, pero con recorridos más largos.
+
+	    Ahora bien, este análisis no responde todas las preguntas sobre el servicio desde la perspectiva del usuario. Por ejemplo, la red anterior no permite estimar directamente cuántos transbordos son necesarios en los caminos evaluados. Para ello se requiere el grafo del $P$-espacio, que se analizó en el capítulo previo y se evalúa a continuación.
 
     \section{Análisis del P-espacio: La Red de Servicio}
         A continuación, se presentan los resultados del análisis aplicado al grafo P-espacio. Este modelo, donde los nodos se conectan si comparten una ruta, ofrece una perspectiva complementaria centrada en la experiencia de viaje del usuario sin transbordos.
@@ -202,7 +209,7 @@
                 \item \textbf{Comunidad 2} (\textasciitilde\!11.5\%): centroide $(20.6293,-103.2990)$, oriente-centro.
                 \item \textbf{Comunidad 6} (\textasciitilde\!10.3\%): centroide $(20.6573,-103.2995)$, corredor central-oriente.
             \end{itemize}
-            El resto incluye clusters poniente (Comunidad 4, 9) y núcleos menores (Communidades 0, 3, 7), mientras que sólo una comunidad es pequeña (\textless=5 nodos), reflejando alta conectividad transversal del servicio.
+            El resto incluye clusters poniente (Comunidad 4, 9) y núcleos menores (comunidades 0, 3, 7), mientras que sólo una comunidad es pequeña (\textless=5 nodos), reflejando alta conectividad transversal del servicio.
 
             La pregunta territorial en servicio es: ¿qué zonas comparten suficientes rutas para planear acciones coordinadas por comunidad? La Figura~\ref{fig:comunidades_p_space} responde al mostrar modularidad y aristas ponderadas por transbordos, habilitando decisiones de coordinación interzonal.
 
@@ -232,8 +239,15 @@
             \end{itemize}
             Comparativamente, el P-espacio es mucho más resiliente que el L-espacio: la pérdida de eficiencia es de apenas 2.64\% frente al 18.50\% observado en la infraestructura física. Esto se explica porque múltiples rutas comparten paradas y pueden sustituirse entre sí. Operativamente, el resultado sugiere que fallas en supernodos troncales se amortiguan si existen líneas paralelas o variantes, pero también que la redundancia descansa en el centro; un rediseño periférico podría mejorar la resistencia fuera del hipercentro.
 
+        \subsection{Conclusiones sobre el $P$-espacio}
+            Este modelo ofrece una perspectiva complementaria respecto al \(L\)-espacio. En términos generales, confirma que la red de servicio es densa, bien conectada y con rasgos de mundo pequeño. También muestra que, desde la experiencia del usuario, las zonas céntricas son todavía más determinantes que en la lectura puramente infraestructural.
+
+            Asimismo, el \(P\)-espacio resulta resiliente ante cortes de servicio en supernodos de alto grado: la cobertura y la eficiencia se degradan de forma moderada, lo que sugiere alta redundancia de rutas y disponibilidad de alternativas para los usuarios.
+
         \subsection{Discusión Comparativa}
-            El ataque dirigido por grado es significativamente más dañino en el L-espacio que en el P-espacio. Mientras que en la infraestructura física la eficiencia cae cerca de 18.50\% al perder 50 hubs, en la red de servicio la pérdida es de apenas 2.64\%. Esto confirma que la conectividad basada en compartir rutas es más resiliente por la existencia de múltiples combinaciones de servicio entre las paradas, aun si la infraestructura depende fuertemente de unos pocos nodos de alta interconexión.
+            El ataque dirigido por grado es significativamente más dañino en el L-espacio que en el P-espacio. Mientras que en la infraestructura física la eficiencia cae cerca de 18.50\% al perder 50 hubs, en la red de servicio la pérdida es de apenas 2.64\%. Esta comparación usa la misma métrica de eficiencia relativa al estado inicial en ambos grafos.
+
+            Lo anterior confirma que la conectividad basada en compartir rutas es más resiliente por la existencia de múltiples combinaciones de servicio entre las paradas, aun si la infraestructura depende fuertemente de unos pocos nodos de alta interconexión.
 	
         \subsection{Sensibilidad de Supuestos de Modelado}
             Para evaluar la estabilidad de los resultados, se ejecutó un análisis de sensibilidad con cuatro umbrales de consolidación espacial (\(75\), \(100\), \(125\) y \(150\) metros) y dos variantes para construir el \(P\)-espacio: clique por \texttt{route\_id} (modelo principal de la tesis) y clique por \texttt{trip\_id} (escenario conservador).
@@ -287,14 +301,16 @@
                 \item \textbf{Refuerzo periférico:} se agregan 120 aristas dirigidas (60 pares bidireccionales) entre nodos de baja cercanía para crear atajos periféricos.
                 \item \textbf{Recableado con bypass:} se agregan 200 aristas de bypass alrededor de hubs para introducir rutas alternativas entre vecinos de nodos troncales.
             \end{itemize}
-            En todos los casos se midió el impacto tras remover 50 nodos por grado ponderado usando: porcentaje de \(LCC\), eficiencia global dirigida (ponderada por \texttt{travel\_time\_minutes}) y diámetro topológico del componente gigante.
+            En todos los casos se midió el impacto tras remover 50 nodos por grado ponderado usando: \(LCC\) post sobre nodos remanentes, eficiencia global dirigida (ponderada por \texttt{travel\_time\_minutes}) y diámetro topológico del componente gigante.
 
             La pregunta de decisión es: ¿qué intervención topológica ofrece mejor balance entre conectividad, eficiencia y diámetro tras el ataque dirigido? La Tabla~\ref{tab:intervenciones_topologicas_l_space} responde al comparar métricas post-ataque por escenario, habilitando priorizar intervenciones con mayor beneficio operativo.
 
             \begin{table}[h!]
                 \centering
+                \small
                 \caption{Escenarios de intervención topológica en \(L\)-espacio después de un ataque dirigido de 50 supernodos: aristas agregadas, LCC post-ataque, retención de eficiencia y diámetro. La tabla permite comparar el balance entre resiliencia estructural y desempeño temporal de cada estrategia.}
                 \label{tab:intervenciones_topologicas_l_space}
+                \resizebox{\textwidth}{!}{%
                 \begin{tabular}{lrrrrr}
                     \toprule
                     Escenario & Aristas nuevas & LCC post (\%) & Retención de eficiencia (\%) & Diámetro post & \(\Delta\)LCC vs base (pp) \\
@@ -304,14 +320,15 @@
                     Refuerzo periférico     & 120 & 98.51 & 88.52 & 53 & +0.00 \\
                     Recableado con bypass   & 200 & 98.82 & 79.68 & 84 & +0.31 \\
                     \bottomrule
-                \end{tabular}
+                \end{tabular}%
+                }
             \end{table}
 
             Los resultados muestran que no todas las intervenciones mejoran de la misma forma:
             \begin{itemize}
-                \item \textbf{Protección de hubs} mejora la conectividad residual del sistema (\(+0.79\) pp en \(LCC\) post frente al base), aunque no reduce el diámetro.
+                \item \textbf{Protección de hubs} mejora la conectividad residual del sistema (\(+0.79\) pp en \(LCC\) post frente a la base), pero incrementa el diámetro post-ataque de 84 a 97.
                 \item \textbf{Refuerzo periférico} es el escenario con mejor desempeño global en eficiencia bajo ataque (retención de \(88.52\%\) vs \(82.50\%\) base) y reduce el diámetro de 84 a 53.
-                \item \textbf{Recableado con bypass} mejora ligeramente la conectividad (\(+0.31\) pp en \(LCC\)), pero pierde eficiencia relativa, por lo que requiere optimización adicional antes de considerarse una recomendación operativa.
+                \item \textbf{Recableado con bypass} mejora ligeramente la conectividad (\(+0.31\) pp en \(LCC\)), pero pierde eficiencia relativa frente a la base, por lo que requiere optimización adicional antes de considerarse una recomendación operativa.
             \end{itemize}
             En conjunto, la evidencia sugiere priorizar estrategias de \textbf{refuerzo periférico} y \textbf{protección de hubs} como primeras líneas de intervención cuantificable para incrementar resiliencia sin depender exclusivamente del hipercentro.
 
@@ -357,10 +374,6 @@
 
             En síntesis, la tesis mantiene sus conclusiones cualitativas centrales, pero las magnitudes clave se reportan en adelante como rangos para reflejar explícitamente la incertidumbre estructural del modelado.
 
-	\subsection{Conclusiones sobre el $P$-espacio}
-	    Como esperábamos, en este modelo de la red de transporte público tenemos una perspectiva diferente del modelo anterior. En esta ocasión podemos constatar que, en lo general, la red de transporte público es densa y bien conectada, siendo incluso de mundo pequeño. Por otro lado, este modelo nos deja claro que, de cara al usuario, las zonas céntricas son aún más importantes que desde la perspectiva de la pura infraestructura. Asimismo, nos muestra que es una red resiliente a cortes de servicio, algo importante pues indica que dispone de una alta redundancia, permitiendo que los usuarios siempre dispongan de más de una alternativa para llegar a sus destinos.
-
-
     \section{Parámetros, Software y Reproducibilidad}
 
         Para garantizar la transparencia y la posibilidad de replicar los hallazgos de este capítulo, a continuación se detallan el software, los parámetros y los datos utilizados.
@@ -391,10 +404,10 @@
             \begin{itemize}
                 \item \textbf{Centralidades:} Para los cálculos de centralidad se utilizaron los pesos de las aristas correspondientes:
                 \begin{itemize}
-                    \item \textbf{Intermediación y Cercanía:} Se utilizó el tiempo de viaje en minutos (\texttt{travel\_time\_minutes}) como peso, para encontrar los caminos más rápidos.
-                    \item \textbf{Grado Ponderado:} Se calculó como la suma de \texttt{in\_degree\_weighted} y \texttt{out\_degree\_weighted}, que representan el número de rutas que pasan por un nodo.
+                    \item \textbf{Intermediación y Cercanía:} Se utilizó como peso el tiempo de viaje en minutos para encontrar los caminos más rápidos.
+                    \item \textbf{Grado Ponderado:} Se calculó como la suma del grado de entrada ponderado y del grado de salida ponderado, que representan el número de rutas que pasan por un nodo.
                 \end{itemize}
-                \item \textbf{Detección de Comunidades:} Se empleó el método de Louvain, optimizando la modularidad sobre una versión no dirigida del grafo ponderado por el número de rutas (\texttt{original\_edge\_count}).
+                \item \textbf{Detección de Comunidades:} Se empleó el método de Louvain, optimizando la modularidad sobre una versión no dirigida del grafo ponderado por el número de rutas.
                 \item \textbf{Análisis de Robustez:}
                 \begin{itemize}
                     \item Se eliminaron secuencialmente los \textbf{50 nodos de mayor grado} en cada grafo (L-espacio y P-espacio).

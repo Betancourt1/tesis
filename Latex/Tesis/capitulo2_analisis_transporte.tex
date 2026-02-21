@@ -6,13 +6,15 @@
 
 	De manera particular, reduciremos el enfoque a la aplicación de la teoría de grafos, por su capacidad para representar formalmente las relaciones entre nodos y trayectos. Se explorará cómo esta herramienta se articula con otros elementos como los datos GTFS, y se presentarán casos de estudio que demuestran su utilidad práctica.
 
-    De acuerdo a \cite{rodrigues2020}, el análisis de transporte público se puede segmentar en cuatro niveles, cada uno dependiente del anterior:
+    De acuerdo con \cite{rodrigues2020}, el análisis de transporte público se puede segmentar en cuatro niveles, cada uno dependiente del anterior:
     \begin{enumerate}
         \item \textbf{Distancia}: El más esencial, de los cuatro. Consiste en conocer la distancia recorrida entre distintas terminales; el concepto de \textit{distancia} se refiere a cualquier función que cumpla con las propiedades de una norma.
         \item \textbf{Accesibilidad}: Es la medida de qué tan sencillo es alcanzar una cierta locación partiendo de cualquier otra. Es claro que la accesibilidad aquí es una función del lugar y la distancia.
         \item \textbf{Interacciones espaciales}: Es el conjunto de desplazamientos realizados por los usuarios del transporte público. Se toma en cuenta el origen y el destino de los viajes para contrarrestar la oferta con la demanda existente.
         \item \textbf{Modelos de uso del transporte}: Es un marco que "busca evaluar las numerosas relaciones y efectos de retroalimentación entre el transporte y la estructura espacial" \cite{rodrigues2020}.
     \end{enumerate}
+
+    En este capítulo, estos niveles servirán como hilo conductor de la discusión: el $L$-espacio se vincula principalmente con la distancia y la estructura física de la red, mientras que el $P$-espacio se vincula con la accesibilidad e interacciones de viaje sin transbordo.
 
     Dependiendo del nivel de abstracción que tengan los datos disponibles, existen múltiples métodos que pueden aplicarse para su estudio. Estos métodos pueden clasificarse de distintas formas según \cite{rodrigues2020}:
         \begin{itemize}
@@ -45,7 +47,7 @@
     A partir de esta definición general, es posible derivar distintas representaciones gráficas que simplifican el sistema $\mathcal{T}$ para resaltar propiedades específicas a estas representaciones las llamamos \textit{espacios de representación}. Cada uno de los espacios de representación que se detallarán a continuación —el espacio $L$, el espacio $P$, el espacio $C$ y el espacio $B$— constituye una ``vista'' parcial o proyección de $\mathcal{T}$. Por ejemplo, el espacio $L$ preserva la infraestructura física definida en $E$, el espacio $P$ modela la continuidad del viaje permitida por el conjunto $R$, el espacio $C$ se enfoca en las conexiones entre los elementos de $R$, y el espacio $B$ captura la relación fundamental de pertenencia entre $V$ y $R$. Esta formalización justifica que la aplicación de la teoría de grafos al transporte es un mapeo estructurado que conserva propiedades topológicas esenciales del sistema real.
 
     \section{El transporte público como grafo}
-        En el capítulo anterior se definió el concepto de grafo, así como sus propiedades principales y varios resultados interesantes en torno a estos. Algunas de las definiciones que adquirimos fue la de recorrido, que nos proporciona una noción de movimiento dentro de un grafo. Asimismo, definimos un tipo de distancia entre dos nodos que nos puede indicar cómo de largo es el recorrido más corto entre estos.
+        En el capítulo anterior se definió el concepto de grafo, así como sus propiedades principales y varios resultados interesantes en torno a estos. Algunas de las definiciones que adquirimos fueron la de recorrido, que nos proporciona una noción de movimiento dentro de un grafo. Asimismo, definimos un tipo de distancia entre dos nodos que nos puede indicar cómo de largo es el recorrido más corto entre estos.
 
         Nuestra meta en esta sección es mostrar que cualquier red de transporte público puede modelarse como un grafo haciendo uso de toda la teoría vista en el capítulo anterior. Más aún, algunos de los resultados que estudiamos para grafos, también nos dicen cosas muy interesantes del transporte público en tanto tal. Esto hace a los grafos una herramienta valiosísima para modelar esta clase de redes y analizar su comportamiento.
 
@@ -109,7 +111,7 @@
 
                 El $L\text{-espacio}$, en este último caso, puede aproximarse mediante un \textit{grafo planar}, es decir, un grafo que puede representarse en el plano sin que sus aristas se crucen. Esta propiedad es especialmente relevante para redes de transporte urbano, donde la estructura topológica se encuentra restringida por la disposición física del territorio y la infraestructura \cite{rodrigues2020}. En contextos metropolitanos complejos, como el de Guadalajara, dicha representación permite relacionar directamente la geometría de las rutas con la accesibilidad territorial y con los patrones de concentración de la demanda \cite{barraza2021}.
 
-                Formalmente, el $L\text{-espacio}$ puede considerarse una proyección de la red bipartita general $G_B=(V \cup R,E_B)$ sobre el conjunto $V$ de paradas, donde dos vértices se conectan si existe una ruta $r \in R$ que las enlaza consecutivamente. Esta proyección conserva la estructura local de conectividad y sirve como base para definir métricas estructurales como:
+                Formalmente, el $L\text{-espacio}$ no se obtiene únicamente de la relación de pertenencia parada--ruta codificada en el grafo bipartito $G_B=(V \cup R,E_B)$. Para construirlo también se requiere la información de consecutividad de paradas dentro de cada ruta (equivalentemente, los tramos de $E$ o el orden de paradas por ruta). Con esa información adicional se define una proyección de adyacencia sobre $V$, en la que dos vértices se conectan si aparecen consecutivos en al menos una ruta. Esta proyección conserva la estructura local de conectividad y sirve como base para definir métricas estructurales como:
                 $$
                 C_i = \frac{2e_i}{k_i(k_i - 1)}, \qquad L = \frac{1}{|V|(|V|-1)} \sum_{i\neq j} d(i,j),
                 $$
@@ -280,14 +282,14 @@
                     \label{fig:b_espacio}
                 \end{figure}
                 
-                El $B$-espacio constituye la estructura más general de modelación de un sistema de transporte, al capturar simultáneamente la relación entre infraestructura ($V$) y operación ($R$). Tanto el $L$-espacio como el $P$- y el $C$-espacio pueden obtenerse como proyecciones de $G_B$ sobre uno de sus conjuntos de vértices:
+                El $B$-espacio constituye la estructura más general de modelación de un sistema de transporte, al capturar simultáneamente la relación entre infraestructura ($V$) y operación ($R$). El $P$-espacio y el $C$-espacio pueden obtenerse directamente como proyecciones de $G_B$, mientras que el $L$-espacio requiere además información de consecutividad de paradas:
                 $$
-                    G_L = \Pi_V^{\text{adyacencia}}(G_B), \quad 
+                    G_L = \Pi_V^{\text{adyacencia}}(G_B, E), \quad 
                     G_P = \Pi_V^{\text{pertenencia}}(G_B), \quad
                     G_C = \Pi_R(G_B).
                 $$
 
-                Este modelo resulta útil cuando se busca analizar propiedades de cobertura, redundancia o centralidad conjunta entre paradas y rutas, ya que las medidas calculadas sobre el grafo bipartito reflejan simultáneamente la importancia estructural de las estaciones y de los servicios que las conectan. Además, la estructura $B$-bipartita puede proyectarse de manera natural sobre cualquiera de los dos conjuntos, generando como casos particulares los modelos $L$- y $C$-espacio, según se proyecte sobre paradas o sobre rutas. De esta forma, el $B\text{-espacio}$ actúa como el nivel más general de formalización topológica del sistema de transporte, a partir del cual pueden definirse los demás espacios según el tipo de interacción o análisis requerido.
+                Este modelo resulta útil cuando se busca analizar propiedades de cobertura, redundancia o centralidad conjunta entre paradas y rutas, ya que las medidas calculadas sobre el grafo bipartito reflejan simultáneamente la importancia estructural de las estaciones y de los servicios que las conectan. Además, la estructura $B$-bipartita puede proyectarse de manera natural para obtener los modelos $P$ y $C$; para obtener el modelo $L$ es necesario incorporar explícitamente la información de tramos consecutivos. De esta forma, el $B\text{-espacio}$ actúa como el nivel más general de formalización topológica del sistema de transporte, a partir del cual pueden definirse los demás espacios según el tipo de interacción o análisis requerido.
 
                 Desde el punto de vista metodológico, el $B\text{-espacio}$ constituye la base de una modelación modular y extensible: nos permite incorporar pesos derivados de frecuencia, capacidad, tiempos de transferencia o flujos de pasajeros, y facilita la integración con modelos de matriz origen–destino o de propagación de perturbaciones.
 
@@ -324,12 +326,12 @@
             \begin{proof} De manera análoga, la entrada $(i,j)$ de $B^\top B$ representa el producto punto entre la columna $i$ y la columna $j$ de $B$, es decir, $\sum_{v \in V} B_{vi} B_{vj}$. Esto cuantifica el número de paradas compartidas entre la ruta $i$ y la ruta $j$. Si el resultado es al menos 1, las rutas están conectadas en el $C$-espacio.
             \end{proof}
 
-        Hasta este punto, no solamente hemos mostrado que los sistemas de transporte público \textit{pueden} modelarse como red, sino además hemos proporcionado cuatro formas distintas de llevar a cabo dicha tarea. Cada una de las formas antes expuestas nos ayudan a revelar una serie de aspectos distintos de estas redes y tienen casos de uso particulares. En el contexto de este trabajo y las secciones siguientes, nos limitaremos a discutir los primeros dos espacios expuestos, pues son los que la literatura ha abarcado con mayor profundidad y con un mayor número de aplicaciones.
+        Hasta este punto, no solamente hemos mostrado que los sistemas de transporte público \textit{pueden} modelarse como red, sino además hemos proporcionado cuatro formas distintas de llevar a cabo dicha tarea. Cada una de las formas antes expuestas nos ayuda a revelar aspectos distintos de estas redes y tiene casos de uso particulares. En el contexto de este trabajo y las secciones siguientes, nos limitaremos a discutir los primeros dos espacios expuestos, pues son los que la literatura ha abarcado con mayor profundidad y con un mayor número de aplicaciones. Esta decisión también preserva continuidad con los cuatro niveles iniciales: el $L$-espacio enfatiza distancia y estructura física, mientras que el $P$-espacio enfatiza accesibilidad e interacciones funcionales de viaje.
 
     \section{Estado del Arte}
-        En este punto ya contamos con varias formas de modelar un sistema de transporte público como grafo. Hemos visto que usaremos una u otra dependiendo del caso, pero que nos centraremos en las primeras dos: $L\text{-espacio}$ y $P\text{-espacio}$. Esto nos permitirá describir tanto la infraestructura como el servicio del transporte público. Por tanto, se busca que las propiedades de los grafos estudiadas previamente permitan interpretar el comportamiento del sistema de transporte público una vez aplicadas a sus respectivos modelos. Este es el objetivo de la presente sección.
+        Con la formalización previa ya establecida, esta sección no redefine los espacios, sino que revisa cómo la literatura interpreta sus métricas en términos de infraestructura y servicio. En particular, se analizan resultados reportados para $L\text{-espacio}$ y $P\text{-espacio}$, que son los marcos más utilizados para interpretar redes de transporte urbano.
 
-        Primero, revisaremos las propiedades de grafo de los $L\text{-espacios}$ para hablar de las interpretaciones que estas propiedades pueden tener en el contexto del análisis de las redes de transporte, luego haremos lo mismo para los $P\text{-espacios}$. Con esto lograremos, no solamente modelar sino también describir exitosamente propiedades de los sistemas de transporte público con grafos.
+        Primero, revisaremos las propiedades de grafo de los $L\text{-espacios}$ y sus lecturas físicas; luego haremos lo mismo para los $P\text{-espacios}$ y sus lecturas operativas. Con esto pasamos de la definición formal del modelo a su interpretación empírica en estudios previos.
 
         \subsection{Propiedades del $L\text{-espacio}$}
             Recordemos que en la representación $L\text{-espacio}$, los nodos son paradas o estaciones y las aristas representan tramos físicos directos entre ellas. Este modelo preserva la forma de la red y respeta la geografía y restricciones físicas del sistema de transporte \cite{dingluo2019}. Por ello, el $L\text{-espacio}$ es ideal para estudiar la topología estructural de la infraestructura de transporte (por ejemplo, la forma de la red vial o ferroviaria utilizada por el transporte público). A partir de este grafo pueden calcularse diversas métricas globales y locales cuyas interpretaciones se vinculan con aspectos físicos del sistema.
@@ -397,7 +399,7 @@
 
                     \item \textbf{Densidad elevada por estructura de cliques}: La densidad (proporción de aristas existentes de entre las posibles) tiende a ser elevada en $P\text{-espacio}$ justamente por la formación de cliques por ruta – por ejemplo, en una ciudad con $N$ paradas y rutas que cubren muchas de ellas, $G_P$ puede acercarse a un grafo casi completo. Esto contrasta con el $L\text{-espacio}$ mucho menos denso en términos de aristas.
 
-                    \item \textbf{Propiedades de pequeño mundo}: Un sistema con características de pequeño mundo en $P\text{-espacio}$ (que es lo común) tendrá distancias muy cortas: típicamente cualquier parada se conecta a cualquier otra con tan solo 1 o 2 transbordos gracias a que las rutas se sobreponen en algunos puntos (esto se ha confirmado observando que las redes en $P$ suelen tener clustering alto y camino medio bajo, a diferencia del $L\text{-espacio}$).
+                    \item \textbf{Propiedades de pequeño mundo}: En el $P\text{-espacio}$, las distancias entre paradas suelen ser muy cortas. Típicamente, cualquier parada se conecta con otra mediante 1 o 2 transbordos gracias a la superposición de rutas. Esta pauta es consistente con un clustering alto y un camino medio bajo, en contraste con el $L\text{-espacio}$.
                 \end{itemize}
 
                 En \cite{zhang2019} hallaron que la red de autobuses de Beijing en $P\text{-espacio}$ exhibe claras propiedades de \textit{mundo pequeño} y una alta conectividad, indicando que funcionalmente el sistema permitía traslados eficientes entre la mayoría de las zonas.
@@ -485,7 +487,7 @@
 
     \section{Antecedente Clave: Análisis Previo de la Red de Guadalajara}
 
-        Hemos indicado en la introducción del presenta trabajo que nuestra finalidad es modelar el sistema de transporte público de la Zona Metropolitana de Guadalajara como grafo y, a través del estudio de dicho modelo, deducir propiedades físicas y de servicio del mismo. 
+        Hemos indicado en la introducción del presente trabajo que nuestra finalidad es modelar el sistema de transporte público de la Zona Metropolitana de Guadalajara como grafo y, a través del estudio de dicho modelo, deducir propiedades físicas y de servicio del mismo. 
         
         Es importante aclarar que en esta sección no se analizarán aún los datos propios de esta investigación. El objetivo es utilizar el trabajo de \cite{barraza2021} como un caso de estudio ilustrativo y una ``prueba de concepto'' de cómo la teoría descrita en este capítulo ha sido aplicada previamente al contexto local, preparando el terreno para nuestro propio análisis.
         
@@ -504,11 +506,11 @@
             \begin{enumerate}
                 \item \textbf{Grado de Accesibilidad (Índice de Shimbel)}: Mide la eficiencia en términos de tiempo de viaje. El artículo lo evalúa a nivel nodal (Grado de Accesibilidad) como el tiempo de viaje promedio ($ATT$) desde un nodo $x$ al resto de nodos $y$:
                 \[
-                    ATT_{(x)}=\frac{\sum_{x}d(x,y)}{N}
+                    ATT_{(x)}=\frac{1}{N-1}\sum_{y\neq x}d(x,y)
                 \]
                 Y también a nivel de red con el \textbf{Índice de Shimbel} ($C_{(x)}$):
                 \[
-                    C_{(x)}=\frac{N-1}{\sum_{y}d(x,y)}
+                    C_{(x)}=\frac{N-1}{\sum_{y\neq x}d(x,y)}
                 \]
 
                 \item \textbf{Índice de rodeo o de desvío} (\textit{Detour Index} o \textit{Deuter Index}): Mide la fricción espacial de la red al comparar la distancia euclidiana entre dos puntos con la distancia de viaje real en la red. Un valor cercano a 1 indica trayectos más directos.
@@ -524,7 +526,7 @@
 
             En cuanto a la fricción espacial, el \textit{Detour Index} fue de 0.63, lo cual los autores consideran bajo (eficiente) y lo atribuyen al diseño ortogonal de la red propuesta.
 
-            Respecto a la vulnerabilidad, el estudio identificó este como el hallazgo más significativo, mostrando un \textbf{pobre desempeño} (\textit{poor performance}) y una \textbf{gran polarización} (\textit{great polarization}) de los flujos hacia unos pocos nodos. El sistema evidenció una alta dependencia de nodos críticos; la afectación de solo el 10\% de los nodos con mayor centralidad de intermediación resultó en el punto crítico de falla, casi duplicando el tiempo de viaje promedio de 70 a 133 minutos.
+            Respecto a la vulnerabilidad, el estudio lo identificó como el hallazgo más significativo, mostrando un \textbf{pobre desempeño} (\textit{poor performance}) y una \textbf{gran polarización} (\textit{great polarization}) de los flujos hacia unos pocos nodos. El sistema evidenció una alta dependencia de nodos críticos; la afectación de solo el 10\% de los nodos con mayor centralidad de intermediación resultó en el punto crítico de falla, casi duplicando el tiempo de viaje promedio de 70 a 133 minutos.
 
             En síntesis, el estudio de \cite{barraza2021} demuestra la aplicabilidad de la teoría de grafos al análisis del transporte metropolitano y proporciona una línea base metodológica. Sus resultados (para la red alternativa) confirman que las métricas estructurales permiten caracterizar el desempeño de la red.
 
