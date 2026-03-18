@@ -299,28 +299,28 @@
         \subsection{Escenarios de Intervención Topológica}
             Para convertir el diagnóstico estructural en propuestas comparables, se evaluaron tres intervenciones sobre el \(L\)-espacio y se contrastaron con un escenario base sin cambios:
             \begin{itemize}
-                \item \textbf{Protección de hubs:} se inmunizan los 10 supernodos de mayor grado ponderado y se aplica el mismo ataque dirigido de 50 nodos sobre el resto.
+                \item \textbf{Protección de nodos críticos:} se protegen los 10 supernodos de mayor grado ponderado y se aplica el mismo ataque dirigido de 50 nodos sobre el resto.
                 \item \textbf{Refuerzo periférico:} se agregan 120 aristas dirigidas (60 pares bidireccionales) entre nodos de baja cercanía para crear atajos periféricos.
-                \item \textbf{Recableado con bypass:} se agregan hasta 200 aristas directas entre predecesores y sucesores de supernodos de alto grado, con el fin de crear rutas alternativas que eviten pasar por esos nodos críticos.
+                \item \textbf{Conexiones alternativas locales:} se agregan hasta 200 aristas directas entre predecesores y sucesores de supernodos de alto grado, con el fin de crear rutas alternativas que eviten pasar por esos nodos críticos.
             \end{itemize}
-            En los cuatro escenarios se aplicó el mismo ataque dirigido: eliminación secuencial de los 50 supernodos con mayor grado ponderado. Después del ataque se midieron tres indicadores: \(LCC\) post sobre nodos remanentes, eficiencia global dirigida (ponderada por \texttt{travel\_time\_minutes}) y diámetro topológico del componente gigante.
+            En los cuatro escenarios se aplicó el mismo ataque dirigido: eliminación secuencial de los 50 supernodos con mayor grado ponderado. Después del ataque se midieron tres indicadores: el porcentaje de nodos remanentes que permanece en el componente gigante, la eficiencia global dirigida (ponderada por \texttt{travel\_time\_minutes}) y el diámetro topológico de ese componente.
 
             La pregunta de decisión es directa: ¿qué intervención conserva mejor la conectividad y, al mismo tiempo, evita que los recorridos se vuelvan mucho más largos tras el ataque? La Tabla~\ref{tab:intervenciones_topologicas_l_space} responde al comparar las métricas post-ataque para cada escenario.
 
             \begin{table}[h!]
                 \centering
                 \small
-                \caption{Escenarios de intervención topológica en \(L\)-espacio después de un ataque dirigido de 50 supernodos: aristas agregadas, LCC post-ataque, retención de eficiencia y diámetro. La tabla permite comparar el balance entre resiliencia estructural y desempeño temporal de cada estrategia.}
+                \caption{Comparación de intervenciones topológicas en \(L\)-espacio después de eliminar 50 supernodos de mayor grado ponderado. Se reportan las aristas añadidas, el porcentaje de nodos remanentes que permanece en el componente gigante, la eficiencia conservada y el diámetro resultante.}
                 \label{tab:intervenciones_topologicas_l_space}
                 \resizebox{\textwidth}{!}{%
                 \begin{tabular}{lrrrrr}
                     \toprule
-                    Escenario & Aristas nuevas & LCC post (\%) & Retención de eficiencia (\%) & Diámetro post & \(\Delta\)LCC vs base (pp) \\
+                    Escenario & Aristas añadidas & Componente gigante (\%) & Eficiencia conservada (\%) & Diámetro resultante & Cambio vs.\ base (pp) \\
                     \midrule
                     Base (sin intervención) & 0   & 98.51 & 82.50 & 84 & 0.00 \\
-                    Protección de hubs      & 0   & 99.30 & 85.58 & 97 & +0.79 \\
+                    Protección de nodos críticos & 0   & 99.30 & 85.58 & 97 & +0.79 \\
                     Refuerzo periférico     & 120 & 98.51 & 88.52 & 53 & +0.00 \\
-                    Recableado con bypass   & 200 & 98.82 & 79.68 & 84 & +0.31 \\
+                    Conexiones alternativas locales & 200 & 98.82 & 79.68 & 84 & +0.31 \\
                     \bottomrule
                 \end{tabular}%
                 }
@@ -328,11 +328,11 @@
 
             La comparación muestra que cada intervención favorece un aspecto distinto de la resiliencia:
             \begin{itemize}
-                \item \textbf{Protección de hubs} es la mejor opción para preservar conectividad: eleva el \(LCC\) post-ataque de \(98.51\%\) a \(99.30\%\). Sin embargo, esa mejora viene acompañada de un diámetro mayor (de 84 a 97), es decir, la red residual queda más unida pero más alargada.
-                \item \textbf{Refuerzo periférico} ofrece el mejor balance operativo: mantiene el \(LCC\) al nivel del escenario base, pero logra la mayor retención de eficiencia (\(88.52\%\) frente a \(82.50\%\)) y reduce el diámetro de 84 a 53. En términos prácticos, conserva recorridos más cortos después del ataque.
-                \item \textbf{Recableado con bypass} sólo aporta una mejora marginal en conectividad (\(+0.31\) pp en \(LCC\)), pero reduce la eficiencia relativa a \(79.68\%\), por debajo del escenario base. En su forma actual, no justifica su costo estructural y requeriría una regla de diseño más afinada.
+                \item \textbf{Protección de nodos críticos} es la mejor opción para preservar conectividad: eleva el porcentaje del componente gigante de \(98.51\%\) a \(99.30\%\). Sin embargo, esa mejora viene acompañada de un diámetro mayor (de 84 a 97), es decir, la red residual queda más unida pero más alargada.
+                \item \textbf{Refuerzo periférico} ofrece el mejor balance operativo: mantiene el componente gigante al nivel del escenario base, pero logra la mayor eficiencia conservada (\(88.52\%\) frente a \(82.50\%\)) y reduce el diámetro de 84 a 53. En términos prácticos, conserva recorridos más cortos después del ataque.
+                \item \textbf{Conexiones alternativas locales} sólo aporta una mejora marginal en conectividad (\(+0.31\) puntos porcentuales en el componente gigante), pero reduce la eficiencia relativa a \(79.68\%\), por debajo del escenario base. En su forma actual, no justifica su costo estructural y requeriría una regla de diseño más afinada.
             \end{itemize}
-            En conjunto, la evidencia sugiere priorizar \textbf{refuerzo periférico} cuando el objetivo principal es sostener tiempos de recorrido razonables bajo falla, y \textbf{protección de hubs} cuando se busca maximizar la conectividad residual. Ambas estrategias resultan más defendibles que el recableado con bypass y, además, reducen la dependencia exclusiva del hipercentro.
+            En conjunto, la evidencia sugiere priorizar \textbf{refuerzo periférico} cuando el objetivo principal es sostener tiempos de recorrido razonables bajo falla, y \textbf{protección de nodos críticos} cuando se busca maximizar la conectividad residual. Ambas estrategias resultan más defendibles que las conexiones alternativas locales y, además, reducen la dependencia exclusiva del hipercentro.
 
         \subsection{Bandas de Incertidumbre de Resultados}
             Para evitar depender de un único valor puntual, se consolidaron los resultados de los puntos 3 y 4 en términos de bandas mínimo--máximo. Esto permite separar dos efectos: (i) la variación por supuestos de modelado (umbral de consolidación y criterio \texttt{route\_id}/\texttt{trip\_id}); y (ii) la variación por decisiones de intervención bajo un mismo ataque dirigido.
