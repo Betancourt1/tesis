@@ -301,7 +301,7 @@
             \begin{itemize}
                 \item \textbf{Protección de hubs:} se inmunizan los 10 supernodos de mayor grado ponderado y se aplica el mismo ataque dirigido de 50 nodos sobre el resto.
                 \item \textbf{Refuerzo periférico:} se agregan 120 aristas dirigidas (60 pares bidireccionales) entre nodos de baja cercanía para crear atajos periféricos.
-                \item \textbf{Recableado con bypass:} se agregan 200 aristas de bypass alrededor de hubs para introducir rutas alternativas entre vecinos de nodos troncales.
+                \item \textbf{Recableado con bypass:} se agregan hasta 200 aristas directas entre predecesores y sucesores de supernodos de alto grado, con el fin de crear rutas alternativas que eviten pasar por esos nodos críticos.
             \end{itemize}
             En los cuatro escenarios se aplicó el mismo ataque dirigido: eliminación secuencial de los 50 supernodos con mayor grado ponderado. Después del ataque se midieron tres indicadores: \(LCC\) post sobre nodos remanentes, eficiencia global dirigida (ponderada por \texttt{travel\_time\_minutes}) y diámetro topológico del componente gigante.
 
