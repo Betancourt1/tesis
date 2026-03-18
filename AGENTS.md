@@ -29,6 +29,7 @@
 ## Commit & Pull Request Guidelines
 - Use concise, imperative commit subjects (Spanish or English), and include scope when useful.
 - Avoid vague messages like `Cambiar cosas`; prefer `Refine modularity metrics in capitulo1`.
+- After each change made in this repository, create a commit before ending the task.
 - PRs should include: objective, modified datasets/scripts, commands run, and key output paths.
 - Attach screenshots when LaTeX figures/tables or graph visualizations change.
 
