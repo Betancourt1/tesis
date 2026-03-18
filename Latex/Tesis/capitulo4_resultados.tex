@@ -296,29 +296,29 @@
 
             En conjunto, el análisis muestra dos cosas: (i) las conclusiones cualitativas principales (presencia de un componente gigante y alta conectividad de servicio) son robustas al rango de umbrales evaluado; (ii) las magnitudes de densidad y cantidad de aristas sí son sensibles al supuesto de consolidación y al criterio de construcción por ruta o por viaje en \(P\)-espacio, por lo que en adelante se reportan como rangos y no como un único valor puntual.
 
-        \subsection{Escenarios de Intervención Topológica}
-            Para convertir el diagnóstico estructural en propuestas comparables, se evaluaron tres intervenciones sobre el \(L\)-espacio y se contrastaron con un escenario base sin cambios:
+        \subsection{Escenarios de Intervención en la Red Modelada}
+            Para convertir el diagnóstico estructural en propuestas comparables, se evaluaron tres intervenciones contrafactuales sobre la representación \(L\)-espacio de la red y se contrastaron con un escenario base sin cambios. En esta subsección, los resultados se interpretan en términos del sistema de transporte modelado: cobertura remanente, continuidad operativa y longitud relativa de los recorridos después de una falla severa.
             \begin{itemize}
-                \item \textbf{Protección de nodos críticos:} se protegen los 10 supernodos de mayor grado ponderado y se aplica el mismo ataque dirigido de 50 nodos sobre el resto.
-                \item \textbf{Refuerzo periférico:} se agregan 120 aristas dirigidas (60 pares bidireccionales) entre nodos de baja cercanía para crear atajos periféricos.
-                \item \textbf{Conexiones alternativas locales:} se agregan hasta 200 aristas directas entre predecesores y sucesores de supernodos de alto grado, con el fin de crear rutas alternativas que eviten pasar por esos nodos críticos.
+                \item \textbf{Protección de puntos críticos del sistema:} se asume continuidad reforzada en los 10 puntos agregados que más articulan la red modelada. En términos operativos, esto representa terminales, estaciones de transferencia o corredores cuya interrupción compromete buena parte de la cobertura restante.
+                \item \textbf{Refuerzo periférico:} se añaden 120 conexiones dirigidas al modelo para representar servicios tangenciales o enlaces entre corredores fuera del hipercentro, con el fin de reducir la dependencia de pasos obligados por el centro.
+                \item \textbf{Conexiones alternativas locales:} se añaden hasta 200 conexiones directas en el modelo para representar rodeos de corto alcance alrededor de puntos muy cargados, de modo que ciertos desplazamientos no dependan de pasar por un mismo punto de transferencia.
             \end{itemize}
-            En los cuatro escenarios se aplicó el mismo ataque dirigido: eliminación secuencial de los 50 supernodos con mayor grado ponderado. Después del ataque se midieron tres indicadores: el porcentaje de nodos remanentes que permanece en el componente gigante, la eficiencia global dirigida (ponderada por \texttt{travel\_time\_minutes}) y el diámetro topológico de ese componente.
+            En los cuatro escenarios se aplicó la misma perturbación severa: eliminación secuencial de los 50 puntos agregados de mayor grado ponderado. Después de la falla se midieron tres indicadores: el porcentaje de puntos remanentes que sigue integrado en la parte principal de la red, la eficiencia global dirigida (ponderada por \texttt{travel\_time\_minutes}) y la longitud del peor recorrido interno, medida como el número máximo de segmentos consecutivos necesarios dentro de la red remanente.
 
-            La pregunta de decisión es directa: ¿qué intervención conserva mejor la conectividad y, al mismo tiempo, evita que los recorridos se vuelvan mucho más largos tras el ataque? La Tabla~\ref{tab:intervenciones_topologicas_l_space} responde al comparar las métricas post-ataque para cada escenario.
+            La pregunta de decisión es directa: ¿qué intervención conserva mejor la cobertura conectada del sistema y, al mismo tiempo, evita que los recorridos se vuelvan mucho más largos tras la falla? La Tabla~\ref{tab:intervenciones_topologicas_l_space} responde al comparar las métricas post-ataque para cada escenario.
 
             \begin{table}[h!]
                 \centering
                 \small
-                \caption{Comparación de intervenciones topológicas en \(L\)-espacio después de eliminar 50 supernodos de mayor grado ponderado. Se reportan las aristas añadidas, el porcentaje de nodos remanentes que permanece en el componente gigante, la eficiencia conservada y el diámetro resultante.}
+                \caption{Comparación de intervenciones en la red modelada después de eliminar 50 puntos agregados de mayor grado ponderado. Se reportan las conexiones nuevas del modelo, el porcentaje de puntos remanentes que permanece en la red principal, la accesibilidad temporal conservada y la longitud del peor recorrido interno.}
                 \label{tab:intervenciones_topologicas_l_space}
                 \resizebox{\textwidth}{!}{%
                 \begin{tabular}{lrrrrr}
                     \toprule
-                    Escenario & Aristas añadidas & Componente gigante (\%) & Eficiencia conservada (\%) & Diámetro resultante & Cambio vs.\ base (pp) \\
+                    Escenario & Conexiones nuevas & Red principal (\%) & Accesibilidad conservada (\%) & Peor recorrido & Cambio vs.\ base (pp) \\
                     \midrule
                     Base (sin intervención) & 0   & 98.51 & 82.50 & 84 & 0.00 \\
-                    Protección de nodos críticos & 0   & 99.30 & 85.58 & 97 & +0.79 \\
+                    Protección de puntos críticos & 0   & 99.30 & 85.58 & 97 & +0.79 \\
                     Refuerzo periférico     & 120 & 98.51 & 88.52 & 53 & +0.00 \\
                     Conexiones alternativas locales & 200 & 98.82 & 79.68 & 84 & +0.31 \\
                     \bottomrule
@@ -326,17 +326,15 @@
                 }
             \end{table}
 
-            La comparación muestra que cada intervención favorece un aspecto distinto de la resiliencia:
+            La comparación muestra que cada intervención favorece un aspecto distinto de la resiliencia del sistema modelado:
             \begin{itemize}
-                \item \textbf{Protección de nodos críticos} es la mejor opción para preservar conectividad: eleva el porcentaje del componente gigante de \(98.51\%\) a \(99.30\%\). Sin embargo, esa mejora viene acompañada de un diámetro mayor (de 84 a 97), es decir, la red residual queda más unida pero más alargada.
-                \item \textbf{Refuerzo periférico} ofrece el mejor balance operativo: mantiene el componente gigante al nivel del escenario base, pero logra la mayor eficiencia conservada (\(88.52\%\) frente a \(82.50\%\)) y reduce el diámetro de 84 a 53. En términos prácticos, conserva recorridos más cortos después del ataque.
-                \item \textbf{Conexiones alternativas locales} sólo aporta una mejora marginal en conectividad (\(+0.31\) puntos porcentuales en el componente gigante), pero reduce la eficiencia relativa a \(79.68\%\), por debajo del escenario base. En su forma actual, no justifica su costo estructural y requeriría una regla de diseño más afinada.
+                \item \textbf{Protección de puntos críticos} es la mejor opción para mantener integrada la mayor parte de la red remanente: el porcentaje de puntos que sigue dentro de la red principal sube de \(98.51\%\) a \(99.30\%\). Sin embargo, el peor recorrido interno pasa de 84 a 97 segmentos del modelo. En términos de transporte, esto significa que más zonas conservan vínculo con la red principal, pero algunos desplazamientos extremos se vuelven más largos y menos directos cuando parte del sistema falla.
+                \item \textbf{Refuerzo periférico} ofrece el mejor balance operativo: mantiene el porcentaje de red principal al nivel del escenario base, pero logra la mayor accesibilidad temporal conservada (\(88.52\%\) frente a \(82.50\%\)) y reduce el peor recorrido interno de 84 a 53 segmentos. En la práctica, esto sugiere que conexiones transversales fuera del centro ayudan a sostener trayectos más razonables y a evitar rodeos excesivos después de una interrupción severa.
+                \item \textbf{Conexiones alternativas locales} sólo aporta una mejora marginal en cobertura conectada (\(+0.31\) puntos porcentuales en la red principal), pero reduce la accesibilidad relativa a \(79.68\%\), por debajo del escenario base. En su forma actual, esto indica que abrir rodeos cortos alrededor de puntos cargados no basta si esos rodeos no mejoran de verdad los itinerarios disponibles para los usuarios.
             \end{itemize}
-            En conjunto, la evidencia sugiere priorizar \textbf{refuerzo periférico} cuando el objetivo principal es sostener tiempos de recorrido razonables bajo falla, y \textbf{protección de nodos críticos} cuando se busca maximizar la conectividad residual. Ambas estrategias resultan más defendibles que las conexiones alternativas locales y, además, reducen la dependencia exclusiva del hipercentro.
+            En conjunto, la evidencia sugiere priorizar \textbf{refuerzo periférico} cuando el objetivo principal es sostener trayectos razonables bajo falla, y \textbf{protección de puntos críticos} cuando se busca maximizar la cobertura que sigue vinculada a la red principal. Traducido al transporte público, lo primero apunta a fortalecer servicios tangenciales, enlaces entre corredores y alternativas que eviten el paso obligatorio por el hipercentro; lo segundo apunta a blindar terminales, estaciones de transferencia y corredores cuya interrupción deja aisladas más zonas del sistema.
 
-            Aplicado al transporte público real, esto no significa que deban añadirse literalmente 120 aristas o protegerse exactamente 10 nodos, sino que conviene traducir esas intervenciones topológicas en decisiones de planeación y operación. El \textbf{refuerzo periférico} apunta a fortalecer conexiones transversales fuera del centro mediante servicios tangenciales, extensiones de ruta, enlaces entre corredores, mejor coordinación de frecuencias o prioridad semafórica en trayectos que hoy obligan a pasar por el hipercentro. La \textbf{protección de nodos críticos}, por su parte, sugiere concentrar medidas de resiliencia en terminales, estaciones de transferencia y corredores cuya falla fragmenta más la red: reserva de flota, regulación operativa, carriles preferentes, mantenimiento prioritario y planes de contingencia.
-
-            En cambio, el bajo desempeño de las \textbf{conexiones alternativas locales} indica que no basta con añadir enlaces por cercanía topológica. En un sistema de transporte público, una conexión nueva sólo es útil si también es operable, tiene demanda razonable y no introduce desvíos que alarguen recorridos o consuman flota de forma ineficiente. Por ello, esta subsección debe leerse como una guía de priorización estructural, no como un diseño final de rutas o infraestructura.
+            El mensaje central de esta subsección no es que deban añadirse literalmente 120 conexiones o protegerse exactamente 10 puntos, sino que la resiliencia del sistema mejora más cuando se refuerzan alternativas útiles de viaje y se asegura la continuidad operativa de los puntos de intercambio más sensibles. Un peor recorrido interno más alto no describe una distancia física mayor, sino que, en el modelo, algunos trayectos pasan a requerir encadenar más segmentos consecutivos; por tanto, representa una red que bajo falla obliga a itinerarios más largos, más indirectos o más frágiles. Por ello, esta subsección debe leerse como una guía de priorización para la planeación y la operación del transporte público, no como un diseño final de rutas o infraestructura.
 
         \subsection{Bandas de Incertidumbre de Resultados}
             Para evitar depender de un único valor puntual, se consolidaron los resultados de los puntos 3 y 4 en términos de bandas mínimo--máximo. Esto permite separar dos efectos: (i) la variación por supuestos de modelado (umbral de consolidación y criterio \texttt{route\_id}/\texttt{trip\_id}); y (ii) la variación por decisiones de intervención bajo un mismo ataque dirigido.
