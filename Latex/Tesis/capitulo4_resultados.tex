@@ -274,15 +274,15 @@
 
             En el \(P\)-espacio, la diferencia entre construir por \texttt{route\_id} y por \texttt{trip\_id} se mantiene en todos los umbrales: el enfoque por ruta produce más aristas, y entre \(8.73\%\) y \(20.86\%\) de ellas no aparecen en la variante por viaje.
 
-            La pregunta de modelado es: ¿cuánto sesgo introduce construir el \(P\)-espacio por \texttt{route\_id} frente a \texttt{trip\_id} en cada umbral? La Tabla~\ref{tab:sensibilidad_p_space_route_trip} responde con el diferencial de aristas route-only, habilitando decidir el criterio de construcción más consistente con el objetivo analítico.
+            La pregunta de modelado es: ¿cuánto sesgo introduce construir el \(P\)-espacio por \texttt{route\_id} frente a \texttt{trip\_id} en cada umbral? La Tabla~\ref{tab:sensibilidad_p_space_route_trip} responde con el diferencial de aristas exclusivas del modelo por ruta, habilitando decidir el criterio de construcción más consistente con el objetivo analítico.
 
             \begin{table}[h!]
                 \centering
-                \caption{Comparación estructural del \(P\)-espacio construido por clique de \texttt{route\_id} frente a clique de \texttt{trip\_id}, con conteo de aristas route-only por umbral. Permite estimar el sesgo de sobreconectividad asociado al supuesto route-only del modelo principal.}
+                \caption{Comparación estructural del \(P\)-espacio construido por clique de \texttt{route\_id} frente a clique de \texttt{trip\_id}, con conteo de aristas exclusivas del modelo por ruta en cada umbral. Permite estimar el sesgo de sobreconectividad asociado al supuesto de agregación por ruta del modelo principal.}
                 \label{tab:sensibilidad_p_space_route_trip}
                 \begin{tabular}{lrrrr}
                     \toprule
-                    Umbral (m) & Aristas route\_id & Aristas trip\_id & Route-only & Route-only (\%) \\
+                    Umbral (m) & Aristas route\_id & Aristas trip\_id & Exclusivas por ruta & Exclusivas por ruta (\%) \\
                     \midrule
                     75  & 517,964 & 409,923 & 108,041 & 20.86 \\
                     100 & 385,225 & 325,855 & 59,370  & 15.41 \\
@@ -292,7 +292,7 @@
                 \end{tabular}
             \end{table}
 
-            En conjunto, el análisis muestra dos cosas: (i) las conclusiones cualitativas principales (presencia de un componente gigante y alta conectividad de servicio) son robustas al rango de umbrales evaluado; (ii) las magnitudes de densidad y cantidad de aristas sí son sensibles al supuesto de consolidación y al criterio route/trip en \(P\)-espacio, por lo que en adelante se reportan como rangos y no como un único valor puntual.
+            En conjunto, el análisis muestra dos cosas: (i) las conclusiones cualitativas principales (presencia de un componente gigante y alta conectividad de servicio) son robustas al rango de umbrales evaluado; (ii) las magnitudes de densidad y cantidad de aristas sí son sensibles al supuesto de consolidación y al criterio de construcción por ruta o por viaje en \(P\)-espacio, por lo que en adelante se reportan como rangos y no como un único valor puntual.
 
         \subsection{Escenarios de Intervención Topológica}
             Para pasar del diagnóstico a propuestas cuantificadas, se evaluaron tres intervenciones sobre el \(L\)-espacio, comparadas contra un escenario base sin cambios estructurales:
@@ -349,7 +349,7 @@
                     P3 (modelado) & L-space nodos & 2,676 & 5,084 & 2,408 \\
                     P3 (modelado) & L-space aristas & 6,280 & 9,550 & 3,270 \\
                     P3 (modelado) & LCC L-space (\%) & 99.81 & 99.88 & 0.07 \\
-                    P3 (modelado) & Route-only en P-space (\%) & 8.73 & 20.86 & 12.13 \\
+                    P3 (modelado) & Exclusivas por ruta en P-space (\%) & 8.73 & 20.86 & 12.13 \\
                     P4 (intervenciones) & LCC post-ataque (\%) & 98.51 & 99.30 & 0.79 \\
                     P4 (intervenciones) & Retención de eficiencia (\%) & 79.68 & 88.52 & 8.85 \\
                     P4 (intervenciones) & Diámetro post-ataque (saltos) & 53 & 97 & 44 \\
@@ -357,7 +357,7 @@
                 \end{tabular}
             \end{table}
 
-            Los rangos muestran que la \textbf{conectividad global} de la red física es estable frente a los supuestos de consolidación (\(LCC\) de \(99.81\%\) a \(99.88\%\)); en cambio, la magnitud de \textbf{sobrerepresentación potencial} en \(P\)-espacio (aristas route-only) cambia de manera importante (\(8.73\%\) a \(20.86\%\)). Bajo ataque dirigido, las intervenciones producen diferencias operativas relevantes: la retención de eficiencia varía entre \(79.68\%\) y \(88.52\%\), y el diámetro post-ataque entre 53 y 97 saltos.
+            Los rangos muestran que la \textbf{conectividad global} de la red física es estable frente a los supuestos de consolidación (\(LCC\) de \(99.81\%\) a \(99.88\%\)); en cambio, la magnitud de \textbf{sobrerepresentación potencial} en \(P\)-espacio (aristas exclusivas del modelo por ruta) cambia de manera importante (\(8.73\%\) a \(20.86\%\)). Bajo ataque dirigido, las intervenciones producen diferencias operativas relevantes: la retención de eficiencia varía entre \(79.68\%\) y \(88.52\%\), y el diámetro post-ataque entre 53 y 97 saltos.
 
             La pregunta final es: ¿la amplitud de las bandas altera o confirma la priorización entre escenarios de intervención? La Figura~\ref{fig:rangos_intervenciones_punto4} responde al comparar visualmente los rangos por escenario, habilitando sustentar decisiones aun bajo incertidumbre estructural.
 
