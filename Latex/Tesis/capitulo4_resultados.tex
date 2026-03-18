@@ -337,33 +337,35 @@
             La resiliencia del sistema mejora más cuando se refuerzan alternativas útiles de viaje y se asegura la continuidad operativa de los puntos de intercambio más sensibles. Un peor recorrido interno más alto no describe una distancia física mayor, sino que, en el modelo, algunos trayectos pasan a requerir encadenar más segmentos consecutivos; por tanto, representa una red que bajo falla obliga a itinerarios más largos, más indirectos o más frágiles.
 
         \subsection{Bandas de Incertidumbre de Resultados}
-            Para evitar depender de un único valor puntual, se consolidaron los resultados de los puntos 3 y 4 en términos de bandas mínimo--máximo. Esto permite separar dos efectos: (i) la variación por supuestos de modelado (umbral de consolidación y criterio \texttt{route\_id}/\texttt{trip\_id}); y (ii) la variación por decisiones de intervención bajo un mismo ataque dirigido.
+            Para evitar depender de un único valor puntual, se consolidaron los resultados de la sensibilidad del modelado y de los escenarios de intervención en términos de bandas mínimo--máximo. Esto permite separar dos fuentes de variación: (i) los supuestos de modelado, en particular el umbral de consolidación espacial y el criterio \texttt{route\_id}/\texttt{trip\_id} para construir la red de servicio; y (ii) las diferencias entre intervenciones bajo una misma perturbación severa.
 
-            La Tabla~\ref{tab:rangos_consolidados_p3_p4} sintetiza mínimos, máximos y amplitudes y muestra qué métricas permanecen estables y cuáles varían materialmente según supuestos e intervenciones; esta lectura habilita decidir qué indicadores requieren monitoreo prioritario.
+            La Tabla~\ref{tab:rangos_consolidados_p3_p4} sintetiza mínimos, máximos y amplitudes y muestra qué resultados permanecen estables y cuáles cambian de forma material según los supuestos del modelo o el tipo de intervención; esta lectura permite identificar qué indicadores requieren monitoreo prioritario.
 
             \begin{table}[h!]
                 \centering
                 \small
-                \caption{Rangos mínimo--máximo de métricas clave en los puntos 3 (modelado) y 4 (intervenciones), con amplitud por indicador. La síntesis permite identificar qué resultados son robustos y cuáles dependen del supuesto de modelado o de la intervención.}
+                \caption{Rangos mínimo--máximo de indicadores clave de sensibilidad del modelado y de escenarios de intervención sobre la red modelada. La síntesis permite distinguir qué resultados permanecen estables y cuáles dependen de los supuestos adoptados.}
                 \label{tab:rangos_consolidados_p3_p4}
+                \resizebox{\textwidth}{!}{%
                 \begin{tabular}{llrrr}
                     \toprule
-                    Bloque & Métrica & Mín & Máx & Amplitud \\
+                    Bloque & Indicador & Mín & Máx & Amplitud \\
                     \midrule
-                    P3 (modelado) & L-space nodos & 2,676 & 5,084 & 2,408 \\
-                    P3 (modelado) & L-space aristas & 6,280 & 9,550 & 3,270 \\
-                    P3 (modelado) & LCC L-space (\%) & 99.81 & 99.88 & 0.07 \\
-                    P3 (modelado) & Exclusivas por ruta en P-space (\%) & 8.73 & 20.86 & 12.13 \\
-                    P4 (intervenciones) & LCC post-ataque (\%) & 98.51 & 99.30 & 0.79 \\
-                    P4 (intervenciones) & Retención de eficiencia (\%) & 79.68 & 88.52 & 8.85 \\
-                    P4 (intervenciones) & Diámetro post-ataque (saltos) & 53 & 97 & 44 \\
+                    Modelado & Puntos agregados de la red física & 2,676 & 5,084 & 2,408 \\
+                    Modelado & Conexiones directas de la red física & 6,280 & 9,550 & 3,270 \\
+                    Modelado & Cobertura principal de la red física (\%) & 99.81 & 99.88 & 0.07 \\
+                    Modelado & Sobreconectividad del servicio por ruta (\%) & 8.73 & 20.86 & 12.13 \\
+                    Intervenciones & Cobertura conectada tras falla (\%) & 98.51 & 99.30 & 0.79 \\
+                    Intervenciones & Accesibilidad temporal conservada (\%) & 79.68 & 88.52 & 8.85 \\
+                    Intervenciones & Peor recorrido tras falla & 53 & 97 & 44 \\
                     \bottomrule
                 \end{tabular}
+                }
             \end{table}
 
-            Los rangos muestran que la \textbf{conectividad global} de la red física es estable frente a los supuestos de consolidación (\(LCC\) de \(99.81\%\) a \(99.88\%\)); en cambio, la magnitud de \textbf{sobrerepresentación potencial} en \(P\)-espacio (aristas exclusivas del modelo por ruta) cambia de manera importante (\(8.73\%\) a \(20.86\%\)). Bajo ataque dirigido, las intervenciones producen diferencias operativas relevantes: la retención de eficiencia varía entre \(79.68\%\) y \(88.52\%\), y el diámetro post-ataque entre 53 y 97 saltos.
+            Los rangos muestran que la \textbf{cobertura principal} de la red física modelada es estable frente a los supuestos de consolidación (\(99.81\%\) a \(99.88\%\)); en cambio, la magnitud de \textbf{sobreconectividad potencial} en la red de servicio asociada a construir por ruta en lugar de por viaje cambia de manera importante (\(8.73\%\) a \(20.86\%\)). Bajo perturbación severa, las intervenciones sí producen diferencias operativas relevantes: la accesibilidad temporal conservada varía entre \(79.68\%\) y \(88.52\%\), y el peor recorrido interno entre 53 y 97 segmentos, lo que modifica de manera material la calidad de los itinerarios remanentes.
 
-            La Figura~\ref{fig:rangos_intervenciones_punto4} compara visualmente los rangos por escenario y permite evaluar si la amplitud de las bandas altera o confirma la priorización entre intervenciones, habilitando sustentar decisiones aun bajo incertidumbre estructural.
+            La Figura~\ref{fig:rangos_intervenciones_punto4} compara visualmente los rangos por escenario y muestra que la priorización entre intervenciones puede sostenerse aun bajo incertidumbre estructural, siempre que se interpreten los resultados como bandas y no como valores puntuales.
 
             \begin{figure}[h!]
                 \centering
@@ -372,11 +374,11 @@
                 }{
                     \fbox{\parbox{0.92\textwidth}{Generar figura con: \texttt{python "Código/analisis\_comparativo/rangos/analisis\_rangos\_resultados.py"}}}
                 }
-                \caption{Bandas mínimo--máximo por escenario de intervención topológica en \(L\)-espacio (punto 4). La figura permite evaluar si la incertidumbre entre escenarios altera la priorización de decisiones de intervención.}
+                \caption{Bandas mínimo--máximo por escenario de intervención sobre la red modelada. La figura permite comparar cómo cambian la cobertura conectada, la accesibilidad temporal y el peor recorrido interno en cada escenario.}
                 \label{fig:rangos_intervenciones_punto4}
             \end{figure}
 
-            En síntesis, la tesis mantiene sus conclusiones cualitativas centrales, pero las magnitudes clave se reportan en adelante como rangos para reflejar explícitamente la incertidumbre estructural del modelado.
+            En síntesis, las conclusiones cualitativas centrales se mantienen, pero las magnitudes más sensibles deben reportarse como rangos. La red física modelada conserva una cobertura conectada estable bajo los supuestos principales, mientras que la estructura fina de la red de servicio y la calidad de los recorridos bajo falla dependen más de cómo se construye el modelo y de qué intervención se considere.
 
     \section{Parámetros, Software y Reproducibilidad}
 
