@@ -7,15 +7,20 @@
 
     \section{Definición y conceptos básicos}
 
+        % TODO [PDF p.12][ernes]: reordenar la progresión conceptual del capítulo; se sugirió una secuencia más clara como subgrafos, caminos y ciclos, conectividad y después representaciones matriciales.
+        % TODO [PDF p.14][Fernando Becerra]: revisar el orden general de las definiciones porque actualmente puede resultar confuso.
         A lo largo de este capítulo, se asumirá que todos los grafos son \textbf{finitos}, a menos que se especifique lo contrario. Las definiciones se presentarán especificando si aplican a grafos \textbf{dirigidos}, \textbf{no dirigidos} o ambos, pues las propiedades y métricas pueden cambiar significativamente según el tipo de grafo.
 
+        % TODO [PDF p.11][Fernando Becerra]: revisar si aquí se está anticipando terminología que debería presentarse solo después de definir formalmente los grafos dirigidos.
         Convención terminológica: en la tesis se usa \textbf{arista} como término general; cuando la orientación sea relevante en un grafo dirigido, se utilizará \textbf{arco} para referirse explícitamente al par ordenado \((u,v)\).
 
         \begin{definicion}[Grafo]
             Un \textbf{grafo} $G$ es un par $(V,E)$ que consiste en un conjunto no vacío $V$ de \textbf{nodos} y una colección $E$ de \textbf{aristas}, donde cada arista conecta un par de nodos. La definición formal más restrictiva, la de un \textbf{grafo simple}, exige que las aristas conecten pares de nodos distintos y que no haya más de una arista entre el mismo par de nodos. A lo largo de este capítulo, se presentarán variantes como grafos dirigidos, multígrafos o grafos con lazos, que relajan estas condiciones.
         \end{definicion}
 
+        % TODO [PDF p.11][ernes]: esta frase fue señalada como poco formal; considerar reescribirla de forma más matemática o eliminarla.
         A un grafo $G$ con conjunto de nodos $V$ también lo podemos definir como un grafo \textit{en} $V$ o simplemente $G(V)$.
+        % TODO [PDF p.11][Fernando Becerra]: revisar si aquí conviene remitir a la definición de lazo o si la observación resulta redundante en esta posición.
 
         \begin{definicion}[Lazo]
             Un \textbf{lazo} es una conexión cuyos extremos coinciden: \(\{v,v\}\) en el caso no dirigido (arista), o \((v,v)\) en el caso dirigido (arco).
@@ -26,6 +31,9 @@
             Se dice que $u$ y $v$ son \textbf{adyacentes} si existe una arista que los conecta directamente.
         \end{definicion}
 
+        % TODO [PDF p.11][abel]: mantener un solo formato tipográfico para el término que se define; aquí se pidió consistencia con el uso previo de negritas.
+        % TODO [PDF p.11][Fernando Becerra]: el tono de esta definición fue marcado como poco formal; revisar redacción.
+        % TODO [PDF p.11][abel]: aclarar de qué depende exactamente el cambio de propiedades o métricas, si del orden, del tamaño o de ambos.
         \begin{definicion}
             Llamamos \textit{orden} de un grafo G al número de nodos que contiene, representado como $|V|$, y \textit{tamaño} a la cantidad de aristas, representada como $|E|$. Un grafo puede ser \textit{finito} o \textit{infinito}.
         \end{definicion}
@@ -59,6 +67,7 @@
             El grafo $G$ tiene el orden $|G|=7$ y el número de aristas $|E| = 5$.
         \end{ejemplo}
         Más adelante veremos que es posible medir distintas propiedades de un grafo, ya sea en su totalidad o en cada una de sus partes, pero una primera noción en ese sentido es la de \textit{grado de un nodo} que además nos ayudará a demostrar varios resultados importantes más adelante.
+        % TODO [PDF p.12][Fernando Becerra]: aquí también se señaló que se anticipan conceptos del caso dirigido antes de fijar por completo el orden expositivo.
         \begin{definicion}[Grado de un nodo]
             El \textbf{grado} de un nodo $v$, denotado $deg(v)$, es el número de aristas que inciden en él (los lazos se cuentan dos veces). Para grafos dirigidos, el grado total se descompone en \textbf{grado de entrada} (\emph{indegree}, $deg^{-}(v)$), que es el número de aristas que terminan en $v$, y \textbf{grado de salida} (\emph{outdegree}, $deg^{+}(v)$), que es el número de aristas que comienzan en $v$. En este caso, el grado total es $deg(v) = deg^{-}(v) + deg^{+}(v)$.
             Este valor refleja la importancia local del nodo como punto de transferencia.
@@ -132,7 +141,9 @@
             \end{center}
         \end{ejemplo}
 
+        % TODO [PDF p.13][Fernando Becerra]: buscar formulaciones más matemáticas para este bloque de definiciones.
         \begin{definicion}[Grafo planar]
+            % TODO [PDF p.13][Fernando Becerra]: se marcó que "representación" más "dibujo planar" puede ser redundante; revisar si basta con una sola formulación.
             Un grafo es \textbf{planar} si admite una representación (llamada \emph{dibujo planar}) en el plano tal que ninguna de sus aristas se cruza con otra, salvo en los nodos que comparten.
         \end{definicion}
 
@@ -140,14 +151,18 @@
             La planitud de un grafo no depende de una representación particular, sino de la existencia de al menos un dibujo en el plano sin cruces de aristas.
         \end{observacion}
 
+        % TODO [PDF p.13][Fernando Becerra]: mejorar la precisión formal de esta definición.
         \begin{definicion}[Cara de un grafo planar]
             Sea $G$ un grafo planar, y considérese un dibujo de $G$ en el plano sin cruces de aristas.
             Una \textbf{cara} es cada una de las regiones conexas en que el dibujo divide el plano, incluyendo la región exterior.
             Formalmente, las caras son los componentes conexos del complemento del dibujo de $G$ en el plano.
         \end{definicion}
 
+        % TODO [PDF p.13][Fernando Becerra]: este comentario meta fue cuestionado; revisar si realmente aporta algo decir que estas definiciones "serán útiles" más adelante.
+        % TODO [PDF p.13][Fernando Becerra]: aquí también se señaló que se anticipa una definición o desarrollo posterior.
         Las definiciones de grafo planar y de cara de un grafo planar nos serán útiles cuando estudiemos propiedades globales de un grafo.
 
+        % TODO [PDF p.13][Fernando Becerra]: revisar si en este punto hay redundancias adicionales dentro de la definición del multígrafo.
         \begin{definicion}[Multígrafo]
             Un \textbf{multígrafo} $G=(V,E)$ es un grafo finito en el que entre un par (ordenado o no ordenado) de nodos se permiten \emph{múltiples aristas} distintas (también llamadas \emph{aristas paralelas}).
             Opcionalmente, puede permitirse la existencia de \emph{lazos} (aristas cuyos extremos coinciden en un mismo nodo); cuando se permiten lazos, a veces se habla de \emph{pseudografo}.
@@ -189,6 +204,7 @@
 
     \section{Propiedades fundamentales de los grafos}
 
+        % TODO [PDF p.14][Fernando Becerra]: este tramo fue marcado como confuso por el orden de las definiciones; revisar si aquí debe reestructurarse la secuencia completa.
         Hasta ahora hemos evaluado a los grafos como un todo, deteniéndonos apenas en sus componentes como una herramienta para definir propiedades globales, pero también es posible y recomendable establecer propiedades de sus componentes. Algunas que son especialmente valiosas para el presente estudio son la \textit{conectividad}, los \textit{caminos}, los \textit{ciclos}, y las representaciones matriciales como la matriz de adyacencia.
 
         \begin{definicion}[Matriz de adyacencia]
@@ -231,6 +247,7 @@
             Por ejemplo, $a_{12} = 1$ indica una arista dirigida de $A$ a $B$, y $a_{33} = 0$ indica que no hay un lazo en $C$.
         \end{ejemplo}
 
+        % TODO [PDF p.15][Fernando Becerra]: revisar la rotulación o presentación de esta definición; en el PDF quedó una observación mínima indicando simplemente "Definición".
         \begin{definicion}[Matriz de incidencia]
             Sea $G=(V,E)$ un grafo simple con $n=|V|$ y $m=|E|$.
             \begin{itemize}
@@ -517,6 +534,7 @@
                 Si $P$ está orientado coherentemente (todas las aristas apuntan en el mismo sentido a lo largo del camino), la numeración puede escogerse de modo que $(\phi(i),\phi(i+1))$ sea el arco para todo $i$. En general, la numeración precedente se construye sobre el subyacente no dirigido.
             \end{observacion}
 
+            % TODO [PDF p.18][Fernando Becerra]: considerar si conviene conectar explícitamente esta noción con la idea de espacio métrico.
             \begin{definicion}[Distancia]
                 Sea $G=(V,E)$ un grafo finito. La \textbf{distancia} de $u$ a $v$, denotada $d(u,v)$, es
                 \[
@@ -550,11 +568,14 @@
 
         \subsubsection{Árboles}
 
+            % TODO [PDF p.18][Fernando Becerra]: verificar si este resultado o el encadenamiento inmediato requieren demostración explícita o referencia externa adicional.
             \begin{definicion}[Árbol]
                 Un \textbf{árbol} es un grafo no dirigido, conexo y acíclico. Equivalentemente, para cualesquiera dos nodos distintos existe exactamente un camino simple que los une.
             \end{definicion}
 
             \begin{ejemplo}[Árbol]
+                % TODO [PDF p.18][Fernando Becerra]: aclarar qué se entiende por raíz, si es única y cómo depende de trabajar con versión dirigida o no dirigida.
+                % TODO [PDF p.18][Fernando Becerra]: el primer ejemplo fue observado como dirigido; revisar si conviene cambiar el dibujo o justificar mejor el uso del subyacente no dirigido.
                 El siguiente grafo muestra un árbol con raíz en $v_1$:
 
                 \begin{center}
@@ -1029,6 +1050,7 @@
             \end{definicion}
 
             \begin{ejemplo}[Centralidad de cercanía de $v=C$]
+                % TODO [PDF p.26][abel]: corregir etiquetas traslapadas en esta figura.
                 Consideremos el siguiente grafo dirigido y calculemos $C_c(C)$.
 
                 \begin{center}
@@ -1085,6 +1107,7 @@
             \end{definicion}
 
             \begin{ejemplo}[Centralidad de intermediación de $v=B$]
+                % TODO [PDF p.27][abel]: corregir etiquetas de esta figura, especialmente por claridad visual.
                 Consideremos el siguiente grafo dirigido y calculemos $C_b(B)$.
 
                 \begin{center}
@@ -1278,6 +1301,7 @@
             \end{ejemplo}
 
     \section{Convenciones para esta tesis}
+        % TODO [PDF p.29][Fernando Becerra]: revisar si este bloque realmente pertenece a este capítulo o si conviene moverlo a metodología/construcción.
         Para vincular las definiciones anteriores con los cálculos empíricos de esta investigación, fijamos las siguientes convenciones de modelado:
         \begin{itemize}
             \item \textbf{L-space.} Se trabaja con un grafo dirigido y ponderado. Para distancias, cercanía e intermediación se usa como costo el tiempo de viaje; para grado ponderado y detección de comunidades se usa el número de servicios compartidos por arista.
@@ -1287,6 +1311,7 @@
         Estas decisiones aseguran consistencia entre el marco teórico (distancias, centralidades y modularidad) y la implementación computacional reportada en los capítulos de construcción y resultados.
 
     \section{Algoritmos de caminos mínimos}
+        % TODO [PDF p.29][Fernando Becerra]: explicar mejor para qué se requieren estos algoritmos dentro de la tesis o considerar si este no es el lugar adecuado para desarrollarlos.
         Al estudiar distancias y caminos mínimos en grafos finitos, necesitamos procedimientos efectivos que, a partir de especificaciones bien definidas, produzcan soluciones correctas en tiempo finito y con garantías de optimalidad. En esta línea situamos dos hitos clásicos: el algoritmo de Dijkstra (formulado en 1956 y publicado en 1959), que resuelve caminos mínimos desde una fuente única con pesos no negativos mediante relajación y selección iterativa del vértice con etiqueta mínima, y el algoritmo de Floyd–Warshall (1962), que computa todas las distancias par–a–par por programación dinámica incorporando vértices intermedios; este último unifica ideas de Floyd para costos mínimos y de Warshall para cierre transitivo, con antecedentes en la aritmética de caminos de Kleene. En lo que sigue fijamos hipótesis, enunciamos invariantes y recurrencias, demostramos corrección y acotamos la complejidad temporal y espacial de ambos métodos.
 
         \subsection{Algoritmo de Dijkstra}
@@ -1676,5 +1701,3 @@
             \begin{observacion}[Grafos Dirigidos]
                 El método se puede aplicar a grafos dirigidos mediante la \textbf{simetrización} de pesos ($A^{\mathrm{sym}} = A + A^\top$) o, de manera más precisa, usando la \textbf{Modularidad Dirigida} (Leicht–Newman), que adapta el término nulo utilizando los grados de entrada ($k^{\mathrm{in}}$) y salida ($k^{\mathrm{out}}$) de los nodos.
             \end{observacion}
-
-

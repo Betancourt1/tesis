@@ -133,6 +133,7 @@
             El número de nodos a eliminar se fijó en 50 para tener una condición de parada clara y concentrarse en el impacto de los supernodos de mayor grado.
 
         \subsubsection{Resultados del Análisis de Robustez}
+            % TODO [PDF p.64][abel]: revisar si la sigla LCC debe ir en redonda/texto y no en itálicas matemáticas.
             La Figura~\ref{fig:robustez_l_space} resume cómo se deterioran el \(LCC\) y la eficiencia temporal cuando fallan supernodos de alto grado bajo el mismo ataque dirigido.
 
             \begin{figure}[h!]
@@ -143,6 +144,7 @@
             \end{figure}
 
         \subsubsection{Impacto en la Conectividad (LCC)}
+            % TODO [PDF p.64][abel]: unificar el uso de punto decimal en porcentajes y cifras numéricas.
             En el escenario base de robustez (sin intervención), después de eliminar los 50 nodos de mayor grado ponderado, el LCC relativo conserva el \textbf{97.45\%} de su tamaño inicial. Esto indica que la red física mantiene la mayor parte de su cobertura estructural, aunque se generan pérdidas periféricas.
 
             Aquí el \(LCC\) se reporta respecto al estado inicial. En la sección de intervenciones, en cambio, se expresa como porcentaje sobre los supernodos remanentes; por eso el valor base allí es \(98.51\%\).
@@ -258,6 +260,7 @@
 
             En el \(L\)-espacio, al variar el umbral de consolidación cambia de forma importante el tamaño de la red, pero no su conectividad global: en todos los escenarios el componente gigante concentra más del \(99.8\%\) de los supernodos y no se observaron aristas con tiempo imputado.
 
+            % TODO [PDF p.70][abel]: revisar la consistencia tipográfica de LCC, porque en distintas partes aparece con formatos distintos.
             La Tabla~\ref{tab:sensibilidad_l_space} resume cómo cambian la estructura y el \(LCC\) con cada umbral de consolidación.
 
             \begin{table}[h!]
@@ -278,6 +281,7 @@
 
             En el \(P\)-espacio, la diferencia entre construir por \texttt{route\_id} y por \texttt{trip\_id} se mantiene en todos los umbrales: el enfoque por ruta produce más aristas, y entre \(8.73\%\) y \(20.86\%\) de ellas no aparecen en la variante por viaje.
 
+            % TODO [PDF p.71][abel]: revisar los puntos decimales en todos los porcentajes del capítulo para mantener un criterio único.
             La Tabla~\ref{tab:sensibilidad_p_space_route_trip} cuantifica el sesgo que introduce construir el \(P\)-espacio por \texttt{route\_id} frente a \texttt{trip\_id} en cada umbral.
 
             \begin{table}[h!]
