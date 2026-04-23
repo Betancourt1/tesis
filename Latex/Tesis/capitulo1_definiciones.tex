@@ -20,7 +20,6 @@
 
         % TODO [PDF p.11][ernes]: esta frase fue señalada como poco formal; considerar reescribirla de forma más matemática o eliminarla.
         A un grafo $G$ con conjunto de nodos $V$ también lo podemos definir como un grafo \textit{en} $V$ o simplemente $G(V)$.
-        % TODO [PDF p.11][Fernando Becerra]: revisar si aquí conviene remitir a la definición de lazo o si la observación resulta redundante en esta posición.
 
         \begin{definicion}[Lazo]
             Un \textbf{lazo} es una conexión cuyos extremos coinciden: \(\{v,v\}\) en el caso no dirigido (arista), o \((v,v)\) en el caso dirigido (arco).
@@ -142,8 +141,7 @@
 
         % TODO [PDF p.13][Fernando Becerra]: buscar formulaciones más matemáticas para este bloque de definiciones.
         \begin{definicion}[Grafo planar]
-            % TODO [PDF p.13][Fernando Becerra]: se marcó que "representación" más "dibujo planar" puede ser redundante; revisar si basta con una sola formulación.
-            Un grafo es \textbf{planar} si admite una representación (llamada \emph{dibujo planar}) en el plano tal que ninguna de sus aristas se cruza con otra, salvo en los nodos que comparten.
+            Un grafo es \textbf{planar} si admite un \emph{dibujo planar}: una disposición de sus nodos y aristas en el plano tal que ninguna arista se cruza con otra, salvo en los nodos que comparten.
         \end{definicion}
 
         \begin{observacion}
@@ -157,13 +155,10 @@
             Formalmente, las caras son los componentes conexos del complemento del dibujo de $G$ en el plano.
         \end{definicion}
 
-        % TODO [PDF p.13][Fernando Becerra]: este comentario meta fue cuestionado; revisar si realmente aporta algo decir que estas definiciones "serán útiles" más adelante.
         % TODO [PDF p.13][Fernando Becerra]: aquí también se señaló que se anticipa una definición o desarrollo posterior.
-        Las definiciones de grafo planar y de cara de un grafo planar nos serán útiles cuando estudiemos propiedades globales de un grafo.
 
-        % TODO [PDF p.13][Fernando Becerra]: revisar si en este punto hay redundancias adicionales dentro de la definición del multígrafo.
         \begin{definicion}[Multígrafo]
-            Un \textbf{multígrafo} $G=(V,E)$ es un grafo finito en el que entre un par (ordenado o no ordenado) de nodos se permiten \emph{múltiples aristas} distintas (también llamadas \emph{aristas paralelas}).
+            Un \textbf{multígrafo} $G=(V,E)$ es un grafo finito en el que pueden existir varias aristas distintas entre el mismo par de nodos, ya sea ordenado o no ordenado según el contexto.
             Opcionalmente, puede permitirse la existencia de \emph{lazos} (aristas cuyos extremos coinciden en un mismo nodo); cuando se permiten lazos, a veces se habla de \emph{pseudografo}.
         \end{definicion}
 
@@ -246,9 +241,9 @@
             Por ejemplo, $a_{12} = 1$ indica una arista dirigida de $A$ a $B$, y $a_{33} = 0$ indica que no hay un lazo en $C$.
         \end{ejemplo}
 
-        % TODO [PDF p.15][Fernando Becerra]: revisar la rotulación o presentación de esta definición; en el PDF quedó una observación mínima indicando simplemente "Definición".
         \begin{definicion}[Matriz de incidencia]
             Sea $G=(V,E)$ un grafo simple con $n=|V|$ y $m=|E|$.
+            La matriz de incidencia registra la relación entre nodos y aristas; su convención de signos depende de si el grafo se trata como dirigido o si se fija una orientación auxiliar.
             \begin{itemize}
                 \item \textbf{No dirigido (orientación arbitraria).} Se fija una orientación arbitraria de cada arista $e=\{u,v\}$ para obtener un par ordenado $(u,v)$. La \emph{matriz de incidencia} es $B\in\{-1,0,1\}^{n\times m}$ definida por
                 \[
@@ -1049,7 +1044,6 @@
             \end{definicion}
 
             \begin{ejemplo}[Centralidad de cercanía de $v=C$]
-                % TODO [PDF p.26][abel]: corregir etiquetas traslapadas en esta figura.
                 Consideremos el siguiente grafo dirigido y calculemos $C_c(C)$.
 
                 \begin{center}
@@ -1078,11 +1072,11 @@
                         \draw[flecha_resaltada] (B) -- (C);      % completa E->C con longitud 2
 
                         % Etiquetas de distancia hacia C
-                        \node[etiqueta, right]  at (C) {$v=C$};
-                        \node[etiqueta, above left]  at (A) {$d(A,C)=1$};
-                        \node[etiqueta, above]       at (B) {$d(B,C)=1$};
-                        \node[etiqueta, below]       at (D) {$d(D,C)=1$};
-                        \node[etiqueta, left]        at (E) {$d(E,C)=2$};
+                        \node[etiqueta] at (4.55,1.35) {$v=C$};
+                        \node[etiqueta] at (0.1,1.55) {$d(A,C)=1$};
+                        \node[etiqueta] at (2,2.45) {$d(B,C)=1$};
+                        \node[etiqueta] at (2,-0.45) {$d(D,C)=1$};
+                        \node[etiqueta] at (-0.05,-0.75) {$d(E,C)=2$};
                     \end{tikzpicture}
                 \end{center}
 
@@ -1106,7 +1100,6 @@
             \end{definicion}
 
             \begin{ejemplo}[Centralidad de intermediación de $v=B$]
-                % TODO [PDF p.27][abel]: corregir etiquetas de esta figura, especialmente por claridad visual.
                 Consideremos el siguiente grafo dirigido y calculemos $C_b(B)$.
 
                 \begin{center}
@@ -1137,8 +1130,8 @@
                         \draw[flecha_alternativa] (D) -- (C);
 
                         % Etiquetas
-                        \node[etiqueta, below] at (2, -0.4) {%
-                            \begin{minipage}{8cm}\centering
+                        \node[etiqueta] at (2, -1.45) {%
+                            \begin{minipage}{7.5cm}\centering
                             Geodésicas hacia $C$: \\
                             $A\to C$: $A\!\to\!B\!\to\!C$ y $A\!\to\!D\!\to\!C$ (longitud $2$). \quad
                             $E\to C$: $E\!\to\!B\!\to\!C$ (longitud $2$).
