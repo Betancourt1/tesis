@@ -16,7 +16,7 @@
             \begin{itemize}
                 \item \textbf{Tamaño de la Red:} El grafo consolidado consta de \textbf{4,203 nodos} (supernodos que agrupan paradas) y \textbf{8,591 aristas} (conexiones directas por una ruta).
 		\item \textbf{Densidad del Grafo:} La densidad es de \textbf{0.000486}, un valor coherente con una red de contigüidad física. En este grafo, cada supernodo se conecta principalmente con las paradas consecutivas de las rutas que lo atraviesan, de modo que el número de aristas posibles es reducido.
-                \item \textbf{Conectividad:} El análisis de componentes conectados arrojó un resultado clave: la red está fragmentada en \textbf{2 componentes}. Uno de ellos es masivo, conteniendo 4,198 nodos (el 99.80\% del total), mientras que el segundo es un fragmento aislado de apenas 5 nodos. Esto sugiere que, en la práctica, la red funciona casi como un todo unificado, pero existe una pequeña \textit{isla} de paradas sin conexión con el resto del sistema.
+                \item \textbf{Conectividad:} El análisis de componentes conectados arrojó un resultado clave: la red está fragmentada en \textbf{2 componentes}. Uno de ellos es masivo, conteniendo 4,198 nodos (el 99.8\% del total), mientras que el segundo es un fragmento aislado de apenas 5 nodos. Esto sugiere que, en la práctica, la red funciona casi como un todo unificado, pero existe una pequeña \textit{isla} de paradas sin conexión con el resto del sistema.
                 \item \textbf{Coeficiente de Clustering Global:} La transitividad de la red es de \textbf{0.1088}. Este valor, cercano a cero, indica una baja tendencia a la formación de clústeres locales: es poco frecuente que dos paradas conectadas a una tercera también lo estén entre sí. Esto sugiere una topología más arbórea o de tipo estrella (\textit{hub-and-spoke}) que una estructura de malla densa.
             \end{itemize}
 
@@ -34,10 +34,10 @@
                 \item \textbf{Nodos más y menos accesibles:} Se identificó una brecha extrema en la accesibilidad. Los \textbf{nodos mejor conectados} promedian entre \textbf{0.7 y 1.3 minutos} al resto de la red. En contraste, los \textbf{nodos peor conectados}, situados en la periferia (Tesistán, aeropuerto, norponiente), promedian entre \textbf{94 y 157 minutos}.
                 \item \textbf{Análisis de Cobertura:} Se calculó el porcentaje de la red accesible desde una parada promedio en distintos umbrales de tiempo:
                 \begin{itemize}
-                    \item \textbf{15 minutos:} Se alcanza solo el 6.50\% de la red.
-                    \item \textbf{30 minutos:} Se alcanza el 33.10\% de la red.
-                    \item \textbf{45 minutos:} Se alcanza el 61.90\% de la red.
-                    \item \textbf{60 minutos:} Se alcanza el 80.10\% de la red.
+                    \item \textbf{15 minutos:} Se alcanza solo el 6.5\% de la red.
+                    \item \textbf{30 minutos:} Se alcanza el 33.1\% de la red.
+                    \item \textbf{45 minutos:} Se alcanza el 61.9\% de la red.
+                    \item \textbf{60 minutos:} Se alcanza el 80.1\% de la red.
                 \end{itemize}
                 Estos datos muestran que el umbral de 45-60 minutos es crítico para acceder a la mayor parte de la ciudad, mientras que el acceso a oportunidades en viajes cortos (menos de 30 minutos) es considerablemente limitado.
                 \item \textbf{El Viaje más Largo:} El trayecto más largo posible dentro de la red toma \textbf{244 minutos (más de 4 horas)}, conectando una zona relativamente céntrica con la periferia norponiente. Este caso extremo subraya la enorme escala de tiempo que implica atravesar la ciudad y la ineficiencia de ciertas conexiones específicas.
@@ -133,7 +133,8 @@
             El número de nodos a eliminar se fijó en 50 para tener una condición de parada clara y concentrarse en el impacto de los supernodos de mayor grado.
 
         \subsubsection{Resultados del Análisis de Robustez}
-            La Figura~\ref{fig:robustez_l_space} resume cómo se deterioran el LCC y la eficiencia temporal cuando fallan supernodos de alto grado bajo el mismo ataque dirigido.
+            % TODO [PDF p.64][abel]: revisar si la sigla LCC debe ir en redonda/texto y no en itálicas matemáticas.
+            La Figura~\ref{fig:robustez_l_space} resume cómo se deterioran el \(LCC\) y la eficiencia temporal cuando fallan supernodos de alto grado bajo el mismo ataque dirigido.
 
             \begin{figure}[h!]
                 \centering
@@ -143,9 +144,10 @@
             \end{figure}
 
         \subsubsection{Impacto en la Conectividad (LCC)}
+            % TODO [PDF p.64][abel]: unificar el uso de punto decimal en porcentajes y cifras numéricas.
             En el escenario base de robustez (sin intervención), después de eliminar los 50 nodos de mayor grado ponderado, el LCC relativo conserva el \textbf{97.45\%} de su tamaño inicial. Esto indica que la red física mantiene la mayor parte de su cobertura estructural, aunque se generan pérdidas periféricas.
 
-            Aquí el LCC se reporta respecto al estado inicial. En la sección de intervenciones, en cambio, se expresa como porcentaje sobre los supernodos remanentes; por eso el valor base allí es 98.51\%.
+            Aquí el \(LCC\) se reporta respecto al estado inicial. En la sección de intervenciones, en cambio, se expresa como porcentaje sobre los supernodos remanentes; por eso el valor base allí es \(98.51\%\).
 
         \subsubsection{Impacto en la Eficiencia Global}
             La eficiencia global cae al \textbf{81.50\%} de su valor original tras la eliminación de esos 50 nodos. Aunque la red sigue conectada, los caminos disponibles son menos directos y los tiempos de viaje promedio se alargan cerca de 18.50\%, lo que evidencia la dependencia operativa de los supernodos de mayor grado.
@@ -153,7 +155,7 @@
 	\subsection{Conclusiones sobre el $L$-espacio}
 	    El análisis permite concluir que la infraestructura del sistema en la Zona Metropolitana de Guadalajara tiene una estructura marcadamente arbórea, enfocada en conectar periferias con zonas centrales. Aunque el hipercentro concentra gran parte de la intermediación, también aparecen nodos de intersección relevantes fuera del centro, como estaciones del tren ligero y cruces comerciales estratégicos.
 
-            En términos de robustez, la red conserva buena cobertura estructural bajo ataque dirigido, pero muestra una fragilidad temporal relevante: la eficiencia cae alrededor de 18.50\% al remover 50 supernodos de mayor grado. La conectividad persiste, pero con recorridos más largos.
+            En términos de robustez, la red conserva buena cobertura estructural bajo ataque dirigido, pero muestra una fragilidad temporal relevante: la eficiencia cae alrededor de \(18.50\%\) al remover 50 supernodos de mayor grado. La conectividad persiste, pero con recorridos más largos.
 
 	    Ahora bien, este análisis no responde todas las preguntas sobre el servicio desde la perspectiva del usuario. Por ejemplo, la red anterior no permite estimar directamente cuántos transbordos son necesarios en los caminos evaluados. Para ello se requiere el grafo del $P$-espacio, que se analizó en el capítulo previo y se evalúa a continuación.
 
@@ -205,11 +207,11 @@
         \subsection{Detección de Comunidades en el P-espacio}
             Se detectaron \textbf{11 comunidades} de supernodos mediante Louvain, agrupando paradas que comparten muchas rutas (modularidad $0.54$). Las cinco mayores concentran el 67\% de los supernodos del servicio:
             \begin{itemize}
-                \item \textbf{Comunidad 5} (\textasciitilde\!18.20\%): centroide $(20.5748,-103.3608)$, domina el sur-poniente.
-                \item \textbf{Comunidad 1} (\textasciitilde\!15.20\%): centroide $(20.6887,-103.2992)$, eje nororiente.
-                \item \textbf{Comunidad 8} (\textasciitilde\!11.70\%): centroide $(20.7404,-103.3939)$, norponiente.
-                \item \textbf{Comunidad 2} (\textasciitilde\!11.50\%): centroide $(20.6293,-103.2990)$, oriente-centro.
-                \item \textbf{Comunidad 6} (\textasciitilde\!10.30\%): centroide $(20.6573,-103.2995)$, corredor central-oriente.
+                \item \textbf{Comunidad 5} (\textasciitilde\!18.2\%): centroide $(20.5748,-103.3608)$, domina el sur-poniente.
+                \item \textbf{Comunidad 1} (\textasciitilde\!15.2\%): centroide $(20.6887,-103.2992)$, eje nororiente.
+                \item \textbf{Comunidad 8} (\textasciitilde\!11.7\%): centroide $(20.7404,-103.3939)$, norponiente.
+                \item \textbf{Comunidad 2} (\textasciitilde\!11.5\%): centroide $(20.6293,-103.2990)$, oriente-centro.
+                \item \textbf{Comunidad 6} (\textasciitilde\!10.3\%): centroide $(20.6573,-103.2995)$, corredor central-oriente.
             \end{itemize}
             El resto incluye clusters poniente (Comunidad 4, 9) y núcleos menores (comunidades 0, 3, 7), mientras que sólo una comunidad es pequeña (\textless=5 nodos), reflejando alta conectividad transversal del servicio.
 
@@ -256,9 +258,10 @@
         \subsection{Sensibilidad de Supuestos de Modelado}
             Para evaluar la estabilidad de los resultados, se ejecutó un análisis de sensibilidad con cuatro umbrales de consolidación espacial (\(75\), \(100\), \(125\) y \(150\) metros) y dos variantes para construir el \(P\)-espacio: clique por \texttt{route\_id} (modelo principal de la tesis) y clique por \texttt{trip\_id} (escenario conservador).
 
-            En el \(L\)-espacio, al variar el umbral de consolidación cambia de forma importante el tamaño de la red, pero no su conectividad global: en todos los escenarios el componente gigante concentra más del 99.80\% de los supernodos y no se observaron aristas con tiempo imputado.
+            En el \(L\)-espacio, al variar el umbral de consolidación cambia de forma importante el tamaño de la red, pero no su conectividad global: en todos los escenarios el componente gigante concentra más del \(99.8\%\) de los supernodos y no se observaron aristas con tiempo imputado.
 
-            La Tabla~\ref{tab:sensibilidad_l_space} resume cómo cambian la estructura y el LCC con cada umbral de consolidación.
+            % TODO [PDF p.70][abel]: revisar la consistencia tipográfica de LCC, porque en distintas partes aparece con formatos distintos.
+            La Tabla~\ref{tab:sensibilidad_l_space} resume cómo cambian la estructura y el \(LCC\) con cada umbral de consolidación.
 
             \begin{table}[h!]
                 \centering
@@ -278,6 +281,7 @@
 
             En el \(P\)-espacio, la diferencia entre construir por \texttt{route\_id} y por \texttt{trip\_id} se mantiene en todos los umbrales: el enfoque por ruta produce más aristas, y entre \(8.73\%\) y \(20.86\%\) de ellas no aparecen en la variante por viaje.
 
+            % TODO [PDF p.71][abel]: revisar los puntos decimales en todos los porcentajes del capítulo para mantener un criterio único.
             La Tabla~\ref{tab:sensibilidad_p_space_route_trip} cuantifica el sesgo que introduce construir el \(P\)-espacio por \texttt{route\_id} frente a \texttt{trip\_id} en cada umbral.
 
             \begin{table}[h!]
@@ -305,19 +309,19 @@
                 \item \textbf{Refuerzo periférico:} se añaden 120 conexiones dirigidas al modelo para representar servicios tangenciales o enlaces entre corredores fuera del hipercentro, con el fin de reducir la dependencia de pasos obligados por el centro.
                 \item \textbf{Conexiones alternativas locales:} se añaden hasta 200 conexiones directas en el modelo para representar rodeos de corto alcance alrededor de puntos muy cargados, de modo que ciertos desplazamientos no dependan de pasar por un mismo punto de transferencia.
             \end{itemize}
-            En los cuatro escenarios se aplicó la misma perturbación severa: eliminación secuencial de los 50 supernodos de mayor grado ponderado. Después de la falla se midieron tres indicadores: el porcentaje de supernodos remanentes que permanece dentro del LCC, la eficiencia global dirigida (ponderada por \texttt{travel\_time\_minutes}) y la longitud del peor recorrido interno, definida como el número máximo de segmentos consecutivos necesarios dentro de la red remanente.
+            En los cuatro escenarios se aplicó la misma perturbación severa: eliminación secuencial de los 50 supernodos de mayor grado ponderado. Después de la falla se midieron tres indicadores: el porcentaje de supernodos remanentes que permanece dentro del \(LCC\), la eficiencia global dirigida (ponderada por \texttt{travel\_time\_minutes}) y la longitud del peor recorrido interno, definida como el número máximo de segmentos consecutivos necesarios dentro de la red remanente.
 
-            La Tabla~\ref{tab:intervenciones_topologicas_l_space} compara las métricas postataque para cada escenario y permite distinguir qué intervención conserva mejor el LCC y la eficiencia sin alargar en exceso los recorridos tras la falla.
+            La Tabla~\ref{tab:intervenciones_topologicas_l_space} compara las métricas postataque para cada escenario y permite distinguir qué intervención conserva mejor el \(LCC\) y la eficiencia sin alargar en exceso los recorridos tras la falla.
 
             \begin{table}[h!]
                 \centering
                 \small
-                \caption{Comparación de intervenciones en la red modelada después de eliminar 50 supernodos de mayor grado ponderado. Se reportan las conexiones nuevas del modelo, la proporción de supernodos remanentes dentro del LCC, la eficiencia global relativa al escenario inicial y la longitud del peor recorrido interno.}
+                \caption{Comparación de intervenciones en la red modelada después de eliminar 50 supernodos de mayor grado ponderado. Se reportan las conexiones nuevas del modelo, la proporción de supernodos remanentes dentro del \(LCC\), la eficiencia global relativa al escenario inicial y la longitud del peor recorrido interno.}
                 \label{tab:intervenciones_topologicas_l_space}
                 \resizebox{\textwidth}{!}{%
                 \begin{tabular}{lrrrrr}
                     \toprule
-                    Escenario & Conexiones nuevas & LCC post (\%) & Eficiencia relativa (\%) & Peor recorrido & Cambio vs.\ base (pp) \\
+                    Escenario & Conexiones nuevas & \(LCC\) post (\%) & Eficiencia relativa (\%) & Peor recorrido & Cambio vs.\ base (pp) \\
                     \midrule
                     Base (sin intervención) & 0   & 98.51 & 82.50 & 84 & 0.00 \\
                     Protección de puntos críticos & 0   & 99.30 & 85.58 & 97 & +0.79 \\
@@ -330,9 +334,9 @@
 
             La comparación muestra que cada intervención favorece un aspecto distinto de la resiliencia del sistema modelado:
             \begin{itemize}
-                \item \textbf{Protección de puntos críticos} es la mejor opción para mantener integrada la mayor parte de la red remanente: la proporción de supernodos dentro del LCC sube de 98.51\% a 99.30\%. Sin embargo, el peor recorrido interno pasa de 84 a 97 segmentos del modelo. En términos de transporte, esto significa que más zonas conservan vínculo con la red principal, pero algunos desplazamientos extremos se vuelven más largos y menos directos cuando parte del sistema falla.
-                \item \textbf{Refuerzo periférico} ofrece el mejor balance operativo: mantiene el LCC post al nivel del escenario base, pero logra la mayor eficiencia relativa (88.52\% frente a 82.50\%) y reduce el peor recorrido interno de 84 a 53 segmentos. En la práctica, esto sugiere que conexiones transversales fuera del centro ayudan a sostener trayectos más razonables y a evitar rodeos excesivos después de una interrupción severa.
-                \item \textbf{Conexiones alternativas locales} sólo aporta una mejora marginal en el LCC post (+0.31 puntos porcentuales), pero reduce la eficiencia relativa a 79.68\%, por debajo del escenario base. En su forma actual, esto indica que abrir rodeos cortos alrededor de puntos cargados no basta si esos rodeos no mejoran de manera efectiva los itinerarios disponibles para los usuarios.
+                \item \textbf{Protección de puntos críticos} es la mejor opción para mantener integrada la mayor parte de la red remanente: la proporción de supernodos dentro del \(LCC\) sube de \(98.51\%\) a \(99.30\%\). Sin embargo, el peor recorrido interno pasa de 84 a 97 segmentos del modelo. En términos de transporte, esto significa que más zonas conservan vínculo con la red principal, pero algunos desplazamientos extremos se vuelven más largos y menos directos cuando parte del sistema falla.
+                \item \textbf{Refuerzo periférico} ofrece el mejor balance operativo: mantiene el \(LCC\) post al nivel del escenario base, pero logra la mayor eficiencia relativa (\(88.52\%\) frente a \(82.50\%\)) y reduce el peor recorrido interno de 84 a 53 segmentos. En la práctica, esto sugiere que conexiones transversales fuera del centro ayudan a sostener trayectos más razonables y a evitar rodeos excesivos después de una interrupción severa.
+                \item \textbf{Conexiones alternativas locales} sólo aporta una mejora marginal en el \(LCC\) post (\(+0.31\) puntos porcentuales), pero reduce la eficiencia relativa a \(79.68\%\), por debajo del escenario base. En su forma actual, esto indica que abrir rodeos cortos alrededor de puntos cargados no basta si esos rodeos no mejoran de manera efectiva los itinerarios disponibles para los usuarios.
             \end{itemize}
             En conjunto, la evidencia sugiere priorizar \textbf{refuerzo periférico} cuando el objetivo principal es sostener trayectos razonables bajo falla, y \textbf{protección de puntos críticos} cuando se busca maximizar la cobertura que sigue vinculada a la red principal. Traducido al transporte público, lo primero apunta a fortalecer servicios tangenciales, enlaces entre corredores y alternativas que eviten el paso obligatorio por el hipercentro; lo segundo apunta a blindar terminales, estaciones de transferencia y corredores cuya interrupción deja aisladas más zonas del sistema.
 
@@ -355,9 +359,9 @@
                     \midrule
                     Modelado & Supernodos de la red física & 2,676 & 5,084 & 2,408 \\
                     Modelado & Conexiones directas de la red física & 6,280 & 9,550 & 3,270 \\
-                    Modelado & LCC de la red física (\%) & 99.81 & 99.88 & 0.07 \\
+                    Modelado & \(LCC\) de la red física (\%) & 99.81 & 99.88 & 0.07 \\
                     Modelado & Sobreconectividad del servicio por ruta (\%) & 8.73 & 20.86 & 12.13 \\
-                    Intervenciones & LCC postataque (\%) & 98.51 & 99.30 & 0.79 \\
+                    Intervenciones & \(LCC\) postataque (\%) & 98.51 & 99.30 & 0.79 \\
                     Intervenciones & Eficiencia relativa tras falla (\%) & 79.68 & 88.52 & 8.85 \\
                     Intervenciones & Peor recorrido tras falla & 53 & 97 & 44 \\
                     \bottomrule
@@ -365,7 +369,7 @@
                 }
             \end{table}
 
-            Los rangos muestran que el \textbf{LCC de la red física} es estable frente a los supuestos de consolidación (99.81\% a 99.88\%); en cambio, la magnitud de \textbf{sobreconectividad potencial} en la red de servicio asociada a construir por ruta en lugar de por viaje cambia de manera importante (8.73\% a 20.86\%). Bajo perturbación severa, las intervenciones sí producen diferencias operativas relevantes: la eficiencia relativa tras falla varía entre 79.68\% y 88.52\%, y el peor recorrido interno entre 53 y 97 segmentos, lo que modifica de manera material la calidad de los itinerarios remanentes.
+            Los rangos muestran que el \textbf{\(LCC\) de la red física} es estable frente a los supuestos de consolidación (\(99.81\%\) a \(99.88\%\)); en cambio, la magnitud de \textbf{sobreconectividad potencial} en la red de servicio asociada a construir por ruta en lugar de por viaje cambia de manera importante (\(8.73\%\) a \(20.86\%\)). Bajo perturbación severa, las intervenciones sí producen diferencias operativas relevantes: la eficiencia relativa tras falla varía entre \(79.68\%\) y \(88.52\%\), y el peor recorrido interno entre 53 y 97 segmentos, lo que modifica de manera material la calidad de los itinerarios remanentes.
 
             La Figura~\ref{fig:rangos_intervenciones_punto4} sintetiza visualmente los rangos por escenario y ayuda a comparar las intervenciones bajo incertidumbre estructural.
 
