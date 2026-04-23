@@ -145,6 +145,8 @@
         \subsubsection{Impacto en la Conectividad (LCC)}
             En el escenario base de robustez (sin intervención), después de eliminar los 50 nodos de mayor grado ponderado, el LCC relativo conserva el \textbf{97.45\%} de su tamaño inicial. Esto indica que la red física mantiene la mayor parte de su cobertura estructural, aunque se generan pérdidas periféricas.
 
+            % TODO [PDF p.64][abel][resaltado: "LCC"]: revisar si la sigla debe ir en texto normal y no en itálicas matemáticas.
+            % TODO [PDF p.64][abel][resaltado: "98,51 %"]: revisar consistencia de punto decimal en porcentajes y cifras numéricas.
             Aquí el \(LCC\) se reporta respecto al estado inicial. En la sección de intervenciones, en cambio, se expresa como porcentaje sobre los supernodos remanentes; por eso el valor base allí es \(98.51\%\).
 
         \subsubsection{Impacto en la Eficiencia Global}
@@ -258,6 +260,7 @@
 
             En el \(L\)-espacio, al variar el umbral de consolidación cambia de forma importante el tamaño de la red, pero no su conectividad global: en todos los escenarios el componente gigante concentra más del \(99.8\%\) de los supernodos y no se observaron aristas con tiempo imputado.
 
+            % TODO [PDF p.70][abel][resaltado: "LCC"]: unificar la consistencia tipográfica de LCC, porque aparece con formatos distintos.
             La Tabla~\ref{tab:sensibilidad_l_space} resume cómo cambian la estructura y el \(LCC\) con cada umbral de consolidación.
 
             \begin{table}[h!]
@@ -330,6 +333,7 @@
 
             La comparación muestra que cada intervención favorece un aspecto distinto de la resiliencia del sistema modelado:
             \begin{itemize}
+                % TODO [PDF p.71][abel][resaltado: "98,51 % a 99,30 %."]: revisar puntos decimales en todos los porcentajes del capítulo.
                 \item \textbf{Protección de puntos críticos} es la mejor opción para mantener integrada la mayor parte de la red remanente: la proporción de supernodos dentro del \(LCC\) sube de \(98.51\%\) a \(99.30\%\). Sin embargo, el peor recorrido interno pasa de 84 a 97 segmentos del modelo. En términos de transporte, esto significa que más zonas conservan vínculo con la red principal, pero algunos desplazamientos extremos se vuelven más largos y menos directos cuando parte del sistema falla.
                 \item \textbf{Refuerzo periférico} ofrece el mejor balance operativo: mantiene el \(LCC\) post al nivel del escenario base, pero logra la mayor eficiencia relativa (\(88.52\%\) frente a \(82.50\%\)) y reduce el peor recorrido interno de 84 a 53 segmentos. En la práctica, esto sugiere que conexiones transversales fuera del centro ayudan a sostener trayectos más razonables y a evitar rodeos excesivos después de una interrupción severa.
                 \item \textbf{Conexiones alternativas locales} sólo aporta una mejora marginal en el \(LCC\) post (\(+0.31\) puntos porcentuales), pero reduce la eficiencia relativa a \(79.68\%\), por debajo del escenario base. En su forma actual, esto indica que abrir rodeos cortos alrededor de puntos cargados no basta si esos rodeos no mejoran de manera efectiva los itinerarios disponibles para los usuarios.
