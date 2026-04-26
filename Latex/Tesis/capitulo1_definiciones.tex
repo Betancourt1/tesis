@@ -149,9 +149,8 @@
         \end{observacion}
 
         \begin{definicion}[Cara de un grafo planar]
-            % TODO [PDF p.13][Fernando Becerra][cat: rigor matematico][prio: baja][resaltado: "el plano sin cruces de aristas."]: revisar redundancia; se comentó que podría bastar con decir "dibujo planar".
             % TODO [PDF p.13][Fernando Becerra][cat: rigor matematico][prio: media][nota flotante sobre: "Una cara es cada una de las regiones conexas..."]: mejorar la precisión matemática de esta definición.
-            Sea $G$ un grafo planar, y considérese un dibujo de $G$ en el plano sin cruces de aristas.
+            Sea $G$ un grafo planar, y considérese un dibujo planar de $G$.
             Una \textbf{cara} es cada una de las regiones conexas en que el dibujo divide el plano, incluyendo la región exterior.
             Formalmente, las caras son los componentes conexos del complemento del dibujo de $G$ en el plano.
         \end{definicion}
@@ -159,9 +158,8 @@
         Las definiciones de grafo planar y de cara de un grafo planar nos serán útiles cuando estudiemos propiedades globales de un grafo.
 
         \begin{definicion}[Multígrafo]
-            % TODO [PDF p.13][Fernando Becerra][cat: rigor matematico][prio: baja][nota flotante sobre: "lazos ... pseudografo"]: revisar redundancia en la explicación de lazos dentro de la definición de multígrafo.
             Un \textbf{multígrafo} $G=(V,E)$ es un grafo finito en el que entre un par (ordenado o no ordenado) de nodos se permiten \emph{múltiples aristas} distintas (también llamadas \emph{aristas paralelas}).
-            Opcionalmente, puede permitirse la existencia de \emph{lazos} (aristas cuyos extremos coinciden en un mismo nodo); cuando se permiten lazos, a veces se habla de \emph{pseudografo}.
+            Cuando además se permiten \emph{lazos} (aristas cuyos extremos coinciden en un mismo nodo), lo indicaremos explícitamente y hablaremos de \emph{pseudografo}.
         \end{definicion}
 
         \begin{observacion}
