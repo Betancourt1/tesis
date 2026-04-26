@@ -572,7 +572,6 @@
             \end{definicion}
 
             \begin{ejemplo}[Árbol]
-                % TODO [PDF p.18][Fernando Becerra][cat: figuras-tablas][prio: alta][resaltado en definición: "no dirigido"; nota sobre este ejemplo]: revisar que el primer ejemplo usa flechas y parece dirigido, aunque la definición de árbol es no dirigida.
                 % TODO [PDF p.18][Fernando Becerra][cat: rigor matematico][prio: media][nota flotante sobre: "árbol con raíz en v_1"]: aclarar qué significa raíz, si es única y cómo depende del caso dirigido o no dirigido.
                 El siguiente grafo muestra un árbol con raíz en $v_1$:
 
@@ -586,12 +585,12 @@
                     \node[nodo] (v5) at (-0.5,-2) [label={[etiqueta_nodo]right:$v_5$}] {};
                     \node[nodo] (v6) at (1,-2) [label={[etiqueta_nodo]right:$v_6$}] {};
 
-                    % Aristas dirigidas
-                    \draw[flecha] (v1) -- (v2);
-                    \draw[flecha] (v1) -- (v3);
-                    \draw[flecha] (v2) -- (v4);
-                    \draw[flecha] (v2) -- (v5);
-                    \draw[flecha] (v3) -- (v6);
+                    % Aristas no dirigidas
+                    \draw[arista] (v1) -- (v2);
+                    \draw[arista] (v1) -- (v3);
+                    \draw[arista] (v2) -- (v4);
+                    \draw[arista] (v2) -- (v5);
+                    \draw[arista] (v3) -- (v6);
                 \end{tikzpicture}
                 \end{center}
 
@@ -1048,7 +1047,6 @@
             \end{definicion}
 
             \begin{ejemplo}[Centralidad de cercanía de $v=C$]
-                % TODO [PDF p.26][abel][cat: figuras-tablas][prio: media][nota flotante sobre: "v=C / d(A,C)=1" en la figura]: corregir etiquetas traslapadas en este ejemplo.
                 Consideremos el siguiente grafo dirigido y calculemos $C_c(C)$.
 
                 \begin{center}
@@ -1077,11 +1075,11 @@
                         \draw[flecha_resaltada] (B) -- (C);      % completa E->C con longitud 2
 
                         % Etiquetas de distancia hacia C
-                        \node[etiqueta, right]  at (C) {$v=C$};
-                        \node[etiqueta, above left]  at (A) {$d(A,C)=1$};
-                        \node[etiqueta, above]       at (B) {$d(B,C)=1$};
-                        \node[etiqueta, below]       at (D) {$d(D,C)=1$};
-                        \node[etiqueta, left]        at (E) {$d(E,C)=2$};
+                        \node[etiqueta, fill=white, inner sep=1pt] at (4.65,0.55) {$v=C$};
+                        \node[etiqueta, fill=white, inner sep=1pt] at (0.35,1.55) {$d(A,C)=1$};
+                        \node[etiqueta, fill=white, inner sep=1pt] at (2,2.38) {$d(B,C)=1$};
+                        \node[etiqueta, fill=white, inner sep=1pt] at (2,-0.45) {$d(D,C)=1$};
+                        \node[etiqueta, fill=white, inner sep=1pt] at (-0.45,-0.65) {$d(E,C)=2$};
                     \end{tikzpicture}
                 \end{center}
 
@@ -1169,7 +1167,6 @@
             \end{definicion}
 
             \begin{ejemplo}[Eccentricidad de $v=C$]
-                % TODO [PDF p.27][abel][cat: figuras-tablas][prio: media][nota flotante sobre: "d(A,C)=2 / d(B,C)=1" en la figura]: corregir etiquetas traslapadas en el ejemplo de eccentricidad.
                 Consideremos el siguiente grafo dirigido y calculemos $e(C)=\max_{u\in V} d(u,C)$.
 
                 \begin{center}
@@ -1194,11 +1191,11 @@
                         \draw[flecha_resaltada] (E) -- (B); \draw[flecha_resaltada] (B) -- (C);         % E->C (2)
 
                         % Etiquetas
-                        \node[etiqueta, right]  at (C) {$v=C$};
-                        \node[etiqueta, above]  at (A) {$d(A,C)=2$};
-                        \node[etiqueta, above]  at (B) {$d(B,C)=1$};
-                        \node[etiqueta, left]   at (D) {$d(D,C)=3$};
-                        \node[etiqueta, below]  at (E) {$d(E,C)=2$};
+                        \node[etiqueta, fill=white, inner sep=1pt] at (4.65,0.75) {$v=C$};
+                        \node[etiqueta, fill=white, inner sep=1pt] at (0.40,1.75) {$d(A,C)=2$};
+                        \node[etiqueta, fill=white, inner sep=1pt] at (2.40,1.75) {$d(B,C)=1$};
+                        \node[etiqueta, fill=white, inner sep=1pt] at (-0.55,-0.60) {$d(D,C)=3$};
+                        \node[etiqueta, fill=white, inner sep=1pt] at (2.25,-0.65) {$d(E,C)=2$};
                     \end{tikzpicture}
                 \end{center}
 
