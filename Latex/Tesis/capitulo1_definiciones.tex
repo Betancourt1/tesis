@@ -7,18 +7,18 @@
 
     \section{Definición y conceptos básicos}
 
-        % TODO [PDF p.11][Fernando Becerra][cat: estructura][resaltado: "dirigidos, no dirigidos"]: revisar si se anticipan conceptos antes de definir formalmente los tipos de grafos.
+        % TODO [PDF p.11][Fernando Becerra][cat: estructura][prio: media][resaltado: "dirigidos, no dirigidos"]: revisar si se anticipan conceptos antes de definir formalmente los tipos de grafos.
         A lo largo de este capítulo, se asumirá que todos los grafos son \textbf{finitos}, a menos que se especifique lo contrario. Las definiciones se presentarán especificando si aplican a grafos \textbf{dirigidos}, \textbf{no dirigidos} o ambos, pues las propiedades y métricas pueden cambiar significativamente según el tipo de grafo.
 
         Convención terminológica: en la tesis se usa \textbf{arista} como término general; cuando la orientación sea relevante en un grafo dirigido, se utilizará \textbf{arco} para referirse explícitamente al par ordenado \((u,v)\).
 
         \begin{definicion}[Grafo]
-            % TODO [PDF p.11][Fernando Becerra][cat: rigor matematico][resaltado: "cada arista conecta un par de nodos."]: reformular esta parte con mayor precisión matemática.
-            % TODO [PDF p.11][Fernando Becerra][cat: estructura][resaltado: "grafo simple,"]: revisar si conviene mencionar aquí "grafo simple" después de haber introducido la noción de lazo.
+            % TODO [PDF p.11][Fernando Becerra][cat: rigor matematico][prio: alta][resaltado: "cada arista conecta un par de nodos."]: reformular esta parte con mayor precisión matemática.
+            % TODO [PDF p.11][Fernando Becerra][cat: estructura][prio: media][resaltado: "grafo simple,"]: revisar si conviene mencionar aquí "grafo simple" después de haber introducido la noción de lazo.
             Un \textbf{grafo} $G$ es un par $(V,E)$ que consiste en un conjunto no vacío $V$ de \textbf{nodos} y una colección $E$ de \textbf{aristas}, donde cada arista conecta un par de nodos. La definición formal más restrictiva, la de un \textbf{grafo simple}, exige que las aristas conecten pares de nodos distintos y que no haya más de una arista entre el mismo par de nodos. A lo largo de este capítulo, se presentarán variantes como grafos dirigidos, multígrafos o grafos con lazos, que relajan estas condiciones.
         \end{definicion}
 
-        % TODO [PDF p.11][ernes][cat: rigor matematico][resaltado: "A un grafo G"]: reescribir con tono formal; se sugirió "Equivalentemente, un grafo G puede denotarse como G(V) cuando se enfatiza el conjunto de vértices."
+        % TODO [PDF p.11][ernes][cat: rigor matematico][prio: media][resaltado: "A un grafo G"]: reescribir con tono formal; se sugirió "Equivalentemente, un grafo G puede denotarse como G(V) cuando se enfatiza el conjunto de vértices."
         A un grafo $G$ con conjunto de nodos $V$ también lo podemos definir como un grafo \textit{en} $V$ o simplemente $G(V)$.
 
         \begin{definicion}[Lazo]
@@ -31,7 +31,7 @@
         \end{definicion}
 
         \begin{definicion}
-            % TODO [PDF p.11][abel][cat: rigor matematico][resaltado: "finito o infinito"]: aclarar de qué depende la finitud del grafo, si del orden, del tamaño o de ambos.
+            % TODO [PDF p.11][abel][cat: rigor matematico][prio: alta][resaltado: "finito o infinito"]: aclarar de qué depende la finitud del grafo, si del orden, del tamaño o de ambos.
             Llamamos \textbf{orden} de un grafo $G$ al número de nodos que contiene, representado como $|V|$, y \textbf{tamaño} a la cantidad de aristas, representada como $|E|$. Un grafo puede ser \textit{finito} o \textit{infinito}.
         \end{definicion}
 
@@ -65,7 +65,7 @@
         \end{ejemplo}
         Más adelante veremos que es posible medir distintas propiedades de un grafo, ya sea en su totalidad o en cada una de sus partes, pero una primera noción en ese sentido es la de \textit{grado de un nodo} que además nos ayudará a demostrar varios resultados importantes más adelante.
         \begin{definicion}[Grado de un nodo]
-            % TODO [PDF p.12][Fernando Becerra][cat: estructura][nota flotante sobre: "El grado de un nodo v... Para grafos dirigidos..."]: revisar la anticipación de grafos dirigidos dentro de esta definición.
+            % TODO [PDF p.12][Fernando Becerra][cat: estructura][prio: media][nota flotante sobre: "El grado de un nodo v... Para grafos dirigidos..."]: revisar la anticipación de grafos dirigidos dentro de esta definición.
             El \textbf{grado} de un nodo $v$, denotado $deg(v)$, es el número de aristas que inciden en él (los lazos se cuentan dos veces). Para grafos dirigidos, el grado total se descompone en \textbf{grado de entrada} (\emph{indegree}, $deg^{-}(v)$), que es el número de aristas que terminan en $v$, y \textbf{grado de salida} (\emph{outdegree}, $deg^{+}(v)$), que es el número de aristas que comienzan en $v$. En este caso, el grado total es $deg(v) = deg^{-}(v) + deg^{+}(v)$.
             Este valor refleja la importancia local del nodo como punto de transferencia.
         \end{definicion}
@@ -86,7 +86,7 @@
             \end{center}
         \end{ejemplo}
 
-    % TODO [PDF p.12][ernes][cat: estructura][resaltado: "Tipos de grafos"]: reordenar la progresión conceptual; se sugirió subgrafos, caminos y ciclos, conectividad y después representaciones matriciales.
+    % TODO [PDF p.12][ernes][cat: estructura][prio: alta][resaltado: "Tipos de grafos"]: reordenar la progresión conceptual; se sugirió subgrafos, caminos y ciclos, conectividad y después representaciones matriciales.
     \section{Tipos de grafos}
 
         Ahora que sabemos lo que es un grafo, es pertinente preguntarnos si es posible clasificarlos. Aunque posible, la clasificación de los grafos es una tarea multifacética que puede atender a una diversidad de criterios. Es posible categorizarlos, por ejemplo, en función de su estructura general (como en el caso de los grafos planares, bipartitos o completos), de las propiedades de conectividad que exhiben, o incluso de la presencia de ciclos. No obstante, para los fines de esta introducción, nos centraremos en una de las distinciones más fundamentales, la cual emana directamente de las propiedades inherentes al conjunto de aristas $E$. Específicamente, exploraremos la clasificación de los grafos según si sus aristas poseen una dirección definida (grafos dirigidos y no dirigidos) y si se les atribuye un valor numérico (grafos ponderados).
@@ -119,7 +119,7 @@
         \end{ejemplo}
 
         \begin{definicion}[Grafo dirigido]
-            % TODO [PDF p.13][Fernando Becerra][cat: rigor matematico][nota flotante sobre: "Un grafo es dirigido..."]: buscar una formulación más matemática para esta definición.
+            % TODO [PDF p.13][Fernando Becerra][cat: rigor matematico][prio: alta][nota flotante sobre: "Un grafo es dirigido..."]: buscar una formulación más matemática para esta definición.
             Un grafo es \textbf{dirigido} (o \emph{grafo dirigido}) si cada arista tiene una dirección; es decir, $(u, v) \in E$ no implica que $(v, u) \in E$ (aunque puede ocurrir). En este caso, diremos que $u$ se dirige a $v$.
         \end{definicion}
 
@@ -149,8 +149,8 @@
         \end{observacion}
 
         \begin{definicion}[Cara de un grafo planar]
-            % TODO [PDF p.13][Fernando Becerra][cat: rigor matematico][resaltado: "el plano sin cruces de aristas."]: revisar redundancia; se comentó que podría bastar con decir "dibujo planar".
-            % TODO [PDF p.13][Fernando Becerra][cat: rigor matematico][nota flotante sobre: "Una cara es cada una de las regiones conexas..."]: mejorar la precisión matemática de esta definición.
+            % TODO [PDF p.13][Fernando Becerra][cat: rigor matematico][prio: baja][resaltado: "el plano sin cruces de aristas."]: revisar redundancia; se comentó que podría bastar con decir "dibujo planar".
+            % TODO [PDF p.13][Fernando Becerra][cat: rigor matematico][prio: media][nota flotante sobre: "Una cara es cada una de las regiones conexas..."]: mejorar la precisión matemática de esta definición.
             Sea $G$ un grafo planar, y considérese un dibujo de $G$ en el plano sin cruces de aristas.
             Una \textbf{cara} es cada una de las regiones conexas en que el dibujo divide el plano, incluyendo la región exterior.
             Formalmente, las caras son los componentes conexos del complemento del dibujo de $G$ en el plano.
@@ -159,18 +159,18 @@
         Las definiciones de grafo planar y de cara de un grafo planar nos serán útiles cuando estudiemos propiedades globales de un grafo.
 
         \begin{definicion}[Multígrafo]
-            % TODO [PDF p.13][Fernando Becerra][cat: rigor matematico][nota flotante sobre: "lazos ... pseudografo"]: revisar redundancia en la explicación de lazos dentro de la definición de multígrafo.
+            % TODO [PDF p.13][Fernando Becerra][cat: rigor matematico][prio: baja][nota flotante sobre: "lazos ... pseudografo"]: revisar redundancia en la explicación de lazos dentro de la definición de multígrafo.
             Un \textbf{multígrafo} $G=(V,E)$ es un grafo finito en el que entre un par (ordenado o no ordenado) de nodos se permiten \emph{múltiples aristas} distintas (también llamadas \emph{aristas paralelas}).
             Opcionalmente, puede permitirse la existencia de \emph{lazos} (aristas cuyos extremos coinciden en un mismo nodo); cuando se permiten lazos, a veces se habla de \emph{pseudografo}.
         \end{definicion}
 
         \begin{observacion}
-            % TODO [PDF p.13][Fernando Becerra][cat: estructura][resaltado: "matrices (incidencia/adyacencia)"]: revisar si se anticipa una definición posterior.
+            % TODO [PDF p.13][Fernando Becerra][cat: estructura][prio: media][resaltado: "matrices (incidencia/adyacencia)"]: revisar si se anticipa una definición posterior.
             En el contexto dirigido, un \emph{multígrafo dirigido} permite múltiples arcos $(u,v)$ con la misma orientación (y lazos $(v,v)$ si se autorizan). Salvo indicación en contrario, las definiciones de grado y matrices (incidencia/adyacencia) se adaptan contando cada arista paralela con su multiplicidad.
         \end{observacion}
 
         \begin{definicion}[Grafo ponderado]
-            % TODO [PDF p.13][Fernando Becerra][cat: rigor matematico][resaltado: "además de dirigido o no dirigido."]: revisar por qué se agrega este comentario en la definición de grafo ponderado.
+            % TODO [PDF p.13][Fernando Becerra][cat: rigor matematico][prio: media][resaltado: "además de dirigido o no dirigido."]: revisar por qué se agrega este comentario en la definición de grafo ponderado.
             Un grafo es \textbf{ponderado} si a cada arista $(u, v) \in E$ se le asigna un peso $w(u, v) \in \mathbb{R}$. Un grafo puede ser ponderado además de dirigido o no dirigido.
         \end{definicion}
 
@@ -193,7 +193,7 @@
         \end{ejemplo}
 
         \begin{definicion}[Grafo simple]
-            % TODO [PDF p.14][Fernando Becerra][cat: estructura][nota flotante sobre: "Un grafo simple G=(V,E)..."]: revisar el orden de las definiciones porque esta ubicación fue marcada como confusa.
+            % TODO [PDF p.14][Fernando Becerra][cat: estructura][prio: alta][nota flotante sobre: "Un grafo simple G=(V,E)..."]: revisar el orden de las definiciones porque esta ubicación fue marcada como confusa.
             Un \textbf{grafo simple} $G=(V,E)$ es un grafo no dirigido, finito y que no es multígrafo; esto es, $E\subseteq \{\{u,v\} : u,v\in V,\ u\neq v\}$ y entre dos nodos distintos hay a lo sumo una arista.
         \end{definicion}
 
@@ -307,7 +307,7 @@
         \end{ejemplo}
 
         \begin{definicion}[Clique]
-            % TODO [PDF p.15][Fernando Becerra][cat: rigor matematico][resaltado: "grafo completo K_{|S|}"]: revisar el comentario "Definición" y si esta equivalencia debe rotularse o explicitarse de otra forma.
+            % TODO [PDF p.15][Fernando Becerra][cat: rigor matematico][prio: media][resaltado: "grafo completo K_{|S|}"]: revisar el comentario "Definición" y si esta equivalencia debe rotularse o explicitarse de otra forma.
             Sea $G=(V,E)$ un grafo simple no dirigido. Llamamos \textbf{clique} a un conjunto no vacío $S\subseteq V$ tal que todo par de vértices distintos en $S$ es adyacente; equivalentemente, el subgrafo inducido $G[S]$ es un grafo completo $K_{|S|}$. Cuando $|S|=k$, decimos que $S$ es una \emph{$k$-clique}.
         \end{definicion}
 
@@ -553,7 +553,7 @@
             \end{definicion}
 
             \begin{observacion}[Propiedades básicas de la distancia]
-                % TODO [PDF p.18][Fernando Becerra][cat: rigor matematico][resaltado: "d(u,v) >= 0... Desigualdad triangular..."]: conectar explícitamente estas propiedades con la noción de espacio métrico, si corresponde.
+                % TODO [PDF p.18][Fernando Becerra][cat: rigor matematico][prio: media][resaltado: "d(u,v) >= 0... Desigualdad triangular..."]: conectar explícitamente estas propiedades con la noción de espacio métrico, si corresponde.
                 \begin{itemize}
                     \item $d(u,u)=0$.
                     \item $d(u,v)\ge 0$; con aristas de longitud unitaria, $d(u,v)=0$ implica $u=v$.
@@ -567,13 +567,13 @@
         \subsubsection{Árboles}
 
             \begin{definicion}[Árbol]
-                % TODO [PDF p.18][Fernando Becerra][cat: referencias][resaltado: "Equivalentemente, para cualesquiera dos nodos distintos existe exactamente un camino simple que los une."]: agregar demostración o referencia.
+                % TODO [PDF p.18][Fernando Becerra][cat: referencias][prio: media][resaltado: "Equivalentemente, para cualesquiera dos nodos distintos existe exactamente un camino simple que los une."]: agregar demostración o referencia.
                 Un \textbf{árbol} es un grafo no dirigido, conexo y acíclico. Equivalentemente, para cualesquiera dos nodos distintos existe exactamente un camino simple que los une.
             \end{definicion}
 
             \begin{ejemplo}[Árbol]
-                % TODO [PDF p.18][Fernando Becerra][cat: figuras-tablas][resaltado en definición: "no dirigido"; nota sobre este ejemplo]: revisar que el primer ejemplo usa flechas y parece dirigido, aunque la definición de árbol es no dirigida.
-                % TODO [PDF p.18][Fernando Becerra][cat: rigor matematico][nota flotante sobre: "árbol con raíz en v_1"]: aclarar qué significa raíz, si es única y cómo depende del caso dirigido o no dirigido.
+                % TODO [PDF p.18][Fernando Becerra][cat: figuras-tablas][prio: alta][resaltado en definición: "no dirigido"; nota sobre este ejemplo]: revisar que el primer ejemplo usa flechas y parece dirigido, aunque la definición de árbol es no dirigida.
+                % TODO [PDF p.18][Fernando Becerra][cat: rigor matematico][prio: media][nota flotante sobre: "árbol con raíz en v_1"]: aclarar qué significa raíz, si es única y cómo depende del caso dirigido o no dirigido.
                 El siguiente grafo muestra un árbol con raíz en $v_1$:
 
                 \begin{center}
@@ -1048,7 +1048,7 @@
             \end{definicion}
 
             \begin{ejemplo}[Centralidad de cercanía de $v=C$]
-                % TODO [PDF p.26][abel][cat: figuras-tablas][nota flotante sobre: "v=C / d(A,C)=1" en la figura]: corregir etiquetas traslapadas en este ejemplo.
+                % TODO [PDF p.26][abel][cat: figuras-tablas][prio: media][nota flotante sobre: "v=C / d(A,C)=1" en la figura]: corregir etiquetas traslapadas en este ejemplo.
                 Consideremos el siguiente grafo dirigido y calculemos $C_c(C)$.
 
                 \begin{center}
@@ -1169,7 +1169,7 @@
             \end{definicion}
 
             \begin{ejemplo}[Eccentricidad de $v=C$]
-                % TODO [PDF p.27][abel][cat: figuras-tablas][nota flotante sobre: "d(A,C)=2 / d(B,C)=1" en la figura]: corregir etiquetas traslapadas en el ejemplo de eccentricidad.
+                % TODO [PDF p.27][abel][cat: figuras-tablas][prio: media][nota flotante sobre: "d(A,C)=2 / d(B,C)=1" en la figura]: corregir etiquetas traslapadas en el ejemplo de eccentricidad.
                 Consideremos el siguiente grafo dirigido y calculemos $e(C)=\max_{u\in V} d(u,C)$.
 
                 \begin{center}
@@ -1298,7 +1298,7 @@
                 En $P_4$ no dirigido con vértices $1$–$4$, $Ef(G)$ se obtiene sumando $1/d(i,j)$ sobre $i\neq j$ y normalizando por $12$. Al eliminar $v=2$ el grafo se parte, varias contribuciones pasan a $0$, y $Ef(G\setminus\{2\})<Ef(G)$; así $V_v>0$. El mismo procedimiento se aplica en grafos dirigidos con distancias dirigidas.
             \end{ejemplo}
 
-    % TODO [PDF p.29][Fernando Becerra][cat: estructura][nota flotante sobre: "Convenciones para esta tesis"]: revisar si este bloque pertenece aquí o si conviene moverlo a metodología/construcción.
+    % TODO [PDF p.29][Fernando Becerra][cat: estructura][prio: media][nota flotante sobre: "Convenciones para esta tesis"]: revisar si este bloque pertenece aquí o si conviene moverlo a metodología/construcción.
     \section{Convenciones para esta tesis}
         Para vincular las definiciones anteriores con los cálculos empíricos de esta investigación, fijamos las siguientes convenciones de modelado:
         \begin{itemize}
@@ -1309,7 +1309,7 @@
         Estas decisiones aseguran consistencia entre el marco teórico (distancias, centralidades y modularidad) y la implementación computacional reportada en los capítulos de construcción y resultados.
 
     \section{Algoritmos de caminos mínimos}
-        % TODO [PDF p.29][Fernando Becerra][cat: metodologia][resaltado: "Floyd-Warshall... par-a-par por programación dinámica..."]: explicar mejor para qué se requieren estos algoritmos dentro de la tesis.
+        % TODO [PDF p.29][Fernando Becerra][cat: metodologia][prio: media][resaltado: "Floyd-Warshall... par-a-par por programación dinámica..."]: explicar mejor para qué se requieren estos algoritmos dentro de la tesis.
         Al estudiar distancias y caminos mínimos en grafos finitos, necesitamos procedimientos efectivos que, a partir de especificaciones bien definidas, produzcan soluciones correctas en tiempo finito y con garantías de optimalidad. En esta línea situamos dos hitos clásicos: el algoritmo de Dijkstra (formulado en 1956 y publicado en 1959), que resuelve caminos mínimos desde una fuente única con pesos no negativos mediante relajación y selección iterativa del vértice con etiqueta mínima, y el algoritmo de Floyd–Warshall (1962), que computa todas las distancias par–a–par por programación dinámica incorporando vértices intermedios; este último unifica ideas de Floyd para costos mínimos y de Warshall para cierre transitivo, con antecedentes en la aritmética de caminos de Kleene. En lo que sigue fijamos hipótesis, enunciamos invariantes y recurrencias, demostramos corrección y acotamos la complejidad temporal y espacial de ambos métodos.
 
         \subsection{Algoritmo de Dijkstra}
