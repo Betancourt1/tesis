@@ -6,6 +6,9 @@
 *.toc
 *.out
 \out
+Latex/Tesis/main.pdf
+Latex/Tesis/main.lof
+Latex/Tesis/main.lot
 Código/etapas/análisis/métricas_globales/matriz_distancias_shimbel.json
 /Bibliografía Tesis/
 
