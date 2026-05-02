@@ -13,10 +13,15 @@ Esta investigación sostiene y pone a prueba una proposición principal: \textbf
 
 En términos operativos, se entiende por \emph{robustez} la capacidad de la red para conservar conectividad y accesibilidad después de perturbaciones, medida por la variación del tamaño del componente gigante, el número de componentes conexas y la eficiencia global ante fallos aleatorios y ataques dirigidos. El calificativo \emph{relativamente} no implica ausencia de vulnerabilidades; indica una comparación entre representaciones: el servicio en el Espacio $P$ se considera más robusto que la infraestructura en el Espacio $L$ si, bajo perturbaciones equivalentes, pierde una proporción menor de conectividad o eficiencia gracias a la redundancia entre rutas.
 
-% TODO [PDF p.9][ernes][cat: metodologia][prio: alta][resaltado: "Planteamiento del Problema"]: formular una o dos preguntas explícitas de investigación, por ejemplo sobre robustez ante fallos dirigidos y nodos críticos cuya eliminación fragmenta la red.
 \paragraph{Planteamiento del Problema}
 
 La red de transporte de la ZMG ha evolucionado de manera orgánica. Si bien existen esfuerzos de planificación, carecemos de evaluaciones cuantitativas públicas que analicen la robustez estructural de la red actual frente a fallos. Estudios previos, como el de Barraza y Estrada (2021), han sentado un precedente importante al aplicar teoría de grafos a redes teóricas u ortogonales en la región. Sin embargo, existe la necesidad de aplicar este marco analítico a la red operativa real y actual, desglosando sus propiedades en función de la infraestructura física frente a la oferta de servicio, y explorando métricas avanzadas de modularidad y resiliencia que no han sido abordadas en profundidad localmente.
+
+A partir de este problema, la investigación se organiza alrededor de dos preguntas:
+\begin{enumerate}
+    \item ¿Qué tan robustas son las representaciones $L$ y $P$ de la red de transporte público de la ZMG ante fallos aleatorios y ataques dirigidos, cuando la degradación se mide mediante conectividad, eficiencia global y tamaño del componente gigante?
+    \item ¿Qué nodos actúan como puntos críticos cuya eliminación fragmenta la red o reduce de manera desproporcionada la accesibilidad, y cómo cambia esa criticidad entre la infraestructura física y el servicio observado por los usuarios?
+\end{enumerate}
 
 \paragraph{Objetivos}
 
