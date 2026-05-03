@@ -1144,31 +1144,6 @@
             Si $d_\ell(u,v)=12$ y $d_{\mathrm{ext}}(u,v)=10$, entonces $DI(u,v)=1.2$.
         \end{ejemplo}
 
-        % --- Operadores y brecha espectral en redes dirigidas ---
-            \begin{definicion}[Operador de transición]
-            Sea $G$ un grafo dirigido finito tal que todo nodo tiene grado de salida positivo. Su \emph{operador de transición} es la matriz $P=(p_{ij})_{i,j\in V}$ dada por
-            \[
-            p_{ij}=\frac{a_{ij}}{\sum_k a_{ik}},
-            \]
-            donde $A=(a_{ij})$ es la matriz de adyacencia (o una versión ponderada coherente con $\ell$). La matriz $P$ es \emph{fila-estocástica}: sus entradas son no negativas y cada fila suma $1$.
-        \end{definicion}
-
-        \begin{definicion}[Brecha espectral para grafos dirigidos]
-            Si $P$ es irreducible y aperiódica, entonces su radio espectral es $1$ (Perron–Frobenius) y todos los autovalores satisfacen $|\lambda_1|=1>|\lambda_2|\ge\cdots$. Definimos la \textbf{brecha espectral} como
-            \[
-            \Delta(P)=1-\max_{i\ge 2}|\lambda_i(P)|.
-            \]
-        \end{definicion}
-
-        \begin{observacion}
-            En grafos no dirigidos (o cuando $P$ es reversible respecto de una medida), $P$ es diagonalizable con espectro real y la notación $\Delta=1-\lambda_2$ coincide con $1-\max_{i\ge 2}\lambda_i$. Si prefieres usar Laplaciano normalizado $L_{\mathrm{rw}}=I-P$ (o el simétrico), entonces la brecha suele expresarse como $\lambda_2(L_{\mathrm{rw}})$.
-        \end{observacion}
-
-        \begin{ejemplo}
-            Si $P$ tiene espectro $\{1,\,0.8,\,0.1,\dots\}$, entonces $\Delta(P)=1-0.8=0.2$.
-        \end{ejemplo}
-
-
         \subsection{Propiedades a nivel de nodo}
 
             Así como hemos estudiado propiedades que nos ayudan a describir un grafo de forma global, también queremos poder mirar a cada uno de sus nodos y ser capaces de decir cosas respecto a su lugar dentro del mismo. El análisis de propiedades a nivel de nodo nos permite identificar y cuantificar el papel de cada nodo dentro de la estructura del grafo. Mediante medidas locales, podemos distinguir nodos con características particulares, comparar su relevancia relativa y obtener una visión más detallada de la organización interna del grafo, incluso cuando el estudio global resulta insuficiente para captar las diferencias individuales.
