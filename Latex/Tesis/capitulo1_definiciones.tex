@@ -1692,67 +1692,85 @@
             \end{ejemplo}
 
 
-        \subsection{Modularidad y Método de Louvain}
+        \subsection{Modularidad y método de Louvain}
 
-            El objetivo principal de este método es \textit{cuantificar la calidad} de una división de red. La Modularidad ($Q$) actúa como una puntuación: un valor alto significa que las conexiones internas de los grupos son mucho más fuertes de lo que se esperaría si el grafo fuera puramente aleatorio.
-
-            La \textbf{modularidad} ($Q$) es una métrica que evalúa la calidad de una partición $\mathcal{C}$ de un grafo en comunidades. Un valor alto de $Q$ (máx. 1) indica que la densidad de enlaces \emph{dentro} de las comunidades es significativamente mayor que la densidad esperada bajo un modelo nulo que preserva los grados.
-
-            \begin{definicion}[Modularidad, $Q$]
-                Sea $G=(V,E)$ un grafo con pesos $A_{ij}$, grado ponderado $k_i = \sum_j A_{ij}$ y peso total $2m = \sum_i k_i$. Para cada comunidad $X \in \mathcal{C}$:
-                \begin{itemize}
-                    \item $\Sigma_{\mathrm{in}}(X)$: Peso total de las aristas \textbf{internas} de $X$.
-                    \item $\Sigma_{\mathrm{tot}}(X)$: Suma de los grados de todos los nodos en $X$.
-                \end{itemize}
-                La modularidad total se calcula como la suma sobre todas las comunidades:
+            \begin{definicion}[Partición]
+                Sea $V$ un conjunto finito no vacío. Una partición de $V$ es una familia $\mathcal{C}$ de subconjuntos no vacíos de $V$ tales que
                 \[
-                Q(\mathcal{C}) = \sum_{X \in \mathcal{C}} \left[ \frac{\Sigma_{\mathrm{in}}(X)}{2m} - \left( \frac{\Sigma_{\mathrm{tot}}(X)}{2m} \right)^2 \right]
+                    X\cap Y=\varnothing \quad \text{si } X,Y\in\mathcal{C} \text{ y } X\neq Y,
+                    \qquad
+                    \bigcup_{X\in\mathcal{C}}X=V.
+                \]
+                Los elementos de $\mathcal{C}$ se llaman comunidades.
+            \end{definicion}
+
+            La modularidad mide la calidad de una partición de nodos. Compara el peso observado dentro de cada comunidad con el peso que se esperaría al conservar solo los grados ponderados.
+
+            \begin{definicion}[Modularidad]
+                Sea $V$ un conjunto finito no vacío y sea $A=(A_{ij})_{i,j\in V}$ una matriz de pesos simétrica, con $A_{ij}\ge 0$ para todo $i,j\in V$. Supongamos que
+                \[
+                    2m=\sum_{i,j\in V}A_{ij}>0.
+                \]
+                Para cada $i\in V$, definimos su grado ponderado como
+                \[
+                    k_i=\sum_{j\in V}A_{ij}.
+                \]
+                Sea $\mathcal{C}$ una partición de $V$. Para cada $X\in\mathcal{C}$, definimos
+                \[
+                    \Sigma_{\mathrm{in}}(X)=\sum_{i,j\in X}A_{ij},
+                    \qquad
+                    \Sigma_{\mathrm{tot}}(X)=\sum_{i\in X}k_i.
+                \]
+                La modularidad de $\mathcal{C}$ es
+                \[
+                Q(\mathcal{C})=
+                \sum_{X\in\mathcal{C}}
+                \left[
+                    \frac{\Sigma_{\mathrm{in}}(X)}{2m}
+                    -
+                    \left(\frac{\Sigma_{\mathrm{tot}}(X)}{2m}\right)^2
+                \right].
                 \]
             \end{definicion}
 
-            El algoritmo de Louvain es un método \textit{codicioso}, lo que significa que en cada paso toma la mejor decisión local. La clave para que este método sea eficiente es que no necesita recalcular toda la modularidad ($Q$) en cada paso, sino solo el cambio marginal, $\Delta Q$.
+            \begin{observacion}
+                En la definición anterior, $\Sigma_{\mathrm{in}}(X)$ cuenta las aristas internas según la convención matricial: en una matriz simétrica sin entradas diagonales, cada arista interna no dirigida contribuye dos veces. La modularidad está acotada superiormente por $1$, pero el valor máximo alcanzable depende de la matriz de pesos y de las particiones consideradas.
+            \end{observacion}
 
-            El cambio en la modularidad, $\Delta Q$, que resulta de mover un nodo $i$ de su comunidad actual $R$ a una comunidad vecina $S$, es la base operacional del algoritmo.
-
-            \begin{proposicion}[Cambio de Modularidad $\Delta Q$]
-                El valor $\Delta Q(i: R \to S)$ se calcula \textbf{localmente} y de manera eficiente, $\mathcal{O}(\deg(i))$. Este valor es la diferencia entre la suma de las contribuciones de $R$ y $S$ después del movimiento y la suma de las contribuciones antes del movimiento.
-
-                Si $\Delta Q > 0$, el movimiento aumenta la calidad de la partición y es ejecutado.
-            \end{proposicion}
-
-            El método de Louvain procede en dos fases que se repiten en cascada. Es como si el algoritmo primero "ajustara los grupos" (Fase 1) y luego "encapsulara" esos grupos en bloques más grandes para seguir refinando la estructura (Fase 2).
-
-            \begin{definicion}[Método de Louvain]
-                Es un algoritmo heurístico iterativo de dos fases que busca maximizar $Q$:
-
-                \begin{enumerate}
-                    \item \textbf{Fase 1: Optimización Local (Movimiento de Nodos)}
-                    \begin{itemize}
-                        \item Se inicia con cada nodo como una comunidad individual.
-                        \item Los nodos se iteran: cada nodo $i$ se mueve a la comunidad vecina $S$ que produce la mayor ganancia $\Delta Q$ (solo si $\Delta Q > 0$).
-                        \item La fase concluye al alcanzar una estabilidad donde ningún movimiento de un solo nodo puede aumentar la $Q$ total.
-                    \end{itemize}
-
-                    \item \textbf{Fase 2: Agregación (Construcción de Supernodos)}
-                    \begin{itemize}
-                        \item Las comunidades encontradas en la Fase 1 se colapsan en \textbf{supernodos}.
-                        \item Se crea un nuevo grafo ponderado donde los nodos son las comunidades. El peso entre supernodos y el peso de los auto-bucles encapsulan la conectividad original.
-                    \end{itemize}
-                \end{enumerate}
-                El proceso \textbf{repite ambas fases} sobre el grafo agregado (que es más pequeño) hasta que no se produce ningún incremento en la modularidad, asegurando la convergencia.
+            \begin{definicion}[Cambio de modularidad]
+                Sea $\mathcal{C}$ una partición de $V$. Supongamos que $i\in R$, con $R\in\mathcal{C}$, y sea $S\in\mathcal{C}$ una comunidad distinta de $R$. Sea $\mathcal{C}'$ la partición obtenida al reemplazar $S$ por $S\cup\{i\}$ y $R$ por $R\setminus\{i\}$; si $R\setminus\{i\}=\varnothing$, ese conjunto se omite. El cambio de modularidad asociado a ese movimiento es
+                \[
+                    \Delta Q(i:R\to S)=Q(\mathcal{C}')-Q(\mathcal{C}).
+                \]
+                Cuando $\Delta Q(i:R\to S)>0$, el movimiento aumenta la modularidad.
             \end{definicion}
 
-            \begin{proposicion}[Propiedades Operacionales]
-                \begin{itemize}
-                    \item \textbf{Monotonía y Terminación:} El valor de $Q$ nunca decrece. La Fase 1 siempre aumenta $Q$, y la Fase 2 la preserva. Dado que $Q$ está acotada y el espacio de particiones es finito, el proceso converge a un máximo local en un número finito de iteraciones.
-                    \item \textbf{Costo:} La eficiencia es su característica definitoria. El costo computacional por "pasada" completa (Fase 1 + Fase 2) es $\tilde{\mathcal{O}}(|E|)$, lo que lo hace casi lineal en el número de aristas $|E|$ y altamente escalable.
-                \end{itemize}
-            \end{proposicion}
+            \begin{observacion}[Cálculo local]
+                Para evaluar $\Delta Q(i:R\to S)$ no es necesario recalcular todos los sumandos de $Q$. Solo cambian las contribuciones de $R$ y $S$; por tanto, el cálculo puede hacerse usando los pesos incidentes en $i$ y los totales ponderados de esas dos comunidades.
+            \end{observacion}
 
-            Finalmente, la modularidad puede extenderse a redes donde las interacciones no son simétricas, requiriendo solo una pequeña adaptación de los términos de grado en la fórmula nula.
+            \begin{definicion}[Método de Louvain]
+                Sea $A=(A_{ij})_{i,j\in V}$ una matriz de pesos simétrica no negativa con $\sum_{i,j\in V}A_{ij}>0$. El método de Louvain es un procedimiento heurístico que busca una partición con modularidad alta mediante dos fases iteradas:
 
-            \begin{observacion}[Grafos Dirigidos]
-                El método se puede aplicar a grafos dirigidos mediante la \textbf{simetrización} de pesos ($A^{\mathrm{sym}} = A + A^\top$) o, de manera más precisa, usando la \textbf{Modularidad Dirigida} (Leicht–Newman), que adapta el término nulo utilizando los grados de entrada ($k^{\mathrm{in}}$) y salida ($k^{\mathrm{out}}$) de los nodos.
+                \begin{enumerate}
+                    \item \textbf{Optimización local.} Se inicia con la partición $\mathcal{C}_0=\{\{i\}:i\in V\}$. Luego se consideran movimientos de un nodo $i$ hacia comunidades $S$ distintas de la comunidad actual de $i$ y para las cuales existe $j\in S$ con $A_{ij}>0$. Se acepta un movimiento si produce el mayor valor positivo de $\Delta Q$ entre las comunidades candidatas. Esta fase se repite hasta que ningún movimiento individual aumenta la modularidad.
+
+                    \item \textbf{Agregación.} Si la partición obtenida es $\mathcal{C}=\{X_1,\dots,X_r\}$, se construye una nueva matriz de pesos $B=(B_{\alpha\beta})_{\alpha,\beta=1}^r$ mediante
+                    \[
+                        B_{\alpha\beta}=\sum_{i\in X_\alpha}\sum_{j\in X_\beta}A_{ij}.
+                    \]
+                    La entrada $B_{\alpha\alpha}$ registra el peso interno de la comunidad $X_\alpha$ bajo la misma convención matricial usada en la definición de modularidad.
+                \end{enumerate}
+
+                El procedimiento aplica nuevamente estas dos fases a la matriz agregada y se detiene cuando la agregación ya no produce un aumento de modularidad.
+            \end{definicion}
+
+            \begin{observacion}[Alcance de Louvain]
+                En la fase de agregación pueden aparecer matrices de pesos con entradas diagonales no nulas. Esas entradas representan peso interno de comunidades agregadas y no cambian la convención básica de grafos simples usada al inicio del capítulo. Además, el método es heurístico: la partición final puede depender del orden de revisión de nodos y de la regla usada para resolver empates.
+            \end{observacion}
+
+            \begin{observacion}[Grafos dirigidos]
+                La definición de modularidad anterior usa una matriz simétrica. Para aplicar el mismo criterio a un grafo dirigido, una opción es construir primero una matriz simétrica de pesos, por ejemplo $A^{\mathrm{sym}}=A+A^\top$, y evaluar la modularidad sobre esa matriz. Otra opción es usar una fórmula distinta que conserve por separado los grados ponderados de entrada y de salida; en ese caso, la matriz y la fórmula nula deben especificarse explícitamente antes de calcular $Q$.
             \end{observacion}
 
 
