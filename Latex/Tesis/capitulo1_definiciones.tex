@@ -12,23 +12,21 @@
         Convención terminológica: en la tesis se usa \textbf{arista} como término general para una conexión entre nodos. Más adelante se introducirá el término \textbf{arco} para las conexiones con orientación.
 
         \begin{definicion}[Grafo]
-            Un \textbf{grafo}, en sentido amplio, es una terna $G=(V,E,\iota)$, donde $V$ es un conjunto no vacío de \textbf{nodos}, $E$ es un conjunto de \textbf{aristas} y
-            \[
-                \iota:E\to \{S\subseteq V:1\le |S|\le 2\}
-            \]
-            es una función de incidencia que asigna a cada arista el conjunto de sus extremos. Si $\iota(e)=\{u,v\}$ con $u\neq v$, decimos que $e$ incide en $u$ y en $v$; si $\iota(e)=\{v\}$, la arista tiene sus dos extremos en el mismo nodo. Dos aristas distintas pueden tener los mismos extremos, en cuyo caso se llaman aristas paralelas. Cuando la función de incidencia es clara por el contexto, escribiremos simplemente $G=(V,E)$.
+            Un \textbf{grafo} es una tupla $G=(V,E)$, donde $V$ es un conjunto no vacío de \textbf{nodos} y $E$ es un conjunto de pares formados por elementos de $V$. Los elementos de $V$ también se llaman \textbf{vértices}, y los elementos de $E$ se llaman \textbf{aristas}. Las dos posiciones del par de una arista indican sus \textbf{extremos}; se dice que la arista \textbf{incide} en cada nodo que aparece en esas posiciones.
+
+            Si los pares de $E$ son ordenados, es decir, si sus elementos tienen la forma $(u,v)$ con $u,v\in V$, el grafo se llama \textbf{dirigido}. Si los pares de $E$ no son ordenados, es decir, si sus elementos tienen la forma $\{u,v\}$ con $u,v\in V$, el grafo se llama \textbf{no dirigido}. En un grafo dirigido, una arista de la forma $(v,v)$ se llama \textbf{lazo}; en un grafo no dirigido, una arista de la forma $\{v,v\}$ se llama también \textbf{lazo}. Esta definición básica no permite distinguir dos aristas distintas con los mismos extremos; más adelante se introducirán variantes que relajan esta condición.
         \end{definicion}
 
         % TODO [PDF p.11][ernes][cat: rigor matematico][prio: media][resaltado: "A un grafo G"]: reescribir con tono formal; se sugirió "Equivalentemente, un grafo G puede denotarse como G(V) cuando se enfatiza el conjunto de vértices."
         A un grafo $G$ con conjunto de nodos $V$ también lo podemos definir como un grafo \textit{en} $V$ o simplemente $G(V)$.
 
         \begin{definicion}[Lazo]
-            Un \textbf{lazo} es una arista cuyos extremos coinciden. Con la notación anterior, esto ocurre cuando $\iota(e)=\{v\}$ para algún $v\in V$.
+            Un \textbf{lazo} es una arista cuyos dos extremos coinciden. En un grafo dirigido tiene la forma $(v,v)$; en un grafo no dirigido tiene la forma $\{v,v\}$.
         \end{definicion}
 
         \begin{definicion}[Adyacencia de nodos]
-            Sean $G=(V,E,\iota)$ un grafo y $u,v\in V$ dos nodos distintos.
-            Se dice que $u$ y $v$ son \textbf{adyacentes} si existe una arista $e\in E$ tal que $\iota(e)=\{u,v\}$.
+            Sean $G=(V,E)$ un grafo no dirigido y $u,v\in V$ dos nodos distintos.
+            Se dice que $u$ y $v$ son \textbf{adyacentes} si $\{u,v\}\in E$.
         \end{definicion}
 
         \begin{definicion}
