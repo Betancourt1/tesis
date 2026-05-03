@@ -172,7 +172,7 @@
                 \item \textbf{Clustering:} Coeficiente de clustering global \textbf{0.4085}, lo que evidencia alta redundancia de rutas que comparten paradas.
                 \item \textbf{Eficiencia y caminos:} Diámetro topológico \textbf{6} saltos y longitud promedio de camino \textbf{2.41} saltos (equivalentes a \textbf{hasta 5} y \textbf{1.41} transbordos, respectivamente, bajo la convención \textit{transbordos = saltos - 1}), con eficiencia global \textbf{0.4476} en el componente principal.
             \end{itemize}
-	    La densidad, casi dos órdenes de magnitud mayor que en el L-espacio, indica que la red de servicio ofrece muchas alternativas de conexión directa entre supernodos que comparten ruta. El clustering elevado refleja cliques de paradas por rutas compartidas, es decir, una redundancia operativa considerable.
+	    La densidad, casi dos órdenes de magnitud mayor que en el L-espacio, indica que la representación \(P\) contiene muchas conexiones potenciales entre supernodos que comparten ruta. El clustering elevado refleja cliques de paradas por rutas compartidas; por ello, esta densidad debe leerse como redundancia estructural del modelo de servicio, no como garantía directa de capacidad operativa real.
 
             Además, un diámetro topológico de 6 y una longitud promedio de camino de 2.41 muestran que cualquier supernodo está a pocos pasos de otro. En conjunto, estos valores son consistentes con la literatura que describe este tipo de redes como sistemas de \textit{mundo pequeño}.
 
@@ -186,7 +186,7 @@
                 \item \textbf{Supernodos 1138 y 2117} (zona poniente; $\sim 20.646^{\circ}$ N, $-103.406^{\circ}$ O). Dominan eigenvector y cercanía en el sector occidental, con rutas como C104, C108, C123 y C124.
                 \item Otros supernodos relevantes son \textbf{2033}, \textbf{288} y \textbf{2073} en el corredor central, así como \textbf{151} en el oriente, asociado con rutas como C105, C106 y C17.
             \end{itemize}
-            En conjunto, la centralidad revela una red de servicio fuertemente articulada alrededor del centro histórico y de varios corredores troncales, con una redundancia de rutas que ayuda a sostener la cercanía y la conectividad del sistema.
+            En conjunto, la centralidad revela una representación de servicio fuertemente articulada alrededor del centro histórico y de varios corredores troncales, con una redundancia de rutas que ayuda a sostener la cercanía y la conectividad dentro del modelo.
 
             La Figura~\ref{fig:centralidad_b_p_space} combina grado e intermediación para localizar los supernodos que concentran los transbordos más críticos del \(P\)-espacio.
 
@@ -229,6 +229,8 @@
         \subsection{Análisis de Robustez del P-espacio}
             Se aplicó el mismo esquema comparativo al P-espacio. En el ataque dirigido se eliminaron secuencialmente los \textbf{50 supernodos con mayor grado}; en los fallos aleatorios se removieron 50 supernodos siguiendo varias permutaciones aleatorias reproducibles. Tras cada eliminación se midieron el tamaño relativo del LCC y la eficiencia global no dirigida. Debido a la alta densidad del \(P\)-espacio, la eficiencia se estimó mediante muestreo de 32 fuentes por iteración; se usaron 10 repeticiones aleatorias con semilla base 42.
 
+            Estos resultados deben interpretarse como propiedades de la proyección \(P\). En esta representación, cada ruta genera una clique entre las paradas que atiende; por construcción, el grafo puede conservar conectividad aunque el sistema operativo real pierda frecuencia, capacidad, regularidad o continuidad física. Por tanto, la robustez reportada mide conectividad potencial sin transbordo dentro del modelo, no robustez operacional completa del servicio.
+
             La Figura~\ref{fig:robustez_p_space} muestra la pérdida de cobertura y eficiencia cuando fallan los supernodos de mayor grado y la compara con la trayectoria media de fallos aleatorios.
 
             \begin{figure}[h!]
@@ -240,23 +242,23 @@
 
             Los resultados muestran que:
             \begin{itemize}
-                \item El LCC se mantiene en \textbf{98.74\%} de su tamaño original tras eliminar los 50 supernodos más conectados, señal de alta redundancia en la red de servicio.
-                \item La eficiencia global desciende a \textbf{97.36\%}, una caída moderada que sugiere que existen suficientes rutas alternativas para conservar recorridos relativamente cortos aun cuando fallan los supernodos principales.
+                \item El LCC se mantiene en \textbf{98.74\%} de su tamaño original tras eliminar los 50 supernodos más conectados, señal de alta redundancia en la proyección \(P\).
+                \item La eficiencia global desciende a \textbf{97.36\%}, una caída moderada que indica que la red proyectada conserva muchas conexiones potenciales entre paradas que comparten rutas, aun cuando se eliminan supernodos principales.
                 \item Bajo fallos aleatorios, el LCC medio después de 50 remociones es \textbf{98.80\%} y la eficiencia media retenida es \textbf{96.93\%}. Las bandas empíricas 5--95\% son estrechas para el LCC (\textbf{98.78\%}--\textbf{98.81\%}) y moderadas para eficiencia (\textbf{95.38\%}--\textbf{99.39\%}).
             \end{itemize}
-            Comparativamente, el P-espacio es mucho más resiliente que el L-espacio: la pérdida de eficiencia es de apenas 2.64\% frente al 18.50\% observado en la infraestructura física. Esto se explica porque múltiples rutas comparten paradas y pueden sustituirse entre sí. Operativamente, el resultado sugiere que fallas en supernodos troncales se amortiguan si existen líneas paralelas o variantes, pero también que la redundancia descansa en el centro; un rediseño periférico podría mejorar la resistencia fuera del hipercentro.
+            Comparativamente, la proyección \(P\) retiene más eficiencia que el \(L\)-espacio bajo el experimento realizado: la pérdida de eficiencia es de apenas 2.64\% frente al 18.50\% observado en la infraestructura física. Esto se explica porque múltiples rutas comparten paradas y la proyección por cliques preserva muchas adyacencias de servicio. La lectura correcta es que el modelo \(P\) conserva conectividad y eficiencia bajo esta eliminación de supernodos; para afirmar robustez del servicio real harían falta datos de frecuencia, capacidad, espera, demanda y operación ante incidentes.
 
         \subsection{Conclusiones sobre el $P$-espacio}
-            Este modelo ofrece una perspectiva complementaria respecto al \(L\)-espacio. En términos generales, confirma que la red de servicio es densa, bien conectada y con rasgos de mundo pequeño. También muestra que, desde la experiencia del usuario, las zonas céntricas son todavía más determinantes que en la lectura puramente infraestructural.
+            Este modelo ofrece una perspectiva complementaria respecto al \(L\)-espacio. En términos generales, confirma que la proyección de servicio es densa, bien conectada y con rasgos de mundo pequeño. También muestra que, bajo la hipótesis de conectividad por rutas compartidas, las zonas céntricas son todavía más determinantes que en la lectura puramente infraestructural.
 
-            Asimismo, el \(P\)-espacio resulta resiliente ante cortes de servicio en supernodos de alto grado: la cobertura y la eficiencia se degradan de forma moderada, lo que sugiere alta redundancia de rutas y disponibilidad de alternativas para los usuarios.
+            Asimismo, el \(P\)-espacio conserva cobertura y eficiencia ante la eliminación de supernodos de alto grado en el modelo. Este resultado sugiere redundancia estructural entre rutas, pero no debe confundirse con una garantía de disponibilidad efectiva para los usuarios ante fallas reales.
 
     \section{Síntesis comparativa y validación del modelo}
 
         \subsection{Discusión Comparativa}
-            El ataque dirigido por grado es significativamente más dañino en el L-espacio que en el P-espacio. Mientras que en la infraestructura física la eficiencia cae cerca de 18.50\% al perder 50 supernodos de mayor grado, en la red de servicio la pérdida es de apenas 2.64\%. Esta comparación usa la misma métrica de eficiencia relativa al estado inicial en ambos grafos y se complementa con las simulaciones aleatorias como línea base de perturbaciones no dirigidas.
+            El ataque dirigido por grado es significativamente más dañino en el L-espacio que en el P-espacio. Mientras que en la infraestructura física la eficiencia cae cerca de 18.50\% al perder 50 supernodos de mayor grado, en la proyección de servicio la pérdida es de apenas 2.64\%. Esta comparación usa la misma métrica de eficiencia relativa al estado inicial en ambos grafos y se complementa con las simulaciones aleatorias como línea base de perturbaciones no dirigidas.
 
-            Lo anterior confirma que la conectividad basada en compartir rutas es más resiliente por la existencia de múltiples combinaciones de servicio entre las paradas, aun si la infraestructura depende fuertemente de unos pocos nodos de alta interconexión.
+            Lo anterior confirma que la conectividad modelada por rutas compartidas es más resiliente dentro de la proyección \(P\), aun si la infraestructura depende fuertemente de unos pocos nodos de alta interconexión. Esta conclusión es topológica y no sustituye una evaluación operacional con flujos, frecuencias y tiempos de espera.
 	
         \subsection{Sensibilidad de Supuestos de Modelado}
             Para evaluar la estabilidad de los resultados, se ejecutó un análisis de sensibilidad con cuatro umbrales de consolidación espacial (\(75\), \(100\), \(125\) y \(150\) metros) y dos variantes para construir el \(P\)-espacio: clique por \texttt{route\_id} (modelo principal de la tesis) y clique por \texttt{trip\_id} (escenario conservador).

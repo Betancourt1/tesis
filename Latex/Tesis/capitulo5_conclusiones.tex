@@ -1,6 +1,6 @@
 \chapter{Conclusiones}
 
-La presente investigación ha logrado modelar matemáticamente el sistema de transporte de la Zona Metropolitana de Guadalajara (ZMG) mediante una aproximación dual, diferenciando entre la infraestructura física (Espacio $L$) y la red de servicio (Espacio $P$). Este enfoque permitió evaluar una proposición principal única: \textbf{la ZMG combina una base física sensible a fallas con un servicio relativamente robusto, efecto explicado por la redundancia entre rutas.}
+La presente investigación ha logrado modelar matemáticamente el sistema de transporte de la Zona Metropolitana de Guadalajara (ZMG) mediante una aproximación dual, diferenciando entre la infraestructura física (Espacio $L$) y la red de servicio proyectada (Espacio $P$). Este enfoque permitió evaluar una proposición principal única: \textbf{la ZMG combina una base física sensible a fallas con una representación de servicio relativamente robusta bajo el modelo \(P\), efecto explicado por la redundancia entre rutas.}
 
 \section{Síntesis de Hallazgos y Verificación de la Tesis Central}
 
@@ -9,9 +9,9 @@ El análisis topológico realizado arroja tres conclusiones principales que cara
 \begin{enumerate}
     \item \textbf{Topología del Espacio $L$ (Infraestructura):} El análisis confirma que la infraestructura subyacente posee una estructura cuasi-arbórea (con un coeficiente de clustering bajo, \(\approx 0.1088\)) y una conectividad frágil. Matemáticamente, la red depende críticamente de nodos articuladores centrales y corredores específicos. La baja redundancia de ciclos en este espacio implica que la infraestructura física carece de plasticidad ante fallos locales, resultando en una degradación rápida de la eficiencia global, de aproximadamente \(18.50\%\), ante ataques dirigidos a los nodos de mayor centralidad. En contraste, los fallos aleatorios retienen en promedio \(97.17\%\) de la eficiencia tras 50 remociones, por lo que la fragilidad principal se asocia a nodos estructuralmente críticos y no a cualquier pérdida puntual.
 
-    \item \textbf{Topología del Espacio $P$ (Servicio):} En contraste, la proyección al Espacio $P$ revela una red de Mundo Pequeño (con un diámetro $D=6$) y una alta densidad de \textit{cliques} locales. Esta estructura mitiga las deficiencias del Espacio $L$: la superposición de múltiples rutas sobre los mismos tramos físicos genera una redundancia funcional que mantiene la conectividad del componente gigante al 98.74\% incluso tras la remoción de los 50 supernodos más importantes.
+    \item \textbf{Topología del Espacio $P$ (Servicio):} En contraste, la proyección al Espacio $P$ revela una red de Mundo Pequeño (con un diámetro $D=6$) y una alta densidad de \textit{cliques} locales. Esta estructura mitiga las deficiencias del Espacio $L$ dentro del modelo: la superposición de múltiples rutas sobre los mismos tramos físicos genera redundancia estructural que mantiene la conectividad del componente gigante al 98.74\% incluso tras la remoción de los 50 supernodos más importantes.
 
-    \item \textbf{Verificación de la Tesis Central:} Existe una clara desconexión entre la eficiencia topológica de la infraestructura (baja) y la del servicio (alta). En consecuencia, la evidencia respalda la proposición central del trabajo: \textbf{la ZMG combina una base física sensible a fallas con un servicio relativamente robusto, efecto explicado por la redundancia entre rutas.}
+    \item \textbf{Verificación de la Tesis Central:} Existe una clara desconexión entre la eficiencia topológica de la infraestructura (baja) y la de la proyección de servicio (alta). En consecuencia, la evidencia respalda la proposición central del trabajo en el marco modelado: \textbf{la ZMG combina una base física sensible a fallas con una representación de servicio relativamente robusta bajo el modelo \(P\), efecto explicado por la redundancia entre rutas.}
 \end{enumerate}
 
 \section{Respuestas a las Preguntas de Investigación}
@@ -20,10 +20,10 @@ Retomando las interrogantes planteadas en el Capítulo 1, los modelos construido
 
 \begin{description}
     \item[¿Cómo está tejida la red?]
-    La red presenta una naturaleza dual. En su nivel físico (tejido de infraestructura), es una red dispersa y jerárquica, dependiente de pocas arterias principales. Sin embargo, en su nivel funcional (tejido de servicio), se comporta como una red compleja de mundo pequeño, facilitando el flujo rápido entre nodos distantes gracias a la integración de rutas, aunque a un costo elevado de redundancia.
+    La red presenta una naturaleza dual. En su nivel físico (tejido de infraestructura), es una red dispersa y jerárquica, dependiente de pocas arterias principales. Sin embargo, en su nivel funcional modelado (tejido de servicio proyectado), se comporta como una red compleja de mundo pequeño, facilitando conexiones topológicas entre nodos distantes gracias a la integración de rutas, aunque a un costo elevado de redundancia.
 
     \item[¿Existen puntos críticos cuya falla colapsaría el servicio?]
-    Sí. El análisis de robustez distinguió entre fallos aleatorios y ataques dirigidos. La degradación más severa aparece cuando se remueven supernodos de alta conectividad, especialmente en la infraestructura física (Espacio $L$). Puntos como el Centro Histórico y corredores como Mariano Otero actúan como articuladores sistémicos; su falla no solo desconecta vecindarios locales, sino que fragmenta la red globalmente, validando la hipótesis de vulnerabilidad estructural.
+    Sí existen puntos críticos en el modelo, aunque el alcance de la conclusión depende de la representación. El análisis de robustez distinguió entre fallos aleatorios y ataques dirigidos. La degradación más severa aparece cuando se remueven supernodos de alta conectividad, especialmente en la infraestructura física (Espacio $L$). En el Espacio $P$, la eliminación de esos nodos no produce colapso global de la proyección, pero este resultado describe conectividad potencial por rutas compartidas, no continuidad operacional completa.
 
     \item[¿Se agrupan los supernodos en comunidades funcionales?]
     La detección de comunidades en el Espacio $P$ sugiere que la organización funcional del transporte obedece más a corredores de movilidad y zonas de atracción económica que a divisiones administrativas municipales estrictas. Los \textit{cliques} locales observados indican zonas de alta integración interna, pero conectadas laxamente entre sí por las rutas troncales.
@@ -44,15 +44,15 @@ La Tabla~\ref{tab:trazabilidad_preguntas} resume la trazabilidad entre preguntas
         \midrule
         ¿Cómo está tejida la red? &
         L-espacio: densidad $0.000486$, clustering $0.1088$, diámetro $77$. P-espacio: densidad $0.0436$, clustering $0.4085$, diámetro $6$, camino medio $2.41$. &
-        Estructura dual: infraestructura dispersa y frágil frente a servicio denso y de mundo pequeño. &
+        Estructura dual: infraestructura dispersa y frágil frente a proyección de servicio densa y de mundo pequeño. &
         La experiencia de conectividad del usuario depende de la superposición de rutas más que de la malla física. &
         El modelo es estático (GTFS programado) y no incorpora variación temporal intradía de la oferta. \\
         \midrule
         ¿Existen puntos críticos cuya falla colapsaría el servicio? &
         Ataque dirigido (50 supernodos de mayor grado), contrastado con fallos aleatorios como línea base. L-espacio: ataque dirigido LCC $97.45\%$, eficiencia $81.50\%$; fallos aleatorios LCC medio $98.23\%$, eficiencia media $97.17\%$. P-espacio: ataque dirigido LCC $98.74\%$, eficiencia $97.36\%$; fallos aleatorios LCC medio $98.80\%$, eficiencia media $96.93\%$. &
-        La criticidad es alta en infraestructura y moderada en servicio; el sistema no colapsa globalmente en $P$, pero sí se degrada en $L$. &
+        La criticidad es alta en infraestructura y moderada en la proyección $P$; el modelo no colapsa globalmente en $P$, pero sí se degrada en $L$. &
         Conviene priorizar protección y refuerzo de hubs estructurales (p. ej., centro y corredores articuladores). &
-        No se modelan fallos en cascada ni redistribución dinámica de flujo ante interrupciones. \\
+        El $P$-espacio por cliques mide conectividad potencial; no se modelan fallos en cascada, frecuencias ni redistribución dinámica de flujo ante interrupciones. \\
         \midrule
         ¿Se agrupan los supernodos en comunidades funcionales? &
         Louvain: 40 comunidades en L-espacio; 11 en P-espacio (modularidad $0.54$), con 67\% de supernodos en las cinco mayores. &
@@ -72,7 +72,7 @@ A pesar de la robustez del análisis topológico estático presentado, la abstra
 \subsection{De Grafos Estáticos a Grafos Temporales ($G_t$)}
 Este trabajo modeló la red como una instantánea estática basada en la programación GTFS. Una extensión natural es la modelación mediante \textbf{grafos temporales} o redes variantes en el tiempo, donde las aristas $E(t)$ existen solo si hay un servicio activo en el instante $t$.
 \begin{itemize}
-    \item \textbf{Investigación Propuesta:} Analizar la fluctuación de la \textit{Eficiencia Global} $Ef(t)$ a lo largo del día para detectar infartos topológicos en horas valle, donde la redundancia del Espacio $P$ desaparece y la red regresa a la fragilidad inherente del Espacio $L$.
+    \item \textbf{Investigación Propuesta:} Analizar la fluctuación de la \textit{Eficiencia Global} $Ef(t)$ a lo largo del día para detectar pérdidas de conectividad funcional en horas valle, donde la redundancia representada en el Espacio $P$ podría reducirse y acercar la operación efectiva a la fragilidad del Espacio $L$.
 \end{itemize}
 
 \subsection{Análisis Espectral de Grafos}
