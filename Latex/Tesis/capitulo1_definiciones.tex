@@ -872,11 +872,11 @@
             \end{corolario}
 
             \begin{observacion}[Versión lineal-algebraica]
-                Si $B$ es la matriz de incidencia de $G$ sobre $\mathbb{R}$ o $\mathbb{F}_2$, entonces $\operatorname{rank}(B)=n-p$ y
+                Sea $G_c=G$ si $G$ es no dirigido y $G_c=U(G)$ si $G$ es dirigido. Escribamos $G_c=(V,E_c)$, $m_c=|E_c|$ y sea $p$ el número de componentes conexas de $G_c$. Si $B_c$ es una matriz de incidencia de $G_c$ sobre $\mathbb{R}$ o $\mathbb{F}_2$, entonces $\operatorname{rank}(B_c)=n-p$ y
                 \[
-                \dim \ker(B)=m-(n-p)=m-n+p,
+                \dim \ker(B_c)=m_c-(n-p)=m_c-n+p,
                 \]
-                lo que coincide con la dimensión del espacio de ciclos.
+                lo que coincide con la dimensión del espacio de ciclos definido sobre el grafo no dirigido correspondiente.
             \end{observacion}
 
             \begin{definicion}[Triángulo]
