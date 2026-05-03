@@ -896,11 +896,14 @@
             \end{definicion}
             
             \begin{definicion}[Coeficiente de agrupamiento global (transitividad)]
-                En un grafo simple no dirigido, llamamos \emph{triple conectado} a una terna $(x,y,z)$ de vértices distintos tal que $x$ y $z$ son vecinos de $y$. Denotamos por $N_\triangle$ el número de triángulos del grafo y por $N_\wedge$ el número de triples conectados. Definimos la \textbf{transitividad} (coeficiente de agrupamiento global) como
+                Sea $G=(V,E)$ un grafo simple no dirigido. Un \emph{triple conectado} es una elección de un nodo central $y\in V$ y un par no ordenado $\{x,z\}$ de vecinos distintos de $y$. Denotamos por $N_\wedge$ el número de triples conectados y por $N_\triangle$ el número de triángulos de $G$.
+
+                Si $N_\wedge>0$, definimos la \textbf{transitividad} o \textbf{coeficiente de agrupamiento global} como
                 \[
                 C_{\mathrm{glob}}\;=\;\frac{3\,N_\triangle}{N_\wedge}\,,
                 \]
                 donde el factor $3$ compensa que cada triángulo contiene exactamente tres triples conectados.
+                Si $N_\wedge=0$, definimos $C_{\mathrm{glob}}=0$.
             \end{definicion}
             
             \begin{definicion}[Coeficiente de agrupamiento promedio]
