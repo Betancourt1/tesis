@@ -25,8 +25,9 @@
             Sea $G=(V,E)$ un grafo. Se dice que $G$ es \textbf{no dirigido} si, para toda arista $e\in E$, existen $u,v\in V$ tales que $e=\{u,v\}$. En este caso, las aristas son pares no ordenados y se cumple $\{u,v\}=\{v,u\}$.
         \end{definicion}
 
-        % TODO [PDF p.11][ernes][cat: rigor matematico][prio: media][resaltado: "A un grafo G"]: reescribir con tono formal; se sugirió "Equivalentemente, un grafo G puede denotarse como G(V) cuando se enfatiza el conjunto de vértices."
-        A un grafo $G$ con conjunto de nodos $V$ también lo podemos definir como un grafo \textit{en} $V$ o simplemente $G(V)$.
+        \begin{observacion}[Convención de notación]
+            Sea $G=(V,E)$ un grafo. Cuando se quiera enfatizar que $V$ es el conjunto de nodos de $G$, se dirá que $G$ es un grafo sobre $V$ y, de manera abreviada, se escribirá $G(V)$. La notación $G(V)$ no define un grafo distinto de $G$; solo explicita el conjunto de nodos considerado.
+        \end{observacion}
 
         \begin{definicion}[Lazo]
             Sea $G=(V,E)$ un grafo dirigido o no dirigido. Un \textbf{lazo} es una arista cuyos dos extremos coinciden. En un grafo dirigido tiene la forma $(v,v)$ para algún $v\in V$; en un grafo no dirigido tiene la forma $\{v,v\}$ para algún $v\in V$.
