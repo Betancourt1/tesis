@@ -1371,16 +1371,6 @@
                 En $P_4$ no dirigido con vértices $1$–$4$, $Ef(G)$ se obtiene sumando $1/d(i,j)$ sobre $i\neq j$ y normalizando por $12$. Al eliminar $v=2$ el grafo se parte, varias contribuciones pasan a $0$, y $Ef(G\setminus\{2\})<Ef(G)$; así $V_v>0$. El mismo procedimiento se aplica en grafos dirigidos con distancias dirigidas.
             \end{ejemplo}
 
-    % TODO [PDF p.29][Fernando Becerra][cat: estructura][prio: media][nota flotante sobre: "Convenciones para esta tesis"]: revisar si este bloque pertenece aquí o si conviene moverlo a metodología/construcción.
-    \section{Convenciones para esta tesis}
-        Para vincular las definiciones anteriores con los cálculos empíricos de esta investigación, fijamos las siguientes convenciones de modelado:
-        \begin{itemize}
-            \item \textbf{L-space.} Se trabaja con un grafo dirigido y ponderado. Para distancias, cercanía e intermediación se usa como costo el tiempo de viaje; para grado ponderado y detección de comunidades se usa el número de servicios compartidos por arista.
-            \item \textbf{P-space.} Se trabaja con un grafo no dirigido en el que las centralidades principales se calculan sobre la topología de conectividad (sin ponderación de tiempo de viaje).
-            \item \textbf{Comunidades.} Para aplicar Louvain sobre L-space, se utiliza la proyección no dirigida del grafo, preservando los pesos de conectividad entre nodos.
-        \end{itemize}
-        Estas decisiones aseguran consistencia entre el marco teórico (distancias, centralidades y modularidad) y la implementación computacional reportada en los capítulos de construcción y resultados.
-
     \section{Algoritmo de Dijkstra para caminos mínimos}
         Al estudiar distancias y caminos mínimos en grafos finitos, necesitamos procedimientos efectivos que, a partir de especificaciones bien definidas, produzcan soluciones correctas en tiempo finito y con garantías de optimalidad. En esta línea se sitúa el algoritmo de Dijkstra (formulado en 1956 y publicado en 1959), que resuelve caminos mínimos desde una fuente única con pesos no negativos mediante relajación y selección iterativa del vértice con etiqueta mínima. En el análisis posterior, este algoritmo permite calcular distancias mínimas cuando los pesos representan tiempos de viaje o cuando todas las aristas tienen peso $1$; esas distancias se usan en matrices de distancias, centralidades basadas en caminos mínimos y eficiencia global. En lo que sigue fijamos hipótesis, enunciamos invariantes, demostramos corrección y acotamos la complejidad temporal y espacial del método.
 
