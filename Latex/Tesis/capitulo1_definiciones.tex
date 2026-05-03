@@ -66,23 +66,23 @@
         \end{ejemplo}
         Más adelante veremos que es posible medir distintas propiedades de un grafo, ya sea en su totalidad o en cada una de sus partes, pero una primera noción en ese sentido es la de \textit{grado de un nodo} que además nos ayudará a demostrar varios resultados importantes más adelante.
         \begin{definicion}[Grado de un nodo]
-            % TODO [PDF p.12][Fernando Becerra][cat: estructura][prio: media][nota flotante sobre: "El grado de un nodo v... Para grafos dirigidos..."]: revisar la anticipación de grafos dirigidos dentro de esta definición.
-            El \textbf{grado} de un nodo $v$, denotado $deg(v)$, es el número de aristas que inciden en él (los lazos se cuentan dos veces). Para grafos dirigidos, el grado total se descompone en \textbf{grado de entrada} (\emph{indegree}, $deg^{-}(v)$), que es el número de aristas que terminan en $v$, y \textbf{grado de salida} (\emph{outdegree}, $deg^{+}(v)$), que es el número de aristas que comienzan en $v$. En este caso, el grado total es $deg(v) = deg^{-}(v) + deg^{+}(v)$.
+            El \textbf{grado} de un nodo $v$, denotado $\deg(v)$, es el número de aristas que inciden en él. Si una arista es un lazo en $v$, se cuenta dos veces.
             Este valor refleja la importancia local del nodo como punto de transferencia.
         \end{definicion}
 
         \begin{ejemplo}
-            En el siguiente grafo, el nodo $A$ tiene dos aristas entrantes y una saliente, por lo que $deg^{-}(A) = 2$, $deg^{+}(A) = 1$ y $deg(A) = 3$.
+            En el siguiente grafo, el nodo $A$ incide en tres aristas, por lo que $\deg(A)=3$.
 
             \begin{center}
                 \begin{tikzpicture}[scale=1.1]
                     \node[nodo] (A) at (0,0) [label={[etiqueta_nodo]left:A}] {};
                     \node[nodo] (B) at (2,0) [label={[etiqueta_nodo]right:B}] {};
                     \node[nodo] (C) at (1,1.5) [label={[etiqueta_nodo]above:C}] {};
+                    \node[nodo] (D) at (1,-1.5) [label={[etiqueta_nodo]below:D}] {};
 
-                    \draw[flecha] (B) -- (A);
-                    \draw[flecha] (C) -- (A);
-                    \draw[flecha] (A) -- (B);
+                    \draw[arista] (A) -- (B);
+                    \draw[arista] (A) -- (C);
+                    \draw[arista] (A) -- (D);
                 \end{tikzpicture}
             \end{center}
         \end{ejemplo}
@@ -140,6 +140,13 @@
                 \end{tikzpicture}
             \end{center}
         \end{ejemplo}
+
+        \begin{observacion}[Grado en grafos dirigidos]
+            En un grafo dirigido, el grado total de un nodo $v$ se descompone en \textbf{grado de entrada}, denotado $\deg^{-}(v)$, que cuenta las aristas que terminan en $v$, y \textbf{grado de salida}, denotado $\deg^{+}(v)$, que cuenta las aristas que comienzan en $v$. En este caso,
+            \[
+                \deg(v)=\deg^{-}(v)+\deg^{+}(v).
+            \]
+        \end{observacion}
 
         \begin{definicion}[Grafo planar]
             Un grafo es \textbf{planar} si admite una representación (llamada \emph{dibujo planar}) en el plano tal que ninguna de sus aristas se cruza con otra, salvo en los nodos que comparten.
