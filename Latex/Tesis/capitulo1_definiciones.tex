@@ -1493,7 +1493,7 @@
                 \end{itemize}
 
                 \paragraph{Caso 1: cola de prioridad binaria.}
-                Para un montículo binario, $\mathsf{INS}=O(1)$ amortizado (o $O(\log n)$ si se prefiere insertar con decrecimiento de clave), $\mathsf{EM}=O(\log n)$ y $\mathsf{DK}=O(\log n)$. Por lo tanto,
+                Para un montículo binario, una inserción individual cuesta $\mathsf{INS}=O(\log n)$; alternativamente, el montículo inicial puede construirse en $O(n)$ mediante \emph{heapify}. Además, $\mathsf{EM}=O(\log n)$ y $\mathsf{DK}=O(\log n)$. Por lo tanto,
                 \[
                 T(n,m)\;=\;O(n)\;+\;n\cdot O(\log n)\;+\;m\cdot O(\log n)\;=\;O\big((n+m)\log n\big).
                 \]
