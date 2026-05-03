@@ -594,9 +594,16 @@
                 Un \textbf{árbol} es un grafo no dirigido, conexo y acíclico.
             \end{definicion}
 
+            \begin{definicion}[Árbol con raíz]
+                Sea $T=(V,E)$ un árbol y sea $r\in V$. Un \textbf{árbol con raíz $r$} es el par $(T,r)$; al nodo $r$ se le llama \textbf{raíz}. La raíz no está determinada por $T$: cualquier nodo de $V$ puede elegirse como raíz. Una vez elegida la raíz $r$, el \textbf{nivel} de un nodo $v\in V$ es la distancia $d(r,v)$.
+            \end{definicion}
+
+            \begin{definicion}[Arborescencia]
+                Sea $D=(V,E)$ un grafo dirigido y sea $r\in V$. Se dice que $D$ es una \textbf{arborescencia de salida} con raíz $r$ si, al reemplazar cada arista dirigida $(u,v)\in E$ por la arista no dirigida $\{u,v\}$, se obtiene un árbol con raíz $r$, y además toda arista dirigida $(u,v)\in E$ satisface $d(r,v)=d(r,u)+1$ en ese árbol. Se dice que $D$ es una \textbf{arborescencia de entrada} con raíz $r$ si, con el mismo árbol no dirigido asociado, toda arista dirigida $(u,v)\in E$ satisface $d(r,u)=d(r,v)+1$.
+            \end{definicion}
+
             \begin{ejemplo}[Árbol]
-                % TODO [PDF p.18][Fernando Becerra][cat: rigor matematico][prio: media][nota flotante sobre: "árbol con raíz en v_1"]: aclarar qué significa raíz, si es única y cómo depende del caso dirigido o no dirigido.
-                El siguiente grafo muestra un árbol con raíz en $v_1$:
+                El siguiente grafo muestra un árbol con raíz $v_1$:
 
                 \begin{center}
                 \begin{tikzpicture}[scale=1.3]
@@ -630,7 +637,7 @@
 
             \begin{observacion}[Caso dirigido y arborescencias]
                 En grafos dirigidos se mantiene la definición anterior vía el subyacente no dirigido.
-                Cuando el grafo dirigido es un árbol enraizado (arborescencia):
+                Cuando el grafo dirigido es una arborescencia:
                 \begin{itemize}
                   \item en una arborescencia \emph{de salida} con raíz $r$, se llama hojas a los $v\neq r$ con $\deg^{+}(v)=0$;
                   \item en una arborescencia \emph{de entrada} con raíz $r$, se llama hojas a los $v\neq r$ con $\deg^{-}(v)=0$.
