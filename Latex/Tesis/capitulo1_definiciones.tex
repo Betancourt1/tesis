@@ -598,10 +598,6 @@
                 Sea $T=(V,E)$ un árbol y sea $r\in V$. Un \textbf{árbol con raíz $r$} es el par $(T,r)$; al nodo $r$ se le llama \textbf{raíz}. La raíz no está determinada por $T$: cualquier nodo de $V$ puede elegirse como raíz. Una vez elegida la raíz $r$, el \textbf{nivel} de un nodo $v\in V$ es la distancia $d(r,v)$.
             \end{definicion}
 
-            \begin{definicion}[Arborescencia]
-                Sea $D=(V,E)$ un grafo dirigido y sea $r\in V$. Se dice que $D$ es una \textbf{arborescencia de salida} con raíz $r$ si, al reemplazar cada arista dirigida $(u,v)\in E$ por la arista no dirigida $\{u,v\}$, se obtiene un árbol con raíz $r$, y además toda arista dirigida $(u,v)\in E$ satisface $d(r,v)=d(r,u)+1$ en ese árbol. Se dice que $D$ es una \textbf{arborescencia de entrada} con raíz $r$ si, con el mismo árbol no dirigido asociado, toda arista dirigida $(u,v)\in E$ satisface $d(r,u)=d(r,v)+1$.
-            \end{definicion}
-
             \begin{ejemplo}[Árbol]
                 El siguiente grafo muestra un árbol con raíz $v_1$:
 
@@ -625,6 +621,56 @@
                 \end{center}
 
                 Tomando $v_1$ como raíz para leer el dibujo, las aristas organizan los nodos en niveles: $v_2$ y $v_3$ quedan a distancia uno, mientras que $v_4$, $v_5$ y $v_6$ quedan a distancia dos.
+            \end{ejemplo}
+
+            \begin{definicion}[Arborescencia]
+                Sea $D=(V,E)$ un grafo dirigido y sea $r\in V$. Se dice que $D$ es una \textbf{arborescencia de salida} con raíz $r$ si, al reemplazar cada arista dirigida $(u,v)\in E$ por la arista no dirigida $\{u,v\}$, se obtiene un árbol con raíz $r$, y además toda arista dirigida $(u,v)\in E$ satisface $d(r,v)=d(r,u)+1$ en ese árbol. Se dice que $D$ es una \textbf{arborescencia de entrada} con raíz $r$ si, con el mismo árbol no dirigido asociado, toda arista dirigida $(u,v)\in E$ satisface $d(r,u)=d(r,v)+1$.
+            \end{definicion}
+
+            \begin{ejemplo}[Arborescencias]
+                En las dos ilustraciones se usa la raíz $v_1$. En la arborescencia de salida, cada arista dirigida apunta desde un nodo hacia otro de nivel mayor. En la arborescencia de entrada, cada arista dirigida apunta desde un nodo hacia otro de nivel menor.
+
+                \begin{center}
+                    \begin{minipage}{0.45\textwidth}
+                    \centering
+                    \textbf{Arborescencia de salida}
+
+                    \begin{tikzpicture}[scale=1.05]
+                        \node[nodo_resaltado] (v1) at (0,0) [label={[etiqueta_nodo]above:$v_1$}] {};
+                        \node[nodo] (v2) at (-1,-1) [label={[etiqueta_nodo]left:$v_2$}] {};
+                        \node[nodo] (v3) at (1,-1) [label={[etiqueta_nodo]right:$v_3$}] {};
+                        \node[nodo] (v4) at (-1.5,-2) [label={[etiqueta_nodo]left:$v_4$}] {};
+                        \node[nodo] (v5) at (-0.5,-2) [label={[etiqueta_nodo]right:$v_5$}] {};
+                        \node[nodo] (v6) at (1,-2) [label={[etiqueta_nodo]right:$v_6$}] {};
+
+                        \draw[flecha] (v1) -- (v2);
+                        \draw[flecha] (v1) -- (v3);
+                        \draw[flecha] (v2) -- (v4);
+                        \draw[flecha] (v2) -- (v5);
+                        \draw[flecha] (v3) -- (v6);
+                    \end{tikzpicture}
+                    \end{minipage}
+                    \hfill
+                    \begin{minipage}{0.45\textwidth}
+                    \centering
+                    \textbf{Arborescencia de entrada}
+
+                    \begin{tikzpicture}[scale=1.05]
+                        \node[nodo_resaltado] (v1) at (0,0) [label={[etiqueta_nodo]above:$v_1$}] {};
+                        \node[nodo] (v2) at (-1,-1) [label={[etiqueta_nodo]left:$v_2$}] {};
+                        \node[nodo] (v3) at (1,-1) [label={[etiqueta_nodo]right:$v_3$}] {};
+                        \node[nodo] (v4) at (-1.5,-2) [label={[etiqueta_nodo]left:$v_4$}] {};
+                        \node[nodo] (v5) at (-0.5,-2) [label={[etiqueta_nodo]right:$v_5$}] {};
+                        \node[nodo] (v6) at (1,-2) [label={[etiqueta_nodo]right:$v_6$}] {};
+
+                        \draw[flecha] (v2) -- (v1);
+                        \draw[flecha] (v3) -- (v1);
+                        \draw[flecha] (v4) -- (v2);
+                        \draw[flecha] (v5) -- (v2);
+                        \draw[flecha] (v6) -- (v3);
+                    \end{tikzpicture}
+                    \end{minipage}
+                \end{center}
             \end{ejemplo}
 
             \begin{definicion}[Hoja]
