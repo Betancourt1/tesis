@@ -1,0 +1,470 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{positioning,calc}
+\renewcommand\tabularxcolumn[1]{>{\raggedright\arraybackslash}p{#1}}
+
+\definecolor{ink}{HTML}{111111}
+\definecolor{graphite}{HTML}{333333}
+\definecolor{midgray}{HTML}{777777}
+\definecolor{linegray}{HTML}{C9C9C9}
+\definecolor{softgray}{HTML}{F2F2F2}
+
+\usetheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\textendash}
+\setbeamertemplate{itemize subitem}{\textendash}
+\setbeamertemplate{enumerate item}{\insertenumlabel.}
+\setbeamercolor{normal text}{fg=ink,bg=white}
+\setbeamercolor{frametitle}{fg=ink,bg=white}
+\setbeamercolor{title}{fg=ink,bg=white}
+\setbeamercolor{subtitle}{fg=graphite,bg=white}
+\setbeamercolor{structure}{fg=ink}
+\setbeamerfont{title}{series=\bfseries,size=\Large}
+\setbeamerfont{subtitle}{size=\normalsize}
+\setbeamerfont{author}{size=\small}
+\setbeamerfont{institute}{size=\small}
+\setbeamerfont{date}{size=\small}
+\setbeamerfont{frametitle}{series=\bfseries,size=\large}
+\setbeamertemplate{frametitle}{%
+  \vspace{0.45cm}
+  \insertframetitle\par
+  \vspace{0.16cm}
+  {\color{linegray}\rule{\linewidth}{0.55pt}}
+}
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.78\paperwidth,ht=2.6ex,dp=1.2ex,leftskip=.45cm]{author in head/foot}%
+      \scriptsize\color{midgray} Proyecto Integrador de Modelación Matemática
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.22\paperwidth,ht=2.6ex,dp=1.2ex,rightskip=.45cm plus1fil]{date in head/foot}%
+      \hfill\scriptsize\color{midgray}\insertframenumber/\inserttotalframenumber
+    \end{beamercolorbox}%
+  }%
+}
+\setbeamertemplate{headline}{}
+\setlength{\parskip}{0.35em}
+
+\newcommand{\thinrule}{\par\vspace{0.2cm}\noindent{\color{linegray}\rule{0.88\linewidth}{0.45pt}}\par\vspace{0.2cm}}
+\newcommand{\metric}[2]{%
+  \begin{minipage}[t]{0.19\linewidth}
+    {\large\bfseries #1}\par
+    {\scriptsize\color{midgray} #2}
+  \end{minipage}
+}
+\newcommand{\claim}[1]{%
+  \vspace{0.2cm}
+  {\large\bfseries #1}
+}
+\newcommand{\smallsource}[1]{%
+  \vspace{0.08cm}{\scriptsize\color{midgray}#1}
+}
+
+\title{El transporte urbano de la Zona Metropolitana de Guadalajara}
+\subtitle{Una lectura desde la teoría de grafos}
+\author{Fernando Betancourt Moreno\\{\small Director: Dr. Abel Palafox González}}
+\institute{Licenciatura en Matemáticas\\Centro Universitario de Ciencias Exactas e Ingenierías\\Universidad de Guadalajara}
+\date{Proyecto Integrador de Modelación Matemática}
+
+\begin{document}
+
+% 1
+\begin{frame}[plain]
+  \vspace{0.7cm}
+  {\color{linegray}\rule{\linewidth}{0.65pt}}
+  \vspace{0.7cm}
+
+  {\usebeamerfont{title}\inserttitle\par}
+  \vspace{0.15cm}
+  {\usebeamerfont{subtitle}\color{graphite}\insertsubtitle\par}
+
+  \vfill
+  {\usebeamerfont{author}\insertauthor\par}
+  \vspace{0.35cm}
+  {\usebeamerfont{institute}\insertinstitute\par}
+  \vspace{0.35cm}
+  {\usebeamerfont{date}\insertdate\par}
+
+  \vspace{0.7cm}
+  {\color{linegray}\rule{\linewidth}{0.65pt}}
+\end{frame}
+
+% 2
+\begin{frame}{Ruta de la exposición}
+  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.08\linewidth}X>{\raggedleft\arraybackslash}p{0.17\linewidth}@{}}
+    1 & Problema, tesis central y preguntas de investigación & 5 min \\
+    2 & Construcción matemática de los modelos \(L\) y \(P\) & 8 min \\
+    3 & Evidencia: métricas, centralidad, comunidades y robustez & 13 min \\
+    4 & Sensibilidad, intervenciones y cierre & 4 min \\
+  \end{tabularx}
+
+  \thinrule
+
+  \claim{La exposición defiende una afirmación cuantitativa: la infraestructura física es sensible a fallas, mientras que el servicio conserva conectividad por redundancia entre rutas.}
+\end{frame}
+
+% 3
+\begin{frame}{Punto de partida}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.56\linewidth}
+      La Zona Metropolitana de Guadalajara tiene una red extensa de transporte público. Su desempeño no depende solo de cuántas rutas existen, sino de cómo están conectadas.
+
+      \thinrule
+
+      Pregunta operativa: si ciertas paradas o corredores fallan, qué parte del sistema conserva conectividad y qué parte pierde eficiencia.
+    \end{column}
+    \begin{column}{0.36\linewidth}
+      \begin{tikzpicture}[scale=0.95, every node/.style={circle,draw=ink,fill=white,inner sep=1.5pt}]
+        \node (a) at (0,0) {};
+        \node (b) at (1,0.45) {};
+        \node (c) at (2,0.25) {};
+        \node (d) at (3,0.85) {};
+        \node (e) at (1.5,-0.8) {};
+        \node (f) at (3,-0.55) {};
+        \node (g) at (4,0.15) {};
+        \node (h) at (2.2,1.35) {};
+        \foreach \u/\v in {a/b,b/c,c/d,c/e,e/f,f/g,d/g,c/h,h/d,b/e}
+          \draw[graphite,line width=.65pt] (\u)--(\v);
+        \node[draw=none,rectangle,align=left,text=midgray] at (2,-1.55) {\scriptsize estructura, no solo cobertura};
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% 4
+\begin{frame}{Tesis central}
+  \claim{La ZMG combina una base física sensible a fallas con un servicio relativamente robusto, efecto explicado por la redundancia entre rutas.}
+
+  \vspace{0.45cm}
+  \begin{tabularx}{\linewidth}{@{}p{0.48\linewidth}p{0.48\linewidth}@{}}
+    \textbf{Pregunta 1} &
+    \textbf{Pregunta 2} \\
+    Qué tan robustas son las representaciones \(L\) y \(P\) ante fallos aleatorios y ataques dirigidos. &
+    Qué nodos actúan como puntos críticos y cómo cambia su criticidad entre infraestructura y servicio. \\
+  \end{tabularx}
+\end{frame}
+
+% 5
+\begin{frame}{Objetivo y aportación}
+  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.22\linewidth}X@{}}
+    Objetivo & Modelar y analizar estructuralmente el sistema de transporte público de la ZMG mediante teoría de grafos. \\
+    Aportación & Comparar dos topologías construidas sobre los mismos supernodos: infraestructura física y conectividad funcional del servicio. \\
+    Resultado esperado & Un diagnóstico reproducible de conectividad, centralidad, comunidades y robustez. \\
+  \end{tabularx}
+
+  \thinrule
+
+  La comparación es posible porque ambos grafos comparten el mismo conjunto de vértices consolidados.
+\end{frame}
+
+% 6
+\begin{frame}{Objeto matemático}
+  Sea \(G=(V,E)\) un grafo asociado a una red de transporte, donde \(V\) representa zonas de parada consolidadas y \(E\) representa relaciones de conectividad entre ellas.
+
+  \vspace{0.35cm}
+  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.24\linewidth}X@{}}
+    Vértices & Supernodos obtenidos al agrupar paradas cercanas. \\
+    Aristas & Tramos físicos consecutivos o conexiones de servicio sin cambio de ruta. \\
+    Pesos & Tiempo de viaje, número de rutas compartidas o intensidad de conexión. \\
+    Perturbación & Eliminación secuencial de nodos de alta centralidad para medir degradación. \\
+  \end{tabularx}
+\end{frame}
+
+% 7
+\begin{frame}{Dos espacios de representación}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.48\linewidth}
+      \textbf{\(L\)-espacio: infraestructura}
+
+      \vspace{0.15cm}
+      Una arista \(u\to v\) existe si una ruta viaja de una parada del supernodo \(u\) a una parada del supernodo \(v\).
+
+      \vspace{0.15cm}
+      Captura continuidad física, tiempos y dependencia de corredores.
+    \end{column}
+    \begin{column}{0.48\linewidth}
+      \textbf{\(P\)-espacio: servicio}
+
+      \vspace{0.15cm}
+      Una arista \(\{u,v\}\) existe si ambos supernodos comparten al menos una ruta.
+
+      \vspace{0.15cm}
+      Captura conectividad funcional: puedo llegar sin cambiar de ruta.
+    \end{column}
+  \end{columns}
+
+  \vspace{0.5cm}
+  \centering
+  \begin{tikzpicture}[scale=0.78, every node/.style={circle,draw=ink,fill=white,inner sep=1.4pt}]
+    \node (a) at (0,0) {};
+    \node (b) at (0.8,0) {};
+    \node (c) at (1.6,0) {};
+    \node (d) at (2.4,0) {};
+    \draw[->,graphite,line width=.7pt] (a)--(b);
+    \draw[->,graphite,line width=.7pt] (b)--(c);
+    \draw[->,graphite,line width=.7pt] (c)--(d);
+    \node[draw=none,rectangle] at (1.2,-0.55) {\scriptsize \(L\)};
+    \begin{scope}[xshift=5.2cm]
+      \node (a2) at (0,0) {};
+      \node (b2) at (0.8,0) {};
+      \node (c2) at (1.6,0) {};
+      \node (d2) at (2.4,0) {};
+      \foreach \u/\v in {a2/b2,a2/c2,a2/d2,b2/c2,b2/d2,c2/d2}
+        \draw[graphite,line width=.55pt] (\u)--(\v);
+      \node[draw=none,rectangle] at (1.2,-0.55) {\scriptsize \(P\)};
+    \end{scope}
+  \end{tikzpicture}
+\end{frame}
+
+% 8
+\begin{frame}{Datos GTFS y limpieza}
+  La base empírica es el GTFS público de la ZMG, versión publicada en marzo de 2024.
+
+  \vspace{0.25cm}
+  \begin{tabularx}{\linewidth}{@{}>{\ttfamily}p{0.22\linewidth}X@{}}
+    stops.csv & Coordenadas geográficas de las paradas. \\
+    routes.csv & Líneas o rutas del sistema. \\
+    trips.csv & Corridas asociadas a cada ruta. \\
+    stop\_times.csv & Secuencia y horarios de llegada y salida; fuente principal para aristas. \\
+  \end{tabularx}
+
+  \thinrule
+
+  Se validan relaciones entre archivos, coordenadas, secuencias temporales y nodos aislados antes de construir los grafos.
+\end{frame}
+
+% 9
+\begin{frame}{Construcción del \(L\)-espacio}
+  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.25\linewidth}X@{}}
+    Limpieza inicial & De 12,231 paradas iniciales a 10,622 nodos en el grafo limpio. \\
+    Consolidación & DBSCAN agrupa paradas en radio de \(100\,\mathrm{m}\). \\
+    Grafo final & 4,203 supernodos y 8,591 aristas dirigidas. \\
+    Peso & Tiempo mínimo observado entre supernodos, en minutos. \\
+  \end{tabularx}
+
+  \vspace{0.4cm}
+  \centering
+  \begin{tikzpicture}[scale=0.82]
+    \draw[ink,line width=.6pt] (0,0) rectangle (2.9,1.1);
+    \draw[ink,line width=.6pt] (4.0,0) rectangle (6.9,1.1);
+    \draw[ink,line width=.6pt] (8.0,0) rectangle (10.9,1.1);
+    \node[align=center] at (1.45,.55) {\small GTFS\\\scriptsize validado};
+    \node[align=center] at (5.45,.55) {\small DBSCAN\\\scriptsize \(100\,\mathrm{m}\)};
+    \node[align=center] at (9.45,.55) {\small Grafo \(L\)\\\scriptsize dirigido};
+    \draw[->,graphite,line width=.65pt] (2.95,.55)--(3.95,.55);
+    \draw[->,graphite,line width=.65pt] (6.95,.55)--(7.95,.55);
+  \end{tikzpicture}
+\end{frame}
+
+% 10
+\begin{frame}{Construcción del \(P\)-espacio}
+  El \(P\)-espacio usa los mismos 4,203 supernodos, pero cambia la definición de arista.
+
+  \vspace{0.25cm}
+  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.24\linewidth}X@{}}
+    Regla & Para cada \texttt{route\_id}, los supernodos de la ruta forman una clique. \\
+    Interpretación & Si \(u\) y \(v\) comparten ruta, se conectan sin transbordo. \\
+    Grafo final & 385,225 aristas no dirigidas. \\
+    Control & Se compara con una variante conservadora por \texttt{trip\_id}. \\
+  \end{tabularx}
+
+  \vspace{0.35cm}
+  \[
+    E_P=\bigcup_{r\in R}\bigl\{\{u,v\}:u,v\in V_r,\ u\neq v\bigr\}.
+  \]
+\end{frame}
+
+% 11
+\begin{frame}{Métricas de análisis}
+  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.25\linewidth}X@{}}
+    Estructura global & Densidad, componentes, clustering, diámetro, camino medio. \\
+    Centralidad & Grado, intermediación, cercanía y eigenvector. \\
+    Comunidades & Louvain sobre una versión no dirigida y ponderada. \\
+    Robustez & LCC y eficiencia global tras eliminar 50 supernodos de mayor grado. \\
+  \end{tabularx}
+
+  \thinrule
+
+  La robustez se interpreta como conservación de conectividad y accesibilidad ante perturbaciones.
+\end{frame}
+
+% 12
+\begin{frame}{Resultado 1: estructura del \(L\)-espacio}
+  \metric{4,203}{supernodos}
+  \hfill
+  \metric{8,591}{aristas dirigidas}
+  \hfill
+  \metric{0.000486}{densidad}
+  \hfill
+  \metric{77}{diámetro}
+
+  \vspace{0.55cm}
+  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.23\linewidth}X@{}}
+    Clustering & \(0.1088\), compatible con una topología de baja redundancia local. \\
+    Componentes & Dos componentes; el principal contiene 4,198 supernodos. \\
+    Lectura & La red física es extensa y casi conectada, pero poco mallada. \\
+  \end{tabularx}
+
+  \thinrule
+  Esta estructura anticipa sensibilidad ante fallas en nodos articuladores.
+\end{frame}
+
+% 13
+\begin{frame}{Centralidad en el \(L\)-espacio}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.46\linewidth}
+      \includegraphics[width=\linewidth]{figuras/l_centralidad.png}
+    \end{column}
+    \begin{column}{0.46\linewidth}
+      \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.43\linewidth}X@{}}
+        Grado & Grandes intersecciones y terminales. \\
+        Intermediación & Centro Histórico como núcleo de transbordo. \\
+        Cercanía & Hipercentro con mayor accesibilidad temporal. \\
+        Eigenvector & Corredores influyentes como Mariano Otero. \\
+      \end{tabularx}
+
+      \thinrule
+      Las centralidades separan volumen,\par puente, accesibilidad e influencia estructural.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% 14
+\begin{frame}{Robustez del \(L\)-espacio}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.52\linewidth}
+      \includegraphics[width=\linewidth]{figuras/l_robustez.png}
+    \end{column}
+    \begin{column}{0.38\linewidth}
+      Ataque dirigido: eliminación secuencial de los 50 supernodos de mayor grado ponderado.
+
+      \vspace{0.3cm}
+      \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.35\linewidth}X@{}}
+        LCC & \(97.45\%\) del valor inicial. \\
+        Eficiencia & \(81.50\%\) del valor inicial. \\
+        Caída & Aproximadamente \(18.50\%\). \\
+      \end{tabularx}
+
+      \thinrule
+      La cobertura persiste,\par pero los recorridos se vuelven menos eficientes.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% 15
+\begin{frame}{Resultado 2: estructura del \(P\)-espacio}
+  \metric{4,203}{supernodos}
+  \hfill
+  \metric{385,225}{aristas}
+  \hfill
+  \metric{0.0436}{densidad}
+  \hfill
+  \metric{6}{diámetro}
+
+  \vspace{0.55cm}
+  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.25\linewidth}X@{}}
+    Clustering & \(0.4085\), mayor redundancia por rutas compartidas. \\
+    Camino medio & \(2.41\) saltos; equivale a \(1.41\) transbordos promedio bajo la convención usada. \\
+    Lectura & El servicio se comporta como red de mundo pequeño. \\
+  \end{tabularx}
+\end{frame}
+
+% 16
+\begin{frame}{Comunidades del \(P\)-espacio}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.52\linewidth}
+      \includegraphics[width=\linewidth,height=0.61\textheight,keepaspectratio]{figuras/p_comunidades.png}
+    \end{column}
+    \begin{column}{0.44\linewidth}
+      Louvain detecta 11 comunidades de servicio.
+
+      \vspace{0.35cm}
+      \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.42\linewidth}X@{}}
+        Modularidad & \(0.54\). \\
+        Concentración & 67\% de supernodos en las cinco mayores. \\
+        Interpretación & Comunidades funcionales asociadas a corredores y zonas de actividad. \\
+      \end{tabularx}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% 17
+\begin{frame}{Robustez del \(P\)-espacio}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.52\linewidth}
+      \includegraphics[width=\linewidth]{figuras/p_robustez.png}
+    \end{column}
+    \begin{column}{0.38\linewidth}
+      Mismo ataque dirigido: eliminación de los 50 supernodos de mayor grado.
+
+      \vspace{0.3cm}
+      \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.35\linewidth}X@{}}
+        LCC & \(98.74\%\) del valor inicial. \\
+        Eficiencia & \(97.36\%\) del valor inicial. \\
+        Caída & Aproximadamente \(2.64\%\). \\
+      \end{tabularx}
+
+      \thinrule
+      La redundancia de rutas\par amortigua la falla de supernodos troncales.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% 18
+\begin{frame}{Comparación \(L\) frente a \(P\)}
+  \begin{tabularx}{\linewidth}{@{}l>{\centering\arraybackslash}X>{\centering\arraybackslash}X>{\centering\arraybackslash}X@{}}
+    \toprule
+    Modelo & Densidad & Diámetro & Eficiencia tras ataque \\
+    \midrule
+    \(L\)-espacio & 0.000486 & 77 & 81.50\% \\
+    \(P\)-espacio & 0.0436 & 6 & 97.36\% \\
+    \bottomrule
+  \end{tabularx}
+
+  \vspace{0.55cm}
+  \claim{La infraestructura y el servicio no tienen la misma vulnerabilidad topológica.}
+
+  \vspace{0.25cm}
+  La infraestructura física tiene baja redundancia local; el servicio genera muchas conexiones funcionales porque varias rutas se superponen.
+\end{frame}
+
+% 19
+\begin{frame}{Sensibilidad e intervenciones}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.50\linewidth}
+      \includegraphics[width=\linewidth]{figuras/intervenciones.png}
+    \end{column}
+    \begin{column}{0.46\linewidth}
+      \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.38\linewidth}X@{}}
+        Sensibilidad & Umbrales de 75 a 150 m; el LCC físico se mantiene entre 99.81\% y 99.88\%. \\
+        Sesgo \(P\) & Construir por \texttt{route\_id} puede sobreconectar frente a \texttt{trip\_id}. \\
+        Intervención & El refuerzo periférico conserva mejor eficiencia postataque: 88.52\%. \\
+      \end{tabularx}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% 20
+\begin{frame}{Cierre}
+  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.20\linewidth}X@{}}
+    Hallazgo 1 & La red física es extensa, casi conectada y de baja redundancia local. \\
+    Hallazgo 2 & La red de servicio es densa, con rasgos de mundo pequeño y alta redundancia funcional. \\
+    Hallazgo 3 & Bajo ataque dirigido, la eficiencia cae mucho más en \(L\) que en \(P\). \\
+    Implicación & La planeación debe reforzar conectividad periférica y proteger supernodos estructurales. \\
+  \end{tabularx}
+
+  \vfill
+  {\large\bfseries La teoría de grafos permite distinguir entre cobertura física, conectividad funcional y vulnerabilidad estructural del transporte público.}
+\end{frame}
+
+\end{document}
