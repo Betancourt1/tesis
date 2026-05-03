@@ -1366,7 +1366,7 @@
         \section{Vulnerabilidad y resiliencia}
 
             \begin{definicion}[Eficiencia global]
-                Sea $G=(V,E)$ un grafo finito con $N=|V|$ y distancia $d(\cdot,\cdot)$ ya definida. La \textbf{eficiencia global} de $G$ es
+                Sea $G=(V,E)$ un grafo finito con $N=|V|\ge 2$ y distancia $d$ tal que, para todo par $i,j\in V$ con $i\neq j$, se cumple $d(i,j)>0$ o $d(i,j)=+\infty$. La \textbf{eficiencia global} de $G$ es
                 \[
                 Ef(G)\;=\;\frac{1}{N(N-1)}\sum_{\substack{i,j\in V\\ i\neq j}}\frac{1}{d(i,j)},
                 \]
@@ -1399,19 +1399,23 @@
             \end{corolario}
 
             \begin{observacion}[Distancias ponderadas arbitrarias]
-                Si permitimos pesos $<1$, entonces $d(i,j)$ puede ser $<1$ y $1/d(i,j)>1$. En ese caso la cota correcta es
+                Si las distancias finitas entre nodos distintos pueden ser menores que $1$, entonces algunos términos $1/d(i,j)$ pueden ser mayores que $1$. Si
                 \[
-                Ef(G)\;\le\;\frac{1}{\delta},\qquad \delta:=\min_{i\neq j} d(i,j)\,,
+                    \delta:=\min\{d(i,j):i\neq j,\ d(i,j)<+\infty\}>0,
                 \]
-                y recuperamos $Ef(G)\le 1$ tras reescalar los pesos para que $\delta\ge 1$ (o usando distancias enteras por número de aristas).
+                entonces la cota correcta es
+                \[
+                Ef(G)\;\le\;\frac{1}{\delta},
+                \]
+                y se recupera $Ef(G)\le 1$ tras reescalar los pesos para que $\delta\ge 1$ o usando distancias enteras por número de aristas. Si alguna distancia entre nodos distintos es $0$, la eficiencia global no se usa sin una convención adicional, porque aparecería una división entre cero.
             \end{observacion}
 
             \begin{definicion}[Eliminación y vulnerabilidad puntual]
-                Sea $H\subseteq V$ (eliminación de vértices) o $H\subseteq E$ (eliminación de aristas). Definimos la \textbf{vulnerabilidad} frente a $H$ por
+                Sea $G=(V,E)$ un grafo para el cual $Ef(G)$ está definida. Sea $H\subseteq E$, o bien sea $H\subseteq V$ con $|V\setminus H|\ge 2$. Definimos la \textbf{vulnerabilidad} frente a $H$ por
                 \[
                 V(G;H)\;=\;\frac{Ef(G)-Ef(G\setminus H)}{Ef(G)},
                 \]
-                con la convención $V(G;H)=0$ si $Ef(G)=0$. Notación abreviada: $V_v:=V(G;\{v\})$ y $V_e:=V(G;\{e\})$.
+                con la convención $V(G;H)=0$ si $Ef(G)=0$. Cuando las expresiones están definidas, se usa la notación abreviada $V_v:=V(G;\{v\})$ y $V_e:=V(G;\{e\})$.
             \end{definicion}
 
             \begin{proposicion}[Monotonicidad por eliminación de aristas]
@@ -1435,7 +1439,7 @@
             \end{observacion}
 
             \begin{definicion}[Curvas de vulnerabilidad y resiliencia]
-                Para $k\in\{1,\dots,N\}$ definimos la \textbf{vulnerabilidad en peor caso}
+                Sea $G=(V,E)$ un grafo con $N=|V|\ge 3$. Para $k\in\{1,\dots,N-2\}$ definimos la \textbf{vulnerabilidad en peor caso}
                 \[
                 V_k^{\max}(G)\;=\;\max_{\substack{H\subseteq V\\ |H|=k}} V(G;H),
                 \]
@@ -1443,7 +1447,7 @@
             \end{definicion}
 
             \begin{definicion}[Vulnerabilidad esperada bajo un modelo de fallo]
-                Sea $\mathbb{P}$ una ley sobre subconjuntos $H$ (p.\,ej. eliminación uniforme de $k$ nodos o eliminación proporcional a una centralidad). La \textbf{vulnerabilidad esperada} es
+                Sea $\mathbb{P}$ una ley sobre subconjuntos $H$ para los cuales $V(G;H)$ está definida; por ejemplo, eliminación uniforme de $k$ nodos con $k\le N-2$ o eliminación proporcional a una centralidad. La \textbf{vulnerabilidad esperada} es
                 \[
                 V_k^{\mathbb{P}}(G)\;=\;\mathbb{E}_{H\sim\mathbb{P}}\!\big[V(G;H)\big].
                 \]
