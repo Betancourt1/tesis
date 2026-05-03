@@ -51,7 +51,7 @@
 
         \begin{definicion}[Adyacencia de nodos]
             Sean $G=(V,E)$ un grafo no dirigido y $u,v\in V$ dos nodos distintos.
-            Se dice que $u$ y $v$ son \textbf{adyacentes} si $\{u,v\}\in E$.
+            Se dice que $u$ y $v$ son \textbf{adyacentes} si $\{u,v\}\in E$. En ese caso, también se dice que $u$ y $v$ son \textbf{vecinos}.
         \end{definicion}
 
         \begin{definicion}[Orden, tamaño y finitud]
@@ -111,10 +111,9 @@
             \end{center}
         \end{ejemplo}
 
-    % TODO [PDF p.12][ernes][cat: estructura][prio: alta][resaltado: "Tipos de grafos"]: reordenar la progresión conceptual; se sugirió subgrafos, caminos y ciclos, conectividad y después representaciones matriciales.
     \section{Tipos de grafos}
 
-        Ahora que sabemos lo que es un grafo, es pertinente preguntarnos si es posible clasificarlos. Aunque posible, la clasificación de los grafos es una tarea multifacética que puede atender a una diversidad de criterios. Es posible categorizarlos, por ejemplo, en función de su estructura general, de las propiedades de conectividad que exhiben o de la presencia de ciclos. No obstante, para los fines de esta introducción, nos centraremos en una de las distinciones más fundamentales, la cual emana directamente de las propiedades inherentes al conjunto de aristas $E$. Específicamente, exploraremos la clasificación de los grafos según si sus aristas poseen una dirección definida (grafos dirigidos y no dirigidos) y si se les atribuye un valor numérico.
+        Ahora que sabemos lo que es un grafo, podemos distinguir algunas variantes según la forma de sus aristas y la información adicional que se les asigne. En esta sección se reúnen esas variantes básicas.
 
         Estas propiedades dan lugar a un espectro de categorías de grafos, cada una con implicaciones estructurales y algorítmicas particulares. Por consiguiente, a continuación se ilustran las clases ya definidas y se introducen otras definiciones formales.
 
@@ -164,6 +163,14 @@
             \end{center}
         \end{ejemplo}
 
+        \begin{definicion}[Grafo subyacente no dirigido]
+            Sea $G=(V,E)$ un grafo. El \textbf{grafo subyacente no dirigido} de $G$, denotado por $U(G)$, se define de la siguiente manera. Si $G$ es no dirigido, entonces $U(G)=G$. Si $G$ es dirigido, entonces $U(G)=(V,E_U)$, donde
+            \[
+                E_U=\{\{u,v\}: u,v\in V,\ u\neq v,\ \text{y }(u,v)\in E\text{ o }(v,u)\in E\}.
+            \]
+            Es decir, $U(G)$ conserva los nodos de $G$ y reemplaza cada arco entre dos nodos distintos por una arista no dirigida.
+        \end{definicion}
+
         \begin{observacion}[Grado en grafos dirigidos]
             En un grafo dirigido, el grado total de un nodo $v$ se descompone en \textbf{grado de entrada}, denotado $\deg^{-}(v)$, que cuenta las aristas que terminan en $v$, y \textbf{grado de salida}, denotado $\deg^{+}(v)$, que cuenta las aristas que comienzan en $v$. En este caso,
             \[
@@ -171,30 +178,9 @@
             \]
         \end{observacion}
 
-        \begin{definicion}[Grafo planar]
-            Un grafo es \textbf{planar} si admite una representación (llamada \emph{dibujo planar}) en el plano tal que ninguna de sus aristas se cruza con otra, salvo en los nodos que comparten.
-        \end{definicion}
-
-        \begin{observacion}
-            La planitud de un grafo no depende de una representación particular, sino de la existencia de al menos un dibujo en el plano sin cruces de aristas.
-        \end{observacion}
-
-        \begin{definicion}[Cara de un grafo planar]
-            Sea $G$ un grafo planar y fíjese un dibujo planar de $G$ en el plano $\mathbb{R}^2$. Sea $X\subseteq \mathbb{R}^2$ el conjunto de puntos ocupado por ese dibujo, formado por los puntos que representan los nodos de $G$ y por las curvas que representan sus aristas.
-
-            Una \textbf{cara} del dibujo es un subconjunto $F$ de $\mathbb{R}^2\setminus X$ que satisface las siguientes dos condiciones:
-            \begin{enumerate}
-                \item cualesquiera dos puntos de $F$ pueden unirse mediante una curva contenida en $F$;
-                \item si $F\subseteq F'\subseteq \mathbb{R}^2\setminus X$ y $F'$ satisface la condición anterior, entonces $F'=F$.
-            \end{enumerate}
-            La cara que se extiende indefinidamente en el plano se llama \textbf{cara exterior}. Las demás se llaman \textbf{caras interiores}.
-        \end{definicion}
-
-        Las definiciones de grafo planar y de cara de un grafo planar nos serán útiles cuando estudiemos propiedades globales de un grafo.
-
         \begin{definicion}[Multígrafo]
-            Un \textbf{multígrafo} $G=(V,E)$ es un grafo finito en el que entre un par (ordenado o no ordenado) de nodos se permiten \emph{múltiples aristas} distintas (también llamadas \emph{aristas paralelas}).
-            Cuando además se permiten \emph{lazos} (aristas cuyos extremos coinciden en un mismo nodo), lo indicaremos explícitamente y hablaremos de \emph{pseudografo}.
+            Un \textbf{multígrafo} es una terna $G=(V,E,\iota)$, donde $V$ es un conjunto finito de nodos, $E$ es un conjunto finito de aristas e $\iota$ asigna a cada arista de $E$ un par de elementos de $V$, ordenado si el multígrafo es dirigido y no ordenado si no lo es. Dos aristas distintas $e,f\in E$ son \textbf{paralelas} si $\iota(e)=\iota(f)$.
+            Cuando además se permiten aristas cuyos dos extremos coinciden, hablaremos de \emph{pseudografo}. Cuando la asignación $\iota$ sea evidente por el contexto, escribiremos simplemente $G=(V,E)$.
         \end{definicion}
 
         \begin{observacion}
@@ -225,76 +211,10 @@
 
     \section{Propiedades fundamentales de los grafos}
 
-        Hasta ahora hemos evaluado a los grafos como un todo, deteniéndonos apenas en sus componentes como una herramienta para definir propiedades globales, pero también es posible y recomendable establecer propiedades de sus componentes. Algunas que son especialmente valiosas para el presente estudio son la \textit{conectividad}, los \textit{caminos}, los \textit{ciclos}, y las representaciones matriciales como la matriz de adyacencia.
-
-        \begin{definicion}[Matriz de adyacencia]
-            Dado un grafo $G=(V,E)$ con $N$ nodos, la \textbf{matriz de adyacencia} es una matriz $A \in \mathbb{R}^{N \times N}$ donde cada elemento $a_{ij}$ indica si existe una conexión directa entre el nodo $i$ y el nodo $j$:
-            \[
-            a_{ij} =
-            \begin{cases}
-            1, & \text{si existe una arista entre } i \text{ y } j,\\
-            0, & \text{en caso contrario.}
-            \end{cases}
-            \]
-            En grafos ponderados, cada $a_{ij}$ toma el valor del peso asignado a la conexión. Además, dos nodos son adyacentes si la entrada correspondiente en la matriz de adyacencia $A$ es distinta de cero, es decir, $a_{uv} \neq 0$.
-
-            La definición anterior supone que no hay aristas paralelas. Si se trabaja con un multígrafo, debe fijarse una convención adicional; la usual es que $a_{ij}$ cuente la multiplicidad de las aristas entre $i$ y $j$, salvo que sus entradas se definan mediante pesos.
-
-        \end{definicion}
-
-        \begin{ejemplo}[Matriz de adyacencia]
-            Consideremos el siguiente grafo dirigido $G = (V, E)$ con $V = \{A, B, C\}$ y $E = \{(A,B), (B,C), (C,A)\}$:
-
-            \begin{center}
-                \begin{tikzpicture}[scale=1]
-                    \node[nodo] (A) at (0,0) [label={[etiqueta_nodo]left:A}] {};
-                    \node[nodo] (B) at (2,0) [label={[etiqueta_nodo]right:B}] {};
-                    \node[nodo] (C) at (1,1.5) [label={[etiqueta_nodo]above:C}] {};
-                    \draw[flecha] (A) -- (B);
-                    \draw[flecha] (B) -- (C);
-                    \draw[flecha] (C) -- (A);
-                \end{tikzpicture}
-            \end{center}
-
-            La matriz de adyacencia $A$ correspondiente es:
-            \[
-            A =
-            \begin{pmatrix}
-            0 & 1 & 0 \\
-            0 & 0 & 1 \\
-            1 & 0 & 0 \\
-            \end{pmatrix}
-            \]
-            donde las filas y columnas corresponden al orden $A$, $B$, $C$.
-            Por ejemplo, $a_{12} = 1$ indica una arista dirigida de $A$ a $B$, y $a_{33} = 0$ indica que no hay un lazo en $C$.
-        \end{ejemplo}
-
-        \begin{definicion}[Matriz de incidencia]
-            Sea $G=(V,E)$ un grafo simple con $n=|V|$ y $m=|E|$.
-            \begin{itemize}
-                \item \textbf{No dirigido (orientación arbitraria).} Se fija una orientación arbitraria de cada arista $e=\{u,v\}$ para obtener un par ordenado $(u,v)$. La \emph{matriz de incidencia} es $B\in\{-1,0,1\}^{n\times m}$ definida por
-                \[
-                B_{xe}=\begin{cases}
-                    -1, & \text{si } x=u \text{ (cola de $e$)},\\
-                    +1, & \text{si } x=v \text{ (cabeza de $e$)},\\
-                    0,  & \text{en otro caso.}
-                \end{cases}
-                \]
-                Con esta convención, $\operatorname{rank}(B)=n-p$ y $\dim\ker(B^\top)=m-n+p$.
-                \item \textbf{Dirigido.} Si $G$ ya es dirigido y $e=(u,v)$, se usa la misma convención natural:
-                \[
-                B_{xe}=\begin{cases}
-                    -1, & x=u,\\
-                    +1, & x=v,\\
-                    0,  & \text{en otro caso.}
-                \end{cases}
-                \]
-            \end{itemize}
-            Salvo indicación contraria, se excluyen lazos y aristas múltiples (en multigrafos, cada arista da una columna; para lazos, la convención habitual asigna columna nula o un $2$ en la fila del vértice en la versión no dirigida).
-        \end{definicion}
+        Después de fijar las variantes básicas de grafo, conviene introducir primero las estructuras que se obtienen dentro de un grafo dado. A partir de ellas se formalizan relaciones entre pares de nodos y formas numéricas de registrar las aristas.
 
         \begin{definicion}[Subgrafo]
-            Un \textbf{subgrafo} $H = (V_H, E_H)$ de un grafo $G = (V, E)$ es un grafo tal que $V_H \subseteq V$ y $E_H \subseteq E$. Es decir, un subgrafo es una parte de un grafo que mantiene la estructura de nodos y aristas del grafo original.
+            Un \textbf{subgrafo} $H = (V_H, E_H)$ de un grafo $G = (V, E)$ es un grafo tal que $V_H \subseteq V$, $E_H \subseteq E$ y toda arista de $E_H$ tiene sus extremos en $V_H$. Es decir, un subgrafo es una parte de un grafo que mantiene la estructura de nodos y aristas del grafo original.
         \end{definicion}
 
         \begin{ejemplo}[Subgrafo]
@@ -339,7 +259,7 @@
         \end{definicion}
 
         \begin{definicion}[Maximal y máxima clique; número de clique]
-            Decimos que una clique $S$ es \textbf{maximal} si no está propiamente contenida en ninguna otra clique. Decimos que es \textbf{máxima} si su cardinalidad es la mayor posible entre todas las cliques de $G$. Al tamaño de una clique máxima lo llamamos \textbf{número de clique} de $G$ y lo denotamos por $\omega(G)$.
+            Sea $G=(V,E)$ un grafo simple no dirigido y sea $S$ una clique de $G$. Decimos que $S$ es \textbf{maximal} si no está propiamente contenida en ninguna otra clique de $G$. Decimos que $S$ es \textbf{máxima} si su cardinalidad es la mayor posible entre todas las cliques de $G$. Al tamaño de una clique máxima lo llamamos \textbf{número de clique} de $G$ y lo denotamos por $\omega(G)$.
         \end{definicion}
 
         \begin{observacion}[Caso dirigido]
@@ -352,16 +272,16 @@
         \end{observacion}
 
 
-        La noción de subgrafo es importante en aquellos escenarios en los que no nos interesa, o no nos es posible, estudiar un grafo completo. Un subgrafo hereda de forma natural las nociones y propiedades ya enunciadas para grafos. Asimismo, hay algunos subgrafos que nos pueden llegar a interesar especialmente por su naturaleza estructural con respecto al resto del grafo al que pertenecen, tal es el caso de los \textit{caminos}, \textit{ciclos} y \textit{árboles}, los cuales definimos a continuación.
+        La noción de subgrafo es importante cuando se desea estudiar solo una parte de un grafo. A continuación se definen algunas subestructuras que permiten describir desplazamientos internos y patrones de cierre dentro de un grafo.
 
-         \subsubsection{Recorridos, caminos y ciclos}
+         \subsection{Recorridos, caminos y ciclos}
 
             \begin{definicion}[Recorrido]
-                Sea $G=(V,E)$ un grafo finito (dirigido o no). Llamamos \textbf{recorrido} a una sucesión finita
+                Sea $G=(V,E)$ un grafo finito (dirigido o no) y sea $k\in\mathbb{N}_0$. Llamamos \textbf{recorrido} a una sucesión finita
                 \[
                 W=(v_0,e_1,v_1,e_2,\dots,e_k,v_k)
                 \]
-                tal que, para cada $i=1,\dots,k$, el borde $e_i$ une $v_{i-1}$ con $v_i$:
+                tal que, para cada $i=1,\dots,k$, la arista $e_i$ une $v_{i-1}$ con $v_i$:
                 \begin{itemize}
                   \item en grafos no dirigidos, $e_i=\{v_{i-1},v_i\}\in E$;
                   \item en grafos dirigidos, $e_i=(v_{i-1},v_i)\in E$.
@@ -370,11 +290,11 @@
             \end{definicion}
 
             \begin{observacion}
-                Un \emph{recorrido elemental} (o \emph{trayecto}/\emph{trail}) es un recorrido que no repite aristas; un \emph{camino} es un recorrido que no repite vértices. Todo camino es un recorrido elemental y todo recorrido elemental es un recorrido. En grafos no dirigidos, un \emph{ciclo} es un recorrido cerrado sin repetición de vértices salvo $v_0=v_k$.
+                Un \emph{recorrido elemental} (o \emph{trayecto}/\emph{trail}) es un recorrido que no repite aristas.
             \end{observacion}
 
             \begin{definicion}[Camino]
-                Sea $G = (V, E)$ un grafo.
+                Sea $G = (V, E)$ un grafo y sea $k\in\mathbb{N}_0$.
                 Un \textbf{camino de longitud $k$} es un subgrafo $P = (V_P, E_P)$ de $G$ tal que existen nodos distintos $v_1, v_2, \dots, v_{k+1} \in V$ para los cuales:
                 \begin{align*}
                     V_P &= \{v_1, v_2, \dots, v_{k+1}\},
@@ -463,7 +383,7 @@
             \end{ejemplo}
 
             \begin{definicion}[Ciclo]
-                Un \textbf{ciclo de longitud $k$} es un camino $C = (V_C, E_C)$ tal que existen nodos distintos $v_1, v_2, \dots, v_k$ para los cuales:
+                Sea $G=(V,E)$ un grafo y sea $k\ge 3$. Un \textbf{ciclo de longitud $k$} es un subgrafo $C = (V_C, E_C)$ de $G$ tal que existen nodos distintos $v_1, v_2, \dots, v_k \in V$ para los cuales:
                 \begin{align*}
                     V_C &= \{v_1, v_2, \dots, v_k\},
                 \end{align*}
@@ -478,7 +398,7 @@
                 y $v_i \neq v_j$ para $i \neq j$.
             \end{definicion}
 
-            \begin{definicion}
+            \begin{definicion}[Grafo acíclico]
                 Decimos que un grafo $G$ es \textit{acíclico} si ninguno de sus subgrafos es un ciclo.
             \end{definicion}
 
@@ -525,19 +445,25 @@
                 El subgrafo resaltado constituye un ciclo de longitud $4$, dado por la sucesión $v_1 \to v_2 \to v_3 \to v_4 \to v_1$.
             \end{ejemplo}
 
-            \begin{definicion}[Espacio de ciclos]
-                Sea $G=(V,E)$ un grafo finito (posiblemente con $p$ componentes). El \emph{espacio de ciclos} $\mathcal{C}(G)$ es el subespacio de $\mathbb{F}_2^{E}$ generado por los vectores característicos de todos los ciclos simples de $G$. La suma es módulo $2$.
+            \begin{definicion}[Conectividad y componentes conexas]
+                Sea $G=(V,E)$ un grafo no dirigido. Decimos que $G$ es \textbf{conexo} si, para todo par de nodos $u,v\in V$, existe un camino de $u$ a $v$ en $G$. Una \textbf{componente conexa} de $G$ es un subgrafo conexo que no está contenido propiamente en otro subgrafo conexo de $G$. Denotamos por $p$ el número de componentes conexas de $G$.
+
+                Si $G$ es dirigido, salvo indicación en contrario, la conectividad y las componentes conexas se entienden en el grafo subyacente no dirigido $U(G)$.
             \end{definicion}
 
-            Ahora que sabemos lo que es un camino y un ciclo, disponemos de una herramienta para formalizar nuestra noción de movimiento dentro de un grafo. Algo que también nos gustaría formalizar es alguna noción de \textit{distancia} entre dos nodos cualesquiera. A continuación, veremos que una propuesta muy buena es pensar la distancia entre dos nodos como el largo del camino más corto que los une. Antes de llegar ahí, establezcamos un par de resultados útiles.
+            \begin{definicion}[Espacio de ciclos]
+                Sea $G$ un grafo finito. Definimos $G_c=(V,E_c)$ como $G$ mismo si $G$ es no dirigido, y como el grafo subyacente no dirigido $U(G)$ si $G$ es dirigido. Denotamos por $\mathbb{F}_2$ al campo con dos elementos, con suma módulo $2$. Para cada ciclo $C$ de $G_c$, su vector característico es el elemento de $\mathbb{F}_2^{E_c}$ que vale $1$ en las aristas de $C$ y $0$ en las demás aristas. El \emph{espacio de ciclos} $\mathcal{C}(G)$ es el subespacio de $\mathbb{F}_2^{E_c}$ generado por esos vectores característicos.
+            \end{definicion}
+
+            Ahora que se han definido caminos, ciclos y componentes conexas, se puede formalizar una noción de distancia entre dos nodos. La distancia se construye a partir de la longitud mínima entre los caminos que unen esos nodos. Antes de llegar a esa definición, establecemos un par de resultados útiles.
 
             \begin{lema}[Extremos de un camino]
-                Sea $P$ un camino finito (subgrafo conexo y acíclico en el que todos los nodos tienen grado $\le 2$).
-                Entonces $P$ tiene exactamente dos nodos de grado $1$ (extremos) y todos los demás nodos, si los hay, tienen grado $2$.
+                Sea $P$ un camino finito de longitud al menos $1$.
+                Entonces $P$ tiene exactamente dos nodos de grado $1$, llamados \textbf{extremos}; todos los demás nodos, si los hay, tienen grado $2$.
             \end{lema}
 
             \begin{proof}
-                Si $|V(P)|=1$, el enunciado es vacuo. Para $|V(P)|\ge 2$, la aciclicidad implica que no puede haber todos los nodos de grado $2$; por el conteo de grados $\sum_{v}\deg(v)=2|E(P)|$ y porque un componente acíclico con $\deg\le 2$ no puede tener más de dos nodos de grado impar, se deduce que hay al menos dos nodos de grado $1$. Si hubiera tres o más de grado $1$, la suma de grados sería $<2|E(P)|$, contradicción.
+                Si $P$ tiene longitud $k\ge 1$, por definición existen nodos distintos $v_1,\dots,v_{k+1}$ tales que las aristas de $P$ conectan exactamente nodos consecutivos. Por tanto, $v_1$ y $v_{k+1}$ inciden en una sola arista de $P$, mientras que cada $v_i$ con $2\le i\le k$ incide en dos aristas de $P$.
             \end{proof}
 
             \begin{teorema}[Numeración lineal de los nodos de un camino]
@@ -546,13 +472,13 @@
                 \phi:\{1,2,\dots,k\}\longrightarrow V(P)
                 \]
                 tal que las aristas de $P$ son exactamente $\{\phi(i),\phi(i+1)\}$ para $i=1,\dots,k-1$.
-                En particular, $P$ es isomorfo al camino estándar $P_k$ y la numeración es única salvo inversión (reversa).
+                En particular, la numeración es única salvo inversión.
             \end{teorema}
 
             \begin{proof}
                 Por el lema, $P$ tiene dos extremos. Fija uno de ellos y llámalo $\phi(1)$. Definimos inductivamente $\phi(i+1)$: dado $\phi(i)$, si $i=1$ tomamos como $\phi(2)$ el único vecino de $\phi(1)$; si $i\ge 2$, tomamos como $\phi(i+1)$ el único vecino de $\phi(i)$ distinto de $\phi(i-1)$.
                 La aciclicidad garantiza que este procedimiento nunca vuelve a un nodo ya visitado y, como $P$ es finito y conexo con grados $\le 2$, el proceso termina exactamente cuando alcanzamos el otro extremo. Así obtenemos un orden lineal $\phi(1),\dots,\phi(k)$ que recorre todos los nodos una única vez y en el que las únicas aristas son las consecutivas por construcción.
-                La unicidad salvo reversa es clara: cualquier ordenación válida debe empezar en un extremo y seguir el único vecino no visitado en cada paso.
+                La unicidad salvo reversa se obtiene porque cualquier ordenación válida debe empezar en un extremo y seguir el único vecino no visitado en cada paso.
             \end{proof}
 
             \begin{observacion}[Caso dirigido]
@@ -576,7 +502,7 @@
             \end{definicion}
 
             \begin{definicion}[Geodésica]
-                Un camino $P$ de $u$ a $v$ es \textbf{geodésico} si su longitud (o su peso total, en el caso ponderado) es igual a $d(u,v)$.
+                Un camino $P$ de $u$ a $v$ es \textbf{geodésico} si su longitud es igual a $d(u,v)$. En el caso ponderado, $P$ es geodésico si su peso total es igual a $d_w(u,v)$.
             \end{definicion}
 
             \begin{observacion}[Propiedades básicas de la distancia]
@@ -596,7 +522,75 @@
                 En grafos dirigidos, puede ocurrir que $d(u,v)\neq d(v,u)$, por lo que la distancia dirigida no define, en general, un espacio métrico. En el caso ponderado, la misma conclusión métrica requiere pesos estrictamente positivos; si se permiten pesos cero, puede ocurrir que $d_w(u,v)=0$ con $u\neq v$.
             \end{observacion}
 
-        \subsubsection{Árboles}
+        \subsection{Representaciones matriciales}
+
+            \begin{definicion}[Matriz de adyacencia]
+                Dado un grafo $G=(V,E)$ con $N$ nodos y una enumeración $v_1,\dots,v_N$ de sus nodos, la \textbf{matriz de adyacencia} es una matriz $A \in \mathbb{R}^{N \times N}$ donde cada elemento $a_{ij}$ indica si existe una conexión directa entre $v_i$ y $v_j$:
+                \[
+                a_{ij} =
+                \begin{cases}
+                1, & \text{si }G\text{ es no dirigido y }\{v_i,v_j\}\in E,\\
+                1, & \text{si }G\text{ es dirigido y }(v_i,v_j)\in E,\\
+                0, & \text{en caso contrario.}
+                \end{cases}
+                \]
+                En grafos ponderados, cada entrada correspondiente a una arista toma el valor del peso asignado a esa arista. En la versión no ponderada, dos nodos son adyacentes si la entrada correspondiente en la matriz de adyacencia $A$ es igual a $1$.
+
+                La definición anterior supone que no hay aristas paralelas. Si se trabaja con un multígrafo, debe fijarse una convención adicional; la usual es que $a_{ij}$ cuente la multiplicidad de las aristas entre $i$ y $j$, salvo que sus entradas se definan mediante pesos.
+
+            \end{definicion}
+
+            \begin{ejemplo}[Matriz de adyacencia]
+                Consideremos el siguiente grafo dirigido $G = (V, E)$ con $V = \{A, B, C\}$ y $E = \{(A,B), (B,C), (C,A)\}$:
+
+                \begin{center}
+                    \begin{tikzpicture}[scale=1]
+                        \node[nodo] (A) at (0,0) [label={[etiqueta_nodo]left:A}] {};
+                        \node[nodo] (B) at (2,0) [label={[etiqueta_nodo]right:B}] {};
+                        \node[nodo] (C) at (1,1.5) [label={[etiqueta_nodo]above:C}] {};
+                        \draw[flecha] (A) -- (B);
+                        \draw[flecha] (B) -- (C);
+                        \draw[flecha] (C) -- (A);
+                    \end{tikzpicture}
+                \end{center}
+
+                La matriz de adyacencia $A$ correspondiente es:
+                \[
+                A =
+                \begin{pmatrix}
+                0 & 1 & 0 \\
+                0 & 0 & 1 \\
+                1 & 0 & 0 \\
+                \end{pmatrix}
+                \]
+                donde las filas y columnas corresponden al orden $A$, $B$, $C$.
+                Por ejemplo, $a_{12} = 1$ indica una arista dirigida de $A$ a $B$, y $a_{33} = 0$ indica que no hay un lazo en $C$.
+            \end{ejemplo}
+
+            \begin{definicion}[Matriz de incidencia]
+                Sea $G=(V,E)$ un grafo simple con $n=|V|$ y $m=|E|$.
+                \begin{itemize}
+                    \item \textbf{No dirigido.} Se fija una orientación arbitraria de cada arista $e=\{u,v\}$ para obtener un par ordenado $(u,v)$. Con esta orientación, llamamos \emph{cola} de $e$ a $u$ y \emph{cabeza} de $e$ a $v$. La \emph{matriz de incidencia} es $B\in\{-1,0,1\}^{n\times m}$ definida por
+                    \[
+                    B_{xe}=\begin{cases}
+                        -1, & \text{si } x=u,\\
+                        +1, & \text{si } x=v,\\
+                        0,  & \text{en otro caso.}
+                    \end{cases}
+                    \]
+                    \item \textbf{Dirigido.} Si $G$ ya es dirigido y $e=(u,v)$, llamamos \emph{cola} de $e$ a $u$ y \emph{cabeza} de $e$ a $v$. La matriz de incidencia usa la misma convención:
+                    \[
+                    B_{xe}=\begin{cases}
+                        -1, & x=u,\\
+                        +1, & x=v,\\
+                        0,  & \text{en otro caso.}
+                    \end{cases}
+                    \]
+                \end{itemize}
+                Salvo indicación contraria, se excluyen lazos y aristas múltiples. En multígrafos, cada arista da una columna; para lazos, debe fijarse una convención adicional.
+            \end{definicion}
+
+        \subsection{Árboles}
 
             \begin{definicion}[Árbol]
                 Un \textbf{árbol} es un grafo no dirigido, conexo y acíclico.
@@ -707,6 +701,10 @@
                 Toma un camino $P$ de longitud máxima en $T$ (existe porque $T$ es finito). Si un extremo de $P$ tuviera grado $\ge 2$, habría una arista adicional que permite prolongar $P$, contradiciendo la maximalidad. Así, ambos extremos de $P$ tienen grado $1$.
             \end{proof}
 
+            \begin{proposicion}[Conteo de aristas en árboles]
+                Si $T=(V,E)$ es un árbol finito, entonces $|E|=|V|-1$.
+            \end{proposicion}
+
             Intuitivamente, se puede construir cualquier árbol partiendo de un único nodo (donde $|E|=0, |V|=1$) y añadiendo sucesivamente nuevos nodos, cada uno conectado por una única arista nueva. En cada paso se suma un nodo y una arista, manteniendo siempre la relación $|E| = |V|-1$. La siguiente demostración formaliza esta idea mediante el proceso inverso: la deconstrucción del árbol.
 
             \begin{proof}
@@ -715,32 +713,6 @@
                 Paso inductivo: sea $n\ge 2$ y supongamos cierto para todo árbol con $<n$ nodos. Por el lema, $T$ tiene una hoja $x$ con vecino $y$. Consideremos $T'=T-\{x\}$: sigue siendo un árbol (conexo y acíclico) con $n-1$ nodos. Por hipótesis inductiva, $|E(T')|=(n-1)-1=n-2$. Como $E(T)=E(T')\cup\{xy\}$, se tiene $|E(T)|=(n-2)+1=n-1$.
             \end{proof}
 
-            \begin{lema}[Frontera de cara acotada contiene un ciclo]
-                En cualquier dibujo planar de un grafo, la frontera de toda cara acotada contiene un ciclo.
-            \end{lema}
-
-            \begin{proof}
-                La frontera de una cara acotada es un camino cerrado $W$ que usa aristas del grafo.
-                Si $W$ no repite aristas ni vértices, entonces $W$ es un ciclo.
-                Si repite, al descomponer el camino cerrado estándar (eliminando subcaminos inversos por diferencia simétrica) se obtiene un ciclo no vacío contenido en la frontera.
-            \end{proof}
-
-            \begin{proposicion}[Todo árbol es planar y tiene una sola cara]
-                Todo árbol finito $T$ admite un dibujo planar y, en cualquier dibujo planar conexo de $T$, el número de caras es $f=1$.
-            \end{proposicion}
-
-            \begin{proof}
-                \emph{Planaridad:} por inducción en $n=|V(T)|$.
-                Para $n=1$ es trivial.
-                Para $n\ge 2$, toma una hoja $x$ con vecino $y$ y consideremos $T'=T-\{x\}$. Por inducción, $T'$ tiene un dibujo sin cruces. Coloca $x$ en un pequeño vecindario libre alrededor de $y$ y dibuja el segmento $xy$; no introduce cruces. Así, $T$ es planar.
-
-                \emph{Unicidad de la cara:} en cualquier dibujo planar de $T$, si hubiera una cara acotada, su frontera contendría un ciclo por el lema anterior, lo que contradice que $T$ sea acíclico. Por tanto no hay caras acotadas y solo existe la cara exterior, es decir, $f=1$.
-            \end{proof}
-
-            \begin{corolario}
-                Si $T$ es un árbol finito y conexo, entonces $|E(T)|=|V(T)|-1$, $T$ es planar y en cualquier dibujo planar de $T$ se tiene $f=1$.
-            \end{corolario}
-
             \begin{definicion}[Bosque generador]
                 Sea $G=(V,E)$ un grafo (posiblemente con $p$ componentes). Un \textbf{bosque generador} de $G$ es un subgrafo $F=(V,E_F)$ tal que:
                 \begin{enumerate}
@@ -748,7 +720,7 @@
                     \item $F$ es acíclico,
                     \item cada componente de $F$ es un árbol que contiene exactamente los nodos de la correspondiente componente de $G$.
                 \end{enumerate}
-                Equivalente y característico: $F$ es acíclico y maximal por inclusión, o bien $|E_F|=|V|-p$. Si $G$ es conexo ($p=1$), un bosque generador es un \emph{árbol generador}.
+                Equivalente y característico: $F$ es acíclico y no puede agregarse ninguna arista de $E\setminus E_F$ sin crear un ciclo, o bien $|E_F|=|V|-p$. Si $G$ es conexo ($p=1$), un bosque generador es un \emph{árbol generador}.
             \end{definicion}
 
             \begin{observacion}
@@ -761,12 +733,8 @@
 
             Entre las propiedades clásicas que describen la forma en que los nodos se relacionan destacan los siguientes conceptos fundamentales:
 
-            \begin{definicion}[Conectividad]
-                Decimos que un grafo $G$ es \textbf{conexo} si existe al menos un camino entre cada par de nodos. En caso contrario, la red se fragmenta en varias componentes conexas. Al número de componentes conexas lo llamamos $p$.
-            \end{definicion}
-
             \begin{definicion}[Nodo de articulación e istmo]
-                Un \textbf{nodo de articulación} es un nodo cuya supresión (junto con sus aristas incidentes) incrementa el número de componentes conexas de la red.
+                Un \textbf{nodo de articulación} es un nodo cuya supresión (junto con sus aristas incidentes) incrementa el número de componentes conexas del grafo.
                 Un \textbf{istmo} (o arista de corte) es una arista cuya supresión incrementa el número de componentes conexas.
             \end{definicion}
 
@@ -837,7 +805,50 @@
             \end{definicion}
 
             \begin{definicion}[Número de ciclos independientes]
-                El \textbf{número de ciclos independientes} de un grafo se define como $\mu = |E| - |V| + p$, donde $|E|$ es el número de aristas, $|V|$ es el número de nodos y $p$ el número de componentes conexas.
+                Sea $G=(V,E)$ un grafo finito. El \textbf{número de ciclos independientes} de $G$ se define como
+                \[
+                    \mu(G)=\dim\mathcal{C}(G).
+                \]
+            \end{definicion}
+
+            \begin{teorema}[Fórmula del número ciclomático]
+                Para todo grafo finito no dirigido $G=(V,E)$ con $|V|=n$, $|E|=m$ y $p$ componentes conexas, se cumple
+                \[
+                \mu(G)=\dim \mathcal{C}(G)=m-n+p.
+                \]
+                Si $G$ es dirigido, la misma fórmula se aplica a $U(G)$.
+            \end{teorema}
+
+            La fórmula $\mu = m-n+p$ puede entenderse de forma conceptual. Para conectar $n$ nodos en $p$ componentes sin formar ciclos, se necesita un esqueleto de exactamente $n-p$ aristas (un \textit{bosque generador}). Cada arista adicional que se añade a este esqueleto, más allá de las $n-p$ estructurales, cierra un camino y crea un ciclo independiente de los demás. Por lo tanto, el número de ciclos independientes es el conteo de aristas sobrantes: $m - (n-p) = m-n+p$. La demostración formaliza esta idea.
+
+            \begin{proof}[Demostración (constructiva con bosque generador)]
+                Sea $F$ un \emph{bosque generador} de $G$, obtenido tomando un árbol generador en cada componente. Entonces $F$ tiene exactamente $n-p$ aristas.
+                Cada arista $e\in E\setminus E(F)$, al añadirse a $F$, crea un \emph{ciclo fundamental} $C_e$ único, porque en $F$ hay un único camino entre los extremos de $e$. El conjunto
+                \[
+                \mathcal{B}=\{C_e:\ e\in E\setminus E(F)\}
+                \]
+                tiene cardinalidad $m-(n-p)=m-n+p$.
+
+                Mostramos que $\mathcal{B}$ es una base de $\mathcal{C}(G)$ sobre $\mathbb{F}_2$:
+                \emph{(i) Independencia.} Si existiera una combinación lineal no trivial $\sum \lambda_e C_e=0$ (con $\lambda_e\in\{0,1\}$), eligiendo $e_0$ la arista de $E\setminus E(F)$ de \emph{mayor} nivel de inserción, se observa que $e_0$ aparece en $C_{e_0}$ pero no aparece en ningún otro $C_e$; por tanto, el coeficiente de $e_0$ en la suma no puede anularse, contradicción. \emph{(ii) Generación.} Todo ciclo $C$ de $G$ puede reducirse por diferencia simétrica, restando sucesivamente ciclos fundamentales que contienen alguna arista de $E\setminus E(F)$ presente en $C$, hasta quedar vacío. Luego todo ciclo pertenece al subespacio generado por $\mathcal{B}$.
+
+                Así, $\mathcal{B}$ es una base y $\dim\mathcal{C}(G)=|\mathcal{B}|=m-n+p$.
+            \end{proof}
+
+            \begin{corolario}
+                Si $G$ es conexo ($p=1$), entonces $\mu(G)=m-n+1$ y, en particular, cualquier árbol tiene $\mu=0$.
+            \end{corolario}
+
+            \begin{observacion}[Versión lineal-algebraica]
+                Si $B$ es la matriz de incidencia de $G$ sobre $\mathbb{R}$ o $\mathbb{F}_2$, entonces $\operatorname{rank}(B)=n-p$ y
+                \[
+                \dim \ker(B)=m-(n-p)=m-n+p,
+                \]
+                lo que coincide con la dimensión del espacio de ciclos.
+            \end{observacion}
+
+            \begin{definicion}[Triángulo]
+                Sea $G=(V,E)$ un grafo simple no dirigido. Un \textbf{triángulo} de $G$ es una $3$-clique de $G$.
             \end{definicion}
 
             \begin{definicion}[Coeficiente de agrupamiento local (no dirigido)]
@@ -876,7 +887,7 @@
                 \[
                 C^{\rightarrow}(i)\;=\;\frac{\big(S^3\big)_{ii}}{2\big(k_i(k_i-1)-2\,k_i^{\leftrightarrow}\big)}\,,
                 \]
-                con la convención $C^{\rightarrow}(i)=0$ si el denominador es nulo. Este coeficiente cuenta todas las triadas cerradas posibles alrededor de $i$ (incluyendo patrones con reciprocidad) y se reduce al caso no dirigido cuando $A$ es simétrica.
+                con la convención $C^{\rightarrow}(i)=0$ si el denominador es nulo. Este coeficiente se reduce al caso no dirigido cuando $A$ es simétrica.
             \end{definicion}
 
             % ----------------------------------------------------------
@@ -896,36 +907,79 @@
                 Para una red con $|V| = 10$ y $|E| = 12$, se tiene $\beta = 1.2$, lo que indica que cada nodo tiene en promedio más de una conexión.
             \end{ejemplo}
 
-            En algunos casos, cuando disponemos de un grafo planar, somos capaces de saber cuál es el número máximo de ciclos que puede tener. Para poder llegar a esa definición, antes debemos establecer un par de resultados relevantes.
+            \begin{definicion}[Grafo planar]
+                Un grafo es \textbf{planar} si admite un dibujo en el plano tal que ninguna de sus aristas se cruza con otra, salvo en los nodos que comparten. Un dibujo con esta propiedad se llama \textbf{dibujo planar}.
+            \end{definicion}
+
+            \begin{observacion}
+                La planitud de un grafo no depende de un dibujo particular, sino de la existencia de al menos un dibujo planar. Si $G$ es dirigido, salvo indicación en contrario, la planitud se evalúa en el grafo subyacente no dirigido $U(G)$.
+            \end{observacion}
+
+            \begin{definicion}[Cara de un grafo planar]
+                Sea $G$ un grafo planar y fíjese un dibujo planar de $G$ en el plano $\mathbb{R}^2$. Sea $X\subseteq \mathbb{R}^2$ el conjunto de puntos ocupado por ese dibujo, formado por los puntos que representan los nodos de $G$ y por las curvas que representan sus aristas.
+
+                Una \textbf{cara} del dibujo es un subconjunto $F$ de $\mathbb{R}^2\setminus X$ que satisface las siguientes dos condiciones:
+                \begin{enumerate}
+                    \item cualesquiera dos puntos de $F$ pueden unirse mediante una curva contenida en $F$;
+                    \item si $F\subseteq F'\subseteq \mathbb{R}^2\setminus X$ y $F'$ satisface la condición anterior, entonces $F'=F$.
+                \end{enumerate}
+                La cara que se extiende indefinidamente en el plano se llama \textbf{cara exterior}. Las demás se llaman \textbf{caras interiores}.
+            \end{definicion}
+
+            \begin{lema}[Frontera de una cara interior]
+                En cualquier dibujo planar de un grafo, la frontera de toda cara interior contiene un ciclo.
+            \end{lema}
+
+            \begin{proof}
+                La frontera de una cara interior es un recorrido cerrado $W$ que usa aristas del grafo.
+                Si $W$ no repite aristas ni vértices, entonces $W$ es un ciclo.
+                Si repite, al descomponer el recorrido cerrado estándar mediante diferencia simétrica se obtiene un ciclo no vacío contenido en la frontera.
+            \end{proof}
+
+            \begin{proposicion}[Todo árbol es planar y tiene una sola cara]
+                Todo árbol finito $T$ admite un dibujo planar y, en cualquier dibujo planar de $T$, el número de caras es $f=1$.
+            \end{proposicion}
+
+            \begin{proof}
+                \emph{Planaridad:} por inducción en $n=|V(T)|$.
+                Para $n=1$ es trivial.
+                Para $n\ge 2$, toma una hoja $x$ con vecino $y$ y consideremos $T'=T-\{x\}$. Por inducción, $T'$ tiene un dibujo sin cruces. Coloca $x$ en un pequeño vecindario libre alrededor de $y$ y dibuja el segmento $xy$; no introduce cruces. Así, $T$ es planar.
+
+                \emph{Unicidad de la cara:} en cualquier dibujo planar de $T$, si hubiera una cara interior, su frontera contendría un ciclo por el lema anterior, lo que contradice que $T$ sea acíclico. Por tanto no hay caras interiores y solo existe la cara exterior, es decir, $f=1$.
+            \end{proof}
+
+            En algunos casos, cuando disponemos de un grafo planar, podemos acotar el número máximo de ciclos independientes. Para establecer esa cota, antes necesitamos el siguiente resultado.
 
             \begin{teorema}[Teorema de Euler]
                 Sea $G$ un grafo planar conexo con $|V|$ nodos, $|E|$ aristas y $f$ caras. Entonces:
+                \[
+                    |V|-|E|+f=2.
+                \]
             \end{teorema}
 
-            La idea central es que la fórmula se cumple para la estructura más simple posible, un árbol, donde $|V| - (|V|-1) + 1 = 2$. A partir de ahí, cualquier arista que se añada sin dejar de ser planar debe necesariamente dividir una cara existente en dos. Al hacer esto, se suma 1 a $|E|$ y 1 a $f$, por lo que el resultado de la expresión $|V| - |E| + f$ permanece constante e igual a 2. La prueba por inducción formaliza este razonamiento.
+            La idea central es que la fórmula se cumple para la estructura más simple posible, un árbol, donde $|V| - (|V|-1) + 1 = 2$. A partir de ahí, cada arista adicional que preserve la conexidad y la planitud divide una cara existente en dos. Al hacer esto, se suma 1 a $|E|$ y 1 a $f$, por lo que el resultado de la expresión $|V| - |E| + f$ permanece constante e igual a 2. La prueba por inducción formaliza este razonamiento.
 
             \begin{proof}
-                La prueba se realiza por inducción sobre el número de aristas $|E|$.
+                La prueba se realiza por inducción sobre $\mu(G)=|E|-|V|+1$, que mide cuántas aristas tiene $G$ por encima de un árbol generador.
 
                 \textbf{Caso base:}
-                Si $G$ es un árbol (grafo conexo sin ciclos), es planar y tiene $f=1$ (toda la región exterior), y se sabe que $|E| = |V| - 1$.
+                Si $\mu(G)=0$, entonces $G$ es un árbol, es planar y tiene $f=1$ (toda la región exterior), y se sabe que $|E| = |V| - 1$.
                 Por tanto:
                 \[
                 |V| - |E| + f = |V| - (|V|-1) + 1 = 1 + 1 = 2.
                 \]
 
                 \textbf{Paso inductivo:}
-                Suponiendo que el teorema se cumple para todo grafo planar conexo con $k$ aristas.
-                Sea $G$ un grafo planar conexo con $k+1$ aristas.
-                Como $G$ es conexo y tiene más aristas que un árbol, debe contener al menos un ciclo.
-                Elimina una arista que pertenezca a algún ciclo; el grafo resultante $G'$ sigue siendo conexo y planar, tiene $k$ aristas y, al eliminar la arista del ciclo, se fusionan dos caras adyacentes, por lo que el número de caras disminuye en uno ($f' = f - 1$).
+                Supongamos que el resultado se cumple para todo grafo planar conexo con número ciclomático menor que $\mu(G)$, y sea $\mu(G)\ge 1$.
+                Como $G$ es conexo y no es un árbol, contiene al menos un ciclo.
+                Elimina una arista que pertenezca a algún ciclo; el grafo resultante $G'$ sigue siendo conexo y planar, tiene $|E|-1$ aristas y, al eliminar la arista del ciclo, se fusionan dos caras adyacentes, por lo que el número de caras disminuye en uno ($f' = f - 1$).
                 Por hipótesis inductiva:
                 \[
-                |V| - k + f' = 2.
+                |V| - (|E|-1) + f' = 2.
                 \]
-                Sustituyendo $f = f'+1$ y $|E| = k+1$,
+                Sustituyendo $f = f'+1$,
                 \[
-                |V| - (k+1) + (f'+1) = |V| - k - 1 + f' + 1 = |V| - k + f' = 2.
+                |V| - |E| + f = |V| - |E| + (f'+1)=|V|-(|E|-1)+f'=2.
                 \]
                 Por lo tanto, la fórmula se mantiene para $G$.
 
@@ -969,11 +1023,11 @@
             \end{proof}
 
             \begin{definicion}[Índice $\alpha$ (redundancia planar)]
-                En un grafo planar simple y conexo, el \textbf{índice $\alpha$} cuantifica la proporción de ciclos presentes frente al máximo posible:
+                En un grafo planar simple y conexo con $|V|\ge 3$, el \textbf{índice $\alpha$} cuantifica la proporción de ciclos presentes frente al máximo posible:
                 \[
                 \alpha = \frac{|E| - |V| + 1}{2|V| - 5}
                 \]
-                Valores altos sugieren mayor redundancia y resiliencia. En esta tesis usamos esta forma para el caso conexo ($p=1$).
+                Valores altos sugieren mayor redundancia y resiliencia. Esta forma corresponde al caso conexo ($p=1$).
             \end{definicion}
 
             \begin{ejemplo}
@@ -985,7 +1039,7 @@
             \end{ejemplo}
 
             \begin{definicion}[Índice $\gamma$ (densidad planar)]
-                El \textbf{índice $\gamma$} expresa la fracción de aristas observadas respecto al máximo en un grafo planar simple:
+                En un grafo planar simple con $|V|\ge 3$, el \textbf{índice $\gamma$} expresa la fracción de aristas observadas respecto al máximo posible:
                 \[
                 \gamma = \frac{|E|}{3|V| - 6}
                 \]
@@ -997,46 +1051,8 @@
                 \[
                 \gamma = \frac{14}{3 \times 8 - 6} = \frac{14}{18} \approx 0.778
                 \]
-                Lo que sugiere alta densidad planar, indicando que la red está utilizando más del 77% de las conexiones posibles para un grafo planar de su tamaño.
+                Esto sugiere alta densidad planar, pues la red utiliza más del 77% de las conexiones posibles para un grafo planar de su tamaño.
             \end{ejemplo}
-
-            \paragraph{Del caso planar al caso general.}
-            Como vimos, los resultados anteriores funcionan únicamente para grafos planares. Aunque esta clase de grafos es abundante y su estudio es muy útil, durante este trabajo nos interesaremos por grafos que no necesariamente son planares. Para esos casos usaremos los siguientes resultados.
-
-            \begin{teorema}[Fórmula del número ciclomático]
-                Para todo grafo finito $G$ con $|V|=n$, $|E|=m$ y $p$ componentes conexas, se cumple
-                \[
-                \dim \mathcal{C}(G)\;=\;\mu(G)\;=\;m-n+p.
-                \]
-            \end{teorema}
-
-            La fórmula $\mu = m-n+p$ puede entenderse de forma conceptual. Para conectar $n$ nodos en $p$ componentes sin formar ciclos, se necesita un esqueleto de exactamente $n-p$ aristas (un \textit{bosque generador}). Cada arista adicional que se añade a este esqueleto, más allá de las $n-p$ estructurales, inevitablemente "cierra" un camino y crea un ciclo que es independiente de los demás. Por lo tanto, el número de ciclos independientes es simplemente el conteo de aristas "sobrantes": $m - (n-p) = m-n+p$. La demostración formaliza esta idea.
-
-            \begin{proof}[Demostración (constructiva con bosque generador)]
-                Sea $F$ un \emph{bosque generador} de $G$, obtenido tomando un árbol generador en cada componente. Entonces $F$ tiene exactamente $n-p$ aristas.
-                Cada arista $e\in E\setminus E(F)$, al añadirse a $F$, crea un \emph{ciclo fundamental} $C_e$ único (porque en $F$ hay un único camino entre los extremos de $e$). El conjunto de estos ciclos fundamentales
-                \[
-                \mathcal{B}=\{C_e:\ e\in E\setminus E(F)\}
-                \]
-                tiene cardinalidad $m-(n-p)=m-n+p$.
-
-                Mostramos que $\mathcal{B}$ es una base de $\mathcal{C}(G)$ sobre $\mathbb{F}_2$:
-                \emph{(i) Independencia.} Si existiera una combinación lineal no trivial $\sum \lambda_e C_e=0$ (con $\lambda_e\in\{0,1\}$), eligiendo $e_0$ la arista de $E\setminus E(F)$ de \emph{mayor} nivel de inserción, se observa que $e_0$ aparece en $C_{e_0}$ pero no aparece en ningún otro $C_e$; por tanto, el coeficiente de $e_0$ en la suma no puede anularse, contradicción. \emph{(ii) Generación.} Todo ciclo $C$ de $G$ puede reducirse, por symmetric difference, restando sucesivamente ciclos fundamentales que contienen alguna arista de $E\setminus E(F)$ presente en $C$, hasta quedar (eventualmente) vacío. Luego todo ciclo pertenece al span de $\mathcal{B}$.
-
-                Así, $\mathcal{B}$ es una base y $\dim\mathcal{C}(G)=|\mathcal{B}|=m-n+p$.
-            \end{proof}
-
-            \begin{corolario}
-                Si $G$ es conexo ($p=1$), entonces $\mu(G)=m-n+1$ y, en particular, cualquier árbol tiene $\mu=0$.
-            \end{corolario}
-
-            \begin{observacion}[Versión lineal-algebraica]
-                Si $B$ es la matriz de incidencia de $G$ sobre $\mathbb{R}$ o $\mathbb{F}_2$, entonces $\operatorname{rank}(B)=n-p$ y
-                \[
-                \dim \ker(B^\top)=m-(n-p)=m-n+p,
-                \]
-                lo que coincide con la dimensión del espacio de ciclos.
-            \end{observacion}
 
         Las propiedades estudiadas hasta aquí son válidas independientemente del espacio en el que esté embebida la red, si existe tal embebimiento. En aplicaciones de transporte también interesa analizar grafos realizados en un espacio geométrico: cada nodo adquiere una posición y, si el espacio es métrico, cada arista una longitud. A continuación formalizamos esta perspectiva.
 
@@ -1094,12 +1110,12 @@
         \end{ejemplo}
 
         % --- Operadores y brecha espectral en redes dirigidas ---
-        \begin{definicion}[Operador de transición]
-            Sea $G$ un grafo dirigido finito, sin nodos aislados. Su \emph{operador de transición} es la matriz fila-estocástica $P=(p_{ij})_{i,j\in V}$ dada por
+            \begin{definicion}[Operador de transición]
+            Sea $G$ un grafo dirigido finito tal que todo nodo tiene grado de salida positivo. Su \emph{operador de transición} es la matriz $P=(p_{ij})_{i,j\in V}$ dada por
             \[
             p_{ij}=\frac{a_{ij}}{\sum_k a_{ik}},
             \]
-            donde $A=(a_{ij})$ es la matriz de adyacencia (o una versión ponderada coherente con $\ell$).
+            donde $A=(a_{ij})$ es la matriz de adyacencia (o una versión ponderada coherente con $\ell$). La matriz $P$ es \emph{fila-estocástica}: sus entradas son no negativas y cada fila suma $1$.
         \end{definicion}
 
         \begin{definicion}[Brecha espectral para grafos dirigidos]
@@ -1181,7 +1197,7 @@
             \begin{definicion}[Centralidad de intermediación]
                 La \textbf{centralidad de intermediación} de un nodo $v$, denotada $C_b(v)$, es la suma, sobre todos los pares de nodos $(s, t)$ distintos de $v$, de la proporción de caminos más cortos entre $s$ y $t$ que pasan por $v$:
                 \[
-                C_b(v) = \sum_{s \neq v \neq t} \frac{\sigma_{st}(v)}{\sigma_{st}}
+                C_b(v) = \sum_{\substack{s,t\in V\setminus\{v\}\\ s\neq t\\ \sigma_{st}>0}} \frac{\sigma_{st}(v)}{\sigma_{st}}
                 \]
                 donde $\sigma_{st}$ es el número de caminos geodésicos de $s$ a $t$, y $\sigma_{st}(v)$ aquellos que pasan por $v$.
             \end{definicion}
@@ -1236,18 +1252,18 @@
                 && \sigma_{EC}(B)=1 \ \Rightarrow\ \frac{\sigma_{EC}(B)}{\sigma_{EC}}=1.
                 \end{aligned}
                 \]
-                Todos los demás pares $(s,t)$ con $s\neq B\neq t$ no aportan (la geodésica no pasa por $B$ o no existe). Por tanto,
+                Todos los demás pares $(s,t)$ con $s,t\in V\setminus\{B\}$ y $s\neq t$ no aportan (la geodésica no pasa por $B$ o no existe). Por tanto,
                 \[
                 C_b(B)=\frac{1}{2}+1=\frac{3}{2}.
                 \]
             \end{ejemplo}
 
             \begin{definicion}[Eccentricidad]
-                La \textbf{eccentricidad} de un nodo $v$, denotada $e(v)$, es la mayor distancia desde $v$ hacia cualquier otro nodo de la red:
+                La \textbf{eccentricidad entrante} de un nodo $v$, denotada $e(v)$, es la mayor distancia desde cualquier otro nodo hacia $v$:
                 \[
                 e(v) = \max_{u \in V} d(u, v)
                 \]
-                Mide el “peor caso” de accesibilidad individual.
+                Mide el peor caso de accesibilidad hacia $v$.
             \end{definicion}
 
             \begin{ejemplo}[Eccentricidad de $v=C$]
@@ -1344,12 +1360,12 @@
                 con la convención $V(G;H)=0$ si $Ef(G)=0$. Notación abreviada: $V_v:=V(G;\{v\})$ y $V_e:=V(G;\{e\})$.
             \end{definicion}
 
-            \begin{proposicion}[Monotonicidad por eliminación]
-                Para todo $H\subseteq V$ o $H\subseteq E$ se cumple $Ef(G\setminus H)\le Ef(G)$.
+            \begin{proposicion}[Monotonicidad por eliminación de aristas]
+                Para todo $H\subseteq E$ se cumple $Ef(G\setminus H)\le Ef(G)$.
             \end{proposicion}
 
             \begin{proof}
-                Sea $d_G$ la distancia en $G$ y $d_{G\setminus H}$ la distancia tras eliminar $H$. Quitar vértices o aristas no crea caminos nuevos ni acorta los existentes, de modo que para todo $i\neq j$:
+                Sea $d_G$ la distancia en $G$ y $d_{G\setminus H}$ la distancia tras eliminar $H$. Quitar aristas no crea caminos nuevos ni acorta los existentes, de modo que para todo $i\neq j$:
                 \[
                 d_{G\setminus H}(i,j)\;\ge\; d_G(i,j)\quad\text{(o bien }d_{G\setminus H}(i,j)=+\infty\text{)}.
                 \]
@@ -1357,8 +1373,12 @@
                 \[
                 \frac{1}{d_{G\setminus H}(i,j)}\;\le\;\frac{1}{d_G(i,j)}\qquad\text{para todo }i\neq j.
                 \]
-                Al promediar sobre todos los pares aparece exactamente $Ef(G\setminus H)\le Ef(G)$.
+                Al promediar sobre el mismo conjunto de nodos aparece exactamente $Ef(G\setminus H)\le Ef(G)$.
             \end{proof}
+
+            \begin{observacion}
+                Para eliminaciones de vértices, la desigualdad anterior no se garantiza con la normalización de $Ef(G\setminus H)$ sobre el nuevo conjunto de nodos: al quitar nodos periféricos, el promedio de eficiencia de los nodos restantes puede aumentar. En ese caso, $V(G;H)$ debe interpretarse como cambio relativo respecto de la eficiencia global original.
+            \end{observacion}
 
             \begin{definicion}[Curvas de vulnerabilidad y resiliencia]
                 Para $k\in\{1,\dots,N\}$ definimos la \textbf{vulnerabilidad en peor caso}
@@ -1505,7 +1525,7 @@
             \end{ejemplo}
 
             \begin{observacion}[Limitación]
-                Si existen pesos negativos, el invariante de optimalidad falla. Por esta razón, en esta tesis Dijkstra se aplica únicamente a grafos cuyos pesos representan costos no negativos, como tiempos de viaje o costo unitario por arista.
+                Si existen pesos negativos, el invariante de optimalidad falla. Por esta razón, Dijkstra se aplica únicamente a grafos cuyos pesos representan costos no negativos, como tiempos de viaje o costo unitario por arista.
             \end{observacion}
 
     \section{Algoritmos de detección de comunidades}
