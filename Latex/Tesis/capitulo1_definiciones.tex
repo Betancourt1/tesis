@@ -572,15 +572,20 @@
             \end{definicion}
 
             \begin{observacion}[Propiedades básicas de la distancia]
-                % TODO [PDF p.18][Fernando Becerra][cat: rigor matematico][prio: media][resaltado: "d(u,v) >= 0... Desigualdad triangular..."]: conectar explícitamente estas propiedades con la noción de espacio métrico, si corresponde.
+                Sea $X$ un conjunto. Una función $\delta:X\times X\to[0,\infty)$ define un \textbf{espacio métrico} $(X,\delta)$ si, para todo $a,b,c\in X$, se cumplen las siguientes propiedades:
                 \begin{itemize}
-                    \item $d(u,u)=0$.
-                    \item $d(u,v)\ge 0$; con aristas de longitud unitaria, $d(u,v)=0$ implica $u=v$.
-                    \item Desigualdad triangular: $d(u,v)\le d(u,x)+d(x,v)$ para todo $u,v,x\in V$.
-                    \item En grafos no dirigidos: $d(u,v)=d(v,u)$ cuando $u$ y $v$ pertenecen a la misma componente; si no, $d(u,v)=+\infty$.
-                    \item En grafos dirigidos: en general $d(u,v)\neq d(v,u)$; y $d(u,v)=+\infty$ si no existe camino de $u$ a $v$.
-                    \item En el caso ponderado con pesos no negativos: las propiedades anteriores se mantienen reemplazando “longitud” por “peso total”.
+                    \item $\delta(a,b)=0$ si y solo si $a=b$;
+                    \item $\delta(a,b)=\delta(b,a)$;
+                    \item $\delta(a,c)\le \delta(a,b)+\delta(b,c)$.
                 \end{itemize}
+
+                La distancia $d$ definida arriba siempre satisface $d(u,u)=0$, $d(u,v)\ge 0$ y la desigualdad triangular
+                \[
+                    d(u,v)\le d(u,x)+d(x,v)
+                \]
+                para todo $u,v,x\in V$, con la convención usual para $+\infty$. En un grafo no dirigido, si todo par de nodos de $V$ está unido por un camino, entonces $d:V\times V\to[0,\infty)$ define un espacio métrico sobre $V$. Si existen nodos que no están unidos por ningún camino, se mantiene la convención $d(u,v)=+\infty$; por tanto, $d$ no define un espacio métrico sobre todo $V$, aunque sí lo hace al restringirse a cualquier subconjunto de nodos en el que todo par esté unido por un camino.
+
+                En grafos dirigidos, puede ocurrir que $d(u,v)\neq d(v,u)$, por lo que la distancia dirigida no define, en general, un espacio métrico. En el caso ponderado, la misma conclusión métrica requiere pesos estrictamente positivos; si se permiten pesos cero, puede ocurrir que $d_w(u,v)=0$ con $u\neq v$.
             \end{observacion}
 
         \subsubsection{Árboles}
