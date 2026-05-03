@@ -33,6 +33,22 @@
             Sea $G=(V,E)$ un grafo dirigido o no dirigido. Un \textbf{lazo} es una arista cuyos dos extremos coinciden. En un grafo dirigido tiene la forma $(v,v)$ para algún $v\in V$; en un grafo no dirigido tiene la forma $\{v,v\}$ para algún $v\in V$.
         \end{definicion}
 
+        \begin{definicion}[Grafo simple]
+            Sea $G=(V,E)$ un grafo no dirigido. Se dice que $G$ es \textbf{simple} si no tiene lazos. Bajo la convención de que $E$ es un conjunto de pares no ordenados, esto equivale a
+            \[
+                E\subseteq \{\{u,v\}: u,v\in V,\ u\neq v\}.
+            \]
+            En particular, para cualesquiera dos nodos distintos $u,v\in V$, existe a lo sumo una arista con extremos $u$ y $v$.
+        \end{definicion}
+
+        \begin{observacion}[Grafo dirigido simple]
+            Sea $G=(V,E)$ un grafo dirigido. Se dice que $G$ es \emph{dirigido simple} si no tiene lazos. Equivalentemente,
+            \[
+                E\subseteq \{(u,v):u,v\in V,\ u\neq v\}.
+            \]
+            Como $E$ es un conjunto, para cada par ordenado $(u,v)$ hay a lo sumo una arista de la forma $(u,v)$. Para $u\neq v$, pueden pertenecer a $E$ el par ordenado $(u,v)$, el par ordenado $(v,u)$, ambos o ninguno.
+        \end{observacion}
+
         \begin{definicion}[Adyacencia de nodos]
             Sean $G=(V,E)$ un grafo no dirigido y $u,v\in V$ dos nodos distintos.
             Se dice que $u$ y $v$ son \textbf{adyacentes} si $\{u,v\}\in E$.
@@ -207,15 +223,6 @@
                 \end{tikzpicture}
             \end{center}
         \end{ejemplo}
-
-        \begin{definicion}[Grafo simple]
-            % TODO [PDF p.14][Fernando Becerra][cat: estructura][prio: alta][nota flotante sobre: "Un grafo simple G=(V,E)..."]: revisar el orden de las definiciones porque esta ubicación fue marcada como confusa.
-            Un \textbf{grafo simple} $G=(V,E)$ es un grafo no dirigido, finito y que no es multígrafo; esto es, $E\subseteq \{\{u,v\} : u,v\in V,\ u\neq v\}$ y entre dos nodos distintos hay a lo sumo una arista.
-        \end{definicion}
-
-        \begin{observacion}
-            Cuando el contexto es dirigido, se habla de \emph{grafo dirigido simple}: no se permiten lazos y, para cada par ordenado $(u,v)$ con $u\neq v$, hay a lo sumo un arco $(u,v)$.
-        \end{observacion}
 
     \section{Propiedades fundamentales de los grafos}
 
