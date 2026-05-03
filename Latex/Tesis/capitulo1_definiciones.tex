@@ -1593,11 +1593,15 @@
         \subsection{DBSCAN}
 
             \begin{definicion}[Espacio de trabajo]
-                Fijamos un conjunto finito de nodos $V$ y una función de distancia simétrica $d:V\times V\to[0,\infty)$ que satisface $d(u,u)=0$ y $d(u,v)=d(v,u)$. Si $d$ no es métrica (p.\,ej.\ proviene de un grafo dirigido), trabajaremos con una simetrización
+                Fijamos un conjunto finito de nodos $V$ y una función simétrica
                 \[
-                d^{\mathrm{sym}}(u,v):=\max\{d(u,v),d(v,u)\}
+                    d:V\times V\to[0,\infty]
                 \]
-                o con la distancia sobre el subyacente no dirigido. Sea $N=|V|$.
+                tal que $d(x,x)=0$ para todo $x\in V$. No se exige que $d$ satisfaga la desigualdad triangular. Si se parte de una disimilitud dirigida $\delta:V\times V\to[0,\infty]$, una forma de obtener una función simétrica es
+                \[
+                d(u,v):=\max\{\delta(u,v),\delta(v,u)\}.
+                \]
+                También puede usarse la distancia sobre el grafo subyacente no dirigido. Sea $N=|V|$.
             \end{definicion}
 
             \begin{definicion}[$\varepsilon$-vecindad y tipos de puntos]
@@ -1622,47 +1626,53 @@
             \end{definicion}
 
             \begin{definicion}[Cluster DBSCAN]
-                Un \emph{cluster} (o comunidad) es un conjunto no vacío $C\subseteq V$ tal que:
-                \begin{enumerate}
-                  \item \emph{Maximalidad por alcance:} si $x\in C$ y $y$ es alcanzable por densidad desde $x$, entonces $y\in C$;
-                  \item \emph{Conexión por densidad:} para todo $x,y\in C$ existe $z\in C$ que conecta por densidad a $x$ e $y$.
-                \end{enumerate}
-                Llamamos \emph{ruido} al conjunto $V\setminus \bigcup C$, unión sobre todos los clusters.
+                Sea $K\subseteq V$ el conjunto de puntos núcleo. Si $K=\emptyset$, no hay clusters núcleo y todos los puntos de $V$ se etiquetan como ruido. Si $K\neq\emptyset$, definimos el \textbf{grafo de núcleos} como el grafo no dirigido $G_K=(K,E_K)$, donde
+                \[
+                    E_K=\{\{x,y\}:x,y\in K,\ x\neq y,\ d(x,y)\le\varepsilon\}.
+                \]
+                Las componentes conexas de $G_K$, denotadas $K_1,\dots,K_r$, se llaman \textbf{clusters núcleo}.
+
+                Un punto de borde $b$ es \textbf{alcanzado} por $K_j$ si existe $x\in K_j$ tal que $b\in\mathcal{N}_\varepsilon(x)$. Como un punto de borde puede ser alcanzado por más de un cluster núcleo, fijamos una regla de desempate: cada punto de borde se asigna a uno de los clusters núcleo que lo alcanzan. Una vez fijada esa regla, el \textbf{cluster DBSCAN} asociado a $K_j$ es
+                \[
+                    C_j=K_j\cup\{b:\ b\text{ es punto de borde asignado a }K_j\}.
+                \]
+                Los puntos que no son núcleo ni borde se etiquetan como \textbf{ruido}.
             \end{definicion}
 
-            \begin{proposicion}[Partición parcial]
-                La familia de clusters DBSCAN forma una colección de subconjuntos disjuntos de $V$; todo punto de núcleo pertenece a un único cluster y todo punto de borde pertenece a lo sumo a un cluster. El resto es ruido.
+            \begin{observacion}
+                Sin una regla de desempate, un punto de borde puede ser alcanzado por más de un cluster núcleo. Por ello, la disjunción de clusters no es una consecuencia automática de la definición por densidad, sino de la convención de asignación fijada arriba.
+            \end{observacion}
+
+            \begin{proposicion}[Partición parcial con desempate]
+                Fijada una regla de desempate para puntos de borde, los clusters DBSCAN $C_1,\dots,C_r$ son disjuntos dos a dos. Todo punto núcleo pertenece a un único cluster, todo punto de borde pertenece a un único cluster asignado, y los puntos restantes son ruido.
             \end{proposicion}
 
             \begin{proof}
-                La alcanzabilidad por densidad es reflexiva y transitiva sobre el subconjunto de núcleos; la conexión por densidad induce clases de equivalencia sobre núcleos. Cada clase se expande añadiendo sus puntos de borde adyacentes (que por definición pueden depender de varios núcleos de la clase), sin crear intersecciones entre clases distintas. La maximalidad impide solapamientos entre clusters distintos.
+                Las componentes conexas $K_1,\dots,K_r$ de $G_K$ son disjuntas y cubren todos los puntos núcleo. Por construcción, cada punto de borde se asigna a exactamente uno de los clusters núcleo que lo alcanzan. Por tanto, ningún punto núcleo ni punto de borde aparece en dos conjuntos $C_j$ distintos. Los puntos que no son núcleo ni borde no se agregan a ningún $C_j$ y quedan etiquetados como ruido.
             \end{proof}
 
-            \begin{proposicion}[Monotonía en los parámetros]
-                Si $\varepsilon_1\le \varepsilon_2$ y $\text{minPts}_1\ge \text{minPts}_2$, entonces todo cluster obtenido con $(\varepsilon_1,\text{minPts}_1)$ es contenido de algún cluster con $(\varepsilon_2,\text{minPts}_2)$ y el conjunto de puntos etiquetados como ruido no aumenta al pasar de $(\varepsilon_1,\text{minPts}_1)$ a $(\varepsilon_2,\text{minPts}_2)$.
+            \begin{proposicion}[Monotonía de núcleos y ruido]
+                Si $\varepsilon_1\le \varepsilon_2$ y $\text{minPts}_1\ge \text{minPts}_2$, entonces todo punto núcleo para $(\varepsilon_1,\text{minPts}_1)$ sigue siendo núcleo para $(\varepsilon_2,\text{minPts}_2)$. Además, todo punto que no es ruido con los parámetros $(\varepsilon_1,\text{minPts}_1)$ tampoco es ruido con los parámetros $(\varepsilon_2,\text{minPts}_2)$.
             \end{proposicion}
 
             \begin{proof}
-                Al crecer $\varepsilon$ o disminuir $\text{minPts}$, las vecindades se expanden y los núcleos no se pierden; por tanto, las cadenas de alcanzabilidad existentes se preservan o se amplían, lo que mantiene o crece los clusters. Consecuentemente, la etiqueta de ruido sólo puede reducirse.
+                Al crecer $\varepsilon$, las vecindades no se reducen. Al disminuir $\text{minPts}$, la condición para ser núcleo no se vuelve más exigente. Por tanto, todo núcleo anterior sigue siendo núcleo. Si un punto era borde, estaba en la vecindad de algún núcleo; ese núcleo se conserva y su vecindad no se reduce, así que el punto sigue siendo núcleo o borde. En consecuencia, ningún punto no ruido pasa a ser ruido bajo parámetros más permisivos.
             \end{proof}
 
             \paragraph{Algoritmo (DBSCAN).}
             \begin{enumerate}
-              \item Marcamos todos los puntos como \textsc{no visitado}. Fijamos $C\gets \emptyset$ como la lista de clusters.
-              \item Para cada $x\in V$ no visitado: marcamos $x$ como \textsc{visitado} y calculamos $\mathcal{N}_\varepsilon(x)$.
-                \begin{itemize}
-                  \item Si $|\mathcal{N}_\varepsilon(x)|<\text{minPts}$, etiquetamos $x$ como \textsc{ruido} (etiqueta provisional).
-                  \item Si $|\mathcal{N}_\varepsilon(x)|\ge\text{minPts}$, creamos un nuevo cluster $C_\mathrm{new}$ y \emph{expandimos}:
-                  añadimos $x$ y todos los puntos de $\mathcal{N}_\varepsilon(x)$; para cada $y$ añadido, si no estaba visitado lo marcamos visitado, computamos $\mathcal{N}_\varepsilon(y)$ y, si $y$ es núcleo, añadimos $\mathcal{N}_\varepsilon(y)$ al conjunto a explorar. Reetiquetamos cualquier punto marcado como \textsc{ruido} que sea absorbido por $C_\mathrm{new}$ como \textsc{borde}. Al terminar, añadimos $C_\mathrm{new}$ a $C$.
-                \end{itemize}
+              \item Calculamos $\mathcal{N}_\varepsilon(x)$ para todo $x\in V$ e identificamos el conjunto $K$ de puntos núcleo.
+              \item Construimos el grafo de núcleos $G_K$ y calculamos sus componentes conexas $K_1,\dots,K_r$.
+              \item Identificamos los puntos de borde y asignamos cada uno a un cluster núcleo que lo alcance mediante la regla de desempate fijada.
+              \item Los clusters son los conjuntos $C_1,\dots,C_r$ resultantes; los puntos no asignados son ruido.
             \end{enumerate}
 
             \begin{proposicion}[Corrección del algoritmo]
-                El algoritmo produce exactamente la familia de clusters definida por alcanzabilidad y conexión por densidad y etiqueta como ruido los puntos que no pertenecen a ningún cluster.
+                El algoritmo produce exactamente los clusters DBSCAN definidos mediante componentes de núcleos y la regla de desempate para puntos de borde.
             \end{proposicion}
 
             \begin{proof}
-                La expansión a partir de un núcleo realiza el cierre por alcanzabilidad por densidad (maximalidad) y, al encadenar núcleos, garantiza la conexión por densidad. Todo punto absorbido pertenece por definición al cluster; ningún punto no alcanzable puede añadirse. La iteración sobre todos los puntos asegura que toda clase de conexión por densidad se descubre. Los puntos que no son alcanzables desde ningún núcleo quedan como ruido.
+                Los pasos 1 y 2 construyen el mismo conjunto de núcleos y las mismas componentes $K_1,\dots,K_r$ que aparecen en la definición. El paso 3 aplica la regla de desempate a todos y solo los puntos de borde alcanzados por al menos una componente. Por tanto, cada $C_j$ contiene exactamente los núcleos de $K_j$ y los bordes asignados a $K_j$. El paso 4 etiqueta como ruido precisamente a los puntos que no son núcleo ni borde.
             \end{proof}
 
             \begin{proposicion}[Complejidad]
@@ -1670,7 +1680,7 @@
             \end{proposicion}
 
             \begin{observacion}[Elección de $d$ en redes]
-                En redes usaremos una distancia $d$ coherente con la estructura: por defecto la distancia de caminos mínimos $d_\ell$ en el subyacente no dirigido; en grafos dirigidos podemos simetrizar con $d^{\mathrm{sym}}(u,v)=\max\{d(u,v),d(v,u)\}$ o trabajar sobre incrustaciones $\varphi:V\to\mathbb{R}^p$ y una métrica euclidiana en el espacio de representación. La consistencia de los clusters depende de esta elección.
+                En redes usaremos una función simétrica $d$ coherente con la estructura: por defecto la distancia de caminos mínimos $d_\ell$ en el subyacente no dirigido; en grafos dirigidos podemos partir de una disimilitud dirigida $\delta$ y simetrizarla con $d(u,v)=\max\{\delta(u,v),\delta(v,u)\}$, o trabajar sobre incrustaciones $\varphi:V\to\mathbb{R}^p$ y una métrica euclidiana en el espacio de representación. La consistencia de los clusters depende de esta elección.
             \end{observacion}
 
             \begin{ejemplo}[Instancia mínima]
