@@ -221,7 +221,32 @@
         Después de fijar las variantes básicas de grafo, conviene introducir primero las estructuras que se obtienen dentro de un grafo dado. A partir de ellas se formalizan relaciones entre pares de nodos y formas numéricas de registrar las aristas.
 
         \begin{definicion}[Subgrafo]
-            Un \textbf{subgrafo} $H = (V_H, E_H)$ de un grafo $G = (V, E)$ es un grafo tal que $V_H \subseteq V$, $E_H \subseteq E$ y toda arista de $E_H$ tiene sus extremos en $V_H$. Es decir, un subgrafo es una parte de un grafo que mantiene la estructura de nodos y aristas del grafo original.
+            Sea $G=(V,E)$ un grafo. Un \textbf{subgrafo} de $G$ es un grafo $H=(V_H,E_H)$ del mismo tipo que $G$ tal que $V_H\subseteq V$, $E_H\subseteq E$ y toda arista de $E_H$ tiene sus extremos en $V_H$.
+        \end{definicion}
+
+        \begin{definicion}[Subgrafo inducido y eliminación]
+            Sea $G=(V,E)$ un grafo y sea $S\subseteq V$ un subconjunto no vacío. El \textbf{subgrafo inducido} por $S$, denotado por $G[S]$, es el subgrafo con conjunto de nodos $S$ y con todas las aristas de $G$ cuyos extremos pertenecen a $S$:
+            \[
+                G[S]=(S,E_S).
+            \]
+            Si $G$ es no dirigido, entonces
+            \[
+                E_S=\{\{u,v\}\in E:u,v\in S\}.
+            \]
+            Si $G$ es dirigido, entonces
+            \[
+                E_S=\{(u,v)\in E:u,v\in S\}.
+            \]
+
+            Si $X\subseteq V$ y $V\setminus X$ es no vacío, la \textbf{eliminación de los nodos de $X$} se define como
+            \[
+                G-X:=G[V\setminus X].
+            \]
+            Si $F\subseteq E$, la \textbf{eliminación de las aristas de $F$} se define como
+            \[
+                G-F:=(V,E\setminus F).
+            \]
+            Cuando el contexto determine si $H$ es un conjunto de nodos o un conjunto de aristas, se escribirá también $G\setminus H$ para la eliminación correspondiente.
         \end{definicion}
 
         \begin{ejemplo}[Subgrafo]
@@ -731,8 +756,15 @@
             Entre las propiedades clásicas que describen la forma en que los nodos se relacionan destacan los siguientes conceptos fundamentales:
 
             \begin{definicion}[Nodo de articulación e istmo]
-                Un \textbf{nodo de articulación} es un nodo cuya supresión (junto con sus aristas incidentes) incrementa el número de componentes conexas del grafo.
-                Un \textbf{istmo} (o arista de corte) es una arista cuya supresión incrementa el número de componentes conexas.
+                Sea $G=(V,E)$ un grafo no dirigido y sea $p(G)$ su número de componentes conexas. Un nodo $v\in V$ es un \textbf{nodo de articulación} si $V\setminus\{v\}$ es no vacío y
+                \[
+                    p(G-\{v\})>p(G).
+                \]
+                Una arista $e\in E$ es un \textbf{istmo} o \textbf{arista de corte} si
+                \[
+                    p(G-\{e\})>p(G).
+                \]
+                En grafos dirigidos, estas nociones se aplican al grafo subyacente no dirigido.
             \end{definicion}
 
             \begin{ejemplo}
