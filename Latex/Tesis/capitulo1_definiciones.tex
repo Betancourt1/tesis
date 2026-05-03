@@ -1381,9 +1381,8 @@
         \end{itemize}
         Estas decisiones aseguran consistencia entre el marco teórico (distancias, centralidades y modularidad) y la implementación computacional reportada en los capítulos de construcción y resultados.
 
-    \section{Algoritmos de caminos mínimos}
-        % TODO [PDF p.29][Fernando Becerra][cat: metodologia][prio: media][resaltado: "Floyd-Warshall... par-a-par por programación dinámica..."]: explicar mejor para qué se requieren estos algoritmos dentro de la tesis.
-        Al estudiar distancias y caminos mínimos en grafos finitos, necesitamos procedimientos efectivos que, a partir de especificaciones bien definidas, produzcan soluciones correctas en tiempo finito y con garantías de optimalidad. En esta línea situamos dos hitos clásicos: el algoritmo de Dijkstra (formulado en 1956 y publicado en 1959), que resuelve caminos mínimos desde una fuente única con pesos no negativos mediante relajación y selección iterativa del vértice con etiqueta mínima, y el algoritmo de Floyd–Warshall (1962), que computa todas las distancias par–a–par por programación dinámica incorporando vértices intermedios; este último unifica ideas de Floyd para costos mínimos y de Warshall para cierre transitivo, con antecedentes en la aritmética de caminos de Kleene. En lo que sigue fijamos hipótesis, enunciamos invariantes y recurrencias, demostramos corrección y acotamos la complejidad temporal y espacial de ambos métodos.
+    \section{Algoritmo de Dijkstra para caminos mínimos}
+        En los cálculos de esta tesis aparecen distancias de caminos mínimos en grafos finitos. En el $L$-espacio, cada arista tiene un costo no negativo dado por el tiempo de viaje; en el $P$-espacio, cuando se trabaja sin ponderación, cada arista tiene costo unitario. Bajo estas hipótesis, el algoritmo de Dijkstra permite calcular, desde un vértice inicial, las distancias mínimas hacia los vértices alcanzables. Al repetir este cálculo desde distintos vértices, se obtiene una tabla cuyas filas y columnas son vértices y cuyas entradas son distancias mínimas. Esa tabla es la base computacional para las centralidades de cercanía e intermediación, para la eficiencia global y para las comparaciones entre escenarios de eliminación de vértices que se reportan en los capítulos posteriores. Por ello, en esta sección se fijan sus hipótesis, se enuncia el procedimiento, se demuestra su correctitud y se acota su complejidad.
 
         \subsection{Algoritmo de Dijkstra}
 
@@ -1508,112 +1507,8 @@
             \end{ejemplo}
 
             \begin{observacion}[Limitación]
-                Si existen pesos negativos, el invariante de optimalidad falla. En tal caso debemos emplear reponderación (Johnson) o Bellman–Ford (para una fuente) y Floyd–Warshall (para todos los pares).
+                Si existen pesos negativos, el invariante de optimalidad falla. Por esta razón, en esta tesis Dijkstra se aplica únicamente a grafos cuyos pesos representan costos no negativos, como tiempos de viaje o costo unitario por arista.
             \end{observacion}
-
-        \subsection{Algoritmo de Floyd-Warshall}
-
-            \begin{definicion}[Problema APSP]
-                Sea $(G,\ell)$ un grafo finito dirigido con $V=\{1,\dots,n\}$ y pesos $\ell:E\to\mathbb{R}$ (admitimos pesos negativos). Para $i,j\in V$ definimos
-                \[
-                d_\ell(i,j)=\inf\Big\{\sum_{e\in P}\ell(e):\ P \text{ es un camino dirigido de }i\text{ a }j\Big\},
-                \]
-                con $d_\ell(i,i)\le 0$ por el camino vacío. Cuando hay ciclos de peso negativo alcanzables de $i$ a $j$, $d_\ell(i,j)=-\infty$ y no existe camino mínimo.
-            \end{definicion}
-
-            \paragraph{Esquema de programación dinámica.}
-            Fijamos un orden de los nodos $1,\dots,n$ y, para $k=0,\dots,n$, definimos $D^{(k)}=(d^{(k)}_{ij})$ como la mejor distancia de $i$ a $j$ usando únicamente nodos intermedios del conjunto $\{1,\dots,k\}$:
-            \[
-            d^{(0)}_{ij}=
-            \begin{cases}
-            0,& i=j,\\
-            \ell(i,j),& (i,j)\in E,\\
-            +\infty,& \text{en otro caso,}
-            \end{cases}
-            \qquad
-            d^{(k)}_{ij}=\min\big\{\,d^{(k-1)}_{ij},\ d^{(k-1)}_{i k}+d^{(k-1)}_{k j}\big\}.
-            \]
-
-            \begin{teorema}[Corrección]
-                Para todo $k\in\{0,\dots,n\}$ y $i,j\in V$, $d^{(k)}_{ij}$ es la mínima longitud de un camino $i\to j$ cuyos nodos intermedios pertenecen a $\{1,\dots,k\}$. En particular, si no existe ciclo de peso negativo alcanzable, $D^{(n)}$ coincide con la matriz de distancias $d_\ell$.
-            \end{teorema}
-
-            La intuición detrás del algoritmo es la programación dinámica. Para encontrar el camino más corto entre dos nodos $i$ y $j$ permitiendo que un conjunto de nodos intermedios $K$ sea utilizado, se consideran dos escenarios: o bien el camino más corto no utiliza un nuevo nodo $k \in K$, en cuyo caso la solución es la que ya se tenía sin $k$; o bien sí lo utiliza, en cuyo caso el camino debe ser la concatenación de los caminos más cortos ya conocidos $i \to k$ y $k \to j$. El algoritmo simplemente itera sobre todos los nodos posibles como intermediarios, construyendo la solución óptima paso a paso.
-
-            \begin{proof}
-                Procedemos por inducción en $k$. El caso $k=0$ es la definición. Supongamos cierto para $k-1$. Todo camino $i\to j$ con intermedios en $\{1,\dots,k\}$ o bien no usa el nodo $k$ como intermedio (costo $\ge d^{(k-1)}_{ij}$) o bien lo usa y puede descomponerse como $i\to k$ seguido de $k\to j$, ambos con intermedios en $\{1,\dots,k-1\}$, con costo $\ge d^{(k-1)}_{ik}+d^{(k-1)}_{kj}$. Tomando el mínimo sobre ambas opciones obtenemos la recurrencia. La igualdad se logra porque todo camino del tipo considerado cae en uno de los dos casos, y la inducción asegura optimalidad en los subcaminos.
-            \end{proof}
-
-            \begin{proposicion}[Detección de ciclos negativos]
-                Existe un ciclo de peso negativo alcanzable si y solo si, al finalizar, algún $d^{(n)}_{ii}<0$. Más aún, si $d^{(n)}_{ii}<0$ y $d^{(n)}_{ij},d^{(n)}_{ji}<+\infty$, entonces $d_\ell(i,j)=-\infty=-d_\ell(j,i)$.
-            \end{proposicion}
-
-            \begin{proof}
-                ($\Rightarrow$) Supongamos que existe un ciclo negativo $C$ alcanzable desde $i$ y que retorna a $i$. Para cada $k$, $d^{(k)}_{ii}$ es la mínima longitud de un camino $i\to i$ cuyos intermedios están en $\{1,\dots,k\}$. Al incorporar como intermedios todos los nodos del ciclo (lo que ocurre no más tarde que en $k=n$), podemos realizar $C$, por lo que $d^{(n)}_{ii}\le \ell(C)<0$.
-
-                ($\Leftarrow$) Supongamos $d^{(n)}_{ii}<0$. Entonces existe un camino $W$ de $i$ a $i$ con longitud total negativa y cuyos intermedios están en $\{1,\dots,n\}$ (esto es, un camino dirigido usual). Si $W$ fuera simple en nodos, sería un ciclo negativo y ya estaría demostrado. Si $W$ repite nodos, al descomponerlo en ciclos elementales obtenemos al menos un ciclo con suma de pesos negativa (pues la suma total es negativa), por lo que existe un ciclo negativo alcanzable. Para la afirmación adicional, si $d^{(n)}_{ij},d^{(n)}_{ji}<+\infty$, concatenando un camino $i\to j$, el ciclo negativo (arbitrariamente repetido) y un camino $j\to i$ obtenemos caminos $i\to j$ y $j\to i$ de costo arbitrariamente pequeño, lo que implica $d_\ell(i,j)=d_\ell(j,i)=-\infty$.
-            \end{proof}
-
-            \paragraph{Reconstrucción de caminos.}
-            Mantenemos una matriz de “siguiente” $N^{(k)}$:
-            \[
-            N^{(0)}_{ij}=
-            \begin{cases}
-            j,& (i,j)\in E\text{ o }i=j,\\
-            \bot,& \text{en otro caso,}
-            \end{cases}
-            \quad
-            \text{y al actualizar } d^{(k)}_{ij}\gets d^{(k-1)}_{ik}+d^{(k-1)}_{kj},\ \text{ponemos } N^{(k)}_{ij}\gets N^{(k-1)}_{ik}.
-            \]
-            Al final, el camino $i\to j$ se obtiene iterando $i,\, i\leftarrow N^{(n)}_{i j}$ hasta llegar a $j$ (si $N^{(n)}_{ij}=\bot$, no hay camino).
-
-            \begin{proposicion}[Complejidad]
-                El algoritmo ejecuta $n$ fases; en cada fase $k$ actualiza todas las parejas $(i,j)$ en $O(1)$. Por tanto, el tiempo es $O(n^3)$ y el espacio $O(n^2)$ (para $D$ y, opcionalmente, $N$).
-            \end{proposicion}
-
-            \begin{proof}
-                Mantenemos matrices $D^{(k)}$ (y opcionalmente $N^{(k)}$) de tamaño $n\times n$. La inicialización de $D^{(0)}$ cuesta $\mathcal{O}(n^2)$. Para cada $k=1,\dots,n$, actualizamos cada par $(i,j)$ mediante
-                \[
-                d^{(k)}_{ij}\gets \min\{\,d^{(k-1)}_{ij},\ d^{(k-1)}_{ik}+d^{(k-1)}_{kj}\,\},
-                \]
-                lo cual requiere tiempo $\mathcal{O}(1)$ por par. Como hay $n$ valores de $k$ y $n^2$ pares $(i,j)$, el tiempo total es $n\cdot n^2\cdot \mathcal{O}(1)=\mathcal{O}(n^3)$. El espacio necesario para almacenar una matriz de distancias es $\mathcal{O}(n^2)$; podemos reciclar memoria guardando sólo $D^{(k-1)}$ y $D^{(k)}$ (o incluso actualizar in-place), por lo que el espacio asintótico permanece en $\mathcal{O}(n^2)$. Si almacenamos además la matriz de “siguiente” $N$, añadimos otro $\mathcal{O}(n^2)$, que no altera la cota.
-            \end{proof}
-
-            \begin{ejemplo}[Instancia pequeña con pesos negativos y sin ciclos negativos]
-                Consideramos $V=\{1,2,3,4\}$ y arcos con pesos
-                \[
-                (1,2):3,\quad (1,3):10,\quad (2,3):-2,\quad (2,4):5,\quad (3,4):1.
-                \]
-                La inicialización da
-                \[
-                D^{(0)}=\begin{pmatrix}
-                0&3&10&+\infty\\
-                +\infty&0&-2&5\\
-                +\infty&+\infty&0&1\\
-                +\infty&+\infty&+\infty&0
-                \end{pmatrix}.
-                \]
-                Tras incorporar $k=1$ no hay mejoras nuevas. Con $k=2$:
-                \[
-                d^{(2)}_{1,3}=\min\{10,\ 3+(-2)\}=1,\qquad
-                d^{(2)}_{1,4}=\min\{+\infty,\ 3+5\}=8.
-                \]
-                Con $k=3$:
-                \[
-                d^{(3)}_{1,4}=\min\{8,\ 1+1\}=2,\qquad
-                d^{(3)}_{2,4}=\min\{5,\ (-2)+1\}= -1.
-                \]
-                Con $k=4$ no hay mejoras. Obtenemos
-                \[
-                D^{(n)}=\begin{pmatrix}
-                0&3&1&2\\
-                +\infty&0&-2&-1\\
-                +\infty&+\infty&0&1\\
-                +\infty&+\infty&+\infty&0
-                \end{pmatrix},
-                \]
-                sin entradas diagonales negativas, luego no hay ciclos de peso negativo. Por ejemplo, el camino mínimo $1\to 4$ es $1\to 2\to 3\to 4$ con costo $3+(-2)+1=2$.
-            \end{ejemplo}
 
     \section{Algoritmos de detección de comunidades}
         Con las distancias y la noción de proximidad ya establecidas, introducimos ahora métodos para identificar estructura mesoscópica en la red. Presentamos primero DBSCAN, que agrupa por densidad sin fijar de antemano el número de comunidades, y luego la modularidad junto con el método de Louvain, orientado a maximizar la calidad de una partición.
