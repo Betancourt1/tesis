@@ -14,14 +14,22 @@
         \begin{definicion}[Grafo]
             Un \textbf{grafo} es una tupla $G=(V,E)$, donde $V$ es un conjunto no vacío y $E$ es un conjunto cuyos elementos son pares formados por elementos de $V$. Los elementos de $V$ se llaman \textbf{nodos} o \textbf{vértices}; los elementos de $E$ se llaman \textbf{aristas}. Si $e\in E$ es una arista, los elementos de $V$ que aparecen en el par $e$ se llaman \textbf{extremos} de $e$. Se dice que la arista $e$ \textbf{incide} en cada uno de sus extremos.
 
-            El grafo $G$ es \textbf{dirigido} si, para toda arista $e\in E$, existen $u,v\in V$ tales que $e=(u,v)$; en este caso, las aristas son pares ordenados. El grafo $G$ es \textbf{no dirigido} si, para toda arista $e\in E$, existen $u,v\in V$ tales que $e=\{u,v\}$; en este caso, las aristas son pares no ordenados. En un grafo dirigido, una arista de la forma $(v,v)$ se llama \textbf{lazo}; en un grafo no dirigido, una arista de la forma $\{v,v\}$ se llama \textbf{lazo}. Esta definición básica no distingue dos aristas distintas con los mismos extremos; las variantes que sí permiten esa distinción se introducirán más adelante.
+            Esta definición básica no distingue dos aristas distintas con los mismos extremos; las variantes que sí permiten esa distinción se introducirán más adelante.
+        \end{definicion}
+
+        \begin{definicion}[Grafo dirigido]
+            Sea $G=(V,E)$ un grafo. Se dice que $G$ es \textbf{dirigido} si, para toda arista $e\in E$, existen $u,v\in V$ tales que $e=(u,v)$. En este caso, las aristas son pares ordenados.
+        \end{definicion}
+
+        \begin{definicion}[Grafo no dirigido]
+            Sea $G=(V,E)$ un grafo. Se dice que $G$ es \textbf{no dirigido} si, para toda arista $e\in E$, existen $u,v\in V$ tales que $e=\{u,v\}$. En este caso, las aristas son pares no ordenados y se cumple $\{u,v\}=\{v,u\}$.
         \end{definicion}
 
         % TODO [PDF p.11][ernes][cat: rigor matematico][prio: media][resaltado: "A un grafo G"]: reescribir con tono formal; se sugirió "Equivalentemente, un grafo G puede denotarse como G(V) cuando se enfatiza el conjunto de vértices."
         A un grafo $G$ con conjunto de nodos $V$ también lo podemos definir como un grafo \textit{en} $V$ o simplemente $G(V)$.
 
         \begin{definicion}[Lazo]
-            Un \textbf{lazo} es una arista cuyos dos extremos coinciden. En un grafo dirigido tiene la forma $(v,v)$; en un grafo no dirigido tiene la forma $\{v,v\}$.
+            Sea $G=(V,E)$ un grafo dirigido o no dirigido. Un \textbf{lazo} es una arista cuyos dos extremos coinciden. En un grafo dirigido tiene la forma $(v,v)$ para algún $v\in V$; en un grafo no dirigido tiene la forma $\{v,v\}$ para algún $v\in V$.
         \end{definicion}
 
         \begin{definicion}[Adyacencia de nodos]
@@ -90,11 +98,11 @@
 
         Ahora que sabemos lo que es un grafo, es pertinente preguntarnos si es posible clasificarlos. Aunque posible, la clasificación de los grafos es una tarea multifacética que puede atender a una diversidad de criterios. Es posible categorizarlos, por ejemplo, en función de su estructura general (como en el caso de los grafos planares, bipartitos o completos), de las propiedades de conectividad que exhiben, o incluso de la presencia de ciclos. No obstante, para los fines de esta introducción, nos centraremos en una de las distinciones más fundamentales, la cual emana directamente de las propiedades inherentes al conjunto de aristas $E$. Específicamente, exploraremos la clasificación de los grafos según si sus aristas poseen una dirección definida (grafos dirigidos y no dirigidos) y si se les atribuye un valor numérico (grafos ponderados).
 
-        Estas propiedades dan lugar a un espectro de categorías de grafos, cada una con implicaciones estructurales y algorítmicas particulares. Por consiguiente, a continuación se presentan las definiciones formales:
+        Estas propiedades dan lugar a un espectro de categorías de grafos, cada una con implicaciones estructurales y algorítmicas particulares. Por consiguiente, a continuación se ilustran las clases ya definidas y se introducen otras definiciones formales.
 
-        \begin{definicion}[Grafo no dirigido]
-            Un grafo es \textbf{no dirigido} si sus aristas no tienen orientación; esto es, cada arista es un par no ordenado $\{u,v\}$ con $u,v\in V$. En particular, $\{u,v\}=\{v,u\}$.
-        \end{definicion}
+        \begin{observacion}[Grafos no dirigidos]
+            En un grafo no dirigido, la arista $\{u,v\}$ coincide con la arista $\{v,u\}$ para cualesquiera $u,v\in V$.
+        \end{observacion}
 
         \begin{ejemplo}
             A continuación se muestra un ejemplo de grafo no dirigido:
@@ -117,10 +125,9 @@
             \end{center}
         \end{ejemplo}
 
-        \begin{definicion}[Grafo dirigido]
-            % TODO [PDF p.13][Fernando Becerra][cat: rigor matematico][prio: alta][nota flotante sobre: "Un grafo es dirigido..."]: buscar una formulación más matemática para esta definición.
-            Un grafo es \textbf{dirigido} (o \emph{grafo dirigido}) si cada arista tiene una dirección; es decir, $(u, v) \in E$ no implica que $(v, u) \in E$ (aunque puede ocurrir). En este caso, diremos que $u$ se dirige a $v$.
-        \end{definicion}
+        \begin{observacion}[Grafos dirigidos]
+            En un grafo dirigido, $(u,v)$ y $(v,u)$ son, en general, pares ordenados distintos. Por tanto, la pertenencia $(u,v)\in E$ no implica la pertenencia $(v,u)\in E$, aunque ambas pueden ocurrir simultáneamente.
+        \end{observacion}
 
         \begin{ejemplo}
             Ejemplo de grafo dirigido:
