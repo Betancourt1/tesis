@@ -18,7 +18,7 @@
         \end{definicion}
 
         \begin{definicion}[Grafo dirigido]
-            Sea $G=(V,E)$ un grafo. Se dice que $G$ es \textbf{dirigido} si, para toda arista $e\in E$, existen $u,v\in V$ tales que $e=(u,v)$. En este caso, las aristas son pares ordenados.
+            Sea $G=(V,E)$ un grafo. Se dice que $G$ es \textbf{dirigido} si, para toda arista $e\in E$, existen $u,v\in V$ tales que $e=(u,v)$. En este caso, las aristas son pares ordenados y también se llaman \textbf{arcos}.
         \end{definicion}
 
         \begin{definicion}[Grafo no dirigido]
@@ -198,8 +198,7 @@
         \end{definicion}
 
         \begin{observacion}
-            % TODO [PDF p.13][Fernando Becerra][cat: estructura][prio: media][resaltado: "matrices (incidencia/adyacencia)"]: revisar si se anticipa una definición posterior.
-            En el contexto dirigido, un \emph{multígrafo dirigido} permite múltiples arcos $(u,v)$ con la misma orientación (y lazos $(v,v)$ si se autorizan). Salvo indicación en contrario, las definiciones de grado y matrices (incidencia/adyacencia) se adaptan contando cada arista paralela con su multiplicidad.
+            En el contexto dirigido, un \emph{multígrafo dirigido} permite múltiples arcos $(u,v)$ con la misma orientación (y lazos $(v,v)$ si se autorizan). Salvo indicación en contrario, el grado se calcula contando cada arista paralela con su multiplicidad.
         \end{observacion}
 
         \begin{definicion}[Grafo ponderado]
@@ -238,6 +237,8 @@
             \end{cases}
             \]
             En grafos ponderados, cada $a_{ij}$ toma el valor del peso asignado a la conexión. Además, dos nodos son adyacentes si la entrada correspondiente en la matriz de adyacencia $A$ es distinta de cero, es decir, $a_{uv} \neq 0$.
+
+            La definición anterior supone que no hay aristas paralelas. Si se trabaja con un multígrafo, debe fijarse una convención adicional; la usual es que $a_{ij}$ cuente la multiplicidad de las aristas entre $i$ y $j$, salvo que sus entradas se definan mediante pesos.
 
         \end{definicion}
 
