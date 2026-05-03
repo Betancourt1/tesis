@@ -306,22 +306,22 @@
             \begin{proposicion}
             Sea $G_B = (V \cup R, E_B)$ el grafo bipartito de un sistema de transporte y sea $B$ su matriz de incidencia. Entonces la matriz de adyacencia del $P$-espacio satisface
             \[
-                A_P = \operatorname{sgn}(B B^\top - I),
+                A_P = \operatorname{sgn}\!\left(B B^\top - \operatorname{diag}(B B^\top)\right),
             \]
-            donde $I$ es la matriz identidad y $\operatorname{sgn}$ se aplica elemento a elemento, tomando valor $1$ si la entrada es positiva y $0$ en caso contrario.
+            donde $\operatorname{diag}(M)$ denota la matriz diagonal formada por las entradas diagonales de $M$, y $\operatorname{sgn}$ se aplica elemento a elemento, tomando valor $1$ si la entrada es positiva y $0$ en caso contrario.
             \end{proposicion}
 
-            \begin{proof} La entrada $(i,j)$ del producto matricial $B B^\top$ calcula el producto punto entre la fila $i$ y la fila $j$ de $B$. Este producto es igual a $\sum_{r \in R} B_{ir} B_{jr}$, lo cual cuenta el número de rutas que comparten las paradas $i$ y $j$. Si este valor es mayor o igual a 1, significa que existe al menos una ruta que conecta ambas paradas, lo cual es la condición de adyacencia en el $P$-espacio. Restamos la identidad para eliminar los lazos (conexión de una parada consigo misma) y aplicamos la función signo para obtener una matriz binaria.
+            \begin{proof} La entrada $(i,j)$ del producto matricial $B B^\top$ calcula el producto punto entre la fila $i$ y la fila $j$ de $B$. Este producto es igual a $\sum_{r \in R} B_{ir} B_{jr}$, lo cual cuenta el número de rutas que comparten las paradas $i$ y $j$. Si $i\neq j$ y este valor es mayor o igual a 1, existe al menos una ruta que conecta ambas paradas, que es la condición de adyacencia en el $P$-espacio. En cambio, cuando $i=j$, la entrada diagonal cuenta cuántas rutas pasan por la parada $i$ y no representa una arista válida del grafo simple. Por ello se elimina la diagonal completa de $B B^\top$ antes de aplicar la función signo; restar solamente la identidad no bastaría si una parada pertenece a más de una ruta.
             \end{proof}
 
             \begin{proposicion}
             Bajo las mismas hipótesis, la matriz de adyacencia del $C$-espacio viene dada por
             \[
-                A_C = \operatorname{sgn}(B^\top B - I).
+                A_C = \operatorname{sgn}\!\left(B^\top B - \operatorname{diag}(B^\top B)\right).
             \]
             \end{proposicion}
 
-            \begin{proof} De modo análogo, la entrada $(i,j)$ de $B^\top B$ representa el producto punto entre la columna $i$ y la columna $j$ de $B$, es decir, $\sum_{v \in V} B_{vi} B_{vj}$. Esto cuantifica el número de paradas compartidas entre la ruta $i$ y la ruta $j$. Si el resultado es al menos 1, las rutas están conectadas en el $C$-espacio.
+            \begin{proof} De modo análogo, la entrada $(i,j)$ de $B^\top B$ representa el producto punto entre la columna $i$ y la columna $j$ de $B$, es decir, $\sum_{v \in V} B_{vi} B_{vj}$. Esto cuantifica el número de paradas compartidas entre la ruta $i$ y la ruta $j$. Si $i\neq j$ y el resultado es al menos 1, las rutas están conectadas en el $C$-espacio. Las entradas diagonales cuentan el número de paradas de cada ruta y se anulan porque el $C$-espacio se modela como grafo simple sin lazos.
             \end{proof}
 
         Hasta este punto se ha mostrado que los sistemas de transporte público pueden modelarse como redes y que existen al menos cuatro formas de hacerlo. Cada una resalta propiedades distintas y responde a casos de uso particulares. En el contexto de este trabajo, las secciones siguientes se concentrarán en los espacios $L$ y $P$, pues son los más desarrollados en la literatura y los más utilizados en aplicaciones empíricas. Esta decisión también preserva continuidad con los cuatro niveles iniciales: el $L$-espacio enfatiza distancia y estructura física, mientras que el $P$-espacio enfatiza accesibilidad e interacciones funcionales de viaje.

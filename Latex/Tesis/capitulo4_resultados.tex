@@ -29,9 +29,9 @@
             \end{itemize}
 
         \subsubsection{Accesibilidad y Cobertura de la Red (Matriz de Shimbel)}
-            El análisis de la matriz de distancias de Shimbel, que contiene los tiempos de viaje más cortos entre todos los pares de nodos, permite evaluar la accesibilidad desde la perspectiva del usuario en términos de tiempo de viaje:
+            El análisis de la matriz de distancias de Shimbel, que contiene los tiempos de viaje más cortos entre pares de nodos alcanzables, permite evaluar la accesibilidad desde la perspectiva del usuario en términos de tiempo de viaje. Como el grafo \(L\)-espacio es dirigido y no es fuertemente conexo, el ranking de accesibilidad se filtró para considerar solo supernodos que alcanzan al menos el \(95\%\) de la red; así se evita clasificar como ``muy accesible'' a un nodo terminal que solo llega a uno o dos destinos cercanos.
             \begin{itemize}
-                \item \textbf{Nodos más y menos accesibles:} Se identificó una brecha extrema en la accesibilidad. Los \textbf{nodos mejor conectados} promedian entre \textbf{0.7 y 1.3 minutos} al resto de la red. En contraste, los \textbf{nodos peor conectados}, situados en la periferia (Tesistán, aeropuerto, norponiente), promedian entre \textbf{94 y 157 minutos}.
+                \item \textbf{Nodos más y menos accesibles:} Se identificó una brecha extrema en la accesibilidad. Bajo el filtro de cobertura mínima, los \textbf{nodos mejor conectados} promedian entre \textbf{24.7 y 25.6 minutos} hacia los destinos alcanzables, cubriendo aproximadamente el \textbf{98.5\%} de la red. En contraste, los \textbf{nodos peor conectados} dentro del mismo criterio, situados en zonas periféricas o de borde operativo, promedian entre \textbf{92.1 y 154.8 minutos}.
                 \item \textbf{Análisis de Cobertura:} Se calculó el porcentaje de la red accesible desde una parada promedio en distintos umbrales de tiempo:
                 \begin{itemize}
                     \item \textbf{15 minutos:} Se alcanza solo el 6.5\% de la red.
@@ -71,9 +71,9 @@
             \end{figure}
 
         \subsubsection{Centralidad de Cercanía (Closeness Centrality)}
-            Mide qué tan cerca está un nodo, en promedio, de todos los demás nodos alcanzables, usando el tiempo de viaje como distancia. Un nodo con alta centralidad de cercanía es aquel desde el cual se puede llegar \textbf{más rápidamente} al resto de la red.
+            Mide qué tan cerca está un nodo, en promedio, de todos los demás nodos alcanzables, usando el tiempo de viaje como distancia. En el grafo dirigido se utilizó la \textbf{cercanía saliente}: la métrica se calcula con las distancias desde el nodo hacia los demás destinos alcanzables. Por tanto, un nodo con alta centralidad de cercanía es aquel desde el cual se puede llegar \textbf{más rápidamente} al resto de la red. La magnitud de esta centralidad es un índice normalizado, no un tiempo promedio en minutos; los tiempos promedio se reportan por separado mediante la matriz de Shimbel.
             \begin{itemize}
-                \item \textbf{Hallazgos Clave:} Los nodos con mayor centralidad de cercanía se concentran de manera casi exclusiva en el \textbf{hipercentro de la ciudad}. Esto confirma que, en términos de tiempo de viaje, el centro es el punto más accesible de la red y aquel desde el cual el tiempo promedio para alcanzar otros destinos es menor. A diferencia de otras medidas, la brecha entre los primeros lugares es relativamente moderada.
+                \item \textbf{Hallazgos Clave:} Los nodos con mayor centralidad de cercanía se concentran de manera casi exclusiva en el \textbf{hipercentro de la ciudad}. Esto confirma que, en términos de tiempo de viaje modelado, el centro ocupa la posición de mayor accesibilidad relativa y coincide con los menores promedios de Shimbel una vez controlada la cobertura alcanzable. A diferencia de otras medidas, la brecha entre los primeros lugares es relativamente moderada.
             \end{itemize}
 
         \subsubsection{Centralidad de Eigenvector (Eigenvector Centrality)}
@@ -417,7 +417,7 @@
             \begin{itemize}
                 \item \textbf{Centralidades:} Para los cálculos de centralidad se utilizaron los pesos de las aristas correspondientes:
                 \begin{itemize}
-                    \item \textbf{Intermediación y Cercanía:} Se utilizó como peso el tiempo de viaje en minutos para encontrar los caminos más rápidos.
+                    \item \textbf{Intermediación y Cercanía:} Se utilizó como peso el tiempo de viaje en minutos para encontrar los caminos más rápidos. En el \(L\)-espacio, la cercanía reportada es saliente: en NetworkX se calculó sobre el grafo reverso para que las distancias correspondan a viajes desde cada supernodo hacia los destinos alcanzables.
                     \item \textbf{Grado Ponderado:} Se calculó como la suma del grado de entrada ponderado y del grado de salida ponderado, que representan el número de rutas que pasan por un nodo.
                 \end{itemize}
                 \item \textbf{Detección de Comunidades:} Se empleó el método de Louvain, optimizando la modularidad sobre una versión no dirigida del grafo ponderado por el número de rutas.

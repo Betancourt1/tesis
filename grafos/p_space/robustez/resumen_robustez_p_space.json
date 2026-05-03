@@ -4,11 +4,10 @@
   "targeted_scenarios": [
     "grado"
   ],
-  "random_repetitions": 10,
+  "random_repetitions": 30,
   "random_seed": 42,
-  "random_efficiency_sources": 32,
-  "targeted_efficiency_sources": 32,
-  "random_efficiency_note": "La eficiencia del ataque dirigido y de los fallos aleatorios puede estimarse con muestreo de fuentes; use --targeted-efficiency-sources 0 o --random-efficiency-sources 0 para calculo exacto.",
+  "random_efficiency_sources": 128,
+  "random_efficiency_note": "La eficiencia de los fallos aleatorios se estima con muestreo de fuentes; use --random-efficiency-sources 0 para calculo exacto.",
   "outputs": {
     "targeted_degree": "C:\\Users\\fbetancourt\\GitHub\\Tesis\\grafos/p_space/robustez\\robustez_p_space_ataque_grado.csv",
     "random_repetitions": "C:\\Users\\fbetancourt\\GitHub\\Tesis\\grafos/p_space/robustez\\robustez_p_space_ataque_aleatoria_repeticiones.csv",

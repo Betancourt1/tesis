@@ -47,7 +47,11 @@ def calcular_centralidades_y_enriquecer():
     betweenness = nx.betweenness_centrality(G, weight='travel_time_minutes', normalized=True)
 
     # c) Centralidad de Cercanía (usa el tiempo de viaje como 'distancia')
-    closeness = nx.closeness_centrality(G, distance='travel_time_minutes')
+    # NetworkX calcula cercanía entrante en grafos dirigidos. Para interpretar
+    # la métrica como accesibilidad desde el nodo hacia el resto de la red, se
+    # calcula sobre el grafo reverso y se conserva el resultado como "closeness".
+    closeness_out = nx.closeness_centrality(G.reverse(copy=False), distance='travel_time_minutes')
+    closeness_in = nx.closeness_centrality(G, distance='travel_time_minutes')
 
     # d) Centralidad de Eigenvector (Ponderada por número de rutas originales)
     try:
@@ -63,7 +67,9 @@ def calcular_centralidades_y_enriquecer():
     nx.set_node_attributes(G, degree_in, name='in_degree_weighted')
     nx.set_node_attributes(G, degree_out, name='out_degree_weighted')
     nx.set_node_attributes(G, betweenness, name='betweenness')
-    nx.set_node_attributes(G, closeness, name='closeness')
+    nx.set_node_attributes(G, closeness_out, name='closeness')
+    nx.set_node_attributes(G, closeness_out, name='closeness_out')
+    nx.set_node_attributes(G, closeness_in, name='closeness_in')
     nx.set_node_attributes(G, eigenvector, name='eigenvector')
     print("Atributos añadidos correctamente.")
 
@@ -79,7 +85,7 @@ def calcular_centralidades_y_enriquecer():
     node_data = {node: data for node, data in G.nodes(data=True)}
     df = pd.DataFrame.from_dict(node_data, orient='index')
     
-    for metrica in ['in_degree_weighted', 'out_degree_weighted', 'betweenness', 'closeness', 'eigenvector']:
+    for metrica in ['in_degree_weighted', 'out_degree_weighted', 'betweenness', 'closeness', 'closeness_in', 'eigenvector']:
         if metrica in df.columns:
             print(f"\n--- Top 10 por: {metrica} ---")
             top_10 = df.nlargest(10, metrica)
