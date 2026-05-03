@@ -7,29 +7,27 @@
 
     \section{Definición y conceptos básicos}
 
-        % TODO [PDF p.11][Fernando Becerra][cat: estructura][prio: media][resaltado: "dirigidos, no dirigidos"]: revisar si se anticipan conceptos antes de definir formalmente los tipos de grafos.
-        A lo largo de este capítulo, se asumirá que todos los grafos son \textbf{finitos}, a menos que se especifique lo contrario. Las definiciones se presentarán especificando si aplican a grafos \textbf{dirigidos}, \textbf{no dirigidos} o ambos, pues las propiedades y métricas pueden cambiar significativamente según el tipo de grafo.
+        Primero se fijará la noción básica de grafo y, después, se introducirán sus variantes. Cuando una propiedad o métrica dependa de alguna variante específica, se indicará explícitamente en la definición correspondiente.
 
-        Convención terminológica: en la tesis se usa \textbf{arista} como término general; cuando la orientación sea relevante en un grafo dirigido, se utilizará \textbf{arco} para referirse explícitamente al par ordenado \((u,v)\).
+        Convención terminológica: en la tesis se usa \textbf{arista} como término general para una conexión entre nodos. Más adelante se introducirá el término \textbf{arco} para las conexiones con orientación.
 
         \begin{definicion}[Grafo]
-            % TODO [PDF p.11][Fernando Becerra][cat: estructura][prio: media][resaltado: "grafo simple,"]: revisar si conviene mencionar aquí "grafo simple" después de haber introducido la noción de lazo.
-            Un \textbf{grafo} no dirigido, en sentido amplio, es una terna $G=(V,E,\iota)$, donde $V$ es un conjunto no vacío de \textbf{nodos}, $E$ es un conjunto de \textbf{aristas} y
+            Un \textbf{grafo}, en sentido amplio, es una terna $G=(V,E,\iota)$, donde $V$ es un conjunto no vacío de \textbf{nodos}, $E$ es un conjunto de \textbf{aristas} y
             \[
                 \iota:E\to \{S\subseteq V:1\le |S|\le 2\}
             \]
-            es una función de incidencia que asigna a cada arista el conjunto de sus extremos. Si $\iota(e)=\{u,v\}$ con $u\neq v$, decimos que $e$ incide en $u$ y en $v$; si $\iota(e)=\{v\}$, la arista es un lazo en $v$. Dos aristas distintas pueden tener los mismos extremos, en cuyo caso se llaman aristas paralelas. Cuando la función de incidencia es clara por el contexto, escribiremos simplemente $G=(V,E)$. La definición formal más restrictiva, la de un \textbf{grafo simple}, exige que las aristas conecten pares de nodos distintos y que no haya más de una arista entre el mismo par de nodos. A lo largo de este capítulo, se presentarán variantes como grafos dirigidos, multígrafos o grafos con lazos, que relajan estas condiciones.
+            es una función de incidencia que asigna a cada arista el conjunto de sus extremos. Si $\iota(e)=\{u,v\}$ con $u\neq v$, decimos que $e$ incide en $u$ y en $v$; si $\iota(e)=\{v\}$, la arista tiene sus dos extremos en el mismo nodo. Dos aristas distintas pueden tener los mismos extremos, en cuyo caso se llaman aristas paralelas. Cuando la función de incidencia es clara por el contexto, escribiremos simplemente $G=(V,E)$.
         \end{definicion}
 
         % TODO [PDF p.11][ernes][cat: rigor matematico][prio: media][resaltado: "A un grafo G"]: reescribir con tono formal; se sugirió "Equivalentemente, un grafo G puede denotarse como G(V) cuando se enfatiza el conjunto de vértices."
         A un grafo $G$ con conjunto de nodos $V$ también lo podemos definir como un grafo \textit{en} $V$ o simplemente $G(V)$.
 
         \begin{definicion}[Lazo]
-            Un \textbf{lazo} es una arista o arco cuyos extremos coinciden. En un grafo no dirigido $G=(V,E,\iota)$, esto ocurre cuando $\iota(e)=\{v\}$ para algún $v\in V$; en un grafo dirigido, corresponde a un arco de la forma \((v,v)\).
+            Un \textbf{lazo} es una arista cuyos extremos coinciden. Con la notación anterior, esto ocurre cuando $\iota(e)=\{v\}$ para algún $v\in V$.
         \end{definicion}
 
         \begin{definicion}[Adyacencia de nodos]
-            Sean $G=(V,E,\iota)$ un grafo no dirigido y $u,v\in V$ dos nodos distintos.
+            Sean $G=(V,E,\iota)$ un grafo y $u,v\in V$ dos nodos distintos.
             Se dice que $u$ y $v$ son \textbf{adyacentes} si existe una arista $e\in E$ tal que $\iota(e)=\{u,v\}$.
         \end{definicion}
 
