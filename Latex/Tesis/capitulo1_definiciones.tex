@@ -1,5 +1,5 @@
 \chapter{Teoría de grafos}
-    Antes de iniciar el estudio de las redes de transporte público, conviene establecer una base conceptual sólida desde la teoría de grafos. En particular, este capítulo formaliza la noción de \textit{camino}, indispensable para representar matemáticamente lo que en transporte interpretamos como ruta. A partir de esta idea se analiza también cómo la estructura de caminos revela propiedades globales de la red. Con ese marco se introducen medidas de \textit{centralidad} para evaluar la relevancia de cada nodo dentro del grafo y, finalmente, se presentan algoritmos para determinar caminos óptimos entre pares de nodos.
+    Antes de iniciar el estudio de las redes de transporte público, conviene establecer una base conceptual sólida desde la teoría de grafos. Este capítulo introduce las nociones necesarias para modelar redes de transporte: grafos dirigidos y no dirigidos, caminos, ciclos, conectividad, distancias, árboles, métricas estructurales, centralidades, vulnerabilidad, algoritmos de caminos mínimos y métodos de agrupamiento o detección de comunidades.
 
     Los problemas de movilidad urbana requieren modelos que abstraigan la complejidad de la ciudad sin perder los elementos esenciales de conectividad. La \emph{teoría de grafos} provee justamente ese andamiaje formal: reduce las interacciones físicas a nodos y aristas y, a partir de ahí, permite cuantificar eficiencia, robustez y vulnerabilidad de toda la red \cite{rodrigues2020}.
 
@@ -31,6 +31,7 @@
 
         \begin{observacion}[Convención de notación]
             Sea $G=(V,E)$ un grafo. Cuando se quiera enfatizar que $V$ es el conjunto de nodos de $G$, se dirá que $G$ es un grafo sobre $V$ y, de manera abreviada, se escribirá $G(V)$. La notación $G(V)$ no define un grafo distinto de $G$; solo explicita el conjunto de nodos considerado.
+            Denotamos por $\mathbb{N}_0=\{0,1,2,\dots\}$.
         \end{observacion}
 
         \begin{definicion}[Lazo]
@@ -430,7 +431,7 @@
             \end{definicion}
 
             \begin{ejemplo}[Ciclo como subgrafo]
-                Sea $G$ el siguiente grafo:
+                Sea $G$ el siguiente grafo dirigido:
 
                 \begin{center}
                     \begin{tikzpicture}[scale=1.2]
@@ -609,7 +610,7 @@
                     \end{cases}
                     \]
                 \end{itemize}
-                Salvo indicación contraria, se excluyen lazos y aristas múltiples. En multígrafos, cada arista da una columna; para lazos, debe fijarse una convención adicional.
+                Salvo indicación contraria, se excluyen lazos y aristas múltiples. En multígrafos, cada arista da una columna; para lazos, debe fijarse una convención adicional. Cuando se trabaje sobre $\mathbb{F}_2$, esta matriz se obtiene reduciendo sus entradas módulo $2$; en particular, $-1$ y $1$ representan el mismo elemento.
             \end{definicion}
 
         \subsection{Árboles}
@@ -732,21 +733,25 @@
             \begin{proof}
                 Por inducción en $n=|V(T)|$.
                 Caso base $n=1$: $|E|=0=n-1$.
-                Paso inductivo: sea $n\ge 2$ y supongamos cierto para todo árbol con $<n$ nodos. Por el lema, $T$ tiene una hoja $x$ con vecino $y$. Consideremos $T'=T-\{x\}$: sigue siendo un árbol (conexo y acíclico) con $n-1$ nodos. Por hipótesis inductiva, $|E(T')|=(n-1)-1=n-2$. Como $E(T)=E(T')\cup\{xy\}$, se tiene $|E(T)|=(n-2)+1=n-1$.
+                Paso inductivo: sea $n\ge 2$ y supongamos cierto para todo árbol con $<n$ nodos. Por el lema, $T$ tiene una hoja $x$ con vecino $y$. Consideremos $T'=T-\{x\}$: sigue siendo un árbol (conexo y acíclico) con $n-1$ nodos. Por hipótesis inductiva, $|E(T')|=(n-1)-1=n-2$. Como $E(T)=E(T')\cup\{\{x,y\}\}$, se tiene $|E(T)|=(n-2)+1=n-1$.
             \end{proof}
 
             \begin{definicion}[Bosque generador]
-                Sea $G=(V,E)$ un grafo (posiblemente con $p$ componentes). Un \textbf{bosque generador} de $G$ es un subgrafo $F=(V,E_F)$ tal que:
+                Sea $G=(V,E)$ un grafo no dirigido con $p$ componentes conexas. Un \textbf{bosque generador} de $G$ es un subgrafo $F=(V,E_F)$ tal que:
                 \begin{enumerate}
-                    \item $E_F \subseteq E$ (mismas $V$, menos aristas),
-                    \item $F$ es acíclico,
-                    \item cada componente de $F$ es un árbol que contiene exactamente los nodos de la correspondiente componente de $G$.
+                    \item $E_F\subseteq E$;
+                    \item $F$ es acíclico;
+                    \item para cualesquiera $u,v\in V$, los nodos $u$ y $v$ están en la misma componente de $F$ si y solo si están en la misma componente de $G$.
                 \end{enumerate}
-                Equivalente y característico: $F$ es acíclico y no puede agregarse ninguna arista de $E\setminus E_F$ sin crear un ciclo, o bien $|E_F|=|V|-p$. Si $G$ es conexo ($p=1$), un bosque generador es un \emph{árbol generador}.
+                Equivalentemente, $F$ es un subgrafo acíclico maximal de $G$, respecto de la inclusión de aristas, con conjunto de nodos $V$. En tal caso,
+                \[
+                    |E_F|=|V|-p.
+                \]
+                Si $G$ es conexo ($p=1$), un bosque generador es un \emph{árbol generador}.
             \end{definicion}
 
             \begin{observacion}
-                Para grafos dirigidos, el bosque/árbol generador se entiende sobre el \emph{grafo subyacente no dirigido} salvo que se especifique orientación (arborescencias). En el conteo ciclomático y en el espacio de ciclos se usa esta versión no dirigida.
+                Si $G$ es dirigido, un bosque generador de $G$ se entiende como un bosque generador de $U(G)$, salvo que se especifique una orientación, por ejemplo mediante arborescencias. En el conteo ciclomático y en el espacio de ciclos se usa esta versión no dirigida.
             \end{observacion}
 
         \section{Propiedades estructurales}
@@ -872,7 +877,7 @@
             \end{corolario}
 
             \begin{observacion}[Versión lineal-algebraica]
-                Sea $G_c=G$ si $G$ es no dirigido y $G_c=U(G)$ si $G$ es dirigido. Escribamos $G_c=(V,E_c)$, $m_c=|E_c|$ y sea $p$ el número de componentes conexas de $G_c$. Si $B_c$ es una matriz de incidencia de $G_c$ sobre $\mathbb{R}$ o $\mathbb{F}_2$, entonces $\operatorname{rank}(B_c)=n-p$ y
+                Sea $G_c=G$ si $G$ es no dirigido y $G_c=U(G)$ si $G$ es dirigido. Escribamos $G_c=(V,E_c)$, $m_c=|E_c|$ y sea $p$ el número de componentes conexas de $G_c$. Si $B_c$ es una matriz de incidencia de $G_c$ sobre $\mathbb{R}$, o su reducción módulo $2$ sobre $\mathbb{F}_2$, entonces $\operatorname{rank}(B_c)=n-p$ y
                 \[
                 \dim \ker(B_c)=m_c-(n-p)=m_c-n+p,
                 \]
@@ -907,7 +912,7 @@
             \end{definicion}
             
             \begin{definicion}[Coeficiente de agrupamiento promedio]
-                Definimos el \textbf{coeficiente de agrupamiento promedio} como la media de los coeficientes locales:
+                Sea $G=(V,E)$ un grafo simple no dirigido. Definimos el \textbf{coeficiente de agrupamiento promedio} como la media de los coeficientes locales:
                 \[
                 \overline{C}\;=\;\frac{1}{|V|}\sum_{v\in V} C(v).
                 \]
@@ -970,9 +975,7 @@
             \end{lema}
 
             \begin{proof}
-                La frontera de una cara interior es un recorrido cerrado $W$ que usa aristas del grafo.
-                Si $W$ no repite aristas ni vértices, entonces $W$ es un ciclo.
-                Si repite, al descomponer el recorrido cerrado estándar mediante diferencia simétrica se obtiene un ciclo no vacío contenido en la frontera.
+                Este es un resultado estándar de grafos planares: la frontera de una cara de un dibujo planar finito está representada por un recorrido cerrado no trivial del grafo, y todo recorrido cerrado no trivial contiene un ciclo simple. Por tanto, la frontera de una cara interior contiene al menos un ciclo.
             \end{proof}
 
             \begin{proposicion}[Todo árbol es planar y tiene una sola cara]
@@ -1011,7 +1014,7 @@
                 \textbf{Paso inductivo:}
                 Supongamos que el resultado se cumple para todo grafo planar conexo con número ciclomático menor que $\mu(G)$, y sea $\mu(G)\ge 1$.
                 Como $G$ es conexo y no es un árbol, contiene al menos un ciclo.
-                Elimina una arista que pertenezca a algún ciclo; el grafo resultante $G'$ sigue siendo conexo y planar, tiene $|E|-1$ aristas y, al eliminar la arista del ciclo, se fusionan dos caras adyacentes, por lo que el número de caras disminuye en uno ($f' = f - 1$).
+                Elimina una arista que pertenezca a algún ciclo. Una arista que pertenece a un ciclo no es puente; por tanto, el grafo resultante $G'$ sigue siendo conexo y planar, y tiene $|E|-1$ aristas. Además, en un dibujo planar, eliminar una arista no puente fusiona exactamente las dos caras incidentes a ella, por lo que el número de caras disminuye en uno ($f'=f-1$).
                 Por hipótesis inductiva:
                 \[
                 |V| - (|E|-1) + f' = 2.
@@ -1108,7 +1111,7 @@
         \end{definicion}
 
         \begin{observacion}
-            En ausencia de $\varphi$, las longitudes provienen únicamente de $\ell$. Si se dispone de $\varphi$ pero se usan otros pesos (tiempo, tarifa), se mantiene $(G,\ell)$ y la geometría sólo se usa para distancias “extrínsecas” (euclidianas).
+            En ausencia de $\varphi$, las longitudes provienen únicamente de $\ell$. Si se dispone de $\varphi$ pero se usan otros pesos (tiempo, tarifa), se mantiene $(G,\ell)$ y la geometría sólo se usa para distancias \emph{extrínsecas} (euclidianas).
         \end{observacion}
 
         % --- Longitud total ---
@@ -1117,7 +1120,7 @@
             \[
             L(G)=\sum_{e\in E}\ell(e).
             \]
-            Si $\ell=\ell_\varphi$ proviene de una realización geométrica, entonces $L(G)=\sum_{(i,j)\in E}\|\varphi(i)-\varphi(j)\|$.
+            Si $\ell=\ell_\varphi$ proviene de una realización geométrica, entonces $L(G)=\sum_{e\in E}\ell_\varphi(e)$.
         \end{definicion}
 
         \begin{ejemplo}
@@ -1125,9 +1128,9 @@
         \end{ejemplo}
 
         % --- Distancias y rodeo ---
-        \begin{definicion}[Distancia sobre la red]
+        \begin{observacion}[Distancia sobre la red]
             Sea $(G,\ell)$ un grafo ponderado. La \textbf{distancia sobre la red} entre $u,v\in V$ es la distancia ponderada $d_\ell(u,v)$ definida previamente. Si $\ell\equiv 1$, esta distancia coincide con la distancia por número de aristas.
-        \end{definicion}
+        \end{observacion}
 
         \begin{definicion}[Distancia extrínseca]
             Dada una realización $\varphi:V\to\mathbb{R}^d$, la \textbf{distancia extrínseca} entre $u\ne v$ es
@@ -1175,6 +1178,10 @@
                 \]
                 Un valor elevado de cercanía entrante indica que $v$ es globalmente accesible desde los demás nodos; un valor elevado de cercanía saliente indica que desde $v$ se alcanza rápidamente a los demás.
             \end{definicion}
+
+            \begin{observacion}
+                Esta centralidad de cercanía no está normalizada. Para comparar grafos de distinto orden, puede usarse la versión normalizada que multiplica la cantidad anterior por $|V|-1$.
+            \end{observacion}
 
             \begin{ejemplo}[Centralidad de cercanía de $v=C$]
                 Consideremos el siguiente grafo dirigido y calculemos $C_c^{\mathrm{in}}(C)$.
@@ -1230,6 +1237,10 @@
                 \]
                 Si $G$ es no dirigido, la misma suma se toma sobre pares no ordenados $\{s,t\}\subseteq V\setminus\{v\}$, con $s\neq t$.
             \end{definicion}
+
+            \begin{observacion}
+                La intermediación anterior no está normalizada. Si $|V|\ge 3$ y se desean comparar grafos de distinto orden, se puede dividir por $(|V|-1)(|V|-2)$ en grafos dirigidos, o por $\frac{(|V|-1)(|V|-2)}{2}$ en grafos no dirigidos.
+            \end{observacion}
 
             \begin{ejemplo}[Centralidad de intermediación de $v=B$]
                 Consideremos el siguiente grafo dirigido y calculemos $C_b(B)$.
@@ -1389,12 +1400,16 @@
                 y se recupera $Ef(G)\le 1$ tras reescalar los pesos para que $\delta\ge 1$ o usando distancias enteras por número de aristas. Si alguna distancia entre nodos distintos es $0$, la eficiencia global no se usa sin una convención adicional, porque aparecería una división entre cero.
             \end{observacion}
 
-            \begin{definicion}[Eliminación y vulnerabilidad puntual]
-                Sea $G=(V,E)$ un grafo para el cual $Ef(G)$ está definida. Sea $H\subseteq E$, o bien sea $H\subseteq V$ con $|V\setminus H|\ge 2$. Definimos la \textbf{vulnerabilidad} frente a $H$ por
+            \begin{definicion}[Eliminación, cambio relativo y vulnerabilidad puntual]
+                Sea $G=(V,E)$ un grafo para el cual $Ef(G)$ está definida. Sea $H\subseteq E$, o bien sea $H\subseteq V$ con $|V\setminus H|\ge 2$. Definimos el \textbf{cambio relativo firmado de eficiencia} frente a $H$ por
                 \[
-                V(G;H)\;=\;\frac{Ef(G)-Ef(G\setminus H)}{Ef(G)},
+                \Delta Ef(G;H)\;=\;\frac{Ef(G)-Ef(G\setminus H)}{Ef(G)},
                 \]
-                con la convención $V(G;H)=0$ si $Ef(G)=0$. Cuando las expresiones están definidas, se usa la notación abreviada $V_v:=V(G;\{v\})$ y $V_e:=V(G;\{e\})$.
+                con la convención $\Delta Ef(G;H)=0$ si $Ef(G)=0$. La \textbf{vulnerabilidad} frente a $H$ es la pérdida relativa no negativa
+                \[
+                V(G;H)\;=\;\max\{0,\Delta Ef(G;H)\}.
+                \]
+                Cuando las expresiones están definidas, se usa la notación abreviada $V_v:=V(G;\{v\})$ y $V_e:=V(G;\{e\})$.
             \end{definicion}
 
             \begin{proposicion}[Monotonicidad por eliminación de aristas]
@@ -1414,7 +1429,7 @@
             \end{proof}
 
             \begin{observacion}
-                Para eliminaciones de vértices, la desigualdad anterior no se garantiza con la normalización de $Ef(G\setminus H)$ sobre el nuevo conjunto de nodos: al quitar nodos periféricos, el promedio de eficiencia de los nodos restantes puede aumentar. En ese caso, $V(G;H)$ debe interpretarse como cambio relativo respecto de la eficiencia global original.
+                Para eliminaciones de vértices, la desigualdad anterior no se garantiza con la normalización de $Ef(G\setminus H)$ sobre el nuevo conjunto de nodos: al quitar nodos periféricos, el promedio de eficiencia de los nodos restantes puede aumentar. En ese caso, $\Delta Ef(G;H)$ puede ser negativo. La vulnerabilidad $V(G;H)$ conserva solo la parte positiva, es decir, mide daño relativo y no mejora relativa.
             \end{observacion}
 
             \begin{definicion}[Curvas de vulnerabilidad y resiliencia]
@@ -1433,7 +1448,7 @@
             \end{definicion}
 
             \begin{ejemplo}[Cálculo ilustrativo mínimo]
-                En $P_4$ no dirigido con vértices $1$–$4$, $Ef(G)$ se obtiene sumando $1/d(i,j)$ sobre $i\neq j$ y normalizando por $12$. Al eliminar $v=2$ el grafo se parte, varias contribuciones pasan a $0$, y $Ef(G\setminus\{2\})<Ef(G)$; así $V_v>0$. El mismo procedimiento se aplica en grafos dirigidos con distancias dirigidas.
+                En $P_4$ no dirigido con vértices $1,2,3,4$, $Ef(G)$ se obtiene sumando $1/d(i,j)$ sobre $i\neq j$ y normalizando por $12$. Al eliminar $v=2$ el grafo se parte, varias contribuciones pasan a $0$, y $Ef(G\setminus\{2\})<Ef(G)$; así $V_v>0$. El mismo procedimiento se aplica en grafos dirigidos con distancias dirigidas.
             \end{ejemplo}
 
     \section{Algoritmo de Dijkstra para caminos mínimos}
@@ -1458,16 +1473,30 @@
                 Fijamos una cola de prioridad $Q$ con claves reales y mantenemos etiquetas tentativas $D[v]$ y predecesores $\pi[v]$.
                 \begin{enumerate}
                     \item Inicializamos $D[s]=0$, $D[v]=+\infty$ para $v\neq s$; $\pi[v]=\bot$ para todo $v$; insertamos todos los vértices en $Q$ con sus claves $D[\cdot]$.
-                    \item Mientras $Q$ no esté vacía: extraemos $u=\arg\min_{v\in Q} D[v]$. Para cada arco/arista $u\to w$ con peso $\ell(u,w)$, si $D[w]>D[u]+\ell(u,w)$ entonces actualizamos $D[w]\gets D[u]+\ell(u,w)$, $\pi[w]\gets u$ y disminuimos la clave de $w$ en $Q$.
+                    \item Mientras $Q$ no esté vacía: extraemos $u=\arg\min_{v\in Q} D[v]$. Para cada arco/arista $u\to w$ con $w\in Q$ y peso $\ell(u,w)$, si $D[w]>D[u]+\ell(u,w)$ entonces actualizamos $D[w]\gets D[u]+\ell(u,w)$, $\pi[w]\gets u$ y disminuimos la clave de $w$ en $Q$.
                     \item Al terminar, $D[v]=d_\ell(s,v)$ para todo $v$; el conjunto $\{( \pi[v],v): \pi[v]\neq \bot\}$ define un árbol (o bosque) de predecesores.
                 \end{enumerate}
 
-            \begin{proposicion}[Correctitud]
-                La correctitud del algoritmo de Dijkstra se basa en una idea "codiciosa" (greedy): en cada paso, se confirma la distancia al nodo no visitado más cercano a la fuente. Dado que los pesos de las aristas no son negativos, cualquier otra ruta alternativa para llegar a ese mismo nodo tendría que pasar forzosamente por otro nodo no visitado, que por definición está más lejos. Por lo tanto, esa ruta alternativa sería siempre más larga, lo que garantiza que la primera vez que llegamos a un nodo y lo marcamos como "visitado", lo hemos hecho por el camino más corto posible.
+            \begin{proposicion}[Correctitud de Dijkstra]
+                Al terminar el algoritmo de Dijkstra, para todo $v\in V$ se cumple
+                \[
+                    D[v]=d_\ell(s,v).
+                \]
+                Además, si $v$ es alcanzable desde $s$ y $v\neq s$, los predecesores $\pi$ determinan un camino de $s$ a $v$ cuyo peso total es $D[v]$.
             \end{proposicion}
 
             \begin{proof}
-                Demostramos por inducción sobre el número de extracciones. Sea $u$ el primer vértice que viola la propiedad. Como $s$ se extrae con $D[s]=0=d_\ell(s,s)$, existe alguno posterior. Sea $P$ un camino mínimo de $s$ a $u$, y sea $x$ el primer vértice de $P$ que aún no había sido extraído inmediatamente antes de extraer $u$; su predecesor $y$ en $P$ ya fue extraído. En ese momento, al relajar $y\to x$ establecemos $D[x]\le D[y]+\ell(y,x)=d_\ell(s,y)+\ell(y,x)=d_\ell(s,x)$, y por optimalidad $D[x]\ge d_\ell(s,x)$, luego $D[x]=d_\ell(s,x)$. Como $D[u]\le D[x]$ por elección de $u$ (clave mínima), obtenemos $D[u]\le d_\ell(s,x)\le d_\ell(s,u)$; pero siempre $D[u]\ge d_\ell(s,u)$, contradicción. La inducción cierra.
+                Demostramos por inducción sobre el número de extracciones que, cuando un vértice $u$ sale de $Q$, su etiqueta satisface $D[u]=d_\ell(s,u)$. Para $s$ se tiene $D[s]=0=d_\ell(s,s)$. Supongamos que $u$ es el primer vértice extraído que viola la igualdad. Sea $P$ un camino mínimo de $s$ a $u$, y sea $x$ el primer vértice de $P$ que aún no había sido extraído inmediatamente antes de extraer $u$; su predecesor $y$ en $P$ ya fue extraído. Al relajar $y\to x$ se obtuvo
+                \[
+                    D[x]\le D[y]+\ell(y,x)=d_\ell(s,y)+\ell(y,x)=d_\ell(s,x).
+                \]
+                Como toda etiqueta tentativa es el peso de algún camino de $s$ al vértice correspondiente, también $D[x]\ge d_\ell(s,x)$. Por tanto, $D[x]=d_\ell(s,x)$. Como $u$ fue elegido con clave mínima en $Q$, $D[u]\le D[x]$, y entonces
+                \[
+                    D[u]\le d_\ell(s,x)\le d_\ell(s,u),
+                \]
+                mientras que siempre $D[u]\ge d_\ell(s,u)$. Esto contradice la elección de $u$ como primer vértice incorrecto y prueba la igualdad para todos los vértices extraídos.
+
+                Si $v$ es alcanzable y $v\neq s$, entonces su etiqueta final es finita. Cada vez que se asigna $\pi[w]=u$, el vértice $u$ ya fue extraído y se cumple $D[w]=D[u]+\ell(u,w)$. Al seguir predecesores desde $v$, los tiempos de extracción disminuyen estrictamente, de modo que el proceso termina en $s$. La suma de los pesos de las aristas de ese camino telescopa y es igual a $D[v]$.
             \end{proof}
 
             \begin{proposicion}[Complejidad]
@@ -1655,7 +1684,15 @@
             \end{proof}
 
             \begin{proposicion}[Complejidad]
-                Si evaluamos vecindades con búsqueda lineal, el tiempo es $\mathcal{O}(N^2)$ y el espacio $\mathcal{O}(N)$ además del almacenamiento de $V$. Si disponemos de un índice espacial adecuado (p.\,ej.\ árbol $k$-d o ball tree) compatible con $d$, el tiempo esperado es $\mathcal{O}(N\log N)$ en dimensión moderada, manteniéndose el espacio en $\mathcal{O}(N)$ más el índice.
+                Con búsqueda lineal de vecindades, el cálculo directo de todas las relaciones $d(x,y)\le\varepsilon$ cuesta $\mathcal{O}(N^2)$ tiempo. Si se almacena el grafo de vecindad, el espacio en el peor caso es $\mathcal{O}(N^2)$.
+
+                Si se procesa la matriz de pares de forma secuencial y se usan estructuras como \emph{union-find} para unir núcleos, el espacio adicional puede reducirse a $\mathcal{O}(N)$, sin cambiar el tiempo cuadrático.
+
+                Con un índice espacial compatible con $d$, el coste puede expresarse como
+                \[
+                    \mathcal{O}(N\log N+M_\varepsilon),
+                \]
+                bajo hipótesis geométricas favorables, donde $M_\varepsilon$ es el número de pares a distancia a lo sumo $\varepsilon$.
             \end{proposicion}
 
             \begin{observacion}[Elección de $d$ en redes]
@@ -1663,10 +1700,15 @@
             \end{observacion}
 
             \begin{ejemplo}[Instancia mínima]
-                Sea $V=\{1,2,3,4,5\}$ con distancias métricas
+                Sea $V=\{1,2,3,4,5\}$ y definamos una función simétrica $d$ mediante
                 \[
-                d(1,2)=d(2,3)=0.9,\quad d(1,3)=1.6,\quad d(4,5)=0.8,\quad d(x,y)=2.5\ \text{en otro caso}.
+                    d(x,x)=0\quad\text{para todo }x\in V,
                 \]
+                junto con los valores
+                \[
+                    d(1,2)=d(2,3)=0.9,\quad d(1,3)=1.6,\quad d(4,5)=0.8,
+                \]
+                para pares distintos listados, y $d(x,y)=2.5$ para todo par distinto no listado.
                 Tomamos $\varepsilon=1$ y $\text{minPts}=3$. Entonces $1,2,3$ forman un cluster (núcleo: $2$; bordes: $1$ y $3$) y $4,5$ quedan como ruido. Si reducimos $\text{minPts}$ a $2$, $\{4,5\}$ pasa a formar un segundo cluster, ilustrando la monotonía en los parámetros.
             \end{ejemplo}
 
@@ -1725,7 +1767,19 @@
             \end{definicion}
 
             \begin{observacion}[Cálculo local]
-                Para evaluar $\Delta Q(i:R\to S)$ no es necesario recalcular todos los sumandos de $Q$. Solo cambian las contribuciones de $R$ y $S$; por tanto, el cálculo puede hacerse usando los pesos incidentes en $i$ y los totales ponderados de esas dos comunidades.
+                Para evaluar $\Delta Q(i:R\to S)$ no es necesario recalcular todos los sumandos de $Q$. Solo cambian las contribuciones de $R$ y $S$; por tanto, el cálculo puede hacerse usando los pesos incidentes en $i$ y los totales ponderados de esas dos comunidades. En el caso usual $A_{ii}=0$, después de retirar $i$ de su comunidad original y dejarlo temporalmente como comunidad unitaria, para insertar $i$ en una comunidad $S$ se define
+                \[
+                    k_{i,S}=\sum_{j\in S}A_{ij}.
+                \]
+                Entonces el incremento de modularidad por esa inserción es
+                \[
+                    \Delta Q_{\mathrm{ins}}(i,S)
+                    =
+                    \frac{k_{i,S}}{m}
+                    -
+                    \frac{k_i\Sigma_{\mathrm{tot}}(S)}{2m^2}.
+                \]
+                El movimiento completo $i:R\to S$ se obtiene combinando la pérdida por retirar $i$ de $R$ y la ganancia por insertarlo en $S$. Si aparecen entradas diagonales no nulas en una fase agregada, estas se incorporan directamente en los términos $\Sigma_{\mathrm{in}}$ y $\Sigma_{\mathrm{tot}}$ de la definición de $Q$.
             \end{observacion}
 
             \begin{definicion}[Método de Louvain]
@@ -1738,7 +1792,7 @@
                     \[
                         B_{\alpha\beta}=\sum_{i\in X_\alpha}\sum_{j\in X_\beta}A_{ij}.
                     \]
-                    La entrada $B_{\alpha\alpha}$ registra el peso interno de la comunidad $X_\alpha$ bajo la misma convención matricial usada en la definición de modularidad.
+                    La entrada $B_{\alpha\alpha}$ registra el peso interno de la comunidad $X_\alpha$ bajo la misma convención matricial usada en la definición de modularidad; en particular, en grafos no dirigidos sin lazos, las aristas internas originales contribuyen dos veces.
                 \end{enumerate}
 
                 El procedimiento aplica nuevamente estas dos fases a la matriz agregada y se detiene cuando la agregación ya no produce un aumento de modularidad.
