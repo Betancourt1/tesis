@@ -1174,15 +1174,31 @@
             Así como hemos estudiado propiedades que nos ayudan a describir un grafo de forma global, también queremos poder mirar a cada uno de sus nodos y ser capaces de decir cosas respecto a su lugar dentro del mismo. El análisis de propiedades a nivel de nodo nos permite identificar y cuantificar el papel de cada nodo dentro de la estructura del grafo. Mediante medidas locales, podemos distinguir nodos con características particulares, comparar su relevancia relativa y obtener una visión más detallada de la organización interna del grafo, incluso cuando el estudio global resulta insuficiente para captar las diferencias individuales.
 
             \begin{definicion}[Centralidad de cercanía]
-                La \textbf{centralidad de cercanía} de un nodo $v$, denotada $C_c(v)$, mide la inversa de la suma de distancias desde todos los nodos hasta $v$:
+                Sea $G=(V,E)$ un grafo con $|V|\ge 2$ y distancia $d$. Para $v\in V$, la \textbf{cercanía entrante} de $v$ se define como
                 \[
-                C_c(v) = \frac{1}{\sum_{u\in V} d(u, v)}
+                C_c^{\mathrm{in}}(v)=
+                \begin{cases}
+                \left(\sum_{u\in V\setminus\{v\}} d(u,v)\right)^{-1},
+                & \text{si } d(u,v)<+\infty \text{ para todo }u\neq v,\\
+                0,
+                & \text{en otro caso.}
+                \end{cases}
                 \]
-                Un valor elevado indica que $v$ es globalmente accesible dentro de la red.
+                En grafos no dirigidos, esta definición coincide con la cercanía usual. En grafos dirigidos también se define la \textbf{cercanía saliente} mediante
+                \[
+                C_c^{\mathrm{out}}(v)=
+                \begin{cases}
+                \left(\sum_{u\in V\setminus\{v\}} d(v,u)\right)^{-1},
+                & \text{si } d(v,u)<+\infty \text{ para todo }u\neq v,\\
+                0,
+                & \text{en otro caso.}
+                \end{cases}
+                \]
+                Un valor elevado de cercanía entrante indica que $v$ es globalmente accesible desde los demás nodos; un valor elevado de cercanía saliente indica que desde $v$ se alcanza rápidamente a los demás.
             \end{definicion}
 
             \begin{ejemplo}[Centralidad de cercanía de $v=C$]
-                Consideremos el siguiente grafo dirigido y calculemos $C_c(C)$.
+                Consideremos el siguiente grafo dirigido y calculemos $C_c^{\mathrm{in}}(C)$.
 
                 \begin{center}
                     \begin{tikzpicture}[scale=1.1]
@@ -1224,9 +1240,8 @@
                 \]
                 Usando la definición
                 \[
-                C_c(C)=\frac{1}{\sum_{u\in V} d(u,C)}=\frac{1}{\,1+1+1+2+0\,}=\frac{1}{5}=0.2.
+                C_c^{\mathrm{in}}(C)=\frac{1}{\sum_{u\in V\setminus\{C\}} d(u,C)}=\frac{1}{\,1+1+1+2\,}=\frac{1}{5}=0.2.
                 \]
-                Si se prefiere la convención estándar $\sum_{u\neq v}$ (excluyendo $d(C,C)$), el valor es el mismo.
             \end{ejemplo}
 
             \begin{definicion}[Centralidad de intermediación]
@@ -1293,16 +1308,20 @@
                 \]
             \end{ejemplo}
 
-            \begin{definicion}[Eccentricidad]
-                La \textbf{eccentricidad entrante} de un nodo $v$, denotada $e(v)$, es la mayor distancia desde cualquier otro nodo hacia $v$:
+            \begin{definicion}[Excentricidad]
+                Sea $G=(V,E)$ un grafo con distancia $d$. La \textbf{excentricidad entrante} de $v\in V$ es
                 \[
-                e(v) = \max_{u \in V} d(u, v)
+                e^{\mathrm{in}}(v)=\max_{u\in V}d(u,v).
                 \]
-                Mide el peor caso de accesibilidad hacia $v$.
+                Si existe $u\in V$ tal que no hay camino de $u$ a $v$, entonces $e^{\mathrm{in}}(v)=+\infty$. En grafos dirigidos también se define la \textbf{excentricidad saliente} como
+                \[
+                e^{\mathrm{out}}(v)=\max_{u\in V}d(v,u).
+                \]
+                En grafos no dirigidos, ambas nociones coinciden.
             \end{definicion}
 
-            \begin{ejemplo}[Eccentricidad de $v=C$]
-                Consideremos el siguiente grafo dirigido y calculemos $e(C)=\max_{u\in V} d(u,C)$.
+            \begin{ejemplo}[Excentricidad de $v=C$]
+                Consideremos el siguiente grafo dirigido y calculemos $e^{\mathrm{in}}(C)=\max_{u\in V} d(u,C)$.
 
                 \begin{center}
                     \begin{tikzpicture}[scale=1.1]
@@ -1340,7 +1359,7 @@
                 \]
                 Por definición,
                 \[
-                e(C)=\max\{2,1,3,2,0\}=3.
+                e^{\mathrm{in}}(C)=\max\{2,1,3,2,0\}=3.
                 \]
             \end{ejemplo}
 
