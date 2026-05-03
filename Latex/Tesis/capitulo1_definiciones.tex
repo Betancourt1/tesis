@@ -98,7 +98,7 @@
     % TODO [PDF p.12][ernes][cat: estructura][prio: alta][resaltado: "Tipos de grafos"]: reordenar la progresión conceptual; se sugirió subgrafos, caminos y ciclos, conectividad y después representaciones matriciales.
     \section{Tipos de grafos}
 
-        Ahora que sabemos lo que es un grafo, es pertinente preguntarnos si es posible clasificarlos. Aunque posible, la clasificación de los grafos es una tarea multifacética que puede atender a una diversidad de criterios. Es posible categorizarlos, por ejemplo, en función de su estructura general (como en el caso de los grafos planares, bipartitos o completos), de las propiedades de conectividad que exhiben, o incluso de la presencia de ciclos. No obstante, para los fines de esta introducción, nos centraremos en una de las distinciones más fundamentales, la cual emana directamente de las propiedades inherentes al conjunto de aristas $E$. Específicamente, exploraremos la clasificación de los grafos según si sus aristas poseen una dirección definida (grafos dirigidos y no dirigidos) y si se les atribuye un valor numérico (grafos ponderados).
+        Ahora que sabemos lo que es un grafo, es pertinente preguntarnos si es posible clasificarlos. Aunque posible, la clasificación de los grafos es una tarea multifacética que puede atender a una diversidad de criterios. Es posible categorizarlos, por ejemplo, en función de su estructura general, de las propiedades de conectividad que exhiben o de la presencia de ciclos. No obstante, para los fines de esta introducción, nos centraremos en una de las distinciones más fundamentales, la cual emana directamente de las propiedades inherentes al conjunto de aristas $E$. Específicamente, exploraremos la clasificación de los grafos según si sus aristas poseen una dirección definida (grafos dirigidos y no dirigidos) y si se les atribuye un valor numérico.
 
         Estas propiedades dan lugar a un espectro de categorías de grafos, cada una con implicaciones estructurales y algorítmicas particulares. Por consiguiente, a continuación se ilustran las clases ya definidas y se introducen otras definiciones formales.
 
@@ -322,9 +322,12 @@
             Obsérvese que $H$ se obtiene de $G$ al eliminar el nodo $D$ y las aristas asociadas a $D$.
         \end{ejemplo}
 
+        \begin{definicion}[Grafo completo]
+            Un \textbf{grafo completo} es un grafo simple no dirigido $G=(V,E)$ tal que, para cualesquiera dos nodos distintos $u,v\in V$, se cumple $\{u,v\}\in E$. Si $|V|=n$, se denota por $K_n$.
+        \end{definicion}
+
         \begin{definicion}[Clique]
-            % TODO [PDF p.15][Fernando Becerra][cat: rigor matematico][prio: media][resaltado: "grafo completo K_{|S|}"]: revisar el comentario "Definición" y si esta equivalencia debe rotularse o explicitarse de otra forma.
-            Sea $G=(V,E)$ un grafo simple no dirigido. Llamamos \textbf{clique} a un conjunto no vacío $S\subseteq V$ tal que todo par de vértices distintos en $S$ es adyacente; equivalentemente, el subgrafo inducido $G[S]$ es un grafo completo $K_{|S|}$. Cuando $|S|=k$, decimos que $S$ es una \emph{$k$-clique}.
+            Sea $G=(V,E)$ un grafo simple no dirigido. Una \textbf{clique} de $G$ es un conjunto no vacío $S\subseteq V$ tal que todo par de nodos distintos en $S$ es adyacente. Equivalentemente, al considerar los nodos de $S$ y las aristas de $G$ cuyos extremos pertenecen a $S$, se obtiene un grafo completo con $|S|$ nodos, es decir, un $K_{|S|}$. Cuando $|S|=k$, se dice que $S$ es una \emph{$k$-clique}.
         \end{definicion}
 
         \begin{definicion}[Maximal y máxima clique; número de clique]
