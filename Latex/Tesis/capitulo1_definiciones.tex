@@ -700,9 +700,9 @@
             \begin{definicion}[Hoja]
                 Sea $G=(V,E)$ un grafo finito. Un nodo $v\in V$ es una \textbf{hoja} si tiene grado uno en el grafo subyacente no dirigido, es decir,
                 \[
-                \deg(v)=1.
+                \deg_{U(G)}(v)=1.
                 \]
-                Equivalente: $v$ es incidente exactamente a una arista del grafo (contando multiplicidades si es multígrafo).
+                Equivalentemente, en $U(G)$ existe exactamente una arista incidente con $v$.
             \end{definicion}
 
             \begin{observacion}[Caso dirigido y arborescencias]
@@ -712,7 +712,7 @@
                   \item en una arborescencia \emph{de salida} con raíz $r$, se llama hojas a los $v\neq r$ con $\deg^{+}(v)=0$;
                   \item en una arborescencia \emph{de entrada} con raíz $r$, se llama hojas a los $v\neq r$ con $\deg^{-}(v)=0$.
                 \end{itemize}
-                Estas nociones coinciden con $\deg(v)=1$ en el subyacente no dirigido.
+                Estas nociones coinciden con $\deg_{U(G)}(v)=1$.
             \end{observacion}
 
             \begin{lema}[Existencia de hoja]
