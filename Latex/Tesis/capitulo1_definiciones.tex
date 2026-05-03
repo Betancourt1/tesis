@@ -7,57 +7,49 @@
 
     \section{Definición y conceptos básicos}
 
-        Primero se fijará la noción básica de grafo y, después, se introducirán sus variantes. Cuando una propiedad o métrica dependa de alguna variante específica, se indicará explícitamente en la definición correspondiente.
+        Primero se fijan dos objetos básicos: los grafos no dirigidos simples y los grafos dirigidos simples. Cuando una propiedad o métrica dependa de alguna variante específica, se indicará explícitamente en la definición correspondiente.
 
-        Convención terminológica: en la tesis se usa \textbf{arista} como término general para una conexión entre nodos. Más adelante se introducirá el término \textbf{arco} para las conexiones con orientación.
-
-        \begin{definicion}[Grafo]
-            Un \textbf{grafo} es una tupla $G=(V,E)$, donde $V$ es un conjunto no vacío y $E$ es un conjunto cuyos elementos son pares formados por elementos de $V$. Los elementos de $V$ se llaman \textbf{nodos} o \textbf{vértices}; los elementos de $E$ se llaman \textbf{aristas}. Si $e\in E$ es una arista, los elementos de $V$ que aparecen en el par $e$ se llaman \textbf{extremos} de $e$. Se dice que la arista $e$ \textbf{incide} en cada uno de sus extremos.
-
-            Esta definición básica no distingue dos aristas distintas con los mismos extremos; las variantes que sí permiten esa distinción se introducirán más adelante.
+        \begin{definicion}[Grafo no dirigido simple]
+            Un \textbf{grafo no dirigido simple} es un par $G=(V,E)$, donde $V$ es un conjunto finito no vacío y
+            \[
+                E\subseteq \{\{u,v\}:u,v\in V,\ u\neq v\}.
+            \]
+            Los elementos de $V$ se llaman \textbf{nodos} o \textbf{vértices}; los elementos de $E$ se llaman \textbf{aristas}. Si $e=\{u,v\}\in E$, los nodos $u$ y $v$ se llaman \textbf{extremos} de $e$. Se dice que la arista $e$ \textbf{incide} en cada uno de sus extremos.
         \end{definicion}
 
-        \begin{definicion}[Grafo dirigido]
-            Sea $G=(V,E)$ un grafo. Se dice que $G$ es \textbf{dirigido} si, para toda arista $e\in E$, existen $u,v\in V$ tales que $e=(u,v)$. En este caso, las aristas son pares ordenados y también se llaman \textbf{arcos}.
+        \begin{definicion}[Grafo dirigido simple]
+            Un \textbf{grafo dirigido simple} es un par $D=(V,A)$, donde $V$ es un conjunto finito no vacío y
+            \[
+                A\subseteq \{(u,v):u,v\in V,\ u\neq v\}.
+            \]
+            Los elementos de $V$ se llaman \textbf{nodos} o \textbf{vértices}; los elementos de $A$ se llaman \textbf{arcos}. Si $a=(u,v)\in A$, entonces $u$ es la \textbf{cola} de $a$ y $v$ es la \textbf{cabeza} de $a$.
         \end{definicion}
 
-        \begin{definicion}[Grafo no dirigido]
-            Sea $G=(V,E)$ un grafo. Se dice que $G$ es \textbf{no dirigido} si, para toda arista $e\in E$, existen $u,v\in V$ tales que $e=\{u,v\}$. En este caso, las aristas son pares no ordenados y se cumple $\{u,v\}=\{v,u\}$.
-        \end{definicion}
+        \begin{observacion}[Uso de la palabra grafo]
+            Salvo indicación contraria, la palabra \textbf{grafo} designa uno de los dos objetos anteriores: un grafo no dirigido simple o un grafo dirigido simple. Cuando se use una notación común, se escribirá $G=(V,E)$ también en el caso dirigido; allí $E$ denota el conjunto de arcos. En afirmaciones que cubran simultáneamente los dos casos, la palabra \emph{arista} se usará como término general para aristas no dirigidas y arcos dirigidos.
+        \end{observacion}
 
         \begin{observacion}[Convención de notación]
             Sea $G=(V,E)$ un grafo. Cuando se quiera enfatizar que $V$ es el conjunto de nodos de $G$, se dirá que $G$ es un grafo sobre $V$ y, de manera abreviada, se escribirá $G(V)$. La notación $G(V)$ no define un grafo distinto de $G$; solo explicita el conjunto de nodos considerado.
         \end{observacion}
 
         \begin{definicion}[Lazo]
-            Sea $G=(V,E)$ un grafo dirigido o no dirigido. Un \textbf{lazo} es una arista cuyos dos extremos coinciden. En un grafo dirigido tiene la forma $(v,v)$ para algún $v\in V$; en un grafo no dirigido tiene la forma $\{v,v\}$ para algún $v\in V$.
+            Fuera de las clases simples definidas arriba, un \textbf{lazo} es una conexión cuyos dos extremos son el mismo nodo. En un modelo dirigido puede representarse como un par ordenado $(v,v)$ con $v\in V$. En un modelo no dirigido, la notación $\{v,v\}$ no representa un par de extremos, pues $\{v,v\}=\{v\}$; por ello, si se permiten lazos no dirigidos, debe usarse una convención más rica, por ejemplo una función de incidencia o un multiconjunto de dos extremos.
         \end{definicion}
 
-        \begin{definicion}[Grafo simple]
-            Sea $G=(V,E)$ un grafo no dirigido. Se dice que $G$ es \textbf{simple} si no tiene lazos. Bajo la convención de que $E$ es un conjunto de pares no ordenados, esto equivale a
-            \[
-                E\subseteq \{\{u,v\}: u,v\in V,\ u\neq v\}.
-            \]
-            En particular, para cualesquiera dos nodos distintos $u,v\in V$, existe a lo sumo una arista con extremos $u$ y $v$.
-        \end{definicion}
-
-        \begin{observacion}[Grafo dirigido simple]
-            Sea $G=(V,E)$ un grafo dirigido. Se dice que $G$ es \emph{dirigido simple} si no tiene lazos. Equivalentemente,
-            \[
-                E\subseteq \{(u,v):u,v\in V,\ u\neq v\}.
-            \]
-            Como $E$ es un conjunto, para cada par ordenado $(u,v)$ hay a lo sumo una arista de la forma $(u,v)$. Para $u\neq v$, pueden pertenecer a $E$ el par ordenado $(u,v)$, el par ordenado $(v,u)$, ambos o ninguno.
+        \begin{observacion}[Dirección de los arcos]
+            En un grafo dirigido, $(u,v)$ y $(v,u)$ son, en general, pares ordenados distintos. Por tanto, la pertenencia $(u,v)\in E$ no implica la pertenencia $(v,u)\in E$, aunque ambas pueden ocurrir simultáneamente.
         \end{observacion}
 
         \begin{definicion}[Adyacencia de nodos]
-            Sean $G=(V,E)$ un grafo no dirigido y $u,v\in V$ dos nodos distintos.
+            Sean $G=(V,E)$ un grafo no dirigido simple y $u,v\in V$ dos nodos distintos.
             Se dice que $u$ y $v$ son \textbf{adyacentes} si $\{u,v\}\in E$. En ese caso, también se dice que $u$ y $v$ son \textbf{vecinos}.
+
+            Si $D=(V,A)$ es un grafo dirigido simple y $(u,v)\in A$, se dice que $u$ es un \textbf{predecesor} directo de $v$ y que $v$ es un \textbf{sucesor} directo de $u$.
         \end{definicion}
 
-        \begin{definicion}[Orden, tamaño y finitud]
+        \begin{definicion}[Orden y tamaño]
             Sea $G=(V,E)$ un grafo. El \textbf{orden} de $G$ es el número de nodos de $G$ y se denota por $|V|$; cuando no hay ambigüedad, también se escribe $|G|$. El \textbf{tamaño} de $G$ es el número de aristas de $G$ y se denota por $|E|$.
-
-            Se dice que $G$ es \textbf{finito} si tanto su orden como su tamaño son finitos. Se dice que $G$ es \textbf{infinito} si al menos uno de los conjuntos $V$ o $E$ es infinito. Con la noción de grafo adoptada en esta sección, si $V$ es finito, entonces $E$ también es finito, pues $E$ es un conjunto de pares formados por elementos de $V$.
         \end{definicion}
 
         \begin{ejemplo}
@@ -90,9 +82,24 @@
         \end{ejemplo}
         Más adelante veremos que es posible medir distintas propiedades de un grafo, ya sea en su totalidad o en cada una de sus partes, pero una primera noción en ese sentido es la de \textit{grado de un nodo} que además nos ayudará a demostrar varios resultados importantes más adelante.
         \begin{definicion}[Grado de un nodo]
-            El \textbf{grado} de un nodo $v$, denotado $\deg(v)$, es el número de aristas que inciden en él. Si una arista es un lazo en $v$, se cuenta dos veces.
-            Este valor refleja la importancia local del nodo como punto de transferencia.
+            Sea $G=(V,E)$ un grafo no dirigido simple y sea $v\in V$. El \textbf{grado} de $v$, denotado $\deg(v)$, es el número de aristas de $E$ que inciden en $v$.
         \end{definicion}
+
+        \begin{definicion}[Grado de entrada y grado de salida]
+            Sea $D=(V,A)$ un grafo dirigido simple y sea $v\in V$. El \textbf{grado de entrada} de $v$ es
+            \[
+                \deg^{-}(v)=|\{u\in V:(u,v)\in A\}|,
+            \]
+            y el \textbf{grado de salida} de $v$ es
+            \[
+                \deg^{+}(v)=|\{u\in V:(v,u)\in A\}|.
+            \]
+            El \textbf{grado total} de $v$ es $\deg(v)=\deg^{-}(v)+\deg^{+}(v)$.
+        \end{definicion}
+
+        \begin{observacion}
+            En una red de transporte, el grado de un nodo puede interpretarse como una medida local de conexión o transferencia. Esta interpretación depende del modelo usado: en un grafo dirigido, el grado de entrada y el grado de salida distinguen llegadas y salidas.
+        \end{observacion}
 
         \begin{ejemplo}
             En el siguiente grafo, el nodo $A$ incide en tres aristas, por lo que $\deg(A)=3$.
@@ -113,7 +120,7 @@
 
     \section{Tipos de grafos}
 
-        Ahora que sabemos lo que es un grafo, podemos distinguir algunas variantes según la forma de sus aristas y la información adicional que se les asigne. En esta sección se reúnen esas variantes básicas.
+        A partir de las dos clases simples definidas arriba, podemos distinguir variantes según la orientación de sus aristas y la información adicional que se les asigne. En esta sección se reúnen esas variantes básicas.
 
         Estas propiedades dan lugar a un espectro de categorías de grafos, cada una con implicaciones estructurales y algorítmicas particulares. Por consiguiente, a continuación se ilustran las clases ya definidas y se introducen otras definiciones formales.
 
@@ -142,10 +149,6 @@
             \end{center}
         \end{ejemplo}
 
-        \begin{observacion}[Grafos dirigidos]
-            En un grafo dirigido, $(u,v)$ y $(v,u)$ son, en general, pares ordenados distintos. Por tanto, la pertenencia $(u,v)\in E$ no implica la pertenencia $(v,u)\in E$, aunque ambas pueden ocurrir simultáneamente.
-        \end{observacion}
-
         \begin{ejemplo}
             Ejemplo de grafo dirigido:
 
@@ -164,31 +167,35 @@
         \end{ejemplo}
 
         \begin{definicion}[Grafo subyacente no dirigido]
-            Sea $G=(V,E)$ un grafo. El \textbf{grafo subyacente no dirigido} de $G$, denotado por $U(G)$, se define de la siguiente manera. Si $G$ es no dirigido, entonces $U(G)=G$. Si $G$ es dirigido, entonces $U(G)=(V,E_U)$, donde
+            Sea $D=(V,A)$ un grafo dirigido simple. El \textbf{grafo subyacente no dirigido} de $D$, denotado por $U(D)$, es el grafo no dirigido simple $U(D)=(V,E_U)$, donde
             \[
-                E_U=\{\{u,v\}: u,v\in V,\ u\neq v,\ \text{y }(u,v)\in E\text{ o }(v,u)\in E\}.
+                E_U=\{\{u,v\}: u,v\in V,\ u\neq v,\ \text{y }(u,v)\in A\text{ o }(v,u)\in A\}.
             \]
-            Es decir, $U(G)$ conserva los nodos de $G$ y reemplaza cada arco entre dos nodos distintos por una arista no dirigida.
+            Es decir, $U(D)$ conserva los nodos de $D$ y reemplaza cada arco entre dos nodos distintos por una arista no dirigida. Si $G$ ya es no dirigido, se adopta la convención $U(G)=G$.
         \end{definicion}
 
-        \begin{observacion}[Grado en grafos dirigidos]
-            En un grafo dirigido, el grado total de un nodo $v$ se descompone en \textbf{grado de entrada}, denotado $\deg^{-}(v)$, que cuenta las aristas que terminan en $v$, y \textbf{grado de salida}, denotado $\deg^{+}(v)$, que cuenta las aristas que comienzan en $v$. En este caso,
-            \[
-                \deg(v)=\deg^{-}(v)+\deg^{+}(v).
-            \]
-        \end{observacion}
-
         \begin{definicion}[Multígrafo]
-            Un \textbf{multígrafo} es una terna $G=(V,E,\iota)$, donde $V$ es un conjunto finito de nodos, $E$ es un conjunto finito de aristas e $\iota$ asigna a cada arista de $E$ un par de elementos de $V$, ordenado si el multígrafo es dirigido y no ordenado si no lo es. Dos aristas distintas $e,f\in E$ son \textbf{paralelas} si $\iota(e)=\iota(f)$.
-            Cuando además se permiten aristas cuyos dos extremos coinciden, hablaremos de \emph{pseudografo}. Cuando la asignación $\iota$ sea evidente por el contexto, escribiremos simplemente $G=(V,E)$.
+            Un \textbf{multígrafo} es una terna $M=(V,E,\iota)$, donde $V$ es un conjunto finito de nodos, $E$ es un conjunto finito de aristas con identidad propia e $\iota$ es una función de incidencia que asigna extremos a cada arista. En el caso dirigido se toma
+            \[
+                \iota:E\to V\times V.
+            \]
+            En el caso no dirigido sin lazos se toma
+            \[
+                \iota:E\to \{\{u,v\}:u,v\in V,\ u\neq v\}.
+            \]
+            Dos aristas distintas $e,f\in E$ son \textbf{paralelas} si $\iota(e)=\iota(f)$. Si se quieren permitir lazos no dirigidos, debe ampliarse el codominio de $\iota$ para representar extremos repetidos.
         \end{definicion}
 
         \begin{observacion}
-            En el contexto dirigido, un \emph{multígrafo dirigido} permite múltiples arcos $(u,v)$ con la misma orientación (y lazos $(v,v)$ si se autorizan). Salvo indicación en contrario, el grado se calcula contando cada arista paralela con su multiplicidad.
+            Los multígrafos no forman parte de la convención básica del capítulo. Cuando una definición posterior requiera multiplicidades, se indicará explícitamente y se contará cada arista paralela con su propia identidad.
         \end{observacion}
 
         \begin{definicion}[Grafo ponderado]
-            Un grafo $G=(V,E)$ es \textbf{ponderado} si a cada arista $e\in E$ se le asigna un peso $w(e)\in \mathbb{R}$.
+            Un \textbf{grafo ponderado} es un par $(G,\ell)$, donde $G=(V,E)$ es un grafo y
+            \[
+                \ell:E\to[0,\infty)
+            \]
+            asigna a cada arista un peso no negativo. Si $\ell(e)>0$ para toda arista $e\in E$, se dice que los pesos son positivos.
         \end{definicion}
 
         \begin{ejemplo}
@@ -277,16 +284,16 @@
          \subsection{Recorridos, caminos y ciclos}
 
             \begin{definicion}[Recorrido]
-                Sea $G=(V,E)$ un grafo finito (dirigido o no) y sea $k\in\mathbb{N}_0$. Llamamos \textbf{recorrido} a una sucesión finita
+                Sea $G=(V,E)$ un grafo y sea $k\in\mathbb{N}_0$. Un \textbf{recorrido} de longitud $k$ en $G$ es una sucesión finita
                 \[
                 W=(v_0,e_1,v_1,e_2,\dots,e_k,v_k)
                 \]
-                tal que, para cada $i=1,\dots,k$, la arista $e_i$ une $v_{i-1}$ con $v_i$:
+                tal que $v_i\in V$ para todo $i=0,\dots,k$ y, para cada $i=1,\dots,k$, la arista $e_i$ une $v_{i-1}$ con $v_i$ en el sentido correspondiente:
                 \begin{itemize}
                   \item en grafos no dirigidos, $e_i=\{v_{i-1},v_i\}\in E$;
                   \item en grafos dirigidos, $e_i=(v_{i-1},v_i)\in E$.
                 \end{itemize}
-                Permitimos repeticiones de vértices y aristas. La \emph{longitud} de $W$ es $k$ (número de aristas). Si $G$ es ponderado con $\ell:E\to[0,\infty)$, el \emph{peso} de $W$ es $\sum_{i=1}^k \ell(e_i)$. Decimos que $W$ es \emph{cerrado} si $v_0=v_k$ y \emph{abierto} en caso contrario.
+                Se permiten repeticiones de vértices y aristas. Si $(G,\ell)$ es ponderado, el \emph{peso} de $W$ es $\sum_{i=1}^k \ell(e_i)$. Se dice que $W$ es \emph{cerrado} si $v_0=v_k$ y \emph{abierto} en caso contrario.
             \end{definicion}
 
             \begin{observacion}
@@ -294,21 +301,13 @@
             \end{observacion}
 
             \begin{definicion}[Camino]
-                Sea $G = (V, E)$ un grafo y sea $k\in\mathbb{N}_0$.
-                Un \textbf{camino de longitud $k$} es un subgrafo $P = (V_P, E_P)$ de $G$ tal que existen nodos distintos $v_1, v_2, \dots, v_{k+1} \in V$ para los cuales:
-                \begin{align*}
-                    V_P &= \{v_1, v_2, \dots, v_{k+1}\},
-                \end{align*}
-                y las aristas (o arcos) de $P$ conectan vértices consecutivos:
+                Sea $G=(V,E)$ un grafo y sea $k\in\mathbb{N}_0$. Un \textbf{camino de longitud $k$} de $u$ a $v$ en $G$ es un recorrido
                 \[
-                    E_P =
-                    \begin{cases}
-                        \left\{ \{v_i, v_{i+1}\} : i = 1, \dots, k \right\}, & \text{si } G \text{ es no dirigido},\\
-                        \left\{ (v_i, v_{i+1}) : i = 1, \dots, k \right\}, & \text{si } G \text{ es dirigido}.
-                    \end{cases}
+                    P=(v_0,e_1,v_1,\dots,e_k,v_k)
                 \]
-                y $v_i \neq v_j$ para todo $i \neq j$.
-                Decimos que $P$ es un camino de $v_1$ a $v_{k+1}$ en $G$.
+                tal que $v_0=u$, $v_k=v$ y los nodos $v_0,\dots,v_k$ son distintos dos a dos. Si $k=0$, el camino tiene un solo nodo y no contiene aristas.
+
+                Cuando no haya ambigüedad, también se llamará $P$ al subgrafo formado por los nodos $v_0,\dots,v_k$ y las aristas $e_1,\dots,e_k$.
             \end{definicion}
 
             \begin{ejemplo}[Camino como subgrafo]
@@ -382,24 +381,27 @@
             \captionof{figure}{Un camino dirigido $P = (v_1, v_6, v_3, v_5)$ en el grafo dirigido $G$ y su representación como subgrafo.}
             \end{ejemplo}
 
-            \begin{definicion}[Ciclo]
-                Sea $G=(V,E)$ un grafo y sea $k\ge 3$. Un \textbf{ciclo de longitud $k$} es un subgrafo $C = (V_C, E_C)$ de $G$ tal que existen nodos distintos $v_1, v_2, \dots, v_k \in V$ para los cuales:
-                \begin{align*}
-                    V_C &= \{v_1, v_2, \dots, v_k\},
-                \end{align*}
-                y
+            \begin{definicion}[Ciclo no dirigido]
+                Sea $G=(V,E)$ un grafo no dirigido simple. Un \textbf{ciclo no dirigido} de longitud $k\ge 3$ es una sucesión de nodos distintos $v_1,\dots,v_k\in V$ tal que
                 \[
-                    E_C =
-                    \begin{cases}
-                        \left\{ \{v_1, v_2\},\ \{v_2, v_3\},\ \dots,\ \{v_{k-1}, v_k\},\ \{v_k, v_1\} \right\}, & \text{si } G \text{ es no dirigido},\\
-                        \left\{ (v_1, v_2),\ (v_2, v_3),\ \dots,\ (v_{k-1}, v_k),\ (v_k, v_1) \right\}, & \text{si } G \text{ es dirigido}.
-                    \end{cases}
+                    \{v_i,v_{i+1}\}\in E \quad (i=1,\dots,k-1),
+                    \qquad
+                    \{v_k,v_1\}\in E.
                 \]
-                y $v_i \neq v_j$ para $i \neq j$.
+                Cuando no haya ambigüedad, también se llamará ciclo al subgrafo formado por esos nodos y esas aristas.
+            \end{definicion}
+
+            \begin{definicion}[Ciclo dirigido]
+                Sea $D=(V,A)$ un grafo dirigido simple. Un \textbf{ciclo dirigido} de longitud $k\ge 2$ es una sucesión de nodos distintos $v_1,\dots,v_k\in V$ tal que
+                \[
+                    (v_i,v_{i+1})\in A \quad (i=1,\dots,k-1),
+                    \qquad
+                    (v_k,v_1)\in A.
+                \]
             \end{definicion}
 
             \begin{definicion}[Grafo acíclico]
-                Decimos que un grafo $G$ es \textit{acíclico} si ninguno de sus subgrafos es un ciclo.
+                Un grafo no dirigido simple es \textbf{acíclico} si no contiene ciclos no dirigidos. Un grafo dirigido simple es \textbf{acíclico} si no contiene ciclos dirigidos.
             \end{definicion}
 
             \begin{ejemplo}[Ciclo como subgrafo]
@@ -442,13 +444,13 @@
                     \end{tikzpicture}
                 \end{center}
 
-                El subgrafo resaltado constituye un ciclo de longitud $4$, dado por la sucesión $v_1 \to v_2 \to v_3 \to v_4 \to v_1$.
+                El subgrafo resaltado constituye un ciclo dirigido de longitud $4$, dado por la sucesión $v_1 \to v_2 \to v_3 \to v_4 \to v_1$.
             \end{ejemplo}
 
             \begin{definicion}[Conectividad y componentes conexas]
                 Sea $G=(V,E)$ un grafo no dirigido. Decimos que $G$ es \textbf{conexo} si, para todo par de nodos $u,v\in V$, existe un camino de $u$ a $v$ en $G$. Una \textbf{componente conexa} de $G$ es un subgrafo conexo que no está contenido propiamente en otro subgrafo conexo de $G$. Denotamos por $p$ el número de componentes conexas de $G$.
 
-                Si $G$ es dirigido, salvo indicación en contrario, la conectividad y las componentes conexas se entienden en el grafo subyacente no dirigido $U(G)$.
+                Si $D=(V,A)$ es un grafo dirigido, se dice que $D$ es \textbf{débilmente conexo} si $U(D)$ es conexo. Se dice que $D$ es \textbf{fuertemente conexo} si, para todo par ordenado de nodos $u,v\in V$, existe un camino dirigido de $u$ a $v$. Salvo indicación en contrario, cuando una propiedad estructural hable de conectividad en un grafo dirigido se entenderá conectividad débil, es decir, conectividad en $U(D)$.
             \end{definicion}
 
             \begin{definicion}[Espacio de ciclos]
@@ -466,43 +468,29 @@
                 Si $P$ tiene longitud $k\ge 1$, por definición existen nodos distintos $v_1,\dots,v_{k+1}$ tales que las aristas de $P$ conectan exactamente nodos consecutivos. Por tanto, $v_1$ y $v_{k+1}$ inciden en una sola arista de $P$, mientras que cada $v_i$ con $2\le i\le k$ incide en dos aristas de $P$.
             \end{proof}
 
-            \begin{teorema}[Numeración lineal de los nodos de un camino]
-                Sea $P$ un camino finito no trivial. Entonces existe una biyección
-                \[
-                \phi:\{1,2,\dots,k\}\longrightarrow V(P)
-                \]
-                tal que las aristas de $P$ son exactamente $\{\phi(i),\phi(i+1)\}$ para $i=1,\dots,k-1$.
-                En particular, la numeración es única salvo inversión.
-            \end{teorema}
-
-            \begin{proof}
-                Por el lema, $P$ tiene dos extremos. Fija uno de ellos y llámalo $\phi(1)$. Definimos inductivamente $\phi(i+1)$: dado $\phi(i)$, si $i=1$ tomamos como $\phi(2)$ el único vecino de $\phi(1)$; si $i\ge 2$, tomamos como $\phi(i+1)$ el único vecino de $\phi(i)$ distinto de $\phi(i-1)$.
-                La aciclicidad garantiza que este procedimiento nunca vuelve a un nodo ya visitado y, como $P$ es finito y conexo con grados $\le 2$, el proceso termina exactamente cuando alcanzamos el otro extremo. Así obtenemos un orden lineal $\phi(1),\dots,\phi(k)$ que recorre todos los nodos una única vez y en el que las únicas aristas son las consecutivas por construcción.
-                La unicidad salvo reversa se obtiene porque cualquier ordenación válida debe empezar en un extremo y seguir el único vecino no visitado en cada paso.
-            \end{proof}
-
-            \begin{observacion}[Caso dirigido]
-                Si $P$ está orientado coherentemente (todas las aristas apuntan en el mismo sentido a lo largo del camino), la numeración puede escogerse de modo que $(\phi(i),\phi(i+1))$ sea el arco para todo $i$. En general, la numeración precedente se construye sobre el subyacente no dirigido.
-            \end{observacion}
-
             \begin{definicion}[Distancia]
-                Sea $G=(V,E)$ un grafo finito. La \textbf{distancia} de $u$ a $v$, denotada $d(u,v)$, es
+                Sea $G=(V,E)$ un grafo y sean $u,v\in V$. La \textbf{distancia} de $u$ a $v$, denotada $d(u,v)$, es
                 \[
-                d(u,v)\;=\;\min\{\,k\in\mathbb{N}_0:\ \text{existe un camino de longitud }k\text{ de }u\text{ a }v\,\},
+                d(u,v)=\min\{\,k\in\mathbb{N}_0:\ \text{existe un camino de longitud }k\text{ de }u\text{ a }v\,\},
                 \]
-                con la convención $d(u,u)=0$ (camino vacío) y $d(u,v)=+\infty$ si no existe tal camino. La longitud de un camino es el número de aristas que contiene.
+                si el conjunto de la derecha no es vacío. Si no existe camino de $u$ a $v$, se define $d(u,v)=+\infty$. En particular, $d(u,u)=0$ por el camino de longitud $0$. En grafos dirigidos, esta distancia respeta la orientación de los arcos.
             \end{definicion}
 
             \begin{definicion}[Distancia ponderada]
-                Si cada arista $e\in E$ tiene un peso no negativo $w(e)\in[0,\infty)$, la \textbf{distancia ponderada} es
+                Sea $(G,\ell)$ un grafo ponderado y sean $u,v\in V$. Si existe al menos un camino de $u$ a $v$, la \textbf{distancia ponderada} de $u$ a $v$ es
                 \[
-                d_w(u,v)\;=\;\inf\Big\{\sum_{e\in P} w(e):\ P \text{ es un camino de }u\text{ a }v\Big\},
+                d_\ell(u,v)=
+                \min\Big\{
+                    \sum_{i=1}^k \ell(e_i):
+                    P=(v_0,e_1,v_1,\dots,e_k,v_k)
+                    \text{ es un camino de }u\text{ a }v
+                \Big\}.
                 \]
-                con $d_w(u,u)=0$ y $d_w(u,v)=+\infty$ si no hay camino. Cuando los pesos son enteros positivos, el ínfimo es un mínimo.
+                Si no existe camino de $u$ a $v$, se define $d_\ell(u,v)=+\infty$. En particular, $d_\ell(u,u)=0$.
             \end{definicion}
 
             \begin{definicion}[Geodésica]
-                Un camino $P$ de $u$ a $v$ es \textbf{geodésico} si su longitud es igual a $d(u,v)$. En el caso ponderado, $P$ es geodésico si su peso total es igual a $d_w(u,v)$.
+                Sea $G=(V,E)$ un grafo y sean $u,v\in V$ con $d(u,v)<+\infty$. Un camino $P$ de $u$ a $v$ es \textbf{geodésico} si su longitud es igual a $d(u,v)$. Si $(G,\ell)$ es ponderado y $d_\ell(u,v)<+\infty$, se dice que $P$ es una \textbf{geodésica ponderada} si su peso total es igual a $d_\ell(u,v)$.
             \end{definicion}
 
             \begin{observacion}[Propiedades básicas de la distancia]
@@ -519,13 +507,13 @@
                 \]
                 para todo $u,v,x\in V$, con la convención usual para $+\infty$. En un grafo no dirigido, si todo par de nodos de $V$ está unido por un camino, entonces $d:V\times V\to[0,\infty)$ define un espacio métrico sobre $V$. Si existen nodos que no están unidos por ningún camino, se mantiene la convención $d(u,v)=+\infty$; por tanto, $d$ no define un espacio métrico sobre todo $V$, aunque sí lo hace al restringirse a cualquier subconjunto de nodos en el que todo par esté unido por un camino.
 
-                En grafos dirigidos, puede ocurrir que $d(u,v)\neq d(v,u)$, por lo que la distancia dirigida no define, en general, un espacio métrico. En el caso ponderado, la misma conclusión métrica requiere pesos estrictamente positivos; si se permiten pesos cero, puede ocurrir que $d_w(u,v)=0$ con $u\neq v$.
+                En grafos dirigidos, puede ocurrir que $d(u,v)\neq d(v,u)$, por lo que la distancia dirigida no define, en general, un espacio métrico. En el caso ponderado, la misma conclusión métrica requiere pesos estrictamente positivos; si se permiten pesos cero, puede ocurrir que $d_\ell(u,v)=0$ con $u\neq v$.
             \end{observacion}
 
         \subsection{Representaciones matriciales}
 
             \begin{definicion}[Matriz de adyacencia]
-                Dado un grafo $G=(V,E)$ con $N$ nodos y una enumeración $v_1,\dots,v_N$ de sus nodos, la \textbf{matriz de adyacencia} es una matriz $A \in \mathbb{R}^{N \times N}$ donde cada elemento $a_{ij}$ indica si existe una conexión directa entre $v_i$ y $v_j$:
+                Dado un grafo $G=(V,E)$ con $N$ nodos y una enumeración $v_1,\dots,v_N$ de sus nodos, la \textbf{matriz de adyacencia} o \textbf{matriz de soporte} es la matriz $A\in\{0,1\}^{N\times N}$ definida por
                 \[
                 a_{ij} =
                 \begin{cases}
@@ -534,9 +522,18 @@
                 0, & \text{en caso contrario.}
                 \end{cases}
                 \]
-                En grafos ponderados, cada entrada correspondiente a una arista toma el valor del peso asignado a esa arista. En la versión no ponderada, dos nodos son adyacentes si la entrada correspondiente en la matriz de adyacencia $A$ es igual a $1$.
+                Así, dos nodos son adyacentes exactamente cuando la entrada correspondiente en $A$ es igual a $1$.
 
-                La definición anterior supone que no hay aristas paralelas. Si se trabaja con un multígrafo, debe fijarse una convención adicional; la usual es que $a_{ij}$ cuente la multiplicidad de las aristas entre $i$ y $j$, salvo que sus entradas se definan mediante pesos.
+                Si $(G,\ell)$ es ponderado, la \textbf{matriz de pesos} es la matriz $W=(w_{ij})$ cuyas entradas correspondientes a aristas toman el valor del peso asignado:
+                \[
+                w_{ij} =
+                \begin{cases}
+                \ell(\{v_i,v_j\}), & \text{si }G\text{ es no dirigido y }\{v_i,v_j\}\in E,\\
+                \ell((v_i,v_j)), & \text{si }G\text{ es dirigido y }(v_i,v_j)\in E,\\
+                0, & \text{en caso contrario.}
+                \end{cases}
+                \]
+                La matriz $A$ registra existencia de aristas; la matriz $W$ registra pesos. Si se permiten pesos cero, una entrada nula de $W$ no implica por sí sola ausencia de arista.
 
             \end{definicion}
 
@@ -800,8 +797,11 @@
             \end{ejemplo}
 
             \begin{definicion}[Diámetro]
-                El \textbf{diámetro} de un grafo es la longitud máxima de los caminos más cortos entre todos los pares de nodos $(u,v)$.
-                Formalmente: $\displaystyle \mathrm{diam}(G) = \max_{u,v \in V} d(u,v)$, donde $d(u,v)$ es la longitud del camino dirigido más corto de $u$ a $v$.
+                Sea $G=(V,E)$ un grafo con distancia $d:V\times V\to[0,\infty]$. El \textbf{diámetro extendido} de $G$ es
+                \[
+                    \operatorname{diam}(G)=\max_{u,v\in V}d(u,v).
+                \]
+                Si $d(u,v)<+\infty$ para todo par $u,v\in V$, entonces el diámetro es finito. En grafos no dirigidos esto ocurre cuando $G$ es conexo; en grafos dirigidos, cuando $G$ es fuertemente conexo.
             \end{definicion}
 
             \begin{definicion}[Número de ciclos independientes]
@@ -830,7 +830,7 @@
                 tiene cardinalidad $m-(n-p)=m-n+p$.
 
                 Mostramos que $\mathcal{B}$ es una base de $\mathcal{C}(G)$ sobre $\mathbb{F}_2$:
-                \emph{(i) Independencia.} Si existiera una combinación lineal no trivial $\sum \lambda_e C_e=0$ (con $\lambda_e\in\{0,1\}$), eligiendo $e_0$ la arista de $E\setminus E(F)$ de \emph{mayor} nivel de inserción, se observa que $e_0$ aparece en $C_{e_0}$ pero no aparece en ningún otro $C_e$; por tanto, el coeficiente de $e_0$ en la suma no puede anularse, contradicción. \emph{(ii) Generación.} Todo ciclo $C$ de $G$ puede reducirse por diferencia simétrica, restando sucesivamente ciclos fundamentales que contienen alguna arista de $E\setminus E(F)$ presente en $C$, hasta quedar vacío. Luego todo ciclo pertenece al subespacio generado por $\mathcal{B}$.
+                \emph{(i) Independencia.} Si existiera una combinación lineal no trivial $\sum \lambda_e C_e=0$ con $\lambda_e\in\{0,1\}$, se toma una arista $e_0\in E\setminus E(F)$ tal que $\lambda_{e_0}=1$. La arista $e_0$ aparece en $C_{e_0}$ y no aparece en ningún otro ciclo fundamental $C_e$, porque cada $C_e$ contiene exactamente una arista fuera de $F$, a saber, $e$. Por tanto, la coordenada correspondiente a $e_0$ no puede anularse, contradicción. \emph{(ii) Generación.} Todo ciclo $C$ de $G$ puede reducirse por diferencia simétrica, restando sucesivamente ciclos fundamentales que contienen alguna arista de $E\setminus E(F)$ presente en $C$, hasta quedar vacío. Luego todo ciclo pertenece al subespacio generado por $\mathcal{B}$.
 
                 Así, $\mathcal{B}$ es una base y $\dim\mathcal{C}(G)=|\mathcal{B}|=m-n+p$.
             \end{proof}
@@ -1057,10 +1057,14 @@
         Las propiedades estudiadas hasta aquí son válidas independientemente del espacio en el que esté embebida la red, si existe tal embebimiento. En aplicaciones de transporte también interesa analizar grafos realizados en un espacio geométrico: cada nodo adquiere una posición y, si el espacio es métrico, cada arista una longitud. A continuación formalizamos esta perspectiva.
 
         \begin{definicion}[Realización geométrica]
-            Una \emph{realización geométrica} de $G$ en $\mathbb{R}^d$ es una aplicación inyectiva $\varphi:V\to \mathbb{R}^d$.
+            Sea $G=(V,E)$ un grafo. Una \emph{realización geométrica} de $G$ en $\mathbb{R}^d$ es una aplicación
+            \[
+                \varphi:V\to \mathbb{R}^d.
+            \]
+            No se exige que $\varphi$ sea inyectiva, por lo que dos nodos distintos pueden tener la misma posición.
             Cuando se desea, puede inducirse una ponderación euclidiana definiendo
             \[
-            \ell_\varphi(e)=\|\varphi(i)-\varphi(j)\| \quad \text{para } e=(i,j)\in E.
+            \ell_\varphi(e)=\|\varphi(i)-\varphi(j)\| \quad \text{si } i,j \text{ son los extremos de } e.
             \]
         \end{definicion}
 
@@ -1083,11 +1087,7 @@
 
         % --- Distancias y rodeo ---
         \begin{definicion}[Distancia sobre la red]
-            La \textbf{distancia sobre la red} entre $u,v\in V$ es
-            \[
-            d_\ell(u,v)=\inf\Big\{\,\sum_{e\in P}\ell(e):\; P \text{ camino de }u\text{ a }v\,\Big\},
-            \]
-            con $d_\ell(u,u)=0$ y $d_\ell(u,v)=+\infty$ si no hay camino. Si $\ell\equiv 1$, se recupera la longitud por número de aristas.
+            Sea $(G,\ell)$ un grafo ponderado. La \textbf{distancia sobre la red} entre $u,v\in V$ es la distancia ponderada $d_\ell(u,v)$ definida previamente. Si $\ell\equiv 1$, esta distancia coincide con la distancia por número de aristas.
         \end{definicion}
 
         \begin{definicion}[Distancia extrínseca]
@@ -1407,9 +1407,10 @@
             \begin{definicion}[Problema de una fuente]
                 Sea $(G,\ell)$ un grafo finito (dirigido o no) con pesos $\ell:E\to[0,\infty)$ y vértice fuente $s\in V$. Definimos
                 \[
-                d_\ell(s,v)=\inf\Big\{\sum_{e\in P}\ell(e):\ P \text{ es un camino de } s \text{ a } v\Big\},
+                d_\ell(s,v)=
+                \min\Big\{\sum_{e\in P}\ell(e):\ P \text{ es un camino de } s \text{ a } v\Big\},
                 \]
-                con $d_\ell(s,s)=0$ y $d_\ell(s,v)=+\infty$ si no hay camino. El problema consiste en calcular $d_\ell(s,v)$ para todo $v\in V$ y, opcionalmente, un árbol de predecesores que realice estas distancias.
+                si existe al menos un camino de $s$ a $v$; si no existe, se define $d_\ell(s,v)=+\infty$. En particular, $d_\ell(s,s)=0$. El problema consiste en calcular $d_\ell(s,v)$ para todo $v\in V$ y, opcionalmente, un árbol de predecesores que realice estas distancias.
             \end{definicion}
 
             \begin{observacion}[Hipótesis]
@@ -1433,7 +1434,7 @@
             \end{proof}
 
             \begin{proposicion}[Complejidad]
-                Sea $n=|V|$ y $m=|E|$. Con una cola de prioridad binaria, el tiempo es $O(m\log n)$ y el espacio $O(n+m)$. Con cola de Fibonacci, $O(m+n\log n)$.
+                Sea $n=|V|$ y $m=|E|$. Con una cola de prioridad binaria, el tiempo es $O((n+m)\log n)$ y el espacio $O(n+m)$. Con cola de Fibonacci, el tiempo es $O(m+n\log n)$.
             \end{proposicion}
 
             \begin{proof}
