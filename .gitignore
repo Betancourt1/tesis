@@ -1,41 +1,55 @@
-*.aux
-*.log
-*.synctex.gz
-\.idea
-*.xml
-*.toc
-*.out
-\out
-Latex/Tesis/main.pdf
-Latex/Tesis/main.lof
-Latex/Tesis/main.lot
-Código/etapas/análisis/métricas_globales/matriz_distancias_shimbel.json
-/Bibliografía Tesis/
+# Local configuration
+.env
 
-# Ignorar archivos de grafos generados, son muy pesados
-QGIS/transporte_publico_grafo_p_space.gexf
-QGIS/transporte_publico_grafo_p_space_centralidades.gexf
-QGIS/transporte_publico_grafo_p_space_comunidades.gexf
-QGIS/transporte_publico_grafo_consolidado.gexf
-QGIS/transporte_publico_grafo.gexf
-*.gexf
-*.csv
-*.json
+# Editor and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
 
 # Python cache
 __pycache__/
 *.py[cod]
 
-# Resultados generados por scripts (no versionar)
-**/resultados_robustez/*.png
-**/resultados_robustez/*.csv
-**/métricas_globales/*.json
-grafos/
+# LaTeX build intermediates
+*.aux
+*.log
+*.synctex.gz
+*.toc
+*.out
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.nav
+*.snm
+*.vrb
+
+# Local LaTeX build products outside the final thesis PDF
+Latex/Protocolo/*.pdf
+out/main.*
+out/diapositivas.pdf
+out/reporte_avance_commits_*
+
+# Local run state
+out/pipeline_state/
+
+# Heavy generated graph artifacts; regenerate them from the pipelines
+grafos/**/*.gexf
+grafos/**/*.gpickle
+grafos/**/*matriz_distancias*.json
+grafos/**/resumen_de_analisis.txt
 grafos_qgis/
-out/
-*.gpickle
+QGIS/
 *.gpkg
 
-# Backups temporales de editores
+# Old local bibliography PDF cache
+Bibliografia Tesis/
+Bibliografía Tesis/
+
+# Temporary editor backups
 *.tex~
 .*.tex.un~
+*.tmp
+*.bak

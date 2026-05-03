@@ -1,0 +1,31 @@
+{
+  "runtime_seconds": 0.7,
+  "inputs": {
+    "l_sensibilidad_csv": "out/sensibilidad/punto3_modelado/sensibilidad_l_space.csv",
+    "p_route_trip_csv": "out/sensibilidad/punto3_modelado/sensibilidad_p_route_vs_trip.csv",
+    "intervenciones_csv": "out/intervenciones/punto4_topologia/intervenciones_topologicas_l_space.csv"
+  },
+  "outputs": {
+    "rangos_resultados_csv": "out/incertidumbre/punto5_rangos/rangos_resultados.csv",
+    "figura_modelado_punto3": "out/incertidumbre/punto5_rangos/rangos_modelado_punto3.png",
+    "figura_intervenciones_punto4": "out/incertidumbre/punto5_rangos/rangos_intervenciones_punto4.png"
+  },
+  "highlights": {
+    "route_only_pct_range": [
+      8.730852913199874,
+      20.858785552663893
+    ],
+    "eff_retention_pct_range": [
+      79.6757866604923,
+      88.52183421418547
+    ],
+    "lcc_post_pct_range": [
+      98.50710329882013,
+      99.30170960751263
+    ],
+    "diameter_post_range": [
+      53.0,
+      97.0
+    ]
+  }
+}

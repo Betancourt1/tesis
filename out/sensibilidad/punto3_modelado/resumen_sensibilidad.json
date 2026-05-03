@@ -1,0 +1,16 @@
+{
+  "thresholds_m": [
+    75,
+    100,
+    125,
+    150
+  ],
+  "l_space_rows": 4,
+  "p_space_rows": 8,
+  "runtime_seconds": 475.68,
+  "outputs": {
+    "sensibilidad_l_space": "out/sensibilidad/punto3_modelado/sensibilidad_l_space.csv",
+    "sensibilidad_p_space": "out/sensibilidad/punto3_modelado/sensibilidad_p_space.csv",
+    "sensibilidad_p_route_vs_trip": "out/sensibilidad/punto3_modelado/sensibilidad_p_route_vs_trip.csv"
+  }
+}
