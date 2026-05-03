@@ -930,17 +930,21 @@
 
             Cuando estudiamos un grafo, a menudo nos interesa ser capaces de describirlo de forma numérica para entender cómo se comporta globalmente. Basados en estas descripciones, podemos querer inferir propiedades más abstractas como la complejidad o la robustez. Esto también nos ayuda a diferenciar dos grafos y compararlos sin necesidad de analizarlos componente a componente, lo cual puede resultar imposible en la práctica. A continuación describiremos algunas de estas formas que tenemos de describir numéricamente un grafo.
 
-            \begin{definicion}[Índice $\beta$ (conectividad)]
-                El \textbf{índice $\beta$} mide cuántas aristas existen respecto al número de nodos:
+            \begin{definicion}[Índice $\beta$]
+                Sea $G=(V,E)$ un grafo finito con $|V|>0$. El \textbf{índice $\beta$} mide cuántas aristas hay por nodo:
                 \[
-                \beta = \frac{|E|}{|V|}
+                \beta(G) = \frac{|E|}{|V|}.
                 \]
-                Valores cercanos a $1$ indican una topología arborescente (pocas alternativas de ruta), mientras que valores crecientes reflejan mayor interconexión y opciones de recorrido.
+                En grafos no dirigidos, el grado medio es $2\beta(G)$. En grafos dirigidos, el grado medio de salida y el grado medio de entrada coinciden con $\beta(G)$.
             \end{definicion}
 
             \begin{ejemplo}
-                Para una red con $|V| = 10$ y $|E| = 12$, se tiene $\beta = 1.2$, lo que indica que cada nodo tiene en promedio más de una conexión.
+                Para una red con $|V| = 10$ y $|E| = 12$, se tiene $\beta(G)=1.2$, es decir, $1.2$ aristas por nodo. Si el grafo es no dirigido, el grado medio es $2.4$.
             \end{ejemplo}
+
+            \begin{observacion}
+                El valor de $\beta(G)$ no determina por sí solo la forma global del grafo. Por ejemplo, un árbol con $n\ge 2$ nodos satisface $\beta(G)=1-\frac{1}{n}$, mientras que un ciclo no dirigido con $n$ nodos satisface $\beta(G)=1$. Por tanto, valores cercanos a $1$ son compatibles con estructuras distintas.
+            \end{observacion}
 
             \begin{definicion}[Grafo planar]
                 Un grafo es \textbf{planar} si admite un dibujo en el plano tal que ninguna de sus aristas se cruza con otra, salvo en los nodos que comparten. Un dibujo con esta propiedad se llama \textbf{dibujo planar}.
