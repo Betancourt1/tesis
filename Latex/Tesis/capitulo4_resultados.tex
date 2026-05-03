@@ -122,33 +122,37 @@
             \end{figure}
 
         \subsection{Análisis de Robustez del L-espacio}
-            Una vez caracterizada la estructura estática de la red, el siguiente paso es evaluar su resiliencia. Un sistema de transporte robusto es aquel que puede mantener su funcionalidad principal, conectar personas y lugares de manera eficiente, incluso cuando algunas de sus partes fallan. Para medir esta robustez, se simularon ataques dirigidos que eliminan nodos críticos y se observó el impacto en la conectividad y eficiencia de la red.
+            Una vez caracterizada la estructura estática de la red, el siguiente paso es evaluar su resiliencia. Un sistema de transporte robusto es aquel que puede mantener su funcionalidad principal, conectar personas y lugares de manera eficiente, incluso cuando algunas de sus partes fallan. Para medir esta robustez, se simularon dos tipos de perturbación: ataques dirigidos, que eliminan nodos críticos, y fallos aleatorios, que eliminan supernodos sin usar información de centralidad.
 
         \subsubsection{Metodología de la Simulación}
-            Se eliminan de manera secuencial los \textbf{50 nodos con mayor grado ponderado}, que son los supernodos con más rutas incidentes. Tras cada eliminación se recalcula:
+            Se evaluaron dos esquemas de eliminación. En el \textbf{ataque dirigido}, se eliminan de manera secuencial los \textbf{50 nodos con mayor grado ponderado}, que son los supernodos con más rutas incidentes. En el esquema de \textbf{fallos aleatorios}, se generan varias permutaciones aleatorias reproducibles de los supernodos y se eliminan los primeros 50 nodos de cada permutación. Tras cada eliminación se recalcula:
             \begin{itemize}
                 \item \textbf{Tamaño del Componente Conectado Gigante (LCC):} proporción del LCC respecto al valor inicial.
                 \item \textbf{Eficiencia Global Dirigida:} eficiencia promedio de los caminos más cortos considerando tiempos de viaje.
             \end{itemize}
-            El número de nodos a eliminar se fijó en 50 para tener una condición de parada clara y concentrarse en el impacto de los supernodos de mayor grado.
+            El número de nodos a eliminar se fijó en 50 para tener una condición de parada clara y comparar el daño producido por la pérdida esperada de nodos al azar contra el daño específico de remover supernodos de alta conectividad. En el \(L\)-espacio se ejecutaron 30 repeticiones aleatorias con semilla base 42; la eficiencia aleatoria se estimó con 128 fuentes muestreadas por iteración para mantener viable el costo computacional. Las curvas aleatorias se resumen mediante media y una banda empírica de percentiles.
 
         \subsubsection{Resultados del Análisis de Robustez}
-            La Figura~\ref{fig:robustez_l_space} resume cómo se deterioran el LCC y la eficiencia temporal cuando fallan supernodos de alto grado bajo el mismo ataque dirigido.
+            La Figura~\ref{fig:robustez_l_space} resume cómo se deterioran el LCC y la eficiencia temporal cuando fallan supernodos de alto grado y contrasta esa trayectoria con la degradación promedio bajo fallos aleatorios.
 
             \begin{figure}[h!]
                 \centering
                 \includegraphics[width=\textwidth]{../../grafos/l_space/robustez/grafico_robustez_comparativo.png}
-                \caption{Trayectorias del LCC relativo y de la eficiencia global del L-espacio durante la eliminación secuencial de 50 supernodos de mayor grado ponderado. Permite interpretar si el ataque dirigido compromete primero la cobertura de red o la calidad temporal de los recorridos.}
+                \caption{Trayectorias del LCC relativo y de la eficiencia global del L-espacio durante la eliminación secuencial de 50 supernodos. La línea de ataque dirigido remueve supernodos de mayor grado ponderado; la curva aleatoria muestra la media de varias repeticiones y su banda empírica.}
                 \label{fig:robustez_l_space}
             \end{figure}
 
-        \subsubsection{Impacto en la Conectividad (LCC)}
+            \subsubsection{Impacto en la Conectividad (LCC)}
             En el escenario base de robustez (sin intervención), después de eliminar los 50 nodos de mayor grado ponderado, el LCC relativo conserva el \textbf{97.45\%} de su tamaño inicial. Esto indica que la red física mantiene la mayor parte de su cobertura estructural, aunque se generan pérdidas periféricas.
 
             Aquí el LCC se reporta respecto al estado inicial. En la sección de intervenciones, en cambio, se expresa como porcentaje sobre los supernodos remanentes; por eso el valor base allí es \(98.51\%\).
 
+            Bajo fallos aleatorios, el LCC medio después de 50 remociones es \textbf{98.23\%}, con una banda empírica 5--95\% de \textbf{97.62\%} a \textbf{98.69\%}. Por tanto, en cobertura estructural el ataque dirigido por grado es más dañino que la pérdida aleatoria esperada.
+
         \subsubsection{Impacto en la Eficiencia Global}
             La eficiencia global cae al \textbf{81.50\%} de su valor original tras la eliminación de esos 50 nodos. Aunque la red sigue conectada, los caminos disponibles son menos directos y los tiempos de viaje promedio se alargan cerca de 18.50\%, lo que evidencia la dependencia operativa de los supernodos de mayor grado.
+
+            En las repeticiones aleatorias, la eficiencia media retenida después de 50 remociones es \textbf{97.17\%}. La banda empírica 5--95\% va de \textbf{89.20\%} a \textbf{104.83\%}; el extremo superior mayor que 100\% es posible porque la eficiencia se normaliza sobre el grafo remanente y remover nodos periféricos puede aumentar el promedio de los nodos que quedan.
 
 	\subsection{Conclusiones sobre el $L$-espacio}
 	    El análisis permite concluir que la infraestructura del sistema en la Zona Metropolitana de Guadalajara tiene una estructura marcadamente arbórea, enfocada en conectar periferias con zonas centrales. Aunque el hipercentro concentra gran parte de la intermediación, también aparecen nodos de intersección relevantes fuera del centro, como estaciones del tren ligero y cruces comerciales estratégicos.
@@ -223,14 +227,14 @@
             \end{figure}
 
         \subsection{Análisis de Robustez del P-espacio}
-            Se aplicó el mismo esquema de ataque dirigido al P-espacio: eliminación secuencial de los \textbf{50 supernodos con mayor grado}. Tras cada eliminación se midieron el tamaño relativo del LCC y la eficiencia global no dirigida.
+            Se aplicó el mismo esquema comparativo al P-espacio. En el ataque dirigido se eliminaron secuencialmente los \textbf{50 supernodos con mayor grado}; en los fallos aleatorios se removieron 50 supernodos siguiendo varias permutaciones aleatorias reproducibles. Tras cada eliminación se midieron el tamaño relativo del LCC y la eficiencia global no dirigida. Debido a la alta densidad del \(P\)-espacio, la eficiencia se estimó mediante muestreo de 32 fuentes por iteración; se usaron 10 repeticiones aleatorias con semilla base 42.
 
-            La Figura~\ref{fig:robustez_p_space} muestra la pérdida de cobertura y eficiencia cuando fallan los supernodos de mayor grado bajo el ataque dirigido.
+            La Figura~\ref{fig:robustez_p_space} muestra la pérdida de cobertura y eficiencia cuando fallan los supernodos de mayor grado y la compara con la trayectoria media de fallos aleatorios.
 
             \begin{figure}[h!]
                 \centering
                 \includegraphics[width=\textwidth]{../../grafos/p_space/robustez/grafico_robustez_p_space_comparativo.png}
-                \caption{Trayectorias del LCC relativo y de la eficiencia global del P-espacio durante la eliminación secuencial de 50 supernodos de mayor grado. Permite evaluar si la redundancia de servicio sostiene cobertura y/o rapidez ante fallas en nodos troncales.}
+                \caption{Trayectorias del LCC relativo y de la eficiencia global del P-espacio durante la eliminación secuencial de 50 supernodos. La línea de ataque dirigido remueve supernodos de mayor grado; la curva aleatoria muestra la media de varias repeticiones y su banda empírica.}
                 \label{fig:robustez_p_space}
             \end{figure}
 
@@ -238,6 +242,7 @@
             \begin{itemize}
                 \item El LCC se mantiene en \textbf{98.74\%} de su tamaño original tras eliminar los 50 supernodos más conectados, señal de alta redundancia en la red de servicio.
                 \item La eficiencia global desciende a \textbf{97.36\%}, una caída moderada que sugiere que existen suficientes rutas alternativas para conservar recorridos relativamente cortos aun cuando fallan los supernodos principales.
+                \item Bajo fallos aleatorios, el LCC medio después de 50 remociones es \textbf{98.80\%} y la eficiencia media retenida es \textbf{96.93\%}. Las bandas empíricas 5--95\% son estrechas para el LCC (\textbf{98.78\%}--\textbf{98.81\%}) y moderadas para eficiencia (\textbf{95.38\%}--\textbf{99.39\%}).
             \end{itemize}
             Comparativamente, el P-espacio es mucho más resiliente que el L-espacio: la pérdida de eficiencia es de apenas 2.64\% frente al 18.50\% observado en la infraestructura física. Esto se explica porque múltiples rutas comparten paradas y pueden sustituirse entre sí. Operativamente, el resultado sugiere que fallas en supernodos troncales se amortiguan si existen líneas paralelas o variantes, pero también que la redundancia descansa en el centro; un rediseño periférico podría mejorar la resistencia fuera del hipercentro.
 
@@ -249,7 +254,7 @@
     \section{Síntesis comparativa y validación del modelo}
 
         \subsection{Discusión Comparativa}
-            El ataque dirigido por grado es significativamente más dañino en el L-espacio que en el P-espacio. Mientras que en la infraestructura física la eficiencia cae cerca de 18.50\% al perder 50 supernodos de mayor grado, en la red de servicio la pérdida es de apenas 2.64\%. Esta comparación usa la misma métrica de eficiencia relativa al estado inicial en ambos grafos.
+            El ataque dirigido por grado es significativamente más dañino en el L-espacio que en el P-espacio. Mientras que en la infraestructura física la eficiencia cae cerca de 18.50\% al perder 50 supernodos de mayor grado, en la red de servicio la pérdida es de apenas 2.64\%. Esta comparación usa la misma métrica de eficiencia relativa al estado inicial en ambos grafos y se complementa con las simulaciones aleatorias como línea base de perturbaciones no dirigidas.
 
             Lo anterior confirma que la conectividad basada en compartir rutas es más resiliente por la existencia de múltiples combinaciones de servicio entre las paradas, aun si la infraestructura depende fuertemente de unos pocos nodos de alta interconexión.
 	
@@ -418,8 +423,9 @@
                 \item \textbf{Detección de Comunidades:} Se empleó el método de Louvain, optimizando la modularidad sobre una versión no dirigida del grafo ponderado por el número de rutas.
                 \item \textbf{Análisis de Robustez:}
                 \begin{itemize}
-                    \item Se eliminaron secuencialmente los \textbf{50 nodos de mayor grado} en cada grafo (L-espacio y P-espacio).
-                    \item El cálculo de la eficiencia global se realizó de forma exacta y paralelizada (L-espacio) o con la función nativa de NetworkX (P-espacio).
+                    \item En el ataque dirigido se eliminaron secuencialmente los \textbf{50 nodos de mayor grado} en cada grafo (L-espacio y P-espacio).
+                    \item En los fallos aleatorios se usaron repeticiones independientes con semilla fija; en cada repetición se eliminó una permutación aleatoria de 50 supernodos y se reportaron media, desviación estándar y percentiles empíricos.
+                    \item El cálculo de la eficiencia global del ataque dirigido se realizó de forma exacta y paralelizada en \(L\)-espacio. En \(P\)-espacio y en las curvas aleatorias se usó muestreo reproducible de fuentes con el fin de mantener el costo computacional controlado.
                 \end{itemize}
             \end{itemize}
 

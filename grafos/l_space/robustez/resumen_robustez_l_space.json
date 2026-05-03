@@ -1,0 +1,17 @@
+{
+  "graph": "L-space",
+  "num_nodes_to_remove": 50,
+  "targeted_scenarios": [
+    "grado"
+  ],
+  "random_repetitions": 30,
+  "random_seed": 42,
+  "random_efficiency_sources": 128,
+  "random_efficiency_note": "La eficiencia de los fallos aleatorios se estima con muestreo de fuentes; use --random-efficiency-sources 0 para calculo exacto.",
+  "outputs": {
+    "targeted_degree": "C:\\Users\\fbetancourt\\GitHub\\Tesis\\grafos/l_space/robustez\\robustez_ataque_grado.csv",
+    "random_repetitions": "C:\\Users\\fbetancourt\\GitHub\\Tesis\\grafos/l_space/robustez\\robustez_ataque_aleatoria_repeticiones.csv",
+    "random_summary": "C:\\Users\\fbetancourt\\GitHub\\Tesis\\grafos/l_space/robustez\\robustez_ataque_aleatoria_resumen.csv",
+    "plot": "C:\\Users\\fbetancourt\\GitHub\\Tesis\\grafos/l_space/robustez\\grafico_robustez_comparativo.png"
+  }
+}

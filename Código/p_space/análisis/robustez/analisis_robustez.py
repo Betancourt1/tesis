@@ -1,160 +1,404 @@
+import argparse
+import json
+import os
+import pickle
+import random
+import sys
+import time
 
+import matplotlib.pyplot as plt
 import networkx as nx
 import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-import os
-import time
 from dotenv import load_dotenv
-import pickle
-import sys
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Analisis de robustez del P-espacio ante ataque dirigido y fallos aleatorios."
+    )
+    parser.add_argument(
+        "--num-remove",
+        type=int,
+        default=50,
+        help="Numero de nodos a remover en cada simulacion.",
+    )
+    parser.add_argument(
+        "--random-repetitions",
+        type=int,
+        default=10,
+        help="Numero de repeticiones para fallos aleatorios. Use 0 para omitirlas.",
+    )
+    parser.add_argument(
+        "--random-seed",
+        type=int,
+        default=42,
+        help="Semilla base para fallos aleatorios reproducibles.",
+    )
+    parser.add_argument(
+        "--random-efficiency-sources",
+        type=int,
+        default=32,
+        help=(
+            "Numero de fuentes muestreadas para estimar eficiencia no dirigida en fallos "
+            "aleatorios. Si es 0 o mayor que el numero de nodos, se calcula exacto."
+        ),
+    )
+    parser.add_argument(
+        "--targeted-efficiency-sources",
+        type=int,
+        default=32,
+        help=(
+            "Numero de fuentes muestreadas para estimar eficiencia en el ataque dirigido. "
+            "Use 0 para calcular eficiencia exacta con NetworkX."
+        ),
+    )
+    return parser.parse_args()
+
 
 def load_graph(graph_path):
     """Carga el grafo desde un archivo gpickle."""
     if not os.path.exists(graph_path):
-        raise FileNotFoundError(f"No se encontró el archivo del grafo en: {graph_path}")
-    # El grafo P-space es no dirigido
+        raise FileNotFoundError(f"No se encontro el archivo del grafo en: {graph_path}")
     with open(graph_path, "rb") as f:
         return pickle.load(f)
 
+
 def calculate_lcc_size(G):
-    """Calcula el tamaño del componente conectado más grande (LCC) para grafos no dirigidos."""
+    """Calcula el tamano del componente conectado mas grande (LCC)."""
     if G.number_of_nodes() == 0:
         return 0
     largest_cc = max(nx.connected_components(G), key=len)
     return len(largest_cc)
 
-def simulate_failures(G, node_order, iterations):
-    """Simula la eliminación de nodos y calcula el impacto en la red P-space."""
+
+def calculate_sampled_undirected_global_efficiency(G, max_sources=128, seed=42):
+    """Estima la eficiencia global no dirigida con una muestra de nodos fuente."""
+    n = G.number_of_nodes()
+    if n < 2:
+        return 0.0
+
+    if max_sources <= 0 or max_sources >= n:
+        return nx.global_efficiency(G)
+
+    nodes = list(G.nodes())
+    rng = random.Random(seed)
+    source_nodes = rng.sample(nodes, max_sources)
+
+    total_efficiency = 0.0
+    all_nodes = list(G.nodes())
+    for source in source_nodes:
+        lengths = nx.single_source_shortest_path_length(G, source)
+        for target in all_nodes:
+            if source == target:
+                continue
+            dist = lengths.get(target)
+            if dist is not None and dist > 0:
+                total_efficiency += 1 / dist
+
+    return total_efficiency / (len(source_nodes) * (n - 1))
+
+
+def calculate_efficiency(G, mode="exact", max_sources=128, seed=42):
+    if mode == "sampled":
+        return calculate_sampled_undirected_global_efficiency(
+            G,
+            max_sources=max_sources,
+            seed=seed,
+        )
+    return nx.global_efficiency(G)
+
+
+def simulate_failures(
+    G,
+    node_order,
+    iterations,
+    efficiency_mode="exact",
+    max_efficiency_sources=128,
+    seed=42,
+    verbose=True,
+):
+    """Simula la eliminacion de nodos y calcula el impacto en la red P-space."""
     results = []
     G_copy = G.copy()
-    
-    initial_lcc_size = calculate_lcc_size(G_copy)
-    print("Calculando eficiencia inicial...")
-    initial_efficiency = nx.global_efficiency(G_copy)
-    print(f"Eficiencia inicial calculada: {initial_efficiency:.4f}")
 
-    results.append({
-        'nodes_removed': 0,
-        'lcc_size_ratio': 1.0,
-        'global_efficiency_ratio': 1.0
-    })
-    
+    initial_lcc_size = calculate_lcc_size(G_copy)
+    if verbose:
+        print("Calculando eficiencia inicial...")
+    initial_efficiency = calculate_efficiency(
+        G_copy,
+        mode=efficiency_mode,
+        max_sources=max_efficiency_sources,
+        seed=seed,
+    )
+    if verbose:
+        print(f"Eficiencia inicial calculada: {initial_efficiency:.4f}")
+
+    results.append(
+        {
+            "nodes_removed": 0,
+            "lcc_size_ratio": 1.0,
+            "global_efficiency_ratio": 1.0,
+        }
+    )
+
     for i in range(1, iterations + 1):
         start_time = time.time()
         if not G_copy.nodes() or i > len(node_order):
             break
-            
-        node_to_remove = node_order[i-1]
-        
+
+        node_to_remove = node_order[i - 1]
+
         if G_copy.has_node(node_to_remove):
             G_copy.remove_node(node_to_remove)
-        
+
         if G_copy.number_of_nodes() < 2:
             lcc_size = 0
             global_efficiency = 0
         else:
             lcc_size = calculate_lcc_size(G_copy)
-            # Usamos la eficiencia global para grafos no dirigidos
-            global_efficiency = nx.global_efficiency(G_copy)
+            global_efficiency = calculate_efficiency(
+                G_copy,
+                mode=efficiency_mode,
+                max_sources=max_efficiency_sources,
+                seed=seed + i,
+            )
 
-        results.append({
-            'nodes_removed': i,
-            'lcc_size_ratio': lcc_size / initial_lcc_size if initial_lcc_size > 0 else 0,
-            'global_efficiency_ratio': global_efficiency / initial_efficiency if initial_efficiency > 0 else 0
-        })
+        results.append(
+            {
+                "nodes_removed": i,
+                "lcc_size_ratio": lcc_size / initial_lcc_size if initial_lcc_size > 0 else 0,
+                "global_efficiency_ratio": (
+                    global_efficiency / initial_efficiency if initial_efficiency > 0 else 0
+                ),
+            }
+        )
         end_time = time.time()
-        print(f"Iteración {i}/{iterations} (Ruta '{node_to_remove}' eliminada) completada en {end_time - start_time:.2f}s")
-        
+        if verbose:
+            print(f"Iteracion {i}/{iterations} (Nodo '{node_to_remove}' eliminado) completada en {end_time - start_time:.2f}s")
+
     return pd.DataFrame(results)
 
+
+def simulate_random_failures(
+    G,
+    iterations,
+    repetitions,
+    seed,
+    max_efficiency_sources,
+):
+    """Ejecuta fallos aleatorios con varias repeticiones independientes."""
+    all_nodes = list(G.nodes())
+    frames = []
+    for rep in range(repetitions):
+        rep_seed = seed + rep
+        rng = random.Random(rep_seed)
+        node_order = all_nodes.copy()
+        rng.shuffle(node_order)
+        print(f"\n--- Fallos aleatorios P-space: repeticion {rep + 1}/{repetitions} (seed={rep_seed}) ---")
+        df = simulate_failures(
+            G,
+            node_order,
+            iterations,
+            efficiency_mode="sampled",
+            max_efficiency_sources=max_efficiency_sources,
+            seed=rep_seed,
+            verbose=False,
+        )
+        df.insert(0, "seed", rep_seed)
+        df.insert(0, "run_id", rep + 1)
+        frames.append(df)
+
+    if not frames:
+        return pd.DataFrame(
+            columns=["run_id", "seed", "nodes_removed", "lcc_size_ratio", "global_efficiency_ratio"]
+        )
+    return pd.concat(frames, ignore_index=True)
+
+
+def summarize_random_results(df):
+    if df.empty:
+        return pd.DataFrame()
+
+    grouped = df.groupby("nodes_removed", as_index=False).agg(
+        repetitions=("run_id", "nunique"),
+        lcc_size_ratio_mean=("lcc_size_ratio", "mean"),
+        lcc_size_ratio_std=("lcc_size_ratio", "std"),
+        global_efficiency_ratio_mean=("global_efficiency_ratio", "mean"),
+        global_efficiency_ratio_std=("global_efficiency_ratio", "std"),
+    )
+    quantiles = (
+        df.groupby("nodes_removed")[["lcc_size_ratio", "global_efficiency_ratio"]]
+        .quantile([0.05, 0.95])
+        .unstack()
+    )
+    quantiles.columns = [
+        f"{metric}_q{int(q * 100):02d}" for metric, q in quantiles.columns.to_flat_index()
+    ]
+    quantiles = quantiles.reset_index()
+    return grouped.merge(quantiles, on="nodes_removed", how="left")
+
+
 def get_node_order_by_centrality(G, centrality_name):
-    """Ordena las rutas (nodos) según una métrica de centralidad."""
-    if centrality_name == 'degree':
-        # Si la métrica no viene precalculada, usamos el grado simple del grafo
+    """Ordena los nodos segun una metrica de centralidad."""
+    if centrality_name == "degree":
         centrality_dict = dict(G.degree())
-        nx.set_node_attributes(G, centrality_dict, 'degree')
+        nx.set_node_attributes(G, centrality_dict, "degree")
     else:
         centrality_dict = nx.get_node_attributes(G, centrality_name)
         if not centrality_dict:
-            raise ValueError(f"La centralidad '{centrality_name}' no se encontró como atributo en los nodos del grafo.")
+            raise ValueError(
+                f"La centralidad '{centrality_name}' no se encontro como atributo en los nodos del grafo."
+            )
 
     sorted_nodes = sorted(centrality_dict, key=centrality_dict.get, reverse=True)
     return sorted_nodes
 
+
+def add_random_band(ax, random_summary, metric, label_prefix="Fallos aleatorios"):
+    if random_summary.empty:
+        return
+    x = random_summary["nodes_removed"].to_numpy()
+    y = random_summary[f"{metric}_mean"].to_numpy()
+    y_low = random_summary[f"{metric}_q05"].to_numpy()
+    y_high = random_summary[f"{metric}_q95"].to_numpy()
+    ax.plot(x, y, label=f"{label_prefix} (media)", linestyle="--", color="black")
+    ax.fill_between(x, y_low, y_high, color="black", alpha=0.12, label=f"{label_prefix} (5%-95%)")
+
+
 def main():
-    """Función principal para ejecutar el análisis de robustez en P-space."""
+    """Funcion principal para ejecutar el analisis de robustez en P-space."""
+    args = parse_args()
     try:
-        dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '.env'))
+        dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", ".env"))
         if not os.path.exists(dotenv_path):
             raise FileNotFoundError
         load_dotenv(dotenv_path=dotenv_path)
         project_root = os.path.dirname(dotenv_path)
     except FileNotFoundError:
-        print("Error: No se pudo encontrar el archivo .env en la raíz del proyecto.")
+        print("Error: No se pudo encontrar el archivo .env en la raiz del proyecto.")
         sys.exit(1)
-    
-    GRAPH_PATH = os.path.join(project_root, os.getenv("P_SPACE_GRAPH_PATH"))
-    OUTPUT_DIR = os.path.join(project_root, os.getenv("P_SPACE_ROBUSTNESS_OUTPUT_DIR"))
 
-    if not os.getenv("P_SPACE_GRAPH_PATH"):
-        print(f"Error: La variable P_SPACE_GRAPH_PATH no está definida en .env")
+    graph_rel = os.getenv("P_SPACE_GRAPH_PATH")
+    robustness_rel = os.getenv("P_SPACE_ROBUSTNESS_OUTPUT_DIR")
+
+    if not graph_rel:
+        print("Error: La variable P_SPACE_GRAPH_PATH no esta definida en .env")
         return
-    if not os.getenv("P_SPACE_ROBUSTNESS_OUTPUT_DIR"):
-        print("Error: La variable P_SPACE_ROBUSTNESS_OUTPUT_DIR no está definida en .env")
-        return
-    if not os.path.exists(GRAPH_PATH):
-        print(f"Error: No se encontró el archivo del grafo en la ruta especificada en .env: {GRAPH_PATH}")
+    if not robustness_rel:
+        print("Error: La variable P_SPACE_ROBUSTNESS_OUTPUT_DIR no esta definida en .env")
         return
 
-    if not os.path.exists(OUTPUT_DIR):
-        os.makedirs(OUTPUT_DIR)
-        
-    G = load_graph(GRAPH_PATH)
-    
-    # Limitar a eliminación de 50 rutas (nodos) como máximo
-    num_nodes_to_remove = min(50, G.number_of_nodes())
+    graph_path = os.path.join(project_root, graph_rel)
+    output_dir = os.path.join(project_root, robustness_rel)
+    if not os.path.exists(graph_path):
+        print(f"Error: No se encontro el archivo del grafo en la ruta especificada en .env: {graph_path}")
+        return
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    G = load_graph(graph_path)
+    num_nodes_to_remove = min(args.num_remove, G.number_of_nodes())
 
     scenarios = {
-        # Removemos rutas en orden descendente por grado
-        'grado': get_node_order_by_centrality(G, 'degree')
+        "grado": get_node_order_by_centrality(G, "degree"),
     }
 
     results_dfs = {}
     for name, node_order in scenarios.items():
-        print(f"\n--- Iniciando simulación para P-space: {name.upper()} ---")
-        df = simulate_failures(G, node_order, num_nodes_to_remove)
+        print(f"\n--- Iniciando simulacion para P-space: {name.upper()} ---")
+        targeted_mode = "exact" if args.targeted_efficiency_sources <= 0 else "sampled"
+        df = simulate_failures(
+            G,
+            node_order,
+            num_nodes_to_remove,
+            efficiency_mode=targeted_mode,
+            max_efficiency_sources=args.targeted_efficiency_sources,
+            seed=args.random_seed,
+        )
         results_dfs[name] = df
-        df.to_csv(os.path.join(OUTPUT_DIR, f'robustez_p_space_ataque_{name}.csv'), index=False)
+        df.to_csv(os.path.join(output_dir, f"robustez_p_space_ataque_{name}.csv"), index=False)
 
-    plt.style.use('seaborn-v0_8-whitegrid')
+    random_df = pd.DataFrame()
+    random_summary = pd.DataFrame()
+    if args.random_repetitions > 0:
+        random_df = simulate_random_failures(
+            G,
+            iterations=num_nodes_to_remove,
+            repetitions=args.random_repetitions,
+            seed=args.random_seed,
+            max_efficiency_sources=args.random_efficiency_sources,
+        )
+        random_summary = summarize_random_results(random_df)
+        random_df.to_csv(
+            os.path.join(output_dir, "robustez_p_space_ataque_aleatoria_repeticiones.csv"),
+            index=False,
+        )
+        random_summary.to_csv(
+            os.path.join(output_dir, "robustez_p_space_ataque_aleatoria_resumen.csv"),
+            index=False,
+        )
+
+    plt.style.use("seaborn-v0_8-whitegrid")
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 12), sharex=True)
-    
+
     styles = {
-        'aleatoria': {'linestyle': '--', 'color': 'black', 'marker': None},
-        'grado': {'linestyle': '-', 'marker': 'o', 'markersize': 4},
-        'intermediacion': {'linestyle': '-.', 'marker': 'x', 'markersize': 5},
-        'cercania': {'linestyle': ':', 'marker': 's', 'markersize': 4}
+        "grado": {"linestyle": "-", "marker": "o", "markersize": 4},
     }
 
-    # LCC Size
     for name, df in results_dfs.items():
-        ax1.plot(df['nodes_removed'], df['lcc_size_ratio'], label=f'Ataque por {name.capitalize()}', **styles[name])
-    ax1.set_title('Impacto en el LCC (P-space)', fontsize=16)
-    ax1.set_ylabel('Proporción del LCC Original', fontsize=12)
+        ax1.plot(
+            df["nodes_removed"],
+            df["lcc_size_ratio"],
+            label=f"Ataque por {name.capitalize()}",
+            **styles[name],
+        )
+    add_random_band(ax1, random_summary, "lcc_size_ratio")
+    ax1.set_title("Impacto en el LCC (P-space)", fontsize=16)
+    ax1.set_ylabel("Proporcion del LCC Original", fontsize=12)
     ax1.legend()
-    
-    # Global Efficiency
-    for name, df in results_dfs.items():
-        ax2.plot(df['nodes_removed'], df['global_efficiency_ratio'], label=f'Ataque por {name.capitalize()}', **styles[name])
-    ax2.set_title('Impacto en la Eficiencia Global (P-space)', fontsize=16)
-    ax2.set_xlabel('Número de Rutas Eliminadas', fontsize=12)
-    ax2.set_ylabel('Proporción de la Eficiencia Original', fontsize=12)
-    ax2.legend()
-    
-    plt.tight_layout()
-    plt.savefig(os.path.join(OUTPUT_DIR, 'grafico_robustez_p_space_comparativo.png'), dpi=300)
-    print(f"\nGráfico de robustez guardado en {OUTPUT_DIR}")
 
-if __name__ == '__main__':
+    for name, df in results_dfs.items():
+        ax2.plot(
+            df["nodes_removed"],
+            df["global_efficiency_ratio"],
+            label=f"Ataque por {name.capitalize()}",
+            **styles[name],
+        )
+    add_random_band(ax2, random_summary, "global_efficiency_ratio")
+    ax2.set_title("Impacto en la Eficiencia Global (P-space)", fontsize=16)
+    ax2.set_xlabel("Numero de Nodos Eliminados", fontsize=12)
+    ax2.set_ylabel("Proporcion de la Eficiencia Original", fontsize=12)
+    ax2.legend()
+
+    plt.tight_layout()
+    plot_path = os.path.join(output_dir, "grafico_robustez_p_space_comparativo.png")
+    plt.savefig(plot_path, dpi=300)
+
+    summary = {
+        "graph": "P-space",
+        "num_nodes_to_remove": num_nodes_to_remove,
+        "targeted_scenarios": list(results_dfs.keys()),
+        "random_repetitions": args.random_repetitions,
+        "random_seed": args.random_seed,
+        "random_efficiency_sources": args.random_efficiency_sources,
+        "targeted_efficiency_sources": args.targeted_efficiency_sources,
+        "random_efficiency_note": (
+            "La eficiencia del ataque dirigido y de los fallos aleatorios puede estimarse "
+            "con muestreo de fuentes; use --targeted-efficiency-sources 0 o "
+            "--random-efficiency-sources 0 para calculo exacto."
+        ),
+        "outputs": {
+            "targeted_degree": os.path.join(output_dir, "robustez_p_space_ataque_grado.csv"),
+            "random_repetitions": os.path.join(output_dir, "robustez_p_space_ataque_aleatoria_repeticiones.csv"),
+            "random_summary": os.path.join(output_dir, "robustez_p_space_ataque_aleatoria_resumen.csv"),
+            "plot": plot_path,
+        },
+    }
+    with open(os.path.join(output_dir, "resumen_robustez_p_space.json"), "w", encoding="utf-8") as f:
+        json.dump(summary, f, indent=2, ensure_ascii=False)
+
+    print(f"\nGrafico de robustez guardado en {output_dir}")
+
+
+if __name__ == "__main__":
     main()
