@@ -2,7 +2,6 @@
 import networkx as nx
 import os
 import numpy as np
-import random
 from dotenv import load_dotenv
 import pickle
 import sys
@@ -21,6 +20,86 @@ def haversine(lat1, lon1, lat2, lon2):
     c = 2 * np.arctan2(np.sqrt(a), np.sqrt(1 - a))
 
     return R * c
+
+
+def construir_grafo_fisico_no_dirigido(G):
+    """
+    Construye una version no dirigida del grafo usando longitud fisica
+    Haversine entre centroides de supernodos como peso de cada arista.
+    Si existen aristas paralelas en sentidos opuestos, conserva la longitud
+    fisica menor para representar el tramo mas directo observado.
+    """
+    H = nx.Graph()
+    for nodo, atributos in G.nodes(data=True):
+        H.add_node(nodo, **atributos)
+
+    for u, v in G.edges():
+        lat1 = G.nodes[u].get('stop_lat')
+        lon1 = G.nodes[u].get('stop_lon')
+        lat2 = G.nodes[v].get('stop_lat')
+        lon2 = G.nodes[v].get('stop_lon')
+        if None in (lat1, lon1, lat2, lon2):
+            continue
+
+        distancia = haversine(float(lat1), float(lon1), float(lat2), float(lon2))
+        if distancia <= 0:
+            continue
+
+        if H.has_edge(u, v):
+            H[u][v]['physical_distance_meters'] = min(
+                H[u][v]['physical_distance_meters'],
+                distancia,
+            )
+        else:
+            H.add_edge(u, v, physical_distance_meters=distancia)
+
+    return H
+
+
+def calcular_indice_desvio_promedio(G):
+    """
+    Calcula el Detour Index geometrico promedio en el componente principal.
+    El numerador es la longitud fisica del camino minimo en la red; el
+    denominador es la distancia Haversine directa entre los dos supernodos.
+    """
+    nodos = list(G.nodes())
+    indice = {nodo: i for i, nodo in enumerate(nodos)}
+    suma = 0.0
+    pares_validos = 0
+
+    for i, origen in enumerate(nodos):
+        distancias_red = nx.single_source_dijkstra_path_length(
+            G,
+            origen,
+            weight='physical_distance_meters',
+        )
+        lat1 = G.nodes[origen].get('stop_lat')
+        lon1 = G.nodes[origen].get('stop_lon')
+
+        for destino, distancia_red in distancias_red.items():
+            if indice[destino] <= i:
+                continue
+
+            lat2 = G.nodes[destino].get('stop_lat')
+            lon2 = G.nodes[destino].get('stop_lon')
+            if None in (lat1, lon1, lat2, lon2):
+                continue
+
+            distancia_directa = haversine(
+                float(lat1),
+                float(lon1),
+                float(lat2),
+                float(lon2),
+            )
+            if distancia_directa <= 0:
+                continue
+
+            suma += distancia_red / distancia_directa
+            pares_validos += 1
+
+    if pares_validos == 0:
+        return None, 0
+    return suma / pares_validos, pares_validos
 
 def analizar_eficiencia():
     """
@@ -86,35 +165,20 @@ def analizar_eficiencia():
         print(f"No se pudieron calcular las métricas de camino: {e}. El grafo puede no ser fuertemente conectado.")
 
     # Índice de Desvío (Detour Index)
-    # Compara la distancia real en la red con la distancia en línea recta.
-    # Se calcula sobre una muestra de pares de nodos para eficiencia.
+    # Compara longitud física del camino mínimo en la red con la distancia
+    # Haversine directa. No usa tiempos de viaje, para mantener la
+    # interpretación geométrica del índice.
     print("\nCalculando el Índice de Desvío (Detour Index)... (puede tardar)")
-    detour_ratios = []
-    nodos_muestra = random.sample(list(S.nodes()), min(100, S.number_of_nodes()))
+    S_fisico = construir_grafo_fisico_no_dirigido(S)
+    if not nx.is_connected(S_fisico):
+        componente_principal = max(nx.connected_components(S_fisico), key=len)
+        S_fisico = S_fisico.subgraph(componente_principal).copy()
 
-    for u in nodos_muestra:
-        for v in nodos_muestra:
-            if u == v or not nx.has_path(S, u, v):
-                continue
-
-            # Distancia en la red (camino más corto por tiempo)
-            network_dist = nx.shortest_path_length(S, source=u, target=v, weight='travel_time_minutes')
-
-            # Distancia en línea recta (Haversine)
-            lat1, lon1 = S.nodes[u]['stop_lat'], S.nodes[u]['stop_lon']
-            lat2, lon2 = S.nodes[v]['stop_lat'], S.nodes[v]['stop_lon']
-            straight_dist_meters = haversine(lat1, lon1, lat2, lon2)
-            
-            # Asumimos una velocidad promedio para convertir distancia a tiempo (ej. 20 km/h = 333 m/min)
-            straight_dist_time = straight_dist_meters / 333 
-
-            if straight_dist_time > 0:
-                detour_ratios.append(network_dist / straight_dist_time)
-
-    if detour_ratios:
-        avg_detour = np.mean(detour_ratios)
+    avg_detour, pares_validos = calcular_indice_desvio_promedio(S_fisico)
+    if avg_detour is not None:
         print(f"Índice de Desvío Promedio: {avg_detour:.2f}")
-        print("Un valor de 1 es un viaje perfectamente directo. Valores más altos indican rutas más indirectas.")
+        print(f"Pares evaluados: {pares_validos:,}")
+        print("Un valor de 1 es un recorrido físicamente directo. Valores más altos indican rutas más indirectas.")
     else:
         print("No se pudo calcular el índice de desvío.")
 

@@ -25,7 +25,7 @@
             \begin{itemize}
                 \item \textbf{Conectividad Fuerte:} Un detalle importante es que el grafo principal no es \textit{fuertemente conectado}. Esto significa que existen pares de nodos (A, B) para los cuales es posible viajar de A a B, pero no hay una ruta de regreso de B a A. Este fenómeno es común en sistemas de autobuses debido a la existencia de calles de un solo sentido o circuitos de ruta.
                 \item \textbf{Diámetro de la Red:} El diámetro, medido en el componente principal, es de \textbf{77 saltos}. Representa el número máximo de supernodos que se deben atravesar en el peor de los casos para conectar dos puntos de la red e indica que existen pares de nodos muy alejados entre sí dentro del sistema.
-                \item \textbf{Índice de Desvío Promedio (Detour Index):} Se obtuvo un valor de \textbf{1.13}. Un valor de 1 representa un viaje en línea recta; este índice indica que, en promedio, los viajes son 13\% más largos que la distancia directa, lo que refleja rutas relativamente directas pero con margen para mejorar conexiones.
+                \item \textbf{Índice de Desvío Promedio (Detour Index):} Se obtuvo un valor de \textbf{1.20}. Este cálculo se hizo con longitudes físicas: para cada arista se usó la distancia Haversine entre centroides de supernodos y se comparó la longitud mínima sobre la red con la distancia directa. Por tanto, el valor indica que, en promedio sobre \textbf{8,809,503 pares} del componente principal, los recorridos físicos mínimos son aproximadamente \textbf{20\%} más largos que la distancia directa. Esta métrica no usa tiempos de viaje.
             \end{itemize}
 
         \subsubsection{Accesibilidad y Cobertura de la Red (Matriz de Shimbel)}
@@ -420,6 +420,7 @@
                     \item \textbf{Intermediación y Cercanía:} Se utilizó como peso el tiempo de viaje en minutos para encontrar los caminos más rápidos. En el \(L\)-espacio, la cercanía reportada es saliente: en NetworkX se calculó sobre el grafo reverso para que las distancias correspondan a viajes desde cada supernodo hacia los destinos alcanzables.
                     \item \textbf{Grado Ponderado:} Se calculó como la suma del grado de entrada ponderado y del grado de salida ponderado, que representan el número de rutas que pasan por un nodo.
                 \end{itemize}
+                \item \textbf{Índice de Desvío:} Se calculó sobre el componente principal del \(L\)-espacio convertido a grafo no dirigido. Las aristas se ponderaron por longitud física Haversine en metros entre centroides de supernodos; el cociente compara esa distancia mínima de red contra la distancia directa entre el par de supernodos.
                 \item \textbf{Detección de Comunidades:} Se empleó el método de Louvain, optimizando la modularidad sobre una versión no dirigida del grafo ponderado por el número de rutas.
                 \item \textbf{Análisis de Robustez:}
                 \begin{itemize}
