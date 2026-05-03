@@ -164,10 +164,14 @@
         \end{observacion}
 
         \begin{definicion}[Cara de un grafo planar]
-            % TODO [PDF p.13][Fernando Becerra][cat: rigor matematico][prio: media][nota flotante sobre: "Una cara es cada una de las regiones conexas..."]: mejorar la precisión matemática de esta definición.
-            Sea $G$ un grafo planar, y considérese un dibujo planar de $G$.
-            Una \textbf{cara} es cada una de las regiones conexas en que el dibujo divide el plano, incluyendo la región exterior.
-            Formalmente, las caras son los componentes conexos del complemento del dibujo de $G$ en el plano.
+            Sea $G$ un grafo planar y fíjese un dibujo planar de $G$ en el plano $\mathbb{R}^2$. Sea $X\subseteq \mathbb{R}^2$ el conjunto de puntos ocupado por ese dibujo, formado por los puntos que representan los nodos de $G$ y por las curvas que representan sus aristas.
+
+            Una \textbf{cara} del dibujo es un subconjunto $F$ de $\mathbb{R}^2\setminus X$ que satisface las siguientes dos condiciones:
+            \begin{enumerate}
+                \item cualesquiera dos puntos de $F$ pueden unirse mediante una curva contenida en $F$;
+                \item si $F\subseteq F'\subseteq \mathbb{R}^2\setminus X$ y $F'$ satisface la condición anterior, entonces $F'=F$.
+            \end{enumerate}
+            La cara que se extiende indefinidamente en el plano se llama \textbf{cara exterior}. Las demás se llaman \textbf{caras interiores}.
         \end{definicion}
 
         Las definiciones de grafo planar y de cara de un grafo planar nos serán útiles cuando estudiemos propiedades globales de un grafo.
