@@ -1224,11 +1224,11 @@
             \end{ejemplo}
 
             \begin{definicion}[Centralidad de intermediación]
-                La \textbf{centralidad de intermediación} de un nodo $v$, denotada $C_b(v)$, es la suma, sobre todos los pares de nodos $(s, t)$ distintos de $v$, de la proporción de caminos más cortos entre $s$ y $t$ que pasan por $v$:
+                Sea $G=(V,E)$ un grafo finito y sea $v\in V$. Para $s,t\in V\setminus\{v\}$ con $s\neq t$, denotamos por $\sigma_{st}$ el número de caminos geodésicos de $s$ a $t$, y por $\sigma_{st}(v)$ el número de esos caminos que pasan por $v$ como nodo interno. Si $G$ es dirigido, la \textbf{centralidad de intermediación} de $v$ se define sumando sobre pares ordenados:
                 \[
                 C_b(v) = \sum_{\substack{s,t\in V\setminus\{v\}\\ s\neq t\\ \sigma_{st}>0}} \frac{\sigma_{st}(v)}{\sigma_{st}}
                 \]
-                donde $\sigma_{st}$ es el número de caminos geodésicos de $s$ a $t$, y $\sigma_{st}(v)$ aquellos que pasan por $v$.
+                Si $G$ es no dirigido, la misma suma se toma sobre pares no ordenados $\{s,t\}\subseteq V\setminus\{v\}$, con $s\neq t$.
             \end{definicion}
 
             \begin{ejemplo}[Centralidad de intermediación de $v=B$]
