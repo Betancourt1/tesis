@@ -57,7 +57,7 @@
 
 \newcommand{\thinrule}{\par\vspace{0.2cm}\noindent{\color{linegray}\rule{0.88\linewidth}{0.45pt}}\par\vspace{0.2cm}}
 \newcommand{\metric}[2]{%
-  \begin{minipage}[t]{0.19\linewidth}
+  \begin{minipage}[t]{0.18\linewidth}
     {\large\bfseries #1}\par
     {\scriptsize\color{midgray} #2}
   \end{minipage}
@@ -68,6 +68,9 @@
 }
 \newcommand{\smallsource}[1]{%
   \vspace{0.08cm}{\scriptsize\color{midgray}#1}
+}
+\newcommand{\twolinecell}[2]{%
+  \begin{tabular}[t]{@{}c@{}}#1\\{\scriptsize\color{midgray}#2}\end{tabular}
 }
 
 \title{El transporte urbano de la Zona Metropolitana de Guadalajara}
@@ -143,15 +146,18 @@
 
 % 4
 \begin{frame}{Tesis central}
-  \claim{La ZMG combina una base física sensible a fallas con un servicio relativamente robusto, efecto explicado por la redundancia entre rutas.}
+  \claim{La ZMG combina una base física sensible a fallas con una representación de servicio relativamente robusta bajo el modelo \(P\), efecto explicado por la redundancia entre rutas.}
 
-  \vspace{0.45cm}
+  \vspace{0.30cm}
   \begin{tabularx}{\linewidth}{@{}p{0.48\linewidth}p{0.48\linewidth}@{}}
     \textbf{Pregunta 1} &
     \textbf{Pregunta 2} \\
     Qué tan robustas son las representaciones \(L\) y \(P\) ante fallos aleatorios y ataques dirigidos. &
     Qué nodos actúan como puntos críticos y cómo cambia su criticidad entre infraestructura y servicio. \\
   \end{tabularx}
+
+  \thinrule
+  La afirmación es topológica: no incorpora frecuencias, capacidad vehicular, espera, congestión ni redistribución dinámica de pasajeros.
 \end{frame}
 
 % 5
@@ -159,7 +165,7 @@
   \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.22\linewidth}X@{}}
     Objetivo & Modelar y analizar estructuralmente el sistema de transporte público de la ZMG mediante teoría de grafos. \\
     Aportación & Comparar dos topologías construidas sobre los mismos supernodos: infraestructura física y conectividad funcional del servicio. \\
-    Resultado esperado & Un diagnóstico reproducible de conectividad, centralidad, comunidades y robustez. \\
+    Resultado esperado & Un diagnóstico reproducible de conectividad, centralidad, comunidades y degradación modelada. \\
   \end{tabularx}
 
   \thinrule
@@ -176,7 +182,7 @@
     Vértices & Supernodos obtenidos al agrupar paradas cercanas. \\
     Aristas & Tramos físicos consecutivos o conexiones de servicio sin cambio de ruta. \\
     Pesos & Tiempo de viaje, número de rutas compartidas o intensidad de conexión. \\
-    Perturbación & Eliminación secuencial de nodos de alta centralidad para medir degradación. \\
+    Perturbación & Eliminación de 50 supernodos por ataque dirigido o por fallos aleatorios. \\
   \end{tabularx}
 \end{frame}
 
@@ -241,6 +247,8 @@
   \thinrule
 
   Se validan relaciones entre archivos, coordenadas, secuencias temporales y nodos aislados antes de construir los grafos.
+
+  \smallsource{El código de la tesis y el respaldo GTFS quedan citados en repositorios públicos separados.}
 \end{frame}
 
 % 9
@@ -290,12 +298,12 @@
     Estructura global & Densidad, componentes, clustering, diámetro, camino medio. \\
     Centralidad & Grado, intermediación, cercanía y eigenvector. \\
     Comunidades & Louvain sobre una versión no dirigida y ponderada. \\
-    Robustez & LCC y eficiencia global tras eliminar 50 supernodos de mayor grado. \\
+    Robustez & LCC y eficiencia global bajo ataque dirigido y fallos aleatorios. \\
   \end{tabularx}
 
   \thinrule
 
-  La robustez se interpreta como conservación de conectividad y accesibilidad ante perturbaciones.
+  La robustez se interpreta como conservación de conectividad y accesibilidad ante perturbaciones; las curvas aleatorias se usan como línea base.
 \end{frame}
 
 % 12
@@ -307,16 +315,19 @@
   \metric{0.000486}{densidad}
   \hfill
   \metric{77}{diámetro}
+  \hfill
+  \metric{1.20}{desvío medio}
 
-  \vspace{0.55cm}
+  \vspace{0.45cm}
   \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.23\linewidth}X@{}}
     Clustering & \(0.1088\), compatible con una topología de baja redundancia local. \\
     Componentes & Dos componentes; el principal contiene 4,198 supernodos. \\
+    Accesibilidad & Los nodos mejor conectados promedian 24.7--25.6 min hacia destinos alcanzables y cubren \(\approx98.5\%\) de la red. \\
     Lectura & La red física es extensa y casi conectada, pero poco mallada. \\
   \end{tabularx}
 
   \thinrule
-  Esta estructura anticipa sensibilidad ante fallas en nodos articuladores.
+  El índice de desvío se calcula con longitud física Haversine, no con tiempos de viaje.
 \end{frame}
 
 % 13
@@ -346,17 +357,17 @@
       \includegraphics[width=\linewidth]{figuras/l_robustez.png}
     \end{column}
     \begin{column}{0.38\linewidth}
-      Ataque dirigido: eliminación secuencial de los 50 supernodos de mayor grado ponderado.
+      Se comparan dos perturbaciones: ataque dirigido por grado ponderado y fallos aleatorios reproducibles.
 
-      \vspace{0.3cm}
-      \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.35\linewidth}X@{}}
-        LCC & \(97.45\%\) del valor inicial. \\
-        Eficiencia & \(81.50\%\) del valor inicial. \\
-        Caída & Aproximadamente \(18.50\%\). \\
+      \vspace{0.2cm}
+      \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.36\linewidth}XX@{}}
+        & Ataque & Aleat. \\
+        LCC & \(97.45\%\) & \(98.23\%\) \\
+        Eficiencia & \(81.50\%\) & \(97.17\%\) \\
       \end{tabularx}
 
       \thinrule
-      La cobertura persiste,\par pero los recorridos se vuelven menos eficientes.
+      La fragilidad aparece sobre todo al remover supernodos estructuralmente críticos.
     \end{column}
   \end{columns}
 \end{frame}
@@ -375,8 +386,11 @@
   \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.25\linewidth}X@{}}
     Clustering & \(0.4085\), mayor redundancia por rutas compartidas. \\
     Camino medio & \(2.41\) saltos; equivale a \(1.41\) transbordos promedio bajo la convención usada. \\
-    Lectura & El servicio se comporta como red de mundo pequeño. \\
+    Lectura & La proyección \(P\) se comporta como red de mundo pequeño. \\
   \end{tabularx}
+
+  \thinrule
+  La densidad en \(P\) mide conectividad potencial por rutas compartidas; no garantiza capacidad ni disponibilidad operativa real.
 \end{frame}
 
 % 16
@@ -405,37 +419,37 @@
       \includegraphics[width=\linewidth]{figuras/p_robustez.png}
     \end{column}
     \begin{column}{0.38\linewidth}
-      Mismo ataque dirigido: eliminación de los 50 supernodos de mayor grado.
+      La proyección \(P\) conserva muchas adyacencias de servicio aun bajo eliminación de supernodos.
 
-      \vspace{0.3cm}
-      \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.35\linewidth}X@{}}
-        LCC & \(98.74\%\) del valor inicial. \\
-        Eficiencia & \(97.36\%\) del valor inicial. \\
-        Caída & Aproximadamente \(2.64\%\). \\
+      \vspace{0.2cm}
+      \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.36\linewidth}XX@{}}
+        & Ataque & Aleat. \\
+        LCC & \(98.74\%\) & \(98.80\%\) \\
+        Eficiencia & \(97.36\%\) & \(96.93\%\) \\
       \end{tabularx}
 
       \thinrule
-      La redundancia de rutas\par amortigua la falla de supernodos troncales.
+      Es robustez de la proyección, no prueba directa de continuidad operacional.
     \end{column}
   \end{columns}
 \end{frame}
 
 % 18
 \begin{frame}{Comparación \(L\) frente a \(P\)}
-  \begin{tabularx}{\linewidth}{@{}l>{\centering\arraybackslash}X>{\centering\arraybackslash}X>{\centering\arraybackslash}X@{}}
+  \begin{tabularx}{\linewidth}{@{}l>{\centering\arraybackslash}X>{\centering\arraybackslash}X>{\centering\arraybackslash}X>{\centering\arraybackslash}X@{}}
     \toprule
-    Modelo & Densidad & Diámetro & Eficiencia tras ataque \\
+    Modelo & Densidad & Diámetro & \twolinecell{Eficiencia}{ataque} & \twolinecell{Eficiencia}{aleatoria} \\
     \midrule
-    \(L\)-espacio & 0.000486 & 77 & 81.50\% \\
-    \(P\)-espacio & 0.0436 & 6 & 97.36\% \\
+    \(L\)-espacio & 0.000486 & 77 & 81.50\% & 97.17\% \\
+    \(P\)-espacio & 0.0436 & 6 & 97.36\% & 96.93\% \\
     \bottomrule
   \end{tabularx}
 
   \vspace{0.55cm}
-  \claim{La infraestructura y el servicio no tienen la misma vulnerabilidad topológica.}
+  \claim{La infraestructura y la proyección de servicio no tienen la misma vulnerabilidad topológica.}
 
   \vspace{0.25cm}
-  La infraestructura física tiene baja redundancia local; el servicio genera muchas conexiones funcionales porque varias rutas se superponen.
+  El contraste fuerte aparece en ataques dirigidos: \(L\) pierde eficiencia por nodos articuladores, mientras \(P\) retiene adyacencias por superposición de rutas.
 \end{frame}
 
 % 19
@@ -448,7 +462,8 @@
       \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.38\linewidth}X@{}}
         Sensibilidad & Umbrales de 75 a 150 m; el LCC físico se mantiene entre 99.81\% y 99.88\%. \\
         Sesgo \(P\) & Construir por \texttt{route\_id} puede sobreconectar frente a \texttt{trip\_id}. \\
-        Intervención & El refuerzo periférico conserva mejor eficiencia postataque: 88.52\%. \\
+        Intervención & El refuerzo periférico conserva mejor eficiencia relativa postataque: 88.52\%. \\
+        Supuestos & 10 hubs protegidos; 120 aristas periféricas; hasta 200 bypasses locales. \\
       \end{tabularx}
     \end{column}
   \end{columns}
@@ -458,13 +473,13 @@
 \begin{frame}{Cierre}
   \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.20\linewidth}X@{}}
     Hallazgo 1 & La red física es extensa, casi conectada y de baja redundancia local. \\
-    Hallazgo 2 & La red de servicio es densa, con rasgos de mundo pequeño y alta redundancia funcional. \\
-    Hallazgo 3 & Bajo ataque dirigido, la eficiencia cae mucho más en \(L\) que en \(P\). \\
+    Hallazgo 2 & La proyección de servicio es densa, con rasgos de mundo pequeño y alta redundancia estructural. \\
+    Hallazgo 3 & Bajo ataque dirigido, la eficiencia cae mucho más en \(L\) que en \(P\); bajo fallos aleatorios ambas representaciones retienen eficiencia alta. \\
     Implicación & La planeación debe reforzar conectividad periférica y proteger supernodos estructurales. \\
   \end{tabularx}
 
   \vfill
-  {\large\bfseries La teoría de grafos permite distinguir entre cobertura física, conectividad funcional y vulnerabilidad estructural del transporte público.}
+  {\large\bfseries La teoría de grafos permite distinguir entre cobertura física, conectividad potencial y vulnerabilidad estructural del transporte público.}
 \end{frame}
 
 \end{document}
