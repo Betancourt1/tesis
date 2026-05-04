@@ -433,6 +433,79 @@ def scenario_result_row(
     }
 
 
+def scenario_methodology(args: argparse.Namespace, fallback_time: float) -> dict:
+    return {
+        "common_attack_rule": (
+            "El ataque elimina num_remove supernodos ordenados por grado ponderado "
+            "total. En refuerzo_periferico y recableado_bypass el orden se recalcula "
+            "sobre el grafo intervenido; en proteccion_hubs se excluyen del ataque "
+            "los protect_top_k hubs del grafo base."
+        ),
+        "weighted_degree": (
+            "Suma de original_edge_count en aristas entrantes y salientes; si no "
+            "existe el atributo, se usa peso 1."
+        ),
+        "fallback_time_minutes": fallback_time,
+        "efficiency": (
+            "Eficiencia global dirigida ponderada por travel_time_minutes. Si "
+            "efficiency_sources es menor que el numero de nodos del LCC, se estima "
+            "con muestreo reproducible de fuentes."
+        ),
+        "scenarios": {
+            "baseline": {
+                "description": "Grafo L-space consolidado sin cambios.",
+                "intervention": "Sin aristas agregadas, removidas ni nodos protegidos.",
+            },
+            "proteccion_hubs": {
+                "description": "Inmuniza hubs estructurales ante el ataque.",
+                "node_selection": f"Top {args.protect_top_k} por grado ponderado en el grafo base.",
+                "edge_changes": "No agrega ni remueve aristas.",
+                "attack_rule": (
+                    "Remueve los siguientes num_remove nodos de mayor grado ponderado "
+                    "que no esten en el conjunto protegido."
+                ),
+            },
+            "refuerzo_periferico": {
+                "description": "Agrega enlaces bidireccionales entre nodos perifericos.",
+                "node_selection": (
+                    "Calcula cercania no dirigida en el LCC; toma hasta el 25% de "
+                    "menor cercania, con minimo 100 candidatos."
+                ),
+                "pairing_rule": (
+                    "Empareja extremos opuestos de la lista periferica; descarta pares "
+                    "ya adyacentes o separados por menos de 4 saltos."
+                ),
+                "edge_weight": (
+                    "Cada arista nueva usa travel_time_minutes=fallback_time_minutes "
+                    "y original_edge_count=1."
+                ),
+                "edge_changes": (
+                    f"Agrega hasta {args.reinforcement_pairs} pares bidireccionales "
+                    "sin remover aristas existentes."
+                ),
+            },
+            "recableado_bypass": {
+                "description": "Agrega bypasses dirigidos alrededor de hubs.",
+                "node_selection": f"Top {args.rewire_hubs} hubs por grado ponderado en el grafo base.",
+                "edge_rule": (
+                    "Para un hub h, si u->h y h->v existen, u y v no son hubs, "
+                    "u!=v y u->v no existe, agrega u->v."
+                ),
+                "edge_weight": (
+                    "El peso de u->v es travel_time(u,h)+travel_time(h,v); "
+                    "original_edge_count=1."
+                ),
+                "edge_changes": (
+                    f"Agrega hasta {args.rewire_bypasses} bypasses. preserve_edge_budget="
+                    f"{args.preserve_edge_budget}; si es true, remueve aristas no puente "
+                    "de baja criticidad para compensar."
+                ),
+                "randomness": f"Orden de predecesores/sucesores aleatorizado con seed={args.seed}.",
+            },
+        },
+    }
+
+
 def main() -> int:
     args = parse_args()
     t0 = time.time()
@@ -581,6 +654,7 @@ def main() -> int:
             "efficiency_sources": args.efficiency_sources,
             "seed": args.seed,
         },
+        "methodology": scenario_methodology(args, fallback_time),
         "output_csv": str(csv_path),
         "scenarios": df.to_dict(orient="records"),
     }

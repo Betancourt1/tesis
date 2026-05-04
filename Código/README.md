@@ -123,6 +123,14 @@ Para cuantificar propuestas de mejora sobre el L-space (proteccion de hubs, refu
 python "Código/analisis_comparativo/intervenciones/analisis_intervenciones_topologicas.py"
 ```
 
+Definicion operativa de los escenarios:
+- `baseline`: usa el grafo L-space consolidado sin cambios.
+- `proteccion_hubs`: selecciona los `protect_top_k=10` supernodos de mayor grado ponderado y los excluye del ataque; no agrega aristas.
+- `refuerzo_periferico`: calcula cercania no dirigida en el LCC, selecciona nodos perifericos de baja cercania y agrega `reinforcement_pairs=60` pares bidireccionales (`120` aristas) si no estaban conectados y estan separados por al menos 4 saltos. Cada arista nueva usa la mediana global de `travel_time_minutes` y `original_edge_count=1`.
+- `recableado_bypass`: selecciona `rewire_hubs=20` hubs y agrega hasta `rewire_bypasses=200` bypasses dirigidos `u -> v` alrededor de un hub `h` cuando existen `u -> h` y `h -> v`; el peso nuevo es la suma de ambos tiempos.
+
+El ataque elimina `num_remove=50` supernodos de mayor grado ponderado. En `refuerzo_periferico` y `recableado_bypass`, el orden de ataque se recalcula sobre el grafo intervenido; en `proteccion_hubs`, los hubs protegidos no son removibles. La eficiencia relativa se calcula contra el estado preataque de cada escenario.
+
 Opcional: conservar presupuesto de aristas en recableado (cada bypass agregado remueve una arista de baja criticidad):
 
 ```bash
