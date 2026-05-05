@@ -584,6 +584,11 @@
   \end{tabularx}
 \end{frame}
 
+\begin{frame}{Ilustración del \(L\)-espacio}
+  \centering
+  \includegraphics[height=0.78\textheight,keepaspectratio]{../../grafos/l_space/grafo.png}
+\end{frame}
+
 % 14
 \begin{frame}{Construcción del \(P\)-espacio}
   El \(P\)-espacio resume conectividad funcional sin cambio de ruta, sobre el mismo conjunto de zonas consolidadas.
@@ -600,6 +605,11 @@
   Esta representación enfatiza alcance de servicio; no describe continuidad física del recorrido.
 \end{frame}
 
+\begin{frame}{Ilustración del \(P\)-espacio}
+  \centering
+  \includegraphics[height=0.78\textheight,keepaspectratio]{../../grafos/p_space/grafo.png}
+\end{frame}
+
 \begin{frame}{Resultado central}
   \claim{Bajo ataque dirigido a los \(50\) nodos de mayor grado, la eficiencia relativa cae a \(81.50\%\) en \(L\) y a \(97.36\%\) en \(P\).}
 
@@ -611,7 +621,7 @@
     \midrule
     Eficiencia tras ataque dirigido & \(81.50\%\) & \(97.36\%\) & \(P\) conserva \(15.86\) puntos porcentuales más. \\
     LCC tras ataque dirigido & \(97.45\%\) & \(98.74\%\) & La conectividad gigante cambia menos que la eficiencia. \\
-    Eficiencia tras fallos aleatorios & \(97.17\%\) & \(96.93\%\) & La diferencia aparece sobre todo cuando el ataque es dirigido. \\
+    Eficiencia tras fallos aleatorios & \(97.17\%\) & \(99.67\%\) & Ambos espacios conservan alta eficiencia; el contraste principal aparece bajo ataque dirigido. \\
     Densidad del grafo base & \(0.000486\) & \(0.0436\) & \(P\) incorpora muchas relaciones por rutas compartidas. \\
     \bottomrule
   \end{tabularx}
@@ -626,7 +636,7 @@
   \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.25\linewidth}X@{}}
     Tamaño & \(4{,}203\) vértices y \(8{,}591\) arcos dirigidos. \\
     Densidad & \(0.000486\): red dispersa, restringida por continuidad física. \\
-    Agrupamiento & \(0.1088\): redundancia local limitada. \\
+    Agrupamiento dirigido & \(0.1088\): redundancia local limitada. \\
     Diámetro & \(77\): existen trayectorias físicas largas entre zonas. \\
     Detour Index & \(1.20\): con longitudes Haversine, la ruta mínima física supera a la distancia directa. \\
   \end{tabularx}
@@ -655,23 +665,14 @@
 
 % 20
 \begin{frame}{Robustez en \(L\)}
-  \begin{columns}[T,onlytextwidth]
-    \begin{column}{0.57\linewidth}
-      \includegraphics[width=\linewidth,height=0.62\textheight,keepaspectratio]{figuras/l_robustez.png}
-    \end{column}
-    \begin{column}{0.38\linewidth}
-      \small
-      \textbf{Ataque dirigido}\par
-      LCC \(97.45\%\), eficiencia \(81.50\%\).
+  \centering
+  \includegraphics[width=0.98\linewidth,height=0.66\textheight,keepaspectratio]{figuras/l_robustez_presentacion.png}
 
-      \vspace{0.16cm}
-      \textbf{Fallo aleatorio}\par
-      LCC medio \(98.23\%\), eficiencia media \(97.17\%\).
-
-      \thinrule
-      La eficiencia es más sensible que el tamaño de la componente gigante.
-    \end{column}
-  \end{columns}
+  \vspace{0.08cm}
+  \begin{tabularx}{0.92\linewidth}{@{}>{\bfseries}p{0.22\linewidth}X@{}}
+    Ataque dirigido & LCC \(97.45\%\), eficiencia \(81.50\%\). \\
+    Fallo aleatorio & LCC medio \(98.23\%\), eficiencia media \(97.17\%\). \\
+  \end{tabularx}
 \end{frame}
 
 % 21
@@ -686,7 +687,7 @@
   \end{tabularx}
 
   \thinrule
-  Los supernodos 264, 262 y 698 del hipercentro concentran centralidad de servicio; el 264 ocupa el primer lugar en las cuatro métricas y reúne al menos 30 rutas.
+  Los supernodos 264, 262 y 698 del hipercentro concentran centralidad de servicio; el 264 encabeza grado, cercanía y eigenvector en el recálculo directo y reúne 30 rutas.
 \end{frame}
 
 % 22
@@ -698,34 +699,25 @@
     \begin{column}{0.38\linewidth}
       \textbf{Resultado}
 
-      Louvain detecta \(11\) comunidades con modularidad \(0.54\).
+      Louvain detecta \(11\) comunidades con modularidad \(0.537\).
 
       \thinrule
 
-      El \(67\%\) de los supernodos queda en las cinco comunidades mayores, lo que sugiere concentración funcional del servicio.
+      El \(66.9\%\) de los supernodos queda en las cinco comunidades mayores, lo que sugiere concentración funcional del servicio.
     \end{column}
   \end{columns}
 \end{frame}
 
 % 23
 \begin{frame}{Robustez en \(P\)}
-  \begin{columns}[T,onlytextwidth]
-    \begin{column}{0.57\linewidth}
-      \includegraphics[width=\linewidth,height=0.62\textheight,keepaspectratio]{figuras/p_robustez.png}
-    \end{column}
-    \begin{column}{0.38\linewidth}
-      \small
-      \textbf{Ataque dirigido}\par
-      LCC \(98.74\%\), eficiencia \(97.36\%\).
+  \centering
+  \includegraphics[width=0.98\linewidth,height=0.66\textheight,keepaspectratio]{figuras/p_robustez_presentacion.png}
 
-      \vspace{0.16cm}
-      \textbf{Fallo aleatorio}\par
-      LCC medio \(98.80\%\), eficiencia media \(96.93\%\).
-
-      \thinrule
-      Bajo el modelo \(P\), la redundancia por rutas compartidas amortigua el ataque dirigido.
-    \end{column}
-  \end{columns}
+  \vspace{0.08cm}
+  \begin{tabularx}{0.92\linewidth}{@{}>{\bfseries}p{0.22\linewidth}X@{}}
+    Ataque dirigido & LCC \(98.74\%\), eficiencia \(97.36\%\). \\
+    Fallo aleatorio & LCC medio \(98.81\%\), eficiencia media \(99.67\%\). \\
+  \end{tabularx}
 \end{frame}
 
 % 24
@@ -739,7 +731,7 @@
     Densidad & \(0.000486\) & \(0.0436\) & \(P\) es mucho más denso. \\
     Diámetro & \(77\) & \(6\) & El servicio reduce distancias topológicas. \\
     Ataque dirigido, eficiencia & \(81.50\%\) & \(97.36\%\) & La infraestructura pierde más eficiencia. \\
-    Fallo aleatorio, eficiencia & \(97.17\%\) & \(96.93\%\) & Los fallos no dirigidos son menos diferenciadores. \\
+    Fallo aleatorio, eficiencia & \(97.17\%\) & \(99.67\%\) & Los fallos no dirigidos son menos diferenciadores. \\
     \bottomrule
   \end{tabularx}
 
@@ -763,32 +755,15 @@
 
 % 26
 \begin{frame}{Escenarios de intervención modelada}
-  \begin{columns}[T,onlytextwidth]
-    \begin{column}{0.52\linewidth}
-      \includegraphics[width=\linewidth,height=0.62\textheight,keepaspectratio]{figuras/intervenciones.png}
-    \end{column}
-    \begin{column}{0.44\linewidth}
-      \scriptsize
-      \textbf{Operaciones simuladas}\par
-      Proteger nodos concentradores; agregar enlaces periféricos; abrir derivaciones locales alrededor de nodos cargados.
+  \centering
+  \includegraphics[width=0.98\linewidth,height=0.66\textheight,keepaspectratio]{figuras/intervenciones_presentacion.png}
 
-      \vspace{0.12cm}
-      \textbf{Protección de nodos concentradores}\par
-      LCC \(99.30\%\), eficiencia \(85.58\%\).
-
-      \vspace{0.11cm}
-      \textbf{Refuerzo periférico}\par
-      LCC \(98.51\%\), eficiencia \(88.52\%\).
-
-      \vspace{0.11cm}
-      \textbf{Conexiones de derivación locales}\par
-      LCC \(98.82\%\), eficiencia \(79.68\%\).
-
-      \normalsize
-      \thinrule
-      La intervención más conveniente depende de si se prioriza conectividad global, eficiencia o reducción del peor recorrido interno postataque.
-    \end{column}
-  \end{columns}
+  \vspace{0.08cm}
+  \scriptsize
+  \begin{tabularx}{0.96\linewidth}{@{}>{\bfseries}p{0.22\linewidth}X@{}}
+    Operaciones & Proteger nodos concentradores; agregar enlaces periféricos; abrir derivaciones locales alrededor de nodos cargados. \\
+    Lectura & La intervención más conveniente depende de si se prioriza conectividad global, eficiencia o reducción del peor recorrido interno postataque. \\
+  \end{tabularx}
 \end{frame}
 
 % 27

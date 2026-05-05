@@ -16,7 +16,7 @@
             \begin{itemize}
                 \item \textbf{Tamaño de la Red:} El grafo consolidado consta de \textbf{4,203 nodos} (supernodos que agrupan paradas) y \textbf{8,591 aristas} (conexiones directas por una ruta).
 		\item \textbf{Densidad del Grafo:} La densidad es de \textbf{0.000486}, un valor coherente con una red de contigüidad física. En este grafo, cada supernodo se conecta principalmente con las paradas consecutivas de las rutas que lo atraviesan, de modo que el número de aristas posibles es reducido.
-                \item \textbf{Conectividad:} El análisis de componentes conectados arrojó un resultado clave: la red está fragmentada en \textbf{2 componentes}. Uno de ellos es masivo, conteniendo 4,198 nodos (el 99.8\% del total), mientras que el segundo es un fragmento aislado de apenas 5 nodos. Esto sugiere que, en la práctica, la red funciona casi como un todo unificado, pero existe una pequeña \textit{isla} de paradas sin conexión con el resto del sistema.
+                \item \textbf{Conectividad:} El análisis de componentes conectados arrojó un resultado clave: la red está fragmentada en \textbf{2 componentes}. Uno de ellos es masivo, conteniendo 4,198 nodos (el 99.88\% del total), mientras que el segundo es un fragmento aislado de apenas 5 nodos. Esto sugiere que, en la práctica, la red funciona casi como un todo unificado, pero existe una pequeña \textit{isla} de paradas sin conexión con el resto del sistema.
                 \item \textbf{Coeficiente de Clustering Global:} La transitividad de la red es de \textbf{0.1088}. Este valor, cercano a cero, indica una baja tendencia a la formación de clústeres locales: es poco frecuente que dos paradas conectadas a una tercera también lo estén entre sí. Esto sugiere una topología más arbórea o de tipo estrella (\textit{hub-and-spoke}) que una estructura de malla densa.
             \end{itemize}
 
@@ -100,7 +100,7 @@
         \subsubsection{Resultados de la Detección}
             El análisis arrojó los siguientes resultados clave:
             \begin{itemize}
-                \item \textbf{Número de Comunidades:} Se detectaron un total de \textbf{40 comunidades}. La gran mayoría de ellas (39) son significativas en tamaño, mientras que solo una fue identificada como un pequeño grupo aislado de menos de 5 nodos, probablemente correspondiente al componente desconectado mencionado en la sección de métricas globales.
+                \item \textbf{Número de Comunidades:} Se detectaron un total de \textbf{40 comunidades}. La gran mayoría de ellas (39) son significativas en tamaño, mientras que solo una fue identificada como un pequeño grupo aislado de 5 nodos o menos, probablemente correspondiente al componente desconectado mencionado en la sección de métricas globales.
                 \item \textbf{Estructura Policéntrica:} La existencia de un número considerable de comunidades robustas confirma que la red no es monolítica, sino que posee una \textbf{estructura policéntrica}. En lugar de un único núcleo dominante, el sistema se organiza en torno a múltiples centros o zonas funcionales.
                 \item \textbf{Comunidades Principales:} Las 10 comunidades más grandes agrupan a más de 1,800 nodos, casi la mitad de la red. El análisis de sus centroides geográficos permite una caracterización preliminar:
                 \begin{itemize}
@@ -150,7 +150,7 @@
             Bajo fallos aleatorios, el LCC medio después de 50 remociones es \textbf{98.23\%}, con una banda empírica 5--95\% de \textbf{97.62\%} a \textbf{98.69\%}. Por tanto, en cobertura estructural el ataque dirigido por grado es más dañino que la pérdida aleatoria esperada.
 
         \subsubsection{Impacto en la Eficiencia Global}
-            La eficiencia global cae al \textbf{81.50\%} de su valor original tras la eliminación de esos 50 nodos. Aunque la red sigue conectada, los caminos disponibles son menos directos y los tiempos de viaje promedio se alargan cerca de 18.50\%, lo que evidencia la dependencia operativa de los supernodos de mayor grado.
+            La eficiencia global cae al \textbf{81.50\%} de su valor original tras la eliminación de esos 50 nodos. Aunque la red sigue conectada, los caminos disponibles son menos directos y se pierde cerca del 18.50\% de la eficiencia relativa, lo que evidencia la dependencia operativa de los supernodos de mayor grado.
 
             En las repeticiones aleatorias, la eficiencia media retenida después de 50 remociones es \textbf{97.17\%}. La banda empírica 5--95\% va de \textbf{89.20\%} a \textbf{104.83\%}; el extremo superior mayor que 100\% es posible porque la eficiencia se normaliza sobre el grafo remanente y remover nodos periféricos puede aumentar el promedio de los nodos que quedan.
 
@@ -179,10 +179,10 @@
         \subsection{Análisis de Centralidad en el P-espacio}
             Se calcularon y almacenaron las centralidades (grado, intermediación, cercanía y eigenvector). Los supernodos con mayor grado son aquellos que comparten numerosas rutas con otros supernodos, actuando como conectores de múltiples recorridos.
 
-            Los cuatro indicadores coinciden en ubicar el máximo de centralidad en el hipercentro (coordenadas aproximadas $20.668^{\circ}$ N, $-103.348^{\circ}$ O). Destacan:
+            Los indicadores de centralidad recalculables directamente desde el grafo ubican el máximo de centralidad en el hipercentro (coordenadas aproximadas $20.668^{\circ}$ N, $-103.348^{\circ}$ O). Destacan:
             \begin{itemize}
-                \item \textbf{Supernodo 264} (7 paradas). Ocupa el primer lugar en las cuatro métricas. Concentra al menos 30 rutas, entre ellas C05, C06, C111-V1/V3 y C118, y funciona como nodo natural de transferencia en el centro.
-                \item \textbf{Supernodo 262} (15 paradas) y \textbf{698} (5 paradas). También pertenecen al clúster central; comparten más de 25 rutas y aparecen en los primeros lugares de intermediación y cercanía.
+                \item \textbf{Supernodo 264} (7 paradas). Encabeza las métricas verificables de grado, cercanía y eigenvector en el recálculo directo sobre el grafo \(P\). Concentra 30 rutas, entre ellas C05, C06, C111-V1/V3 y C118, y funciona como nodo natural de transferencia en el centro.
+                \item \textbf{Supernodo 262} (15 paradas) y \textbf{698} (5 paradas). También pertenecen al clúster central; el primero reúne 27 rutas y el segundo 25 rutas, y ambos aparecen en los primeros lugares de grado y cercanía.
                 \item \textbf{Supernodos 1138 y 2117} (zona poniente; $\sim 20.646^{\circ}$ N, $-103.406^{\circ}$ O). Dominan eigenvector y cercanía en el sector occidental, con rutas como C104, C108, C123 y C124.
                 \item Otros supernodos relevantes son \textbf{2033}, \textbf{288} y \textbf{2073} en el corredor central, así como \textbf{151} en el oriente, asociado con rutas como C105, C106 y C17.
             \end{itemize}
@@ -207,15 +207,15 @@
             \end{figure}
 
         \subsection{Detección de Comunidades en el P-espacio}
-            Se detectaron \textbf{11 comunidades} de supernodos mediante Louvain, agrupando paradas que comparten muchas rutas (modularidad $0.54$). Las cinco mayores concentran el 67\% de los supernodos del servicio:
+            Se detectaron \textbf{11 comunidades} de supernodos mediante Louvain, agrupando paradas que comparten muchas rutas (modularidad $0.537$). Las cinco mayores concentran el 66.9\% de los supernodos del servicio:
             \begin{itemize}
-                \item \textbf{Comunidad 5} (\textasciitilde\!18.2\%): centroide $(20.5748,-103.3608)$, domina el sur-poniente.
-                \item \textbf{Comunidad 1} (\textasciitilde\!15.2\%): centroide $(20.6887,-103.2992)$, eje nororiente.
-                \item \textbf{Comunidad 8} (\textasciitilde\!11.7\%): centroide $(20.7404,-103.3939)$, norponiente.
-                \item \textbf{Comunidad 2} (\textasciitilde\!11.5\%): centroide $(20.6293,-103.2990)$, oriente-centro.
+                \item \textbf{Comunidad 5} (\textasciitilde\!17.4\%): centroide $(20.5729,-103.3589)$, domina el sur-poniente.
+                \item \textbf{Comunidad 1} (\textasciitilde\!15.2\%): centroide $(20.6888,-103.2990)$, eje nororiente.
+                \item \textbf{Comunidad 2} (\textasciitilde\!12.3\%): centroide $(20.6285,-103.3056)$, oriente-centro.
+                \item \textbf{Comunidad 8} (\textasciitilde\!11.7\%): centroide $(20.7403,-103.3937)$, norponiente.
                 \item \textbf{Comunidad 6} (\textasciitilde\!10.3\%): centroide $(20.6573,-103.2995)$, corredor central-oriente.
             \end{itemize}
-            El resto incluye clusters poniente (Comunidad 4, 9) y núcleos menores (comunidades 0, 3, 7), mientras que sólo una comunidad es pequeña (\textless=5 nodos), reflejando alta conectividad transversal del servicio.
+            El resto incluye clusters poniente (Comunidad 4, 9) y núcleos menores (comunidades 0, 3, 7), mientras que sólo una comunidad es pequeña (\(\leq 5\) nodos), reflejando alta conectividad transversal del servicio.
 
             La Figura~\ref{fig:comunidades_p_space} permite reconocer qué zonas comparten suficientes rutas como para ser analizadas de manera coordinada por comunidad.
 
@@ -227,7 +227,7 @@
             \end{figure}
 
         \subsection{Análisis de Robustez del P-espacio}
-            Se aplicó el mismo esquema comparativo al P-espacio. En el ataque dirigido se eliminaron secuencialmente los \textbf{50 supernodos con mayor grado}; en los fallos aleatorios se removieron 50 supernodos siguiendo varias permutaciones aleatorias reproducibles. Tras cada eliminación se midieron el tamaño relativo del LCC y la eficiencia global no dirigida. Debido a la alta densidad del \(P\)-espacio, la eficiencia se estimó mediante muestreo de 32 fuentes por iteración; se usaron 10 repeticiones aleatorias con semilla base 42.
+            Se aplicó el mismo esquema comparativo al P-espacio. En el ataque dirigido se eliminaron secuencialmente los \textbf{50 supernodos con mayor grado}; en los fallos aleatorios se removieron 50 supernodos siguiendo varias permutaciones aleatorias reproducibles. Tras cada eliminación se midieron el tamaño relativo del LCC y la eficiencia global no dirigida. En las curvas aleatorias, debido a la alta densidad del \(P\)-espacio, la eficiencia se estimó mediante muestreo de 128 fuentes por iteración; se usaron 30 repeticiones aleatorias con semilla base 42.
 
             Estos resultados deben interpretarse como propiedades de la proyección \(P\). En esta representación, cada ruta genera una clique entre las paradas que atiende; por construcción, el grafo puede conservar conectividad aunque el sistema operativo real pierda frecuencia, capacidad, regularidad o continuidad física. Por tanto, la robustez reportada mide conectividad potencial sin transbordo dentro del modelo, no robustez operacional completa del servicio.
 
@@ -244,7 +244,7 @@
             \begin{itemize}
                 \item El LCC se mantiene en \textbf{98.74\%} de su tamaño original tras eliminar los 50 supernodos más conectados, señal de alta redundancia en la proyección \(P\).
                 \item La eficiencia global desciende a \textbf{97.36\%}, una caída moderada que indica que la red proyectada conserva muchas conexiones potenciales entre paradas que comparten rutas, aun cuando se eliminan supernodos principales.
-                \item Bajo fallos aleatorios, el LCC medio después de 50 remociones es \textbf{98.80\%} y la eficiencia media retenida es \textbf{96.93\%}. Las bandas empíricas 5--95\% son estrechas para el LCC (\textbf{98.78\%}--\textbf{98.81\%}) y moderadas para eficiencia (\textbf{95.38\%}--\textbf{99.39\%}).
+                \item Bajo fallos aleatorios, el LCC medio después de 50 remociones es \textbf{98.81\%} y la eficiencia media retenida es \textbf{99.67\%}. Las bandas empíricas 5--95\% son estrechas para el LCC (\textbf{98.79\%}--\textbf{98.81\%}) y moderadas para eficiencia (\textbf{97.51\%}--\textbf{102.17\%}).
             \end{itemize}
             Comparativamente, la proyección \(P\) retiene más eficiencia que el \(L\)-espacio bajo el experimento realizado: la pérdida de eficiencia es de apenas 2.64\% frente al 18.50\% observado en la infraestructura física. Esto se explica porque múltiples rutas comparten paradas y la proyección por cliques preserva muchas adyacencias de servicio. La lectura correcta es que el modelo \(P\) conserva conectividad y eficiencia bajo esta eliminación de supernodos; para afirmar robustez del servicio real harían falta datos de frecuencia, capacidad, espera, demanda y operación ante incidentes.
 

@@ -40,13 +40,13 @@ Los pasos de robustez de `L-space` y `P-space` ejecutan, por defecto, dos pertur
 - fallos aleatorios reproducibles con semilla base 42.
 
 Las repeticiones aleatorias generan un CSV largo con cada corrida, un CSV resumido por numero de nodos removidos y una figura comparativa con media y banda empirica 5%-95%.
-Por costo computacional, `L-space` usa 30 repeticiones aleatorias y 128 fuentes muestreadas para la eficiencia aleatoria; `P-space` usa 10 repeticiones y 32 fuentes muestreadas para ataque dirigido y fallos aleatorios.
+Por costo computacional, los resultados versionados de robustez usan 30 repeticiones aleatorias y 128 fuentes muestreadas para la eficiencia aleatoria en `L-space` y `P-space`.
 
 Para ajustar el costo computacional puedes ejecutar los scripts de robustez directamente:
 
 ```bash
 python "Código/l_space/análisis/robustez/analisis_robustez.py" --random-repetitions 100 --random-efficiency-sources 128
-python "Código/p_space/análisis/robustez/analisis_robustez.py" --random-repetitions 10 --random-efficiency-sources 32 --targeted-efficiency-sources 32
+python "Código/p_space/análisis/robustez/analisis_robustez.py" --random-repetitions 30 --random-efficiency-sources 128 --targeted-efficiency-sources 32
 ```
 
 Usa `--random-efficiency-sources 0` solo si necesitas eficiencia exacta tambien en fallos aleatorios; en `L-space` puede ser muy costoso.

@@ -42,8 +42,8 @@ def detectar_comunidades_p_space():
     
     # El método de Louvain funciona mejor en grafos no dirigidos.
     # El grafo P-space ya es no dirigido.
-    communities = nx_comm.louvain_communities(G, seed=123)
-    modularidad = nx_comm.modularity(G, communities)
+    communities = nx_comm.louvain_communities(G, weight='weight', seed=123)
+    modularidad = nx_comm.modularity(G, communities, weight='weight')
     print(f"Se detectaron {len(communities)} comunidades de rutas. Modularidad: {modularidad:.4f}")
 
     # Resumen de tamaños

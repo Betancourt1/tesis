@@ -43,19 +43,19 @@ La Tabla~\ref{tab:trazabilidad_preguntas} resume la trazabilidad entre preguntas
         \textbf{Pregunta} & \textbf{Métrica / evidencia} & \textbf{Resultado clave} & \textbf{Implicación} & \textbf{Límite} \\
         \midrule
         ¿Cómo está tejida la red? &
-        L-espacio: densidad $0.000486$, clustering $0.1088$, diámetro $77$. P-espacio: densidad $0.0436$, clustering $0.4085$, diámetro $6$, camino medio $2.41$. &
+        L-espacio: densidad $0.000486$, clustering dirigido $0.1088$, diámetro $77$. P-espacio: densidad $0.0436$, clustering $0.4085$, diámetro $6$, camino medio $2.41$. &
         Estructura dual: infraestructura dispersa y frágil frente a proyección de servicio densa y de mundo pequeño. &
         La experiencia de conectividad del usuario depende de la superposición de rutas más que de la malla física. &
         El modelo es estático (GTFS programado) y no incorpora variación temporal intradía de la oferta. \\
         \midrule
         ¿Existen puntos críticos cuya falla colapsaría el servicio? &
-        Ataque dirigido (50 supernodos de mayor grado), contrastado con fallos aleatorios como línea base. L-espacio: ataque dirigido LCC $97.45\%$, eficiencia $81.50\%$; fallos aleatorios LCC medio $98.23\%$, eficiencia media $97.17\%$. P-espacio: ataque dirigido LCC $98.74\%$, eficiencia $97.36\%$; fallos aleatorios LCC medio $98.80\%$, eficiencia media $96.93\%$. &
+        Ataque dirigido (50 supernodos de mayor grado), contrastado con fallos aleatorios como línea base. L-espacio: ataque dirigido LCC $97.45\%$, eficiencia $81.50\%$; fallos aleatorios LCC medio $98.23\%$, eficiencia media $97.17\%$. P-espacio: ataque dirigido LCC $98.74\%$, eficiencia $97.36\%$; fallos aleatorios LCC medio $98.81\%$, eficiencia media $99.67\%$. &
         La criticidad es alta en infraestructura y moderada en la proyección $P$; el modelo no colapsa globalmente en $P$, pero sí se degrada en $L$. &
         Conviene priorizar protección y refuerzo de hubs estructurales (p. ej., centro y corredores articuladores). &
         El $P$-espacio por cliques mide conectividad potencial; no se modelan fallos en cascada, frecuencias ni redistribución dinámica de flujo ante interrupciones. \\
         \midrule
         ¿Se agrupan los supernodos en comunidades funcionales? &
-        Louvain: 40 comunidades en L-espacio; 11 en P-espacio (modularidad $0.54$), con 67\% de supernodos en las cinco mayores. &
+        Louvain: 40 comunidades en L-espacio; 11 en P-espacio (modularidad $0.537$), con 66.9\% de supernodos en las cinco mayores. &
         Sí, existen comunidades funcionales policéntricas asociadas a corredores y zonas de actividad, no estrictamente a límites administrativos. &
         El diseño y gestión puede abordarse por subsistemas funcionales, no sólo por municipio. &
         La partición depende del algoritmo y de los pesos elegidos; otras configuraciones pueden variar los cortes. \\
@@ -121,7 +121,7 @@ Con base en los resultados estructurales y de robustez del Cap\'itulo 4 (Figuras
 
     \item \textbf{Prioridad 3: institucionalizar la planeaci\'on por comunidades funcionales, no solo por l\'imites administrativos.}
 
-    \textit{Impacto esperado:} mejorar la coordinaci\'on interzonal de oferta y seguimiento operativo en subsistemas de movilidad, aprovechando la evidencia de 11 comunidades funcionales en el Espacio $P$ (modularidad 0.54; Figura~\ref{fig:comunidades_p_space}) y la concentraci\'on del 67\% de supernodos en cinco macrocomunidades.
+    \textit{Impacto esperado:} mejorar la coordinaci\'on interzonal de oferta y seguimiento operativo en subsistemas de movilidad, aprovechando la evidencia de 11 comunidades funcionales en el Espacio $P$ (modularidad 0.537; Figura~\ref{fig:comunidades_p_space}) y la concentraci\'on del 66.9\% de supernodos en cinco macrocomunidades.
 
     \textit{Riesgo principal:} rigidez de dise\~no institucional si la partici\'on comunitaria se toma como fija, pese a que su configuraci\'on depende del algoritmo y de los pesos utilizados.
 
