@@ -73,6 +73,12 @@
 \newcommand{\twolinecell}[2]{%
   \begin{tabular}[t]{@{}c@{}}#1\\{\scriptsize\color{midgray}#2}\end{tabular}
 }
+\newcommand{\tabactive}[1]{%
+  \fcolorbox{ink}{softgray}{\strut\hspace{0.34cm}\textbf{#1}\hspace{0.34cm}}%
+}
+\newcommand{\tabinactive}[1]{%
+  \fcolorbox{linegray}{white}{\strut\hspace{0.34cm}#1\hspace{0.34cm}}%
+}
 
 \title{El transporte urbano de la Zona Metropolitana de Guadalajara}
 \subtitle{Una lectura desde la teoría de grafos}
@@ -197,7 +203,7 @@
   \]
   donde cada par consecutivo está unido por una arista o por un arco en la orientación correspondiente.
 
-  La longitud topológica de \(P\), denotada por \(\ell(P)\), es el número de pasos del camino:
+  La longitud de \(P\), denotada por \(\ell(P)\), es el número de pasos del camino:
   \[
     \ell(P)=k.
   \]
@@ -222,7 +228,7 @@
 
   \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.24\linewidth}X@{}}
     Componente conexa & Subconjunto maximal \(C\subseteq V\) tal que \(d_G(u,v)<+\infty\) para todo \(u,v\in C\). \\
-    Componente gigante & Componente conexa con mayor número de vértices; en robustez se reporta como proporción del tamaño de referencia. \\
+    Componente mayor & Componente conexa con cardinalidad máxima entre todas las componentes conexas de \(G\). \\
     Diámetro & \(\operatorname{diam}(G)=\max_{\substack{u,v\in V\\ d_G(u,v)<+\infty}} d_G(u,v)\). \\
   \end{tabularx}
 
@@ -234,13 +240,12 @@
 % 9
 \begin{frame}{Centralidad en grafos no dirigidos}
   \small
-  Sea \(G=(V,E)\) un grafo no dirigido, \(v\in V\), y sea \(A=(a_{uv})\) su matriz de adyacencia.
+  Sea \(G=(V,E)\) un grafo no dirigido y sea \(v\in V\).
 
   \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.20\linewidth}p{0.35\linewidth}X@{}}
     Grado & \(\deg(v)=|\{u:\{u,v\}\in E\}|\) & Conectividad local inmediata. \\
     Cercanía & \(C_c(v)=\left(\sum_{u\neq v} d_G(v,u)\right)^{-1}\) & Qué tan cerca queda \(v\) del resto. \\
     Intermediación & \(C_b(v)=\sum_{\substack{s\neq t\\ s,t\neq v}}\dfrac{\sigma_{st}(v)}{\sigma_{st}}\) & Cuántos caminos mínimos dependen de \(v\). \\
-    Eigenvector & \(Ax=\lambda x\) & Importancia por conexión con vértices importantes. \\
   \end{tabularx}
 
   \thinrule
@@ -268,94 +273,269 @@
   \[
     C_b^D(v)=\sum_{\substack{s\neq t\\ s,t\neq v}}\dfrac{\sigma^D_{st}(v)}{\sigma^D_{st}}.
   \]
+\end{frame}
+
+% 11
+\begin{frame}{Métricas globales}
+  \small
+  Fijado un grafo \(G\), sea \(n=|V(G)|\), \(m=|E(G)|\) (o \(m=|A(G)|\), si es dirigido) y \(d_G(u,v)\) la distancia entre \(u\) y \(v\).
+
+  \vspace{0.12cm}
+  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.22\linewidth}p{0.38\linewidth}X@{}}
+    Densidad & \(\rho_D=\frac{m}{n(n-1)}\), \(\rho_U=\frac{m}{\binom{n}{2}}=\frac{2m}{n(n-1)}\) & \(\rho_D\) para grafos dirigidos y \(\rho_U\) para no dirigidos; en ambos casos, conexiones observadas sobre posibles. \\
+    Agrupamiento & \(C_{\mathrm{glob}}=\frac{3N_\triangle}{N_\wedge}\) & \(N_\triangle\): triángulos; \(N_\wedge\): ternas conectadas. \\
+    Eficiencia global & \(Ef(G)=\frac{1}{n(n-1)}\sum_{i\neq j}\frac{1}{d_G(i,j)}\) & Accesibilidad promedio; si no hay camino, el término se toma como \(0\). \\
+    Detour Index & \(DI(u,v)=\frac{\ell_G(u,v)}{d_{\mathrm{geo}}(u,v)}\) & \(d_{\mathrm{geo}}\) es distancia directa Haversine; \(\ell_G\) usa longitud física de red. \\
+  \end{tabularx}
+\end{frame}
+
+% 12
+\begin{frame}{Métricas de nodo}
+  \small
+  Fijado un grafo \(G\) y un vértice \(v\in V(G)\), \(e\sim v\) indica que \(e\) incide en \(v\), \(w(e)\) es el peso de \(e\) y \(d_G\) es la distancia en \(G\).
+
+  \vspace{0.12cm}
+  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.21\linewidth}p{0.38\linewidth}X@{}}
+    Grado ponderado & \(s(v)=\sum_{e\sim v}w(e)\) & Intensidad local de conexión. \\
+    Cercanía & \(C_c(v)=\left(\sum_{\substack{u\in V(G)\\u\neq v}} d_G(v,u)\right)^{-1}\) & Acceso medio desde \(v\); en entrada se invierte el orden. \\
+    Intermediación & \(C_b(v)=\sum_{\substack{a,b\in V(G)\\a\neq b\\a,b\neq v}}\frac{\sigma_{ab}(v)}{\sigma_{ab}}\) & Dependencia de caminos mínimos respecto de \(v\). \\
+  \end{tabularx}
 
   \thinrule
+  \scriptsize
+  Aquí \(\sigma_{ab}\) es el número de caminos mínimos de \(a\) a \(b\), y \(\sigma_{ab}(v)\) los que pasan por \(v\). En grafos dirigidos, las distancias y caminos respetan la orientación.
+\end{frame}
 
-  Para eigenvector, si \(M\) es la matriz de adyacencia de \(D\), debe declararse si se usa \(M\), \(M^\top\) o el subyacente \(U(D)\), según se mida influencia saliente, entrante o no dirigida.
+% 13
+\begin{frame}{Comunidades}
+  \small
+  Fijado un grafo \(G\), sea \(A=(A_{ij})\) su matriz de adyacencia: \(A_{ij}=1\) si existe una arista entre \(i\) y \(j\), y \(A_{ij}=0\) en otro caso. Sea \(m\) el número de aristas y \(k_i\) el grado del vértice \(i\). Una partición asigna a cada vértice \(i\) una comunidad \(c_i\).
+
+  \thinrule
+  Louvain es una heurística de optimización: mueve vértices entre comunidades y luego contrae comunidades, conservando cambios que aumentan la modularidad.
+
+  \vspace{0.08cm}
+  La modularidad de la partición es
+  \[
+    Q=\frac{1}{2m}\sum_{i,j}
+    \left(A_{ij}-\frac{k_i k_j}{2m}\right)
+    \delta(c_i,c_j).
+  \]
+
+  \thinrule
+  \(Q\) compara aristas dentro de comunidades con las esperadas por grado. Aquí \(\delta(c_i,c_j)\) vale \(1\) si \(i\) y \(j\) están en la misma comunidad, y \(0\) en otro caso.
+
+\end{frame}
+
+% 14
+\begin{frame}{Robustez}
+  \small
+  Sea \(G_0\) el grafo inicial. Después de remover \(k\) vértices, queda un grafo \(G_k\). La remoción se hace por fallos aleatorios o por ataque dirigido según grado.
+
+  \vspace{0.18cm}
+  Para una métrica \(X\), se reporta su valor relativo:
+  \[
+    R_X(k)=\frac{X(G_k)}{X(G_0)},
+    \qquad X\in\{\mathrm{LCC},Ef\}.
+  \]
+
+  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.16\linewidth}X@{}}
+    \(k\) & Número de vértices removidos. \\
+    \(X\) & Métrica evaluada antes y después de la remoción. \\
+    \(\mathrm{LCC}(G)\) & Tamaño de la componente mayor de \(G\). \\
+    \(Ef(G)\) & Eficiencia global de \(G\). \\
+  \end{tabularx}
+
+  \thinrule
+  Si \(R_X(k)\) se mantiene cerca de \(1\), la métrica conserva casi todo su valor inicial.
 \end{frame}
 
 % 8
 \begin{frame}{Sistema de transporte como tupla}
-  En la tesis, un sistema de transporte se organiza como
+  \small
+  Una forma de modelar un sistema de transporte público es la siguiente tupla:
   \[
     \mathcal{T}=(V,R,E,\tau,d).
   \]
 
-  \vspace{0.15cm}
   \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.10\linewidth}X@{}}
     \(V\) & Conjunto finito de paradas o estaciones. \\
-    \(R\) & Conjunto de rutas o líneas de servicio. \\
-    \(E\) & Segmentos físicos o tramos de infraestructura entre elementos de \(V\). \\
-    \(\tau\) & Función de tiempos o frecuencias asociada con la operación. \\
-    \(d\) & Métrica física o topológica sobre los elementos de \(V\). \\
+    \(E\) & Conjunto de tramos entre paradas; formalmente, \(E\subseteq V\times V\). \\
+    \(R\) & Familia de rutas; cada \(r\in R\) es una sucesión finita \(r=(e_1,\ldots,e_k)\), con \(e_i\in E\). \\
+    \(\tau\) & Función operacional: asigna tiempos o frecuencias a rutas o tramos. \\
+    \(d\) & Función distancia sobre los elementos de \(V\). \\
   \end{tabularx}
 
   \thinrule
-  Los grafos usados en el análisis son proyecciones parciales de \(\mathcal{T}\), no el sistema completo.
+  Los grafos usados en el análisis son representaciones derivadas de \(\mathcal{T}\), no el sistema completo.
 \end{frame}
 
 % 9
 \begin{frame}{Espacios de representación}
-  \scriptsize
-  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.12\linewidth}p{0.22\linewidth}p{0.30\linewidth}X@{}}
-    \toprule
-    Espacio & Vértices & Aristas & Conserva \\
-    \midrule
-    \(L\) & Paradas o zonas \(V\) & \(u\to v\) si hay consecutividad física en una ruta & Infraestructura, contigüidad y restricciones físicas. \\
-    \(P\) & Paradas o zonas \(V\) & \(\{u,v\}\) si comparten al menos una ruta & Conectividad sin cambio de ruta. \\
-    \(C\) & Rutas \(R\) & \(\{r_i,r_j\}\) si comparten al menos una parada & Red de transbordos entre servicios. \\
-    \(B\) & \(V\cup R\) & \((v,r)\) si \(v\) pertenece a \(r\) & Relación base entre infraestructura y operación. \\
-    \bottomrule
-  \end{tabularx}
+  \centering
+  \tabactive{\(B\)}\hspace{0.18cm}
+  \tabinactive{\(C\)}\hspace{0.18cm}
+  \tabinactive{\(P\)}\hspace{0.18cm}
+  \tabinactive{\(L\)}
 
-  \normalsize
-  \thinrule
-  El \(B\)-espacio es el objeto más informativo; \(L\), \(P\) y \(C\) pierden información para resaltar una propiedad específica.
+  \vspace{0.32cm}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.52\linewidth}
+      \textbf{\(B\)-espacio: relación base}
+
+      Sea \(G_B=(V\cup R,E_B)\) un grafo bipartito. Sus vértices son paradas \(V\) y rutas \(R\), y
+      \[
+        (v,r)\in E_B \iff v \text{ pertenece a la ruta } r.
+      \]
+
+      Este espacio conserva la relación más general entre infraestructura y operación.
+    \end{column}
+    \begin{column}{0.42\linewidth}
+      \centering
+      \begin{tikzpicture}[scale=0.82,
+        stop/.style={circle,draw=ink,fill=white,inner sep=1.8pt},
+        route/.style={rectangle,draw=ink,fill=softgray,minimum width=0.62cm,minimum height=0.28cm},
+        link/.style={graphite,line width=0.55pt}]
+        \node[stop,label=left:{\scriptsize \(v_1\)}] (v1) at (0,1.5) {};
+        \node[stop,label=left:{\scriptsize \(v_2\)}] (v2) at (0,0.5) {};
+        \node[stop,label=left:{\scriptsize \(v_3\)}] (v3) at (0,-0.5) {};
+        \node[stop,label=left:{\scriptsize \(v_4\)}] (v4) at (0,-1.5) {};
+        \node[route,label=right:{\scriptsize \(r_1\)}] (r1) at (2.3,0.9) {};
+        \node[route,label=right:{\scriptsize \(r_2\)}] (r2) at (2.3,-0.9) {};
+        \foreach \u/\v in {v1/r1,v2/r1,v3/r1,v2/r2,v3/r2,v4/r2}
+          \draw[link] (\u)--(\v);
+      \end{tikzpicture}
+
+      \smallsource{Vértices de dos tipos; aristas de pertenencia.}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 % 10
-\begin{frame}{Matriz parada-ruta}
-  Una matriz parada-ruta permite construir automáticamente las proyecciones \(P\) y \(C\).
+\begin{frame}{Espacios de representación}
+  \centering
+  \tabinactive{\(B\)}\hspace{0.18cm}
+  \tabactive{\(C\)}\hspace{0.18cm}
+  \tabinactive{\(P\)}\hspace{0.18cm}
+  \tabinactive{\(L\)}
 
-  \vspace{0.15cm}
-  Sea \(G_B=(V\cup R,E_B)\) el grafo bipartito donde una arista \((v,r)\) indica que la parada \(v\) pertenece a la ruta \(r\). La matriz de incidencia \(B=(B_{vr})\) se define por
-  \[
-    B_{vr}=
-    \begin{cases}
-      1, & \text{si la parada } v \text{ pertenece a la ruta } r,\\
-      0, & \text{en otro caso.}
-    \end{cases}
-  \]
+  \vspace{0.32cm}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.52\linewidth}
+      \textbf{\(C\)-espacio: rutas conectadas}
 
-  \thinrule
-  Las filas de \(B\) corresponden a paradas y las columnas a rutas; por eso sus productos matriciales cuentan coincidencias parada-ruta.
+      Si \(r=(e_1,\ldots,e_k)\) y \(e_m=(v_m,v_{m+1})\), escribimos
+      \[
+        V(r)=\{v_1,\ldots,v_{k+1}\}.
+      \]
+      El \(C\)-espacio es \(G_C=(R,E_C)\), donde
+      \[
+        \{r_i,r_j\}\in E_C \iff V(r_i)\cap V(r_j)\neq\varnothing.
+      \]
+
+      La adyacencia representa que dos rutas comparten al menos una parada.
+    \end{column}
+    \begin{column}{0.42\linewidth}
+      \centering
+      \begin{tikzpicture}[scale=0.86,
+        route/.style={circle,draw=ink,fill=white,inner sep=2.1pt},
+        link/.style={graphite,line width=0.65pt}]
+        \node[route,label=above:{\scriptsize \(r_1\)}] (r1) at (0,1.25) {};
+        \node[route,label=right:{\scriptsize \(r_2\)}] (r2) at (1.85,0.15) {};
+        \node[route,label=below:{\scriptsize \(r_3\)}] (r3) at (0.25,-1.35) {};
+        \node[route,label=left:{\scriptsize \(r_4\)}] (r4) at (-1.55,-0.15) {};
+        \draw[link] (r1)--node[above,sloped]{\scriptsize comparten \(v_2\)} (r2);
+        \draw[link] (r2)--(r3);
+        \draw[link] (r3)--(r4);
+        \draw[link] (r4)--(r1);
+        \draw[link] (r1)--(r3);
+      \end{tikzpicture}
+
+      \smallsource{Las rutas son los vértices.}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 % 11
-\begin{frame}{Proyecciones desde el \(B\)-espacio}
-  \small
+\begin{frame}{Espacios de representación}
+  \centering
+  \tabinactive{\(B\)}\hspace{0.18cm}
+  \tabinactive{\(C\)}\hspace{0.18cm}
+  \tabactive{\(P\)}\hspace{0.18cm}
+  \tabinactive{\(L\)}
+
+  \vspace{0.32cm}
   \begin{columns}[T,onlytextwidth]
-    \begin{column}{0.49\linewidth}
-      \textbf{\(P\)-espacio}
+    \begin{column}{0.52\linewidth}
+      \textbf{\(P\)-espacio: conectividad de servicio}
+
+      El \(P\)-espacio es el grafo \(G_P=(V,E_P)\), donde dos paradas son adyacentes si alguna ruta sirve a ambas:
       \[
-        A_P=\operatorname{sgn}\!\left(BB^\top-\operatorname{diag}(BB^\top)\right)
+        \{u,v\}\in E_P \iff \exists r\in R \text{ tal que } u,v\in V_r.
       \]
-      Proyecta rutas sobre paradas: dos paradas se conectan si comparten ruta.
+
+      Conserva la posibilidad de viajar entre dos paradas sin cambiar de ruta.
     \end{column}
-    \begin{column}{0.49\linewidth}
-      \textbf{\(C\)-espacio}
-      \[
-        A_C=\operatorname{sgn}\!\left(B^\top B-\operatorname{diag}(B^\top B)\right)
-      \]
-      Proyecta paradas sobre rutas: dos rutas se conectan si comparten parada.
+    \begin{column}{0.42\linewidth}
+      \centering
+      \begin{tikzpicture}[scale=0.86,
+        stop/.style={circle,draw=ink,fill=white,inner sep=1.8pt},
+        pedge/.style={graphite,line width=0.55pt}]
+        \node[stop,label=above:{\scriptsize \(v_1\)}] (v1) at (0,1.1) {};
+        \node[stop,label=right:{\scriptsize \(v_2\)}] (v2) at (1.3,0.35) {};
+        \node[stop,label=below:{\scriptsize \(v_3\)}] (v3) at (0.75,-1.0) {};
+        \node[stop,label=left:{\scriptsize \(v_4\)}] (v4) at (-0.8,-0.35) {};
+        \node[stop,label=right:{\scriptsize \(v_5\)}] (v5) at (2.55,-0.8) {};
+        \foreach \u/\v in {v1/v2,v1/v3,v1/v4,v2/v3,v2/v4,v3/v4,v2/v5,v3/v5}
+          \draw[pedge] (\u)--(\v);
+      \end{tikzpicture}
+
+      \smallsource{Compartir ruta induce adyacencias entre paradas.}
     \end{column}
   \end{columns}
+\end{frame}
 
-  \thinrule
-  \(\operatorname{diag}\) elimina la diagonal y \(\operatorname{sgn}\) convierte entradas positivas en \(1\). Así se obtienen grafos sin lazos.
+% 12
+\begin{frame}{Espacios de representación}
+  \centering
+  \tabinactive{\(B\)}\hspace{0.18cm}
+  \tabinactive{\(C\)}\hspace{0.18cm}
+  \tabinactive{\(P\)}\hspace{0.18cm}
+  \tabactive{\(L\)}
 
-  \vspace{0.08cm}
-  \(L\) no se obtiene solo de \(B\): requiere además la consecutividad de paradas dentro de cada ruta, codificada por los tramos físicos \(E\).
+  \vspace{0.32cm}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.52\linewidth}
+      \textbf{\(L\)-espacio: infraestructura recorrida}
+
+      El \(L\)-espacio es un grafo dirigido \(G_L=(V,E_L)\). Para \(u,v\in V\),
+      \[
+        (u,v)\in E_L
+      \]
+      si y solo si \(u\) precede inmediatamente a \(v\) en alguna ruta.
+
+      Conserva orden, contigüidad física y dependencia de corredores.
+    \end{column}
+    \begin{column}{0.42\linewidth}
+      \centering
+      \begin{tikzpicture}[scale=0.88,
+        stop/.style={circle,draw=ink,fill=white,inner sep=1.8pt},
+        arc/.style={-{Latex[length=2.1mm]},graphite,line width=0.65pt}]
+        \node[stop,label=above:{\scriptsize \(v_1\)}] (v1) at (-1.6,0.45) {};
+        \node[stop,label=above:{\scriptsize \(v_2\)}] (v2) at (-0.35,0.9) {};
+        \node[stop,label=above:{\scriptsize \(v_3\)}] (v3) at (0.95,0.35) {};
+        \node[stop,label=below:{\scriptsize \(v_4\)}] (v4) at (2.05,-0.65) {};
+        \node[stop,label=below:{\scriptsize \(v_5\)}] (v5) at (-0.25,-1.0) {};
+        \draw[arc] (v1)--(v2);
+        \draw[arc] (v2)--(v3);
+        \draw[arc] (v3)--(v4);
+        \draw[arc] (v2)--(v5);
+        \draw[arc] (v5)--(v3);
+      \end{tikzpicture}
+
+      \smallsource{Los arcos siguen el orden observado.}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 % 12
@@ -375,7 +555,7 @@
       \node[box] (gtfs) {GTFS\\{\scriptsize validado}};
       \node[box,right=0.75cm of gtfs] (clean) {Paradas\\{\scriptsize activas}};
       \node[box,right=0.75cm of clean] (dbscan) {DBSCAN\\{\scriptsize 100 m}};
-      \node[box,right=0.75cm of dbscan] (nodes) {\(V^\ast\)\\{\scriptsize 4,203 zonas}};
+      \node[box,right=0.75cm of dbscan] (nodes) {\(V\)\\{\scriptsize 4,203 zonas}};
       \node[box,below=0.75cm of nodes,xshift=-1.55cm] (l) {\(L\)\\{\scriptsize consecutividad}};
       \node[box,below=0.75cm of nodes,xshift=1.55cm] (p) {\(P\)\\{\scriptsize rutas compartidas}};
       \draw[arr] (gtfs) -- (clean);
@@ -392,99 +572,32 @@
 
 % 12
 \begin{frame}{Construcción del \(L\)-espacio}
-  El \(L\)-espacio modela la infraestructura física. El grafo final es dirigido porque se preserva el orden de paradas observado en los recorridos.
+  El \(L\)-espacio resume la infraestructura física recorrida por el servicio. Conserva continuidad entre zonas consecutivas y orientación observada en los recorridos.
 
-  \vspace{0.15cm}
-  \[
-    G_L=(V^\ast,E_L),\qquad
-    (u,v)\in E_L \iff \text{existe un tramo consecutivo de } u \text{ a } v.
-  \]
-
-  \vspace{0.15cm}
+  \thinrule
   \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.22\linewidth}X@{}}
     Vértices & \(4{,}203\) zonas consolidadas mediante DBSCAN con radio de \(100\) m. \\
     Arcos & \(8{,}591\) conexiones dirigidas entre zonas consecutivas. \\
     Peso temporal & Tiempo mínimo observado entre zonas, calculado a partir de tiempos entre paradas consecutivas en el feed. \\
     Longitud física & Para el Detour Index se usa distancia Haversine entre centroides, no tiempo. \\
-    Interpretación & Continuidad física, restricciones espaciales y dependencia de corredores. \\
+    Lectura & Continuidad física, restricciones espaciales y dependencia de corredores. \\
   \end{tabularx}
 \end{frame}
 
 % 14
 \begin{frame}{Construcción del \(P\)-espacio}
-  El \(P\)-espacio modela conectividad funcional sin cambio de ruta, sobre el mismo conjunto \(V^\ast\).
+  El \(P\)-espacio resume conectividad funcional sin cambio de ruta, sobre el mismo conjunto de zonas consolidadas.
 
-  \vspace{0.15cm}
-  Para cada ruta \(r\in R\), sea \(V_r\subseteq V^\ast\) el conjunto de zonas servidas por \(r\). Entonces
-  \[
-    G_P=(V^\ast,E_P),\qquad
-    \{u,v\}\in E_P \iff \exists r\in R \text{ tal que } u,v\in V_r.
-  \]
-
-  \vspace{0.15cm}
+  \thinrule
   \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.22\linewidth}X@{}}
-    Aristas & \(385{,}225\) aristas no dirigidas. \\
+    Vértices & Las mismas \(4{,}203\) zonas consolidadas del \(L\)-espacio. \\
+    Aristas & \(385{,}225\) conexiones no dirigidas por rutas compartidas. \\
     Campo principal & \texttt{route\_id} identifica la línea; \texttt{trip\_id} identifica una corrida específica. \\
-    Interpretación & Dos zonas son adyacentes si se puede viajar entre ellas sin cambiar de ruta. \\
+    Lectura & Dos zonas quedan conectadas si el servicio permite viajar entre ellas sin cambiar de ruta. \\
   \end{tabularx}
 
   \thinrule
-  Cada ruta genera una clique: todos los pares de supernodos servidos por esa ruta quedan conectados.
-\end{frame}
-
-% 15
-\begin{frame}{Métricas globales}
-  \small
-  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.24\linewidth}p{0.34\linewidth}X@{}}
-    Densidad & \(\rho_D=\frac{m}{n(n-1)}\), \(\rho_U=\frac{2m}{n(n-1)}\) & Proporción de aristas existentes frente a las posibles. \\
-    Diámetro & \(\operatorname{diam}(G)=\max_{u,v}d_G(u,v)\) & Distancia extrema dentro del grafo. \\
-    Agrupamiento & \(C_{\mathrm{glob}}=\frac{3N_\triangle}{N_\wedge}\) & \(N_\triangle\): triángulos; \(N_\wedge\): ternas conectadas. \\
-    Eficiencia global & \(Ef(G)=\frac{1}{n(n-1)}\sum_{i\neq j}\frac{1}{d(i,j)}\) & Accesibilidad promedio; si no hay camino, \(1/\infty=0\). \\
-    Detour Index & \(DI(u,v)=\frac{\ell_G(u,v)}{d_{\mathrm{geo}}(u,v)}\) & \(d_{\mathrm{geo}}\) es distancia directa Haversine; \(\ell_G\) usa longitud física de red, no tiempo. \\
-  \end{tabularx}
-\end{frame}
-
-% 16
-\begin{frame}{Métricas de nodo}
-  \small
-  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.21\linewidth}p{0.38\linewidth}X@{}}
-    Grado ponderado & \(s(v)=\sum_{e\sim v}w(e)\) & Intensidad local de conexión. \\
-    Cercanía & \(C_c(v)=\left(\sum_{u\neq v} d(v,u)\right)^{-1}\) & Acceso medio desde o hacia \(v\), según la orientación. \\
-    Intermediación & \(C_b(v)=\sum_{\substack{s\neq t\\ s,t\neq v}}\frac{\sigma_{st}(v)}{\sigma_{st}}\) & Dependencia de caminos mínimos respecto de \(v\). \\
-    Eigenvector & \(Ax=\lambda x\) & Influencia por estar conectado con vértices influyentes. \\
-  \end{tabularx}
-
-  \normalsize
-  \thinrule
-  En las figuras de centralidad, tamaño y color codifican medidas distintas para localizar nodos con roles combinados.
-\end{frame}
-
-% 17
-\begin{frame}{Comunidades y robustez}
-  \begin{columns}[T,onlytextwidth]
-    \begin{column}{0.48\linewidth}
-      \textbf{Comunidades}
-
-      Louvain es un algoritmo heurístico para detectar comunidades maximizando modularidad:
-      \[
-        Q=\frac{1}{2m}\sum_{i,j}
-        \left(A_{ij}-\frac{k_i k_j}{2m}\right)
-        \mathbf{1}(c_i=c_j).
-      \]
-      Aquí \(k_i\) es el grado de \(i\) y \(c_i\) la comunidad asignada.
-      En \(L\), la comunidad suele tener lectura territorial; en \(P\), lectura funcional.
-    \end{column}
-    \begin{column}{0.48\linewidth}
-      \textbf{Robustez}
-
-      Tras remover \(k\) vértices, se reporta
-      \[
-        R_X(k)=\frac{X(G_k)}{X(G_0)},
-        \qquad X\in\{\mathrm{LCC},Ef\}.
-      \]
-      Aquí LCC es el tamaño relativo de la componente gigante y \(Ef\) la eficiencia global. Se comparan fallos aleatorios frente a ataque dirigido por grado.
-    \end{column}
-  \end{columns}
+  Esta representación enfatiza alcance de servicio; no describe continuidad física del recorrido.
 \end{frame}
 
 \begin{frame}{Resultado central}
@@ -531,11 +644,11 @@
     \begin{column}{0.38\linewidth}
       \textbf{Lectura}
 
-      Los nodos centrales no son equivalentes: algunos concentran accesibilidad, otros conectan corredores y otros acumulan influencia por vecindad.
+      Los nodos centrales no son equivalentes: algunos concentran accesibilidad, otros conectan corredores y otros articulan vecindades relevantes.
 
       \thinrule
 
-      El Centro Histórico concentra accesibilidad e intermediación; las grandes avenidas reúnen volumen y Mariano Otero aparece como eje de influencia estructural.
+      El Centro Histórico concentra accesibilidad e intermediación; las grandes avenidas reúnen volumen y Mariano Otero aparece como eje de conectividad estructural.
     \end{column}
   \end{columns}
 \end{frame}
@@ -632,7 +745,7 @@
 
   \normalsize
   \thinrule
-  La evidencia respalda la tesis dentro del modelo construido: la misma red empírica produce diagnósticos distintos según la proyección usada.
+  La evidencia respalda la afirmación central dentro del modelo construido: la misma red empírica produce diagnósticos distintos según la representación usada.
 \end{frame}
 
 % 25
@@ -680,7 +793,7 @@
 
 % 27
 \begin{frame}{Reproducibilidad}
-  Los insumos y el código quedan separados: el repositorio de la tesis contiene scripts, tablas y figuras; el respaldo GTFS conserva el paquete usado como fuente empírica.
+  Los insumos y el código quedan separados: el repositorio del proyecto contiene scripts, tablas y figuras; el respaldo GTFS conserva el paquete usado como fuente empírica.
 
   \vspace{0.3cm}
   \begin{columns}[T,onlytextwidth]
@@ -689,7 +802,7 @@
       \qrcode[height=2.75cm]{https://github.com/Betancourt1/tesis}
 
       \vspace{0.18cm}
-      \textbf{Repositorio de tesis}
+      \textbf{Repositorio del proyecto}
 
       {\scriptsize\url{https://github.com/Betancourt1/tesis}}
     \end{column}
@@ -707,11 +820,11 @@
 
 % 28
 \begin{frame}{Cierre}
-  \claim{La misma red empírica produce diagnósticos distintos según la proyección matemática usada.}
+  \claim{La misma red empírica produce diagnósticos distintos según la representación matemática usada.}
 
   \vspace{0.3cm}
   \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.25\linewidth}X@{}}
-    Matemáticamente & \(L\), \(P\), \(C\) y \(B\) son proyecciones de una estructura de transporte común. \\
+    Matemáticamente & \(B\) codifica la relación parada--ruta; \(P\) y \(C\) son proyecciones de \(B\), y \(L\) se induce por consecutividad física. \\
     Empíricamente & \(L\) es disperso y sensible en eficiencia ante ataque dirigido; \(P\) es denso y retiene conectividad funcional. \\
     Metodológicamente & La conclusión debe leerse bajo sus supuestos: topología, GTFS estático y construcción por zonas consolidadas. \\
   \end{tabularx}
