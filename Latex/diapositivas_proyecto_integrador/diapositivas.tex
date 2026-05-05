@@ -589,54 +589,11 @@
   \includegraphics[height=0.78\textheight,keepaspectratio]{../../grafos/l_space/grafo.png}
 \end{frame}
 
-% 14
-\begin{frame}{Construcción del \(P\)-espacio}
-  El \(P\)-espacio resume conectividad funcional sin cambio de ruta, sobre el mismo conjunto de zonas consolidadas.
-
-  \thinrule
-  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.22\linewidth}X@{}}
-    Vértices & Las mismas \(4{,}203\) zonas consolidadas del \(L\)-espacio. \\
-    Aristas & \(385{,}225\) conexiones no dirigidas por rutas compartidas. \\
-    Campo principal & \texttt{route\_id} identifica la línea; \texttt{trip\_id} identifica una corrida específica. \\
-    Lectura & Dos zonas quedan conectadas si el servicio permite viajar entre ellas sin cambiar de ruta. \\
-  \end{tabularx}
-
-  \thinrule
-  Esta representación enfatiza alcance de servicio; no describe continuidad física del recorrido.
-\end{frame}
-
-\begin{frame}{Ilustración del \(P\)-espacio}
-  \centering
-  \includegraphics[height=0.78\textheight,keepaspectratio]{../../grafos/p_space/grafo.png}
-\end{frame}
-
-\begin{frame}{Resultado central}
-  \claim{Bajo ataque dirigido a los \(50\) nodos de mayor grado, la eficiencia relativa cae a \(81.50\%\) en \(L\) y a \(97.36\%\) en \(P\).}
-
-  \vspace{0.25cm}
-  \scriptsize
-  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.25\linewidth}p{0.18\linewidth}p{0.18\linewidth}X@{}}
-    \toprule
-    Comparación & \(L\)-espacio & \(P\)-espacio & Lectura \\
-    \midrule
-    Eficiencia tras ataque dirigido & \(81.50\%\) & \(97.36\%\) & \(P\) conserva \(15.86\) puntos porcentuales más. \\
-    LCC tras ataque dirigido & \(97.45\%\) & \(98.74\%\) & La conectividad gigante cambia menos que la eficiencia. \\
-    Eficiencia tras fallos aleatorios & \(97.17\%\) & \(99.67\%\) & Ambos espacios conservan alta eficiencia; el contraste principal aparece bajo ataque dirigido. \\
-    Densidad del grafo base & \(0.000486\) & \(0.0436\) & \(P\) incorpora muchas relaciones por rutas compartidas. \\
-    \bottomrule
-  \end{tabularx}
-
-  \normalsize
-  \thinrule
-  Alcance: el resultado no incorpora frecuencias, capacidad vehicular, espera, congestión ni redistribución dinámica de pasajeros.
-\end{frame}
-
 % 18
 \begin{frame}{Resultados en \(L\): infraestructura}
   \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.25\linewidth}X@{}}
     Tamaño & \(4{,}203\) vértices y \(8{,}591\) arcos dirigidos. \\
     Densidad & \(0.000486\): red dispersa, restringida por continuidad física. \\
-    Agrupamiento dirigido & \(0.1088\): redundancia local limitada. \\
     Diámetro & \(77\): existen trayectorias físicas largas entre zonas. \\
     Detour Index & \(1.20\): con longitudes Haversine, la ruta mínima física supera a la distancia directa. \\
   \end{tabularx}
@@ -673,6 +630,27 @@
     Ataque dirigido & LCC \(97.45\%\), eficiencia \(81.50\%\). \\
     Fallo aleatorio & LCC medio \(98.23\%\), eficiencia media \(97.17\%\). \\
   \end{tabularx}
+\end{frame}
+
+% 21
+\begin{frame}{Construcción del \(P\)-espacio}
+  El \(P\)-espacio resume conectividad funcional sin cambio de ruta, sobre el mismo conjunto de zonas consolidadas.
+
+  \thinrule
+  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.22\linewidth}X@{}}
+    Vértices & Las mismas \(4{,}203\) zonas consolidadas del \(L\)-espacio. \\
+    Aristas & \(385{,}225\) conexiones no dirigidas por rutas compartidas. \\
+    Campo principal & \texttt{route\_id} identifica la línea; \texttt{trip\_id} identifica una corrida específica. \\
+    Lectura & Dos zonas quedan conectadas si el servicio permite viajar entre ellas sin cambiar de ruta. \\
+  \end{tabularx}
+
+  \thinrule
+  Esta representación enfatiza alcance de servicio; no describe continuidad física del recorrido.
+\end{frame}
+
+\begin{frame}{Ilustración del \(P\)-espacio}
+  \centering
+  \includegraphics[height=0.78\textheight,keepaspectratio]{../../grafos/p_space/grafo.png}
 \end{frame}
 
 % 21
@@ -720,24 +698,46 @@
   \end{tabularx}
 \end{frame}
 
-% 24
-\begin{frame}{Comparación entre \(L\) y \(P\)}
+\begin{frame}{Resultado central}
+  \claim{Bajo ataque dirigido a los \(50\) nodos de mayor grado, la eficiencia relativa cae a \(81.50\%\) en \(L\) y a \(97.36\%\) en \(P\).}
+
+  \vspace{0.25cm}
   \scriptsize
-  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.27\linewidth}p{0.20\linewidth}p{0.20\linewidth}X@{}}
+  \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.25\linewidth}p{0.18\linewidth}p{0.18\linewidth}X@{}}
     \toprule
-    Propiedad & \(L\)-espacio & \(P\)-espacio & Interpretación \\
+    Comparación & \(L\)-espacio & \(P\)-espacio & Lectura \\
     \midrule
-    Tipo de arista & Consecutividad física & Ruta compartida & Cambia la pregunta modelada. \\
-    Densidad & \(0.000486\) & \(0.0436\) & \(P\) es mucho más denso. \\
-    Diámetro & \(77\) & \(6\) & El servicio reduce distancias topológicas. \\
-    Ataque dirigido, eficiencia & \(81.50\%\) & \(97.36\%\) & La infraestructura pierde más eficiencia. \\
-    Fallo aleatorio, eficiencia & \(97.17\%\) & \(99.67\%\) & Los fallos no dirigidos son menos diferenciadores. \\
+    Eficiencia tras ataque dirigido & \(81.50\%\) & \(97.36\%\) & \(P\) conserva \(15.86\) puntos porcentuales más. \\
+    LCC tras ataque dirigido & \(97.45\%\) & \(98.74\%\) & La conectividad gigante cambia menos que la eficiencia. \\
+    Eficiencia tras fallos aleatorios & \(97.17\%\) & \(99.67\%\) & Ambos espacios conservan alta eficiencia; el contraste principal aparece bajo ataque dirigido. \\
+    LCC tras fallos aleatorios & \(98.23\%\) & \(98.81\%\) & La componente gigante se conserva en ambos espacios. \\
     \bottomrule
   \end{tabularx}
 
   \normalsize
   \thinrule
-  La evidencia respalda la afirmación central dentro del modelo construido: la misma red empírica produce diagnósticos distintos según la representación usada.
+  Alcance: el resultado no incorpora frecuencias, capacidad vehicular, espera, congestión ni redistribución dinámica de pasajeros.
+\end{frame}
+
+% 24
+\begin{frame}{Comparación estructural entre \(L\) y \(P\)}
+  \scriptsize
+  \begin{tabularx}{\linewidth}{@{}>{\bfseries\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.20\linewidth}X@{}}
+    \toprule
+    Propiedad & \(L\)-espacio & \(P\)-espacio & Interpretación \\
+    \midrule
+    Tipo de arista & Consecutividad física & Ruta compartida & Cambia la pregunta modelada. \\
+    Orientación & Dirigido & No dirigido & \(L\) conserva el sentido observado del recorrido. \\
+    Tamaño & \begin{tabular}[t]{@{}l@{}}\(4{,}203\) nodos;\\ \(8{,}591\) arcos\end{tabular} & \begin{tabular}[t]{@{}l@{}}\(4{,}203\) nodos;\\ \(385{,}225\) aristas\end{tabular} & Mismos nodos, distinta relación. \\
+    Densidad & \(0.000486\) & \(0.0436\) & \(P\) es mucho más denso. \\
+    Diámetro & \(77\) & \(6\) & El servicio reduce distancias topológicas. \\
+    \bottomrule
+  \end{tabularx}
+
+  \normalsize
+  \thinrule
+  {\raggedright
+  La evidencia respalda la afirmación central dentro del modelo construido: la misma red empírica produce diagnósticos distintos según la representación usada.\par}
 \end{frame}
 
 % 25
