@@ -31,6 +31,9 @@ Latex/Protocolo/*.pdf
 out/main.*
 out/diapositivas.pdf
 out/reporte_avance_commits_*
+Latex/Tesis/reportes/respuestas_preguntas_modelacion.tex
+Latex/Tesis/reportes/respuestas_preguntas_modelacion.pdf
+Latex/Tesis/reportes/build/
 
 # Local run state
 out/pipeline_state/
