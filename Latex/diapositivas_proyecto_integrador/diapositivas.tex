@@ -143,7 +143,7 @@
 \begin{frame}{Objetivo y aportación}
   \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.22\linewidth}X@{}}
     Objetivo & Modelar y analizar estructuralmente el sistema de transporte público de la ZMG mediante teoría de grafos. \\
-    Aportación & Comparar dos topologías construidas sobre la misma red: infraestructura física y conectividad funcional del servicio. \\
+    Aportación & Comparar dos representaciones construidas sobre la misma red: infraestructura física y conectividad funcional del servicio. \\
     Pregunta guía & Identificar qué conectividad se conserva, qué eficiencia se pierde y qué partes de la red actúan como puntos críticos.
   \end{tabularx}
 
@@ -699,7 +699,7 @@
 \end{frame}
 
 \begin{frame}{Resultado central}
-  \claim{Bajo ataque dirigido a los \(50\) nodos de mayor grado, la eficiencia relativa cae a \(81.50\%\) en \(L\) y a \(97.36\%\) en \(P\).}
+  \claim{La red conserva alta conectividad global; la fragilidad aparece como p\'erdida de eficiencia en \(L\), no como colapso del componente gigante.}
 
   \vspace{0.25cm}
   \scriptsize
@@ -707,7 +707,7 @@
     \toprule
     Comparación & \(L\)-espacio & \(P\)-espacio & Lectura \\
     \midrule
-    Eficiencia tras ataque dirigido & \(81.50\%\) & \(97.36\%\) & \(P\) conserva \(15.86\) puntos porcentuales más. \\
+    Eficiencia tras ataque dirigido & \(81.50\%\) & \(97.36\%\) & \(L\) pierde eficiencia de manera desproporcionada. \\
     LCC tras ataque dirigido & \(97.45\%\) & \(98.74\%\) & La conectividad gigante cambia menos que la eficiencia. \\
     Eficiencia tras fallos aleatorios & \(97.17\%\) & \(99.67\%\) & Ambos espacios conservan alta eficiencia; el contraste principal aparece bajo ataque dirigido. \\
     LCC tras fallos aleatorios & \(98.23\%\) & \(98.81\%\) & La componente gigante se conserva en ambos espacios. \\
@@ -801,7 +801,7 @@
   \begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.25\linewidth}X@{}}
     Matemáticamente & \(B\) codifica la relación parada--ruta; \(P\) y \(C\) son proyecciones de \(B\), y \(L\) se induce por consecutividad física. \\
     Empíricamente & \(L\) es disperso y sensible en eficiencia ante ataque dirigido; \(P\) es denso y retiene conectividad funcional. \\
-    Metodológicamente & La conclusión debe leerse bajo sus supuestos: topología, GTFS estático y construcción por zonas consolidadas. \\
+    Metodológicamente & La conclusión debe leerse bajo sus supuestos: representaciones, GTFS estático y construcción por zonas consolidadas. \\
   \end{tabularx}
 
   \thinrule
