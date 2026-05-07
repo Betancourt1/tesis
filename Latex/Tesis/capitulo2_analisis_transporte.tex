@@ -46,7 +46,7 @@
         \]
         Además, los tramos deben ser consecutivos: para cada $i=1,\ldots,k-1$, si $e_i=(v_i,v_{i+1})$, entonces $e_{i+1}=(v_{i+1},v_{i+2})$. Esta formulación conserva el orden del recorrido; una ruta no es un elemento de $E$, sino un objeto construido a partir de tramos de $E$.
         \item $\tau$ representa una función operacional que asigna tiempos, frecuencias u otra magnitud de servicio a rutas o tramos, según el nivel de agregación usado.
-        \item $d$ es una función distancia (física o topológica) definida sobre el conjunto de paradas.
+        \item $d$ es una función distancia (física o definida por caminos en el grafo) sobre el conjunto de paradas.
     \end{itemize}
 
     A partir de esta definición general pueden derivarse distintas representaciones gráficas que simplifican el sistema $\mathcal{T}$ para resaltar propiedades específicas; a estas representaciones las llamamos \textit{espacios de representación}. El espacio $L$ preserva la infraestructura física definida en $E$; el espacio $P$ modela la continuidad del viaje permitida por el conjunto $R$; el espacio $C$ se enfoca en las conexiones entre las rutas; y el espacio $B$ captura la relación de pertenencia entre $V$ y $R$. En lo que sigue, el término \textit{proyección} se reserva para las construcciones que se obtienen formalmente a partir del grafo bipartito $G_B$, en particular los espacios $P$ y $C$.
@@ -93,7 +93,7 @@
 
             \subsubsection{$L\text{-espacio}$}
 
-                Siguiendo estas reglas, obtenemos el $L\text{-espacio}$ o \textit{espacio de infraestructura}, como lo definen \cite{vanferber2009} y posteriormente \cite{dingluo2019}. Este modelo, usualmente formulado como grafo no ponderado, es especialmente útil para describir la topología de la infraestructura del transporte público.
+                Siguiendo estas reglas, obtenemos el $L\text{-espacio}$ o \textit{espacio de infraestructura}, como lo definen \cite{vanferber2009} y posteriormente \cite{dingluo2019}. Este modelo, usualmente formulado como grafo no ponderado, es especialmente útil para describir la estructura de conexiones de la infraestructura del transporte público.
 
                 \begin{definicion}[$L$-espacio]
                     Dado un sistema de transporte $\mathcal{T} = (V, R, E, \tau, d)$, el grafo del $L$-espacio se define como
@@ -106,7 +106,7 @@
                     $$
                 \end{definicion}
 
-                En el $L\text{-espacio}$, las aristas representan vínculos físicos entre paradas, no necesariamente la pertenencia a una misma línea o servicio, sino la existencia de un segmento compartido de infraestructura. Esta característica lo convierte en un modelo adecuado para estudiar la \textit{topología estructural} del sistema, ya que preserva la continuidad espacial de la red, su forma geométrica y sus restricciones físicas \cite{dingluo2019,vanferber2009}. A partir de este modelo pueden calcularse métricas como la conectividad global, el diámetro, la longitud media de los caminos, la densidad o la distribución de grados, útiles para caracterizar la eficiencia, redundancia y resiliencia de la infraestructura ante fallas o bloqueos locales.
+                En el $L\text{-espacio}$, las aristas representan vínculos físicos entre paradas, no necesariamente la pertenencia a una misma línea o servicio, sino la existencia de un segmento compartido de infraestructura. Esta característica lo convierte en un modelo adecuado para estudiar la \textit{estructura de conexiones} del sistema, ya que preserva la continuidad espacial de la red, su forma geométrica y sus restricciones físicas \cite{dingluo2019,vanferber2009}. A partir de este modelo pueden calcularse métricas como la conectividad global, el diámetro, la longitud media de los caminos, la densidad o la distribución de grados, útiles para caracterizar la eficiencia, redundancia y resiliencia de la infraestructura ante fallas o bloqueos locales.
 
                 Otra ventaja del $L\text{-espacio}$ es que permite estudiar la relación entre la estructura del transporte y la morfología urbana. Si se representan explícitamente las intersecciones, el modelo puede extenderse para incluir como nodos tanto las paradas como los cruces de vías relevantes, de manera que:
                 $$
@@ -114,13 +114,13 @@
                 $$
                 donde $V_p$ representa el conjunto de paradas y $V_i$ el de intersecciones. En este caso pueden definirse dos tipos de aristas: las que conectan paradas consecutivas dentro de una misma ruta y las que vinculan intersecciones adyacentes. Esto amplía el análisis de continuidad espacial del sistema y de su integración con la red vial.
 
-                En este último caso, el $L\text{-espacio}$ puede aproximarse mediante un \textit{grafo planar}, es decir, un grafo que puede representarse en el plano sin que sus aristas se crucen. Esta propiedad es relevante para redes de transporte urbano, donde la estructura topológica está restringida por la disposición física del territorio y la infraestructura \cite{rodrigues2020}. En contextos metropolitanos complejos, como el de Guadalajara, esta representación permite relacionar la geometría de las rutas con la accesibilidad territorial y con los patrones de concentración de la demanda \cite{barraza2021}.
+                En este último caso, el $L\text{-espacio}$ puede aproximarse mediante un \textit{grafo planar}, es decir, un grafo que puede representarse en el plano sin que sus aristas se crucen. Esta propiedad es relevante para redes de transporte urbano, donde la estructura de conexiones está restringida por la disposición física del territorio y la infraestructura \cite{rodrigues2020}. En contextos metropolitanos complejos, como el de Guadalajara, esta representación permite relacionar la geometría de las rutas con la accesibilidad territorial y con los patrones de concentración de la demanda \cite{barraza2021}.
 
                 Formalmente, el $L\text{-espacio}$ no se obtiene únicamente de la relación de pertenencia parada--ruta codificada en el grafo bipartito $G_B=(V \cup R,E_B)$. Para construirlo también se requiere la información de consecutividad de paradas dentro de cada ruta (equivalentemente, los tramos de $E$ o el orden de paradas por ruta). Con esa información adicional se define una representación de adyacencia sobre $V$, en la que dos vértices se conectan si aparecen consecutivos en al menos una ruta. Esta representación conserva la estructura local de conectividad y sirve como base para definir métricas estructurales como:
                 $$
                 C_i = \frac{2e_i}{k_i(k_i - 1)}, \qquad L = \frac{1}{|V|(|V|-1)} \sum_{i\neq j} d(i,j),
                 $$
-                donde $C_i$ es el coeficiente de agrupamiento del nodo $i$, $k_i$ su grado y $L$ la longitud media de los caminos en el grafo. Dichos indicadores describen la cohesión topológica de la red, su compacidad y la eficiencia promedio de los desplazamientos posibles a lo largo de la infraestructura.
+                donde $C_i$ es el coeficiente de agrupamiento del nodo $i$, $k_i$ su grado y $L$ la longitud media de los caminos en el grafo. Dichos indicadores describen la cohesión estructural de la red, su compacidad y la eficiencia promedio de los desplazamientos posibles a lo largo de la infraestructura.
 
                 \paragraph{Limitaciones del $L$-espacio}
                 A pesar de su utilidad para representar la infraestructura, el $L$-espacio presenta limitaciones importantes. En particular, pierde información sobre el servicio: el grafo no distingue cuántas rutas utilizan un tramo específico y solo registra la existencia física de la conexión. Por ello, dos tramos con volúmenes de servicio muy distintos pueden aparecer como equivalentes en esta representación.
@@ -171,7 +171,7 @@
                 donde $f$ es una función de ponderación que puede calibrarse según los objetivos del análisis (por ejemplo, para modelar tiempos esperados o demanda efectiva). Este tipo de extensión transforma el grafo en una red ponderada que describe la estructura potencial de movilidad dentro del sistema.
 
                 \paragraph{Limitaciones del $P$-espacio}
-                El $P$-espacio también conlleva distorsiones significativas. Al colapsar la geometría física, dos paradas pueden ser adyacentes en el grafo porque comparten ruta, aunque estén separadas por una gran distancia geográfica. Esto dificulta la interpretación espacial directa de las métricas de distancia topológica.
+                El $P$-espacio también conlleva distorsiones significativas. Al colapsar la geometría física, dos paradas pueden ser adyacentes en el grafo porque comparten ruta, aunque estén separadas por una gran distancia geográfica. Esto dificulta la interpretación espacial directa de las métricas de distancia definida por caminos.
                 
                 Además, la estructura de cliques inducida por cada ruta infla el coeficiente de agrupamiento local. Por ello, el clustering en el $P$-espacio no es directamente comparable con el del $L$-espacio ni con el de grafos aleatorios estándar. Si se introducen pesos en las aristas ($w_{ij}$), las propiedades resultantes del grafo también dependen de la función de ponderación $f$ elegida, lo que desplaza el análisis desde propiedades puramente estructurales hacia supuestos de modelado adicionales.
 
@@ -348,7 +348,7 @@
         Primero, revisaremos las propiedades de grafo de los $L\text{-espacios}$ y sus lecturas físicas; luego haremos lo mismo para los $P\text{-espacios}$ y sus lecturas operativas. Con esto pasamos de la definición formal del modelo a su interpretación empírica en estudios previos.
 
         \subsection{Propiedades del $L\text{-espacio}$}
-            Recordemos que en la representación $L\text{-espacio}$, los nodos son paradas o estaciones y las aristas representan tramos físicos directos entre ellas. Este modelo preserva la forma de la red y respeta la geografía y restricciones físicas del sistema de transporte \cite{dingluo2019}. Por ello, el $L\text{-espacio}$ es ideal para estudiar la topología estructural de la infraestructura de transporte (por ejemplo, la forma de la red vial o ferroviaria utilizada por el transporte público). A partir de este grafo pueden calcularse diversas métricas globales y locales cuyas interpretaciones se vinculan con aspectos físicos del sistema.
+            Recordemos que en la representación $L\text{-espacio}$, los nodos son paradas o estaciones y las aristas representan tramos físicos directos entre ellas. Este modelo preserva la forma de la red y respeta la geografía y restricciones físicas del sistema de transporte \cite{dingluo2019}. Por ello, el $L\text{-espacio}$ es ideal para estudiar la estructura de conexiones de la infraestructura de transporte (por ejemplo, la forma de la red vial o ferroviaria utilizada por el transporte público). A partir de este grafo pueden calcularse diversas métricas globales y locales cuyas interpretaciones se vinculan con aspectos físicos del sistema.
 
             \paragraph{Conectividad}
             En $L\text{-espacio}$ conviene evaluar las siguientes características de conectividad:
@@ -385,7 +385,7 @@
                 \item \textbf{Presencia de ciclos y redundancia}: La presencia de ciclos y clustering mayor puede indicar redundancia en la infraestructura (rutas alternativas físicas). Si dos estaciones están conectadas por más de un camino (quizá dos líneas diferentes que pasan por rutas distintas pero unen los mismos puntos), se forma un ciclo en el grafo $L$. Un clustering elevado a nivel global sugiere una red con múltiples interconexiones (propia de sistemas bien mallados, como ciertas redes ferroviarias o de metro con bucles), mientras que valores bajos (frecuentes en redes de autobús radial) indican estructura de árbol donde cada ramal es único.
             \end{itemize}
 
-            Estas propiedades topológicas permiten evaluar la robustez estructural: la presencia de ciclos suele correlacionar con mayor tolerancia a fallos (hay rutas alternativas si un tramo se cae), mientras que una red tipo árbol (sin ciclos) es más frágil a cortes.
+            Estas propiedades estructurales permiten evaluar la robustez de la red: la presencia de ciclos suele correlacionar con mayor tolerancia a fallos (hay rutas alternativas si un tramo se cae), mientras que una red tipo árbol (sin ciclos) es más frágil a cortes.
 
             En \cite{vanferber2009} se analizan redes de transporte europeas y se observa que muchas exhiben propiedades de \textit{pequeño mundo}, entendido aquí como un camino más corto promedio entre nodos igual o menor a seis, en $L\text{-espacio}$ solo cuando existen lazos o bucles en la infraestructura; de lo contrario, el camino promedio se alarga considerablemente.
 
@@ -433,12 +433,12 @@
             La centralidad de cercanía en el $P\text{-espacio}$ captura cuán accesible es una parada cuando se mide el viaje en términos de transbordos: un nodo con cercanía alta requiere, en promedio, pocos cambios de ruta para alcanzar cualquier otro destino del sistema. Esta métrica funciona como un indicador de accesibilidad estructural, pues sintetiza la facilidad global de movimiento desde cada parada. En redes urbanas, las zonas centrales o nodos de convergencia suelen presentar mayor cercanía, mientras que las áreas periféricas muestran valores bajos, lo que se traduce en mayores tiempos de viaje y menor integración funcional.
 
             \begin{itemize}
-                \item \textbf{Interpretación operativa}: La cercanía mide el número promedio de transbordos necesarios para alcanzar el resto de paradas. Un valor alto indica que la parada se encuentra cerca del resto del sistema en términos topológicos, incluso si las distancias físicas son mayores. Paradas ubicadas en zonas céntricas, corredores troncales o puntos donde convergen varias rutas tienden a exhibir cercanía elevada en $G_P$, lo que equivale a buena accesibilidad y rapidez de conexión con múltiples destinos. Por otro lado, nodos ubicados en rutas marginales o extremos de línea muestran cercanía baja, lo que se traduce en más transbordos, tiempos de viaje largos y accesibilidad desigual.
+                \item \textbf{Interpretación operativa}: La cercanía mide el número promedio de transbordos necesarios para alcanzar el resto de paradas. Un valor alto indica que la parada se encuentra cerca del resto del sistema en términos de caminos en el grafo, incluso si las distancias físicas son mayores. Paradas ubicadas en zonas céntricas, corredores troncales o puntos donde convergen varias rutas tienden a exhibir cercanía elevada en $G_P$, lo que equivale a buena accesibilidad y rapidez de conexión con múltiples destinos. Por otro lado, nodos ubicados en rutas marginales o extremos de línea muestran cercanía baja, lo que se traduce en más transbordos, tiempos de viaje largos y accesibilidad desigual.
 
                 \item \textbf{Evaluación de equidad espacial}: El gradiente de cercanía permite detectar desigualdades territoriales en el acceso al sistema. Valores bajos concentrados en barrios o zonas periféricas indican brechas estructurales de conectividad y potencial desventaja en movilidad.
             \end{itemize}
 
-            Estudios como \cite{dingluo2019} combinan cercanía topológica con tiempos reales de viaje, mostrando que ambas medidas capturan dimensiones complementarias de accesibilidad.
+            Estudios como \cite{dingluo2019} combinan cercanía calculada con distancias de camino y tiempos reales de viaje, mostrando que ambas medidas capturan dimensiones complementarias de accesibilidad.
 
             \paragraph{Centralidad de intermediación y nodos críticos de transferencia}
             La intermediación en el $P\text{-espacio}$ identifica qué tan indispensable es una parada para articular los caminos mínimos entre pares de estaciones. En consecuencia, funciona como una medida de su relevancia como nodo de transferencia. Un valor alto indica que numerosos viajes con el mínimo de transbordos deben pasar por esa parada, de modo que su afectación puede aumentar los cambios de ruta necesarios o incluso desconectar sectores enteros del sistema. Esta centralidad es útil para detectar vulnerabilidades, planificar redundancias, descentralizar la transferencia y diseñar rutas alternativas.
@@ -503,7 +503,7 @@
         
         En esta sección todavía no se analizan los datos propios de la investigación. El objetivo es utilizar el trabajo de \cite{barraza2021} como caso de estudio ilustrativo y como antecedente directo de la aplicación de la teoría de grafos al contexto local.
         
-        El estudio de \cite{barraza2021} constituye el antecedente más directo y relevante para el análisis estructural del transporte público de la Zona Metropolitana de Guadalajara desde este enfoque. Su modelo parte de la premisa de que el desempeño operativo y energético del sistema está estrechamente ligado a su estructura, y de que la planificación metropolitana debe integrar explícitamente propiedades topológicas y geométricas de la red en la toma de decisiones.
+        El estudio de \cite{barraza2021} constituye el antecedente más directo y relevante para el análisis estructural del transporte público de la Zona Metropolitana de Guadalajara desde este enfoque. Su modelo parte de la premisa de que el desempeño operativo y energético del sistema está estrechamente ligado a su estructura, y de que la planificación metropolitana debe integrar explícitamente propiedades estructurales y geométricas de la red en la toma de decisiones.
 
         \subsection{Metodología general y construcción de la red}
 
@@ -530,7 +530,7 @@
                 \item \textbf{Dependencia de nodos críticos}: Estima la vulnerabilidad estructural. El artículo utiliza un conjunto de indicadores para ello, principalmente la \textbf{centralidad de intermediación} (\textit{betweenness centrality}), para identificar nodos cuya afectación puede comprometer el desempeño de toda la red.
             \end{enumerate}
 
-            Estas tres propiedades corresponden, respectivamente, a los tres ejes analíticos del trabajo: \textit{accesibilidad estructural}, \textit{fricción espacial} y \textit{vulnerabilidad topológica}.
+            Estas tres propiedades corresponden, respectivamente, a los tres ejes analíticos del trabajo: \textit{accesibilidad estructural}, \textit{fricción espacial} y \textit{vulnerabilidad estructural del grafo}.
 
         \subsection{Principales hallazgos y conclusiones}
 
@@ -548,9 +548,9 @@
 
             Para formalizar la contribución de esta tesis frente al antecedente mencionado, planteamos las siguientes interrogantes que guiarán nuestro análisis:
             \begin{itemize}
-                \item ¿Qué métricas de las utilizadas por \cite{barraza2021} encuentran una interpretación más natural en el $L$-espacio y cuáles en el $P$-espacio, distinción que no fue explícita en su estudio?
-                \item ¿Qué información estructural adicional revelan métricas no abordadas previamente, como la modularidad y el clustering, bajo nuestro marco formal?
-                \item ¿Qué propiedades topológicas de la red actual, tanto físicas como funcionales, podemos recuperar y caracterizar que no fueron capturadas por el modelo de red ortogonal teórica?
+                \item \invquestion{}Qué métricas de las utilizadas por \cite{barraza2021} encuentran una interpretación más natural en el $L$-espacio y cuáles en el $P$-espacio, distinción que no fue explícita en su estudio?
+                \item \invquestion{}Qué información estructural adicional revelan métricas no abordadas previamente, como la modularidad y el clustering, bajo nuestro marco formal?
+                \item \invquestion{}Qué propiedades estructurales de la red actual, tanto físicas como funcionales, podemos recuperar y caracterizar que no fueron capturadas por el modelo de red ortogonal teórica?
             \end{itemize}
 
     \section{Comentarios del capítulo}

@@ -17,7 +17,7 @@
                 \item \textbf{Tamaño de la Red:} El grafo consolidado consta de \textbf{4,203 nodos} (supernodos que agrupan paradas) y \textbf{8,591 aristas} (conexiones directas por una ruta).
 		\item \textbf{Densidad del Grafo:} La densidad es de \textbf{0.000486}, un valor coherente con una red de contigüidad física. En este grafo, cada supernodo se conecta principalmente con las paradas consecutivas de las rutas que lo atraviesan, de modo que el número de aristas posibles es reducido.
                 \item \textbf{Conectividad:} El análisis de componentes conectados arrojó un resultado clave: la red está fragmentada en \textbf{2 componentes}. Uno de ellos es masivo, conteniendo 4,198 nodos (el 99.88\% del total), mientras que el segundo es un fragmento aislado de apenas 5 nodos. Esto sugiere que, en la práctica, la red funciona casi como un todo unificado, pero existe una pequeña \textit{isla} de paradas sin conexión con el resto del sistema.
-                \item \textbf{Coeficiente de Clustering Global:} La transitividad de la red es de \textbf{0.1088}. Este valor, cercano a cero, indica una baja tendencia a la formación de clústeres locales: es poco frecuente que dos paradas conectadas a una tercera también lo estén entre sí. Esto sugiere una topología más arbórea o de tipo estrella (\textit{hub-and-spoke}) que una estructura de malla densa.
+                \item \textbf{Coeficiente de Clustering Global:} La transitividad de la red es de \textbf{0.1088}. Este valor, cercano a cero, indica una baja tendencia a la formación de clústeres locales: es poco frecuente que dos paradas conectadas a una tercera también lo estén entre sí. Esto sugiere una estructura más arbórea o de tipo estrella (\textit{hub-and-spoke}) que una estructura de malla densa.
             \end{itemize}
 
         \subsubsection{Eficiencia y Tiempos de Viaje}
@@ -170,11 +170,11 @@
                 \item \textbf{Tamaño y densidad:} 4,203 nodos (supernodos) y 385,225 aristas (pares de supernodos que comparten al menos una ruta), con densidad \textbf{0.0436}.
                 \item \textbf{Componentes:} 2 componentes; el principal reúne 4,198 supernodos.
                 \item \textbf{Clustering:} Coeficiente de clustering global \textbf{0.4085}, lo que evidencia alta redundancia de rutas que comparten paradas.
-                \item \textbf{Eficiencia y caminos:} Diámetro topológico \textbf{6} saltos y longitud promedio de camino \textbf{2.41} saltos (equivalentes a \textbf{hasta 5} y \textbf{1.41} transbordos, respectivamente, bajo la convención \textit{transbordos = saltos - 1}), con eficiencia global \textbf{0.4476} en el componente principal.
+                \item \textbf{Eficiencia y caminos:} Diámetro por saltos \textbf{6} y longitud promedio de camino \textbf{2.41} saltos (equivalentes a \textbf{hasta 5} y \textbf{1.41} transbordos, respectivamente, bajo la convención \textit{transbordos = saltos - 1}), con eficiencia global \textbf{0.4476} en el componente principal.
             \end{itemize}
 	    La densidad, casi dos órdenes de magnitud mayor que en el L-espacio, indica que la representación \(P\) contiene muchas conexiones potenciales entre supernodos que comparten ruta. El clustering elevado refleja cliques de paradas por rutas compartidas; por ello, esta densidad debe leerse como redundancia estructural del modelo de servicio, no como garantía directa de capacidad operativa real.
 
-            Además, un diámetro topológico de 6 y una longitud promedio de camino de 2.41 muestran que cualquier supernodo está a pocos pasos de otro. En conjunto, estos valores son consistentes con la literatura que describe este tipo de redes como sistemas de \textit{mundo pequeño}.
+            Además, un diámetro de 6 saltos y una longitud promedio de camino de 2.41 muestran que cualquier supernodo está a pocos pasos de otro. En conjunto, estos valores son consistentes con la literatura que describe este tipo de redes como sistemas de \textit{mundo pequeño}.
 
         \subsection{Análisis de Centralidad en el P-espacio}
             Se calcularon y almacenaron las centralidades (grado, intermediación, cercanía y eigenvector). Los supernodos con mayor grado son aquellos que comparten numerosas rutas con otros supernodos, actuando como conectores de múltiples recorridos.
@@ -258,7 +258,7 @@
         \subsection{Discusión Comparativa}
             El ataque dirigido por grado es significativamente más dañino en el L-espacio que en el P-espacio. Mientras que en la infraestructura física la eficiencia cae cerca de 18.50\% al perder 50 supernodos de mayor grado, en la proyección de servicio la pérdida es de apenas 2.64\%. Esta comparación usa la misma métrica de eficiencia relativa al estado inicial en ambos grafos y se complementa con las simulaciones aleatorias como línea base de perturbaciones no dirigidas.
 
-            Lo anterior confirma que la conectividad modelada por rutas compartidas es más resiliente dentro de la proyección \(P\), aun si la infraestructura depende fuertemente de unos pocos nodos de alta interconexión. Esta conclusión es topológica y no sustituye una evaluación operacional con flujos, frecuencias y tiempos de espera.
+            Lo anterior confirma que la conectividad modelada por rutas compartidas es más resiliente dentro de la proyección \(P\), aun si la infraestructura depende fuertemente de unos pocos nodos de alta interconexión. Esta conclusión se limita a la estructura del grafo y no sustituye una evaluación operacional con flujos, frecuencias y tiempos de espera.
 	
         \subsection{Sensibilidad de Supuestos de Modelado}
             Para evaluar la estabilidad de los resultados, se ejecutó un análisis de sensibilidad con cuatro umbrales de consolidación espacial (\(75\), \(100\), \(125\) y \(150\) metros) y dos variantes para construir el \(P\)-espacio: clique por \texttt{route\_id} (modelo principal de la tesis) y clique por \texttt{trip\_id} (escenario conservador).
@@ -312,18 +312,18 @@
 
             \begin{itemize}
                 \item \textbf{Protección de puntos críticos del sistema:} se seleccionan los 10 supernodos con mayor \(d_w\) en el grafo base y se declaran protegidos. El ataque elimina entonces los siguientes 50 supernodos de mayor \(d_w\) que no pertenecen a ese conjunto. No se agregan aristas; se modela continuidad reforzada de esos puntos críticos.
-                \item \textbf{Refuerzo periférico:} se toma el componente débil principal, se ignora la dirección de las aristas para calcular cercanía topológica y se ordenan los supernodos de menor a mayor cercanía. De la periferia así definida se forman pares entre extremos opuestos de la lista, descartando pares ya adyacentes o separados por menos de cuatro saltos. Para cada par aceptado se agregan dos aristas dirigidas, una por sentido, con peso temporal igual a la mediana global de tiempos válidos y \texttt{original\_edge\_count}=1. Con los parámetros usados se agregan 60 pares, es decir, 120 aristas dirigidas.
+                \item \textbf{Refuerzo periférico:} se toma el componente débil principal, se ignora la dirección de las aristas para calcular cercanía con distancias de camino y se ordenan los supernodos de menor a mayor cercanía. De la periferia así definida se forman pares entre extremos opuestos de la lista, descartando pares ya adyacentes o separados por menos de cuatro saltos. Para cada par aceptado se agregan dos aristas dirigidas, una por sentido, con peso temporal igual a la mediana global de tiempos válidos y \texttt{original\_edge\_count}=1. Con los parámetros usados se agregan 60 pares, es decir, 120 aristas dirigidas.
                 \item \textbf{Conexiones alternativas locales:} se seleccionan los 20 supernodos de mayor \(d_w\) como hubs y se construyen bypasses alrededor de ellos. Para un hub \(h\), se consideran predecesores \(u\) y sucesores \(v\) no protegidos por el conjunto de hubs; si existe \(u\to h\) y \(h\to v\), pero no existe \(u\to v\), se agrega la arista \(u\to v\) con peso igual a la suma de los tiempos de \(u\to h\) y \(h\to v\). El orden de revisión se aleatoriza con semilla 42 y se agregan hasta 200 bypasses. En el escenario reportado no se conserva presupuesto de aristas, por lo que no se remueven aristas existentes.
             \end{itemize}
             Después de la falla se midieron tres indicadores: el porcentaje de supernodos remanentes que permanece dentro del LCC, la eficiencia global dirigida (ponderada por \texttt{travel\_time\_minutes}) y la longitud del peor recorrido interno, definida como el número máximo de segmentos consecutivos necesarios dentro de la red remanente. La eficiencia relativa se calcula como cociente entre la eficiencia postataque y la eficiencia preataque del mismo escenario. Por esta razón, una intervención que eleva la eficiencia inicial puede mostrar menor retención relativa si sus nuevas conexiones no sobreviven o no son útiles después de recalcular el ataque.
 
-            La Tabla~\ref{tab:intervenciones_topologicas_l_space} compara las métricas postataque para cada escenario y permite distinguir qué intervención conserva mejor el LCC y la eficiencia sin alargar en exceso los recorridos tras la falla.
+            La Tabla~\ref{tab:intervenciones_estructurales_l_space} compara las métricas postataque para cada escenario y permite distinguir qué intervención conserva mejor el LCC y la eficiencia sin alargar en exceso los recorridos tras la falla.
 
             \begin{table}[h!]
                 \centering
                 \small
                 \caption{Comparación de intervenciones en la red modelada después de eliminar 50 supernodos de mayor grado ponderado. Se reportan las conexiones nuevas del modelo, la proporción de supernodos remanentes dentro del LCC, la eficiencia global relativa al escenario inicial y la longitud del peor recorrido interno.}
-                \label{tab:intervenciones_topologicas_l_space}
+                \label{tab:intervenciones_estructurales_l_space}
                 \resizebox{\textwidth}{!}{%
                 \begin{tabular}{lrrrrr}
                     \toprule
