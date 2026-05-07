@@ -28,6 +28,8 @@ __pycache__/
 
 # Local LaTeX build products outside the final thesis PDF
 Latex/Protocolo/*.pdf
+Latex/Tesis/build/
+Latex/diapositivas_proyecto_integrador/build/
 out/main.*
 out/diapositivas.pdf
 out/reporte_avance_commits_*
