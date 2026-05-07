@@ -1,5 +1,6 @@
 # Local configuration
 .env
+.codex/
 
 # Editor and OS files
 .idea/
